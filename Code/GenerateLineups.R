@@ -18,8 +18,11 @@ seeds <- c(699181, 190785, 746705, 938857, 256246,
 # seeds <- sample(0:1e6, N) + sample(0:1e3, N) + sample(0:100, N)
 answers <- data.frame()
 
-colors <- c("#882E72", "#D92120", "#4EB265", "#3F4EA1", 
-            "#E7742F", "#1965B0", "#B1B343", "#4683C1", "#DFA53A")
+# colors <- c("#882E72", "#D92120", "#4EB265", "#3F4EA1", 
+#             "#E7742F", "#1965B0", "#B1B343", "#4683C1", "#DFA53A")
+colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+             "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+
 
 names <- data.frame(filename = sample(paste("./Images/Lineups/", rep(1:3, each=N*2), "-", rep(1:(N*2), times=3), ".png", sep=""), 6*N), idx=1:(6*N), stringsAsFactors=FALSE)
 
@@ -49,7 +52,7 @@ for(i in 1:N){
   ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
-    scale_color_manual(values=colors[c(2,8)]) +
+    scale_color_manual(values=colors[c(3,7)]) +
     theme_lineup()
   ggsave(filename, width=10, height=8, dpi=300, units="in")
   answers <- rbind(answers, data.frame(name=filename, target1=NA, target2=pos.x, seed=seeds[i], idx=i, permute.var=pv, group="NoOutliers", type="Color"))
@@ -65,7 +68,7 @@ for(i in 1:N){
   ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
-    scale_color_manual(values=colors[c(3,5,6)]) +
+    scale_color_manual(values=colors[c(3,4,8)]) +
     theme_lineup()
   ggsave(filename, width=10, height=8, dpi=300, units="in")
   answers <- rbind(answers, data.frame(name=filename, target1=pos.x, target2=pos.y, seed=seeds[i], idx=i, permute.var=pv, group="NoOutliers", type="ShapeColor"))
@@ -85,8 +88,8 @@ seeds <- c(488462,  89012,  68718, 875098, 790630,
 # seeds <- sample(0:1e6, N) + sample(0:1e3, N) + sample(0:100, N)
 # answers <- data.frame()
 
-colors <- c("#882E72", "#D92120", "#4EB265", "#3F4EA1", 
-            "#E7742F", "#1965B0", "#B1B343", "#4683C1", "#DFA53A")
+# colors <- c("#882E72", "#D92120", "#4EB265", "#3F4EA1", 
+#             "#E7742F", "#1965B0", "#B1B343", "#4683C1", "#DFA53A")
 permute.var <- c("x", "y")
 for(i in 1:N){
   set.seed(seeds[i])
@@ -113,7 +116,7 @@ for(i in 1:N){
   ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
-    scale_color_manual(values=colors[c(3,5,6)]) +
+    scale_color_manual(values=colors[c(3,4,8)]) +
     theme_lineup()
   ggsave(filename, width=10, height=8, dpi=300, units="in")
   answers <- rbind(answers, data.frame(name=filename, target1=NA, target2=pos.x, seed=seeds[i], idx=i, permute.var=pv, group="Outliers", type="Color"))
@@ -129,7 +132,7 @@ for(i in 1:N){
   ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
-    scale_color_manual(values=colors[c(3,5,6,1)]) +
+    scale_color_manual(values=colors[c(3,4,7,8)]) +
     theme_lineup()
   ggsave(filename, width=10, height=8, dpi=300, units="in")
   answers <- rbind(answers, data.frame(name=filename, target1=pos.x, target2=pos.y, seed=seeds[i], idx=i, permute.var=pv, group="Outliers", type="ShapeColor"))
