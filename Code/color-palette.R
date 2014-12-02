@@ -2,9 +2,8 @@ palette <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "
 palette.options <- expand.grid(c1=1:10, c2=1:10, c3=1:10, c4=1:10)
 palette.options <- with(palette.options, palette.options[c1!=c2 & c2!=c3 & c1!=c3 & c1!=c4 & c2!=c4 & c3!=c4,])
 
-colortm <- colortm2 <- read.table("~/Documents/Rprojects/perceptual-kernels/data/kernels/color-tm.txt", sep=",")
-colortm2$id <- 1:10
-write.csv(colortm2[, c(11, 1:10)], file="~/Documents/Rprojects/FeatureHierarchy/Data/color-perceptual-kernel.csv")
+colortm <- read.table("~/Documents/Rprojects/perceptual-kernels/data/kernels/color-tm.txt", sep=",")
+write.csv(colortm, file="~/Documents/Rprojects/FeatureHierarchy/Data/color-perceptual-kernel.csv", row.names=FALSE)
 
 palette.options$dist2way <- with(palette.options, 
                                  as.numeric(unlist(colortm))[(c1-1)*10+c2]) 
@@ -29,9 +28,8 @@ palette <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
 palette.options <- expand.grid(c1=1:10, c2=1:10, c3=1:10, c4=1:10)
 palette.options <- with(palette.options, palette.options[c1!=c2 & c2!=c3 & c1!=c3 & c1!=c4 & c2!=c4 & c3!=c4,])
 
-shapetm <- shapetm2 <- read.table("~/Documents/Rprojects/perceptual-kernels/data/kernels/shape-tm.txt", sep=",")
-shapetm2$id <- 1:10
-write.csv(shapetm2[, c(11, 1:10)], file="~/Documents/Rprojects/FeatureHierarchy/Data/shape-perceptual-kernel.csv")
+shapetm <- read.table("~/Documents/Rprojects/perceptual-kernels/data/kernels/shape-tm.txt", sep=",")
+write.csv(shapetm, file="~/Documents/Rprojects/FeatureHierarchy/Data/shape-perceptual-kernel.csv", row.names=F)
 
 palette.options$dist2way <- with(palette.options, 
                                  as.numeric(unlist(shapetm))[(c1-1)*10+c2]) 
