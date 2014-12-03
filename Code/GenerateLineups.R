@@ -109,5 +109,6 @@ data <- merge(data, answers[,c("name", "plot.idx", "filename")])
 lapply(answers$plot.idx, function(i) 
   ggsave(plots[[i]], filename = names[i,"filename"], width=10, height=8, dpi=300, units="in"))
 
-save(plots, names, answers, data, filename="./Images/Lineups/Lineups.rda")
+save(plots, names, answers, data, file="./Images/Lineups/Lineups.rda")
 write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
+
