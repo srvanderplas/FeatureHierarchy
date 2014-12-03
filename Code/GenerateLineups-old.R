@@ -19,6 +19,7 @@ seeds <- c(699181, 190785, 746705, 938857, 256246,
            549865, 866498, 941755, 930329, 718688)
 # seeds <- sample(0:1e6, N) + sample(0:1e3, N) + sample(0:100, N)
 answers <- data.frame()
+plots <- rep(NA, 2*7*N)
 
 # colors <- c("#882E72", "#D92120", "#4EB265", "#3F4EA1", 
 #             "#E7742F", "#1965B0", "#B1B343", "#4683C1", "#DFA53A")
@@ -41,7 +42,8 @@ for(i in 1:N){
   filename <- names$filename[j]
   pv <- sample(permute.var, 1)
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y), size=3) + 
     facet_wrap(~.sample) +
     theme_lineup()
@@ -53,7 +55,8 @@ for(i in 1:N){
   pv <- "group"
   filename <- names$filename[j+1]
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j+1] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_color_manual(values=colors[c(3,7)]) +
@@ -66,7 +69,8 @@ for(i in 1:N){
   pv <- "group"
   filename <- names$filename[j+2]
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j+2] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(5,10)]) +
@@ -79,7 +83,8 @@ for(i in 1:N){
   pv <- "group"
   filename <- names$filename[j+3]
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j+3] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group), color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(5,10)]) +
@@ -95,7 +100,8 @@ for(i in 1:N){
   filename <- names$filename[j+4]
   lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
                                 ngroups=3, pos=pos.y)
-  ggplot(data=lineupdata) + 
+  plots[j+4] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
     scale_color_manual(values=colors[c(3,4,8)]) +
@@ -110,7 +116,8 @@ for(i in 1:N){
   filename <- names$filename[j+5]
   lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
                                 ngroups=3, pos=pos.y)
-  ggplot(data=lineupdata) + 
+  plots[j+5] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(1, 3, 10)]) +
@@ -126,7 +133,8 @@ for(i in 1:N){
   lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
                                 ngroups=3, pos=pos.y)
   
-  ggplot(data=lineupdata) + 
+  plots[j+6] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group.k), color=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(1, 3, 10)]) +
@@ -163,7 +171,8 @@ for(i in 1:N){
   filename <- names$filename[j]
   pv <- sample(permute.var, 1)
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y), size=3) + 
     facet_wrap(~.sample) +
     theme_lineup()
@@ -175,7 +184,8 @@ for(i in 1:N){
   pv <- "group"
   filename <- names$filename[j+1]
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j+1] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_color_manual(values=colors[c(3,4,8)]) +
@@ -188,7 +198,8 @@ for(i in 1:N){
   pv <- "group"
   filename <- names$filename[j+2]
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j+2] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(1,3,10)]) +
@@ -201,7 +212,8 @@ for(i in 1:N){
   pv <- "group"
   filename <- names$filename[j+3]
   lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
-  ggplot(data=lineupdata) + 
+  plots[j+3] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group), color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(1,3,10)]) +
@@ -217,7 +229,8 @@ for(i in 1:N){
   filename <- names$filename[j+4]
   lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
                                 ngroups=3, pos=pos.y)
-  ggplot(data=lineupdata) + 
+  plots[j+4] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
     scale_color_manual(values=colors[c(3,4,8)]) +
@@ -232,7 +245,8 @@ for(i in 1:N){
   filename <- names$filename[j+5]
   lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
                                 ngroups=3, pos=pos.y)
-  ggplot(data=lineupdata) + 
+  plots[j+5] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(1, 3, 10)]) +
@@ -247,7 +261,8 @@ for(i in 1:N){
   filename <- names$filename[j+6]
   lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
                                 ngroups=3, pos=pos.y)
-  ggplot(data=lineupdata) + 
+  plots[j+6] <- 
+    ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group.k), color=factor(group.k)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shapes[c(1, 3, 10)]) +
@@ -257,4 +272,5 @@ for(i in 1:N){
   answers <- rbind(answers, data.frame(name=filename, target1=pos.x, target2=pos.y, seed=seeds[i], idx=i, permute.var=pv, group="NoOutliers", type="SlopeColorShape"))
 }
 
+save(plots, names, answers, filename="./Images/Lineups/Lineups.rda")
 write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
