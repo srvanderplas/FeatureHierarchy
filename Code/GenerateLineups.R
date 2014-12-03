@@ -106,9 +106,36 @@ answers <- cbind(names, answers)
 answers <- answers[order(answers$plot.idx),]
 data <- merge(data, answers[,c("name", "plot.idx", "filename")])
 
-lapply(answers$plot.idx, function(i) 
+tmp <- lapply(answers$plot.idx, function(i) 
   ggsave(plots[[i]], filename = names[i,"filename"], width=10, height=8, dpi=300, units="in"))
+
+data.summary <- ddply(data, .(plot.idx, filename, name, .sample), function(df){
+  model <- lm(data=df, y~x)
+  slope <- model$coefficients[2]
+  slope.t <- summary(model)$coefficients[2,3]
+  slope.p <- summary(model)$coefficients[2,4]
+  slope.r2 <- summary(model)$r.squared
+  tmp <- unique(as.character(df$name))
+  if(as.numeric(substr(tmp, nchar(tmp), nchar(tmp)))>4){
+    model2 <- lm(data=df, y~0+factor(group.k))
+  } else {
+    model2 <- lm(data=df, y~0+factor(group))
+  }
+  group.mse <- anova(model2)$`Mean Sq`[2]
+  group.p <- anova(model2)$`Pr(>F)`[1]
+  group.r2 <- summary(model2)$r.squared
+  data.frame(slope=slope, slope.t=slope.t, slope.p=slope.p, slope.r2=slope.r2,
+             group.mse=group.mse, group.p=group.p, group.r2=group.r2, 
+             n=nrow(df), ngroups=max(c(length(unique(df$group.k)),length(unique(df$group)))))
+})
+data.summary <- merge(data.summary, answers)
+data.summary$Slope <- grepl("Slope", data.summary$type)
+data.summary$Type2 <- gsub("Slope", "", data.summary$type)
 
 save(plots, names, answers, data, file="./Images/Lineups/Lineups.rda")
 write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
 
+qplot(data=data.summary, x=jitter(as.numeric(as.factor(group))), y=slope.r2, color=factor(target1==.sample), alpha=I(.5)) + 
+  facet_grid(Slope~Type2, labeller=label_both, scales="free") + scale_colour_discrete(guide="none")
+qplot(data=data.summary, x=jitter(as.numeric(as.factor(group))), y=group.r2, color=factor(target2==.sample), alpha=I(.5)) + 
+  facet_grid(Slope~Type2, labeller=label_both, scales="free") + scale_colour_discrete(guide="none")
