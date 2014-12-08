@@ -1,4 +1,9 @@
 source("./Code/LineupFunctions.R")
+library(ggplot2)
+library(plyr)
+library(dplyr)
+library(reshape2)
+library(nullabor)
 
 N <- 5
 # seeds <- sample(0:1e6, N*3*4) + sample(0:1e3, N*3*4) + sample(0:100, N*3*4)
@@ -129,13 +134,8 @@ data.summary <- ddply(data, .(plot.idx, filename, name, .sample), function(df){
              n=nrow(df), ngroups=max(c(length(unique(df$group.k)),length(unique(df$group)))))
 })
 data.summary <- merge(data.summary, answers)
-data.summary$Slope <- grepl("Slope", data.summary$type)
+data.summary$Type1 <- c("", "Slope")[grepl("Slope", data.summary$type)+1]
 data.summary$Type2 <- gsub("Slope", "", data.summary$type)
 
 save(plots, names, answers, data, file="./Images/Lineups/Lineups.rda")
 write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
-
-qplot(data=data.summary, x=jitter(as.numeric(as.factor(group))), y=slope.r2, color=factor(target1==.sample), alpha=I(.5)) + 
-  facet_grid(Slope~Type2, labeller=label_both, scales="free") + scale_colour_discrete(guide="none")
-qplot(data=data.summary, x=jitter(as.numeric(as.factor(group))), y=group.r2, color=factor(target2==.sample), alpha=I(.5)) + 
-  facet_grid(Slope~Type2, labeller=label_both, scales="free") + scale_colour_discrete(guide="none")
