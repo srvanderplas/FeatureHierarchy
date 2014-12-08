@@ -36,3 +36,19 @@ ggplot(data=subset(eval.data, Type2!=""), aes(x=factor(ans2), y=factor(target2))
   facet_wrap(~group) + 
   ggtitle("Answer Matching using R^2") + 
   xlab("R^2 predicted answer") + ylab("Target answer")
+
+ddply(eval.data, .(group), summarize, 
+      correct1=sum(Type1!="" & ans1==target1, na.rm=T),
+      close1=sum(Type1!="" & runnerup1==target1, na.rm=T), 
+      miss1=sum(Type1!="" & target1!=ans1 & target1!=runnerup1), 
+      correct2=sum(Type2!="" & ans2==target2, na.rm=T), 
+      close2=sum(Type2!="" & runnerup2==target2, na.rm=T), 
+      miss2=sum(Type2!="" & target2!=ans2 & target2!=runnerup2))
+
+ddply(eval.data, .(type), summarize, 
+      correct1=sum(Type1!="" & ans1==target1, na.rm=T),
+      close1=sum(Type1!="" & runnerup1==target1, na.rm=T), 
+      miss1=sum(Type1!="" & target1!=ans1 & target1!=runnerup1), 
+      correct2=sum(Type2!="" & ans2==target2, na.rm=T), 
+      close2=sum(Type2!="" & runnerup2==target2, na.rm=T), 
+      miss2=sum(Type2!="" & target2!=ans2 & target2!=runnerup2))
