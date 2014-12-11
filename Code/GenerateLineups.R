@@ -37,7 +37,7 @@ for(i in (N+1):(2*N)){
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (2*N+1):(3*N)){
-  tmp <- make.plot.set(seed=seeds[i], n=70, sd.groups=.2, sd.data=1, ngroups = 3, group="N30-sdG0.2-sdD1-g3")
+  tmp <- make.plot.set(seed=seeds[i], n=70, sd.groups=.2, sd.data=1, ngroups = 3, group="N70-sdG0.2-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
