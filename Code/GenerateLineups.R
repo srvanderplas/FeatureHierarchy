@@ -24,6 +24,7 @@ answers <- data.frame()
 data <- data.frame()
 plots <- lapply(1:(N*7*3*4), function(i) ggplot() + geom_blank())
 
+# Small SD.group, no lines
 for(i in 1:N){
   tmp <- make.plot.set(seed=seeds[i], n=30, sd.groups=.2, sd.data=1, ngroups = 3, group="N30-sdG0.2-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
@@ -44,62 +45,63 @@ for(i in (2*N+1):(3*N)){
 }
 
 
+# Large SD.group, no lines
 for(i in (3*N+1):(4*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 3, group = "3Groups-3Outliers-sd=3", n=50, sd.data=3, n.outliers=3)
+  tmp <- make.plot.set(seed=seeds[i], n=30, sd.groups=.4, sd.data=1, ngroups = 3, group="N30-sdG0.4-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (4*N+1):(5*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 3, group = "3Groups-3Outliers-sd=5", n=50, sd.data=5, n.outliers=3)
+  tmp <- make.plot.set(seed=seeds[i], n=50, sd.groups=.4, sd.data=1, ngroups = 3, group="N50-sdG0.4-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (5*N+1):(6*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 3, group = "3Groups-3Outliers-sd=7", n=50, sd.data=7, n.outliers=3)
+  tmp <- make.plot.set(seed=seeds[i], n=70, sd.groups=.4, sd.data=1, ngroups = 3, group="N70-sdG0.4-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 
 
-
+# Small SD.group, no lines, med SD.data, 5 groups
 for(i in (6*N+1):(7*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 5, group = "5Groups-NoOutliers-sd=3", n=50, sd.data=3, n.outliers=0)
+  tmp <- make.plot.set(seed=seeds[i], n=30, sd.groups=.2, sd.data=.75, ngroups = 5, group="N30-sdG0.2-sdD.75-g5")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (7*N+1):(8*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 5, group = "5Groups-NoOutliers-sd=5", n=50, sd.data=5, n.outliers=0)
+  tmp <- make.plot.set(seed=seeds[i], n=50, sd.groups=.2, sd.data=.75, ngroups = 5, group="N50-sdG0.2-sdD.75-g5")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (8*N+1):(9*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 5, group = "5Groups-NoOutliers-sd=7", n=50, sd.data=7, n.outliers=0)
+  tmp <- make.plot.set(seed=seeds[i], n=70, sd.groups=.2, sd.data=.75, ngroups = 5, group="N70-sdG0.2-sdD.75-g5")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 
 
-
+# Small SD.group, no lines, med SD.data, 5 groups
 for(i in (9*N+1):(10*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 5, group = "5Groups-3Outliers-sd=3", n=50, sd.data=3, n.outliers=3)
+  tmp <- make.plot.set(seed=seeds[i], n=30, sd.groups=.4, sd.data=.75, ngroups = 5, group="N30-sdG0.4-sdD.75-g5")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (10*N+1):(11*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 5, group = "5Groups-3Outliers-sd=5", n=50, sd.data=5, n.outliers=3)
+  tmp <- make.plot.set(seed=seeds[i], n=50, sd.groups=.4, sd.data=.75, ngroups = 5, group="N50-sdG0.4-sdD.75-g5")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (11*N+1):(12*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 5, group = "5Groups-3Outliers-sd=7", n=50, sd.data=7, n.outliers=3)
+  tmp <- make.plot.set(seed=seeds[i], n=70, sd.groups=.4, sd.data=.75, ngroups = 5, group="N70-sdG0.4-sdD.75-g5")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
@@ -121,17 +123,13 @@ data.summary <- ddply(data, .(plot.idx, filename, name, .sample), function(df){
   slope.p <- summary(model)$coefficients[2,4]
   slope.r2 <- summary(model)$r.squared
   tmp <- unique(as.character(df$name))
-  if(as.numeric(substr(tmp, nchar(tmp), nchar(tmp)))>4){
-    model2 <- lm(data=df, y~0+factor(group.k))
-  } else {
-    model2 <- lm(data=df, y~0+factor(group))
-  }
+  model2 <- lm(data=df, y~0+factor(group))
   group.mse <- anova(model2)$`Mean Sq`[2]
   group.p <- anova(model2)$`Pr(>F)`[1]
   group.r2 <- summary(model2)$r.squared
   data.frame(slope=slope, slope.t=slope.t, slope.p=slope.p, slope.r2=slope.r2,
              group.mse=group.mse, group.p=group.p, group.r2=group.r2, 
-             n=nrow(df), ngroups=max(c(length(unique(df$group.k)),length(unique(df$group)))))
+             n=nrow(df), ngroups=length(unique(df$group)))
 })
 data.summary <- merge(data.summary, answers)
 data.summary$Type1 <- c("", "Slope")[grepl("Slope", data.summary$type)+1]
