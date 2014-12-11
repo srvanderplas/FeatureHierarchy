@@ -164,47 +164,51 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
 #' @param ngroups number of groups to cut x values into (including a group for outliers, if any are generated)
 #' @param null.line generate data without a line trend
 #' @param null.group generate data without groups
-linear.group.trend <- function(n=80, sd.groups=.1, sd.data=1, ngroups=4, null.line=FALSE, null.group=FALSE){
+linear.group.trend <- function(n=80, sd.groups=.1, sd.data=1, slope=1, ngroups=4, null.line=FALSE, null.group=FALSE){
   if(sd.data<=0 | sd.groups<0){
     stop("sd.data must be positive.")
   }
   # Determine how many points in each group
   id.group <- rep(1:ngroups, times=ceiling(n/ngroups))[1:n]
   
-  # Generate slope - either 0 (null) or +/- 1
+  # Set slope
   if(null.line){
     a <- 0
+    b <- ngroups/2
   } else {
-    a <- 1
+    a <- slope
+    b <- 0
   }
 
-  group.centers <- 1:ngroups
+  # Step 1: Generate group centers
+  group.centers <- 1:ngroups - 1
   group.centers <- data.frame(xcenter=group.centers,
-                              ycenter=a*(group.centers + rnorm(ngroups, 0, sd.groups)),
+                              ycenter=a*(group.centers) + b,
                               group=group.centers)
 
+  # Step 2: Permute the points in x
+  # Step 3: Add general error variance in y
   if(null.group){
-    xerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)+sd.groups))
-    yerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)+sd.groups))
+    xerr <- runif(n, -.5, .5)
+    yerr <- rnorm(n, mean=0, sd=sd.data)
   } else {
-    xerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)))
-    yerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)))
+    xerr <- rnorm(n, mean=0, sd=sd.groups)
+    yerr <- rnorm(n, mean=0, sd=sd.data)
   }
 
-  
-  
-  df <- data.frame(x=group.centers$xcenter[id.group] + xerr, 
-                   y=group.centers$ycenter[id.group] + yerr, 
+  # Aggregate into a data frame (keep group centers)
+  # Step 4: Scale x and y by k to get points in [0,1]-ish for x and proportionate points in y
+  df <- data.frame(x=(group.centers$xcenter[id.group] + xerr)/ngroups, 
+                   y=(group.centers$ycenter[id.group] + yerr)/ngroups, 
+                   xcenter = (group.centers$xcenter[id.group])/ngroups,
+                   ycenter = (group.centers$ycenter[id.group])/ngroups,
                    group=id.group)
-  df <- merge(df, group.centers)
 
-  
+  # Permutue group labels using k-means.
   if(null.group){
-    df$x <- df$x
-    df$y <- a*df$x + yerr
     df <- permute.groups(df, ngroups)
   }
-  df[,c("x", "xcenter", "y", "ycenter")] <- scale(df[,c("x", "xcenter", "y", "ycenter")])
+  
   return(df)
 }
 
