@@ -280,7 +280,7 @@ make.plot.set <- function(seed=NA,
   lineupdata <- lineup(true=dframe, pos=pos.x, n=20, samples=nulldata)
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
-    geom_point(aes(x=x, y=y), size=3, solid=F) + 
+    geom_point(aes(x=x, y=y), size=3, shape=1) + 
     facet_wrap(~.sample) +
     theme_lineup()
   tmp <- data.frame(name=paste0(group, "-", seed, "-", j), 
@@ -303,7 +303,7 @@ make.plot.set <- function(seed=NA,
   lineupdata <- lineup(true=dframe, pos=pos.x, n=20, samples=nulldata)
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
-    geom_point(aes(x=x, y=y, color=factor(group)), size=3, solid=F) + 
+    geom_point(aes(x=x, y=y, color=factor(group)), size=3, shape=1) + 
     facet_wrap(~.sample) + 
     scale_color_manual(values=color.pal) +
     theme_lineup()
@@ -381,7 +381,8 @@ make.plot.set <- function(seed=NA,
                       cbind(.sample=pos.y, alt.target))
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
-    geom_point(aes(x=x, y=y, color=factor(group)), size=3, solid=F) + 
+    geom_point(aes(x=x, y=y, color=factor(group)), size=3, shape=1) + 
+    scale_shape_discrete(solid=F) + 
     facet_wrap(~.sample) + 
     scale_color_manual(values=color.pal) +
     theme_lineup()
