@@ -25,19 +25,19 @@ data <- data.frame()
 plots <- lapply(1:(N*7*3*4), function(i) ggplot() + geom_blank())
 
 for(i in 1:N){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 3, group = "3Groups-NoOutliers-sd=3", n=30, sd.data=3, n.outliers=0)
+  tmp <- make.plot.set(seed=seeds[i], n=30, sd.groups=.2, sd.data=1, ngroups = 3, group="N30-sdG0.2-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (N+1):(2*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 3, group = "3Groups-NoOutliers-sd=5", n=30, sd.data=5, n.outliers=0)
+  tmp <- make.plot.set(seed=seeds[i], n=50, sd.groups=.2, sd.data=1, ngroups = 3, group="N50-sdG0.2-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
 }
 for(i in (2*N+1):(3*N)){
-  tmp <- make.plot.set(seed=seeds[i], ngroups = 3, group = "3Groups-NoOutliers-sd=7", n=30, sd.data=7, n.outliers=0)
+  tmp <- make.plot.set(seed=seeds[i], n=70, sd.groups=.2, sd.data=1, ngroups = 3, group="N30-sdG0.2-sdD1-g3")
   plots[((i-1)*7+1):(i*7)] <- tmp$plots
   answers <- rbind(answers, tmp$answers)
   data <- rbind.fill(data, tmp$data)
@@ -137,5 +137,5 @@ data.summary <- merge(data.summary, answers)
 data.summary$Type1 <- c("", "Slope")[grepl("Slope", data.summary$type)+1]
 data.summary$Type2 <- gsub("Slope", "", data.summary$type)
 
-save(plots, names, answers, data, file="./Images/Lineups/Lineups.rda")
+save(plots, names, answers, data.summary, data, file="./Images/Lineups/Lineups.rda")
 write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)

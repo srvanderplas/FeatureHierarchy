@@ -88,8 +88,8 @@ linear.trend <- function(n=30, sd.data=5, n.outliers=0, ngroups=2, group.strengt
 permute.groups2 <- function(lineupdata, ngroups=3, pos=sample(1:20, 1)){
   require(plyr)
   ddply(lineupdata, .(.sample), function(df){
-    dst <- dist(df[,c("x", "y", "z")])
-    #     dst <- dist(df[,c("x", "y")])
+#     dst <- dist(df[,c("x", "y", "z")])
+    dst <- dist(df[,c("x", "y")])
     if(sum(df$.sample==pos)==0){
       df$group.k = cutree(hclust(dst, method="complete"), round(nrow(df)/(ngroups)))%%ngroups+1
     } else {
@@ -97,6 +97,27 @@ permute.groups2 <- function(lineupdata, ngroups=3, pos=sample(1:20, 1)){
     }
     df
   })
+}
+
+#' Permute groups (for aesthetics) to test the effect of similarity vs. proximity
+#' 
+#' @description This function is used after the nullabor function lineup(null_permute, data). 
+#' It uses the first iteration of k-means clustering to create a new group variable. 
+#' This group variable is used for displaying other aesthetics, like color or shape. 
+#' In the target plot, there will be \code{ngroups} clusters which may slightly overlap. 
+#' 
+#' @param df data frame with x, y columns
+#' @param ngroups number of clusters in the target plot
+#' @param pos position of the second target plot
+permute.groups <- function(df, ngroups=3){
+  require(plyr)
+  # sample ngroup points, use 1st step of kmeans as "group" allocation with 3*ngroups groups
+  kmcenter <- sample(1:nrow(df), ngroups*3)
+  df$group <- apply(sapply(kmcenter, function(i) sqrt((df$x-df$x[i])^2 + (df$y-df$y[i])^2)), 1, which.min)
+  df$xcenter <- df$x[kmcenter[df$group]]
+  df$ycenter <- df$y[kmcenter[df$group]]
+  df$group <- df$group %% ngroups + 1
+  df
 }
 
 #' Function to find the subset of a palette with the largest total pairwise distance
@@ -121,27 +142,92 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
   return(palette[clist[which.max(res),]])
 }
 
+#' @title Generate data with groups arranged according to a linear trend 
+#' 
+#' @description
+#' This function returns a data frame containing x, y, and group columns. 
+#' It is designed for use with the \code{nullabor} package, to create lineups.
+#' 
+#' @details 
+#' The returned data frame contains columns:
+#' \itemize{
+#'  \item \code{x}, a slightly non-uniform vector of values between -5 and 5
+#'  \item \code{y}, which is linearly related to \code{x} (absolute slope between .5 and 4.5)
+#'  \item \code{group}, which indicates which group the point belongs to
+#'  \item \code{a}, the "true" slope value
+#'  \item \code{b}, the "true" intercept value
+#'  \item \code{r2}, the fitted $R^2$ value
+#' } 
+#' @param n Number of points to generate
+#' @param sd.groups standard deviation of the group centers around the line
+#' @param sd.data sd of random noise around group centers
+#' @param ngroups number of groups to cut x values into (including a group for outliers, if any are generated)
+#' @param null.line generate data without a line trend
+#' @param null.group generate data without groups
+linear.group.trend <- function(n=80, sd.groups=.1, sd.data=1, ngroups=4, null.line=FALSE, null.group=FALSE){
+  if(sd.data<=0 | sd.groups<0){
+    stop("sd.data must be positive.")
+  }
+  # Determine how many points in each group
+  id.group <- rep(1:ngroups, times=ceiling(n/ngroups))[1:n]
+  
+  # Generate slope - either 0 (null) or +/- 1
+  if(null.line){
+    a <- 0
+  } else {
+    a <- 1
+  }
+
+  group.centers <- 1:ngroups
+  group.centers <- data.frame(xcenter=group.centers,
+                              ycenter=a*(group.centers + rnorm(ngroups, 0, sd.groups)),
+                              group=group.centers)
+
+  if(null.group){
+    xerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)+sd.groups))
+    yerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)+sd.groups))
+  } else {
+    xerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)))
+    yerr <- rnorm(n, mean=0, sd=(sd.data/sqrt(a^2+1)))
+  }
+
+  
+  
+  df <- data.frame(x=group.centers$xcenter[id.group] + xerr, 
+                   y=group.centers$ycenter[id.group] + yerr, 
+                   group=id.group)
+  df <- merge(df, group.centers)
+
+  
+  if(null.group){
+    df$x <- df$x
+    df$y <- a*df$x + yerr
+    df <- permute.groups(df, ngroups)
+  }
+  df[,c("x", "xcenter", "y", "ycenter")] <- scale(df[,c("x", "xcenter", "y", "ycenter")])
+  return(df)
+}
+
+
+
+
 #' Function to generate 7 plots which permute slope and the aesthetics 
 #' color, shape, color+shape(redundant), or a combination of slope and 
 #' the other aesthetics.
 #' @param seed a seed to be used to generate the data which is shared by all 7 plots
-#' @param permute.var the variable or variables to be permuted. If multiple variables are specified, one will be sampled for each plot. 
 #' @param n Number of points to generate
-#' @param sd.data standard deviation of the data around the line
-#' @param n.outliers number of outliers
+#' @param sd.groups standard deviation of the group centers around the line
+#' @param sd.data sd of random noise around group centers
 #' @param ngroups number of groups to cut x values into (including a group for outliers, if any are generated)
-#' @param group.strength sd of random noise used to cluster values
-#' @param group label for the group of generated plots
-#' @param quiet should messages indicating new seeds be printed?
 #' @param ... additional arguments to data.gen.function()
-make.plot.set <- function(seed=NA, permute.var=c("x", "y"), 
-                          n=30, sd.data=5, 
-                          n.outliers=0, ngroups=3, 
-                          group.strength=0.1,                          
+make.plot.set <- function(seed=NA, 
+                          n=80, sd.groups=0.1, sd.data=1, ngroups=4,                        
                           group = "Group Label",
                           quiet=!is.na(seed),
                           ...){
   require(plyr)
+  require(ggplot2)
+  require(nullabor)
   
   # Define colors and shapes
   colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
@@ -151,8 +237,8 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
   colortm <- read.csv("./Data/color-perceptual-kernel.csv")
   shapetm <- read.csv("./Data/shape-perceptual-kernel.csv")
   
-  color.pal <- best.combo(ngroups, colors, colortm)
-  shape.pal <- best.combo(ngroups, shapes, shapetm)
+  color.pal <- sample(best.combo(ngroups, colors, colortm))
+  shape.pal <- sample(best.combo(ngroups, shapes, shapetm))
   
   # Check seed validity
   if(!(is.numeric(seed) | is.na(seed))){
@@ -180,12 +266,14 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
   j <- 1
   
   # Generate data (to be used in all plots)
-  dframe <- linear.trend(n=n, sd.data=sd.data, n.outliers=n.outliers, ngroups=ngroups, group.strength=group.strength)
+  dframe <- linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, ngroups=ngroups)
   
   # Slope alone
   pos.x <- sample(1:20, 1)
-  pv <- sample(permute.var, 1)
-  lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
+  nulldata <- rdply(19, function(.sample)  
+                     linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                                        ngroups=ngroups, null.line=T))
+  lineupdata <- lineup(true=dframe, pos=pos.x, n=20, samples=nulldata)
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y), size=3) + 
@@ -196,7 +284,6 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
                     target2=NA, 
                     seed=seed, 
                     idx=j, 
-                    permute.var=pv, 
                     group=group, 
                     type="Slope")
   lineupdata$name <- tmp$name
@@ -206,8 +293,10 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
   
   # Color alone
   pos.x <- sample(1:20, 1)
-  pv <- "group"
-  lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
+  nulldata <- rdply(19, function(.sample)  
+    linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                       ngroups=ngroups, null.group=T))
+  lineupdata <- lineup(true=dframe, pos=pos.x, n=20, samples=nulldata)
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, color=factor(group)), size=3) + 
@@ -219,7 +308,6 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
                     target2=pos.x, 
                     seed=seed, 
                     idx=j, 
-                    permute.var=pv, 
                     group=group, 
                     type="Color")
   lineupdata$name <- tmp$name
@@ -229,8 +317,10 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
 
   # Shape alone
   pos.x <- sample(1:20, 1)
-  pv <- "group"
-  lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
+  nulldata <- rdply(19, function(.sample)  
+    linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                       ngroups=ngroups, null.group=T))
+  lineupdata <- lineup(true=dframe, pos=pos.x, n=20, samples=nulldata)
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group)), size=3) + 
@@ -242,7 +332,6 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
                     target2=pos.x, 
                     seed=seed, 
                     idx=j, 
-                    permute.var=pv, 
                     group=group, 
                     type="Shape")
   lineupdata$name <- tmp$name
@@ -252,8 +341,10 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
   
   # Shape+Color (redundant) alone
   pos.x <- sample(1:20, 1)
-  pv <- "group"
-  lineupdata <- lineup(null_permute(pv), dframe, pos=pos.x)
+  nulldata <- rdply(19, function(.sample)  
+    linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                       ngroups=ngroups, null.group=T))
+  lineupdata <- lineup(true=dframe, pos=pos.x, n=20, samples=nulldata)
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
     geom_point(aes(x=x, y=y, shape=factor(group), color=factor(group)), size=3) + 
@@ -266,7 +357,6 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
                     target2=pos.x, 
                     seed=seed, 
                     idx=j, 
-                    permute.var=pv, 
                     group=group, 
                     type="ColorShape")
   lineupdata$name <- tmp$name
@@ -277,12 +367,17 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
   # Slope vs. Color
   pos.x <- sample(1:20, 1)
   pos.y <- sample(c(1:20)[which(1:20!=pos.x)], 1)
-  pv <- sample(permute.var, 1)
-  lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
-                                ngroups=ngroups, pos=pos.y)
+  nulldata <- rdply(19, function(.sample)  
+    linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                       ngroups=ngroups, null.line=T, null.group=T))
+  alt.target <- linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                       ngroups=ngroups, null.line=T, null.group=F)
+  lineupdata <- lineup(true=permute.groups(dframe), pos=pos.x, n=20, samples=nulldata)
+  lineupdata <- rbind.fill(subset(lineupdata, .sample!=pos.y), 
+                      cbind(.sample=pos.y, alt.target))
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
-    geom_point(aes(x=x, y=y, color=factor(group.k)), size=3) + 
+    geom_point(aes(x=x, y=y, color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_color_manual(values=color.pal) +
     theme_lineup()
@@ -291,7 +386,6 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
                     target2=pos.y, 
                     seed=seed, 
                     idx=j, 
-                    permute.var=pv, 
                     group=group, 
                     type="SlopeColor")
   lineupdata$name <- tmp$name
@@ -302,12 +396,17 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
   # Slope vs. Shape
   pos.x <- sample(1:20, 1)
   pos.y <- sample(c(1:20)[which(1:20!=pos.x)], 1)
-  pv <- sample(permute.var, 1)
-  lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
-                                ngroups=ngroups, pos=pos.y)
+  nulldata <- rdply(19, function(.sample)  
+    linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                       ngroups=ngroups, null.line=T, null.group=T))
+  alt.target <- linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                                   ngroups=ngroups, null.line=T)  
+  lineupdata <- lineup(true=permute.groups(dframe), pos=pos.x, n=20, samples=nulldata)
+  lineupdata <- rbind.fill(subset(lineupdata, .sample!=pos.y), 
+                      cbind(.sample=pos.y, alt.target))
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
-    geom_point(aes(x=x, y=y, shape=factor(group.k)), size=3) + 
+    geom_point(aes(x=x, y=y, shape=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shape.pal) +
     theme_lineup()
@@ -316,7 +415,6 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
                     target2=pos.y, 
                     seed=seed, 
                     idx=j, 
-                    permute.var=pv, 
                     group=group, 
                     type="SlopeShape")
   lineupdata$name <- tmp$name
@@ -327,13 +425,18 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
   # Slope vs. Color+Shape (redundant)
   pos.x <- sample(1:20, 1)
   pos.y <- sample(c(1:20)[which(1:20!=pos.x)], 1)
-  pv <- sample(permute.var, 1)
-  lineupdata <- permute.groups2(lineup(null_permute(pv), dframe, pos=pos.x), 
-                                ngroups=ngroups, pos=pos.y)
+  nulldata <- rdply(19, function(.sample)  
+    linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                       ngroups=ngroups, null.line=T, null.group=T))
+  alt.target <- linear.group.trend(n=n, sd.groups=sd.groups, sd.data=sd.data, 
+                                   ngroups=ngroups, null.line=T)  
+  lineupdata <- lineup(true=permute.groups(dframe), pos=pos.x, n=20, samples=nulldata)
+  lineupdata <- rbind.fill(subset(lineupdata, .sample!=pos.y), 
+                      cbind(.sample=pos.y, alt.target))
   
   plots[[j]] <- 
     ggplot(data=lineupdata) + 
-    geom_point(aes(x=x, y=y, shape=factor(group.k), color=factor(group.k)), size=3) + 
+    geom_point(aes(x=x, y=y, shape=factor(group), color=factor(group)), size=3) + 
     facet_wrap(~.sample) + 
     scale_shape_manual(values=shape.pal) +
     scale_color_manual(values=color.pal) +
@@ -343,7 +446,6 @@ make.plot.set <- function(seed=NA, permute.var=c("x", "y"),
                     target2=pos.y, 
                     seed=seed, 
                     idx=j, 
-                    permute.var=pv, 
                     group=group, 
                     type="SlopeColorShape")
   lineupdata$name <- tmp$name
