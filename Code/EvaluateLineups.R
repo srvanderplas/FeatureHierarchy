@@ -1,4 +1,13 @@
+library(ggplot2)
+library(plyr)
+library(dplyr)
+library(reshape2)
+library(nullabor)
+
+source("./Code/LineupFunctions.R")
+
 load(file="./Images/Lineups/Lineups.rda")
+
 eval.data.r2 <- data.summary %>% 
   group_by(name, plot.idx, type, Type1, Type2, group, ngroups, n) %>%
   do(data.frame(ans1 = .$.sample[order(.$slope.r2, decreasing = T)[1]],
