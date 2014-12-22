@@ -2,6 +2,7 @@ library(shiny)
 library(ggplot2)
 library(plyr)
 library(nullabor)
+library(ggthemes)
 library(Cairo)
 options(shiny.usecairo=T)
 
@@ -19,6 +20,11 @@ colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
 shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
 
 colortm <- read.csv("/home/susan/Documents/Rprojects/FeatureHierarchy/Data/color-perceptual-kernel.csv")
+# colortm[3,4] <- 0
+# colortm[4,3] <- 0
+colortm[8,] <- 0
+colortm[,8] <- 0
+  
 shapetm <- read.csv("/home/susan/Documents/Rprojects/FeatureHierarchy/Data/shape-perceptual-kernel.csv")
 
 shinyServer(function(input, output, session){
@@ -72,7 +78,7 @@ shinyServer(function(input, output, session){
     colorp <- color.pal()
     shapep <- shape.pal()
     
-    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) + coord_fixed(ratio=1)
+    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) #+ coord_fixed(ratio=1)
     
     # Set Aesthetics
     if(length(input$aes)==0){
@@ -108,7 +114,7 @@ shinyServer(function(input, output, session){
     }
       
     plot
-  })
+  }, width=850, height=680)
   
   output$answer <- renderUI({
     if(input$showAnswer){

@@ -8,7 +8,7 @@ shinyUI(fluidPage(
       wellPanel(
         actionButton("newdata", "New Data"),     
         numericInput("N", "Number of Points", value=50, min=30, max=100, step=5), 
-        numericInput("K", "Number of groups", value=3, min=2, max=10, step=1),
+        numericInput("K", "Number of groups", value=3, min=3, max=5, step=1),
         br(),
         fluidRow(
           column(4, radioButtons("p", "# Target Plots", choices=c("1", "2"), selected=1)),
@@ -18,17 +18,24 @@ shinyUI(fluidPage(
                                        c("Regression Line", "Data Ellipses"), selected=NULL))
         ),
         br(),        
-        sliderInput(inputId="lambda", label="Proportion Group Model", 
-                    min=0, max=1, value=.5, step=.05, round=F),
+        sliderInput(inputId="lambda", label="Group Strength", 
+                    min=0.05, max=1, value=1, step=.01, round=F),
         br(),
         conditionalPanel(
           condition = "input.p=='2'", 
-          sliderInput(inputId="lambda2", label="Proportion Group Model (2nd Target)", 
-                      min=0, max=1, value=1, step=.05, round=F),
+          sliderInput(inputId="lambda2", label="Group Strength (Model 2)", 
+                      min=0.05, max=1, value=1, step=.01, round=F),
           br()
         ),
-        sliderInput(inputId="nulllambda", label="Null Plots: Group Proportion", 
-                    min=0, max=1, value=1, step=.05, round=F)
+        sliderInput(inputId="nulllambda", label="Group Strength (Null Plots)", 
+                    min=0.05, max=1, value=.5, step=.01, round=F)
+#         ,
+#         br(),
+#         sliderInput(inputId="sep", label="Cluster Separation",
+#                     min=.05, max=1, value=.65, step=0.05, round=F),
+#         br(),
+#         sliderInput(inputId="nullsep", label="Null Cluster Separation",
+#                     min=.05, max=1, value=.05, step=0.05, round=F)
         
       )
     ),
