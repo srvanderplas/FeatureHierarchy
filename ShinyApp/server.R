@@ -2,6 +2,8 @@ library(shiny)
 library(ggplot2)
 library(plyr)
 library(nullabor)
+library(Cairo)
+options(shiny.usecairo=T)
 
 # functions for generating data
 source("/home/susan/Documents/Rprojects/FeatureHierarchy/Code/MixtureLineups.R")
@@ -39,26 +41,26 @@ shinyServer(function(input, output, session){
   
   dframe <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda, N=input$N, K=input$K)
+      mixture.sim(lambda=input$lambda, N=input$N, K=input$K, q=input$lambda)
     }
   })
   
   dframe2 <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda2, N=input$N, K=input$K)
+      mixture.sim(lambda=input$lambda2, N=input$N, K=input$K, q=input$lambda)
     }
   })
   
   nulldata <- reactive({
     if(!is.na(input$newdata)){
-      rdply(19, function(.sample) mixture.sim(lambda=input$nulllambda, N=input$N, K=input$K))
+      rdply(19, function(.sample) mixture.sim(lambda=input$nulllambda, N=input$N, K=input$K, q=input$nulllambda))
     }
   })
   
   data <- reactive({
     if(input$p=='2'){
       tmp <- lineup(true=dframe(), pos=pos()[1], n=20, samples=nulldata())
-      tmp <- rbind.fill(subset(tmp, .sample!=pos()[2]), cbind(.sample=pos()[2], dframe2))
+      tmp <- rbind.fill(subset(tmp, .sample!=pos()[2]), cbind(.sample=pos()[2], dframe2()))
     } else {
       tmp <- lineup(true=dframe(), pos=pos()[1], n=20, samples=nulldata())
     }
@@ -105,7 +107,7 @@ shinyServer(function(input, output, session){
       }
     }
       
-    print(plot)
+    plot
   })
   
   output$answer <- renderUI({
