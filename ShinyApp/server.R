@@ -26,6 +26,8 @@ colortm[8,] <- 0
 colortm[,8] <- 0
   
 shapetm <- read.csv("/home/susan/Documents/Rprojects/FeatureHierarchy/Data/shape-perceptual-kernel.csv")
+# shapetm[9:10,] <- 0
+# shapetm[, 9:10] <- 0
 
 shinyServer(function(input, output, session){
   
@@ -47,19 +49,19 @@ shinyServer(function(input, output, session){
   
   dframe <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda, N=input$N, K=input$K, q=input$lambda)
+      mixture.sim(lambda=input$lambda, N=input$N, K=input$K, q=3/4, sd=input$sd)
     }
   })
   
   dframe2 <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda2, N=input$N, K=input$K, q=input$lambda)
+      mixture.sim(lambda=input$lambda2, N=input$N, K=input$K, q=3/4, sd=input$sd)
     }
   })
   
   nulldata <- reactive({
     if(!is.na(input$newdata)){
-      rdply(19, function(.sample) mixture.sim(lambda=input$nulllambda, N=input$N, K=input$K, q=input$nulllambda))
+      rdply(19, function(.sample) mixture.sim(lambda=input$nulllambda, N=input$N, K=input$K, q=.1, sd=input$sd))
     }
   })
   

@@ -45,18 +45,18 @@ sim.clusters <- function(K, N, q=2/3){
   return(m1.data)
 }
 
-sim.line <- function(K, N, a=1){
+sim.line <- function(K, N, sd=1.5){
   # Simulate data from line
   m2.data <- data.frame(x=jitter(seq(-4, 4, length.out=N)), y=0)
-  m2.data$y <- a*m2.data$x + rnorm(N, 0, 1)
+  m2.data$y <- m2.data$x + rnorm(N, 0, sd)
   
   return(m2.data)
 }
 
-mixture.sim <- function(lambda, K, N, q=2/3){
+mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
   m1.data <- sim.clusters(K=K, N=N, q=q)
   m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
-  m2.data <- sim.line(K=K, N=N)
+  m2.data <- sim.line(K=K, N=N, sd=sd)
   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
 
   mix.data <- data.frame(
@@ -69,18 +69,30 @@ mixture.sim <- function(lambda, K, N, q=2/3){
   # If lambda = 1, don't permute. If lambda = 0, permute everything
   # For entries that will be permuted, transition to group +/-1 with equal probability 
   # (unless edge, then transition to self or either +/- 1 with equal prob).
+  if(lambda>0 & lambda < 1){
+    fix <- rbinom(N, 1, 1-lambda)
+  } else if(lambda==0){
+    fix <- rep(1, N)
+  } else {
+    fix <- 0
+  }
   
-  mix.data$group <- sapply(mix.data$group, function(i){
-    trans.vec <- c(-1*(i>1), 1*(i<K))
-    if(lambda>0 & lambda < 1){
-      i + rbinom(1, 1, 1-lambda)*sample(trans.vec, size=1, replace=F)
-    } else if(lambda==1){
-      i
-    } else{
-      i + sample(trans.vec, size=1, replace=F)
-    }
-  })
+  mix.data$group <- (1-fix)*i + fix*sample(mix.data$group, size=N, replace=F)
+#   
+#   mix.data$group <- sapply(mix.data$group, function(i){
+# #     trans.vec <- c(-1*(i>1), 1*(i<K))
+#     trans.vec <- 1:K
+#     if(lambda>0 & lambda < 1){
+#       fix <- rbinom(1, 1, 1-lambda)
+#       (1-fix)*i + fix*sample(trans.vec, size=1, replace=F)
+#     } else if(lambda==1){
+#       i
+#     } else{
+#       sample(trans.vec, size=1, replace=F)
+#     }
+#   })
   
+  mix.data$group <- mix.data$group%%K + 1
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
   
   return(mix.data)

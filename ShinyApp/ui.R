@@ -29,10 +29,11 @@ shinyUI(fluidPage(
         ),
         sliderInput(inputId="nulllambda", label="Group Strength (Null Plots)", 
                     min=0.05, max=1, value=.5, step=.01, round=F)
-#         ,
-#         br(),
-#         sliderInput(inputId="sep", label="Cluster Separation",
-#                     min=.05, max=1, value=.65, step=0.05, round=F),
+        ,
+        br(),
+        sliderInput(inputId="sd", label="Line Std Dev.",
+                    min=.5, max=2, value=1.5, step=0.25, round=F)
+        #,
 #         br(),
 #         sliderInput(inputId="nullsep", label="Null Cluster Separation",
 #                     min=.05, max=1, value=.05, step=0.05, round=F)
