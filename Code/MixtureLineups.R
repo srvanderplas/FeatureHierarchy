@@ -24,6 +24,8 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
 
 # q = separation between clusters
 sim.clusters <- function(K, N, q=2/3){
+  if(q==0){q <- .01}
+  if(q==1){q <- .99}
   
   X <- data.frame(matrix(rnorm(N*floor(q*N)), nrow=N))
   X$class <- rep(1:K, each=ceiling(N/K))[1:N]
