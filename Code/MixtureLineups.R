@@ -77,20 +77,7 @@ mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
     fix <- 0
   }
   
-  mix.data$group <- (1-fix)*i + fix*sample(mix.data$group, size=N, replace=F)
-#   
-#   mix.data$group <- sapply(mix.data$group, function(i){
-# #     trans.vec <- c(-1*(i>1), 1*(i<K))
-#     trans.vec <- 1:K
-#     if(lambda>0 & lambda < 1){
-#       fix <- rbinom(1, 1, 1-lambda)
-#       (1-fix)*i + fix*sample(trans.vec, size=1, replace=F)
-#     } else if(lambda==1){
-#       i
-#     } else{
-#       sample(trans.vec, size=1, replace=F)
-#     }
-#   })
+  mix.data$group <- (1-fix)*mix.data$group + fix*sample(mix.data$group, size=N, replace=F)
   
   mix.data$group <- mix.data$group%%K + 1
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])

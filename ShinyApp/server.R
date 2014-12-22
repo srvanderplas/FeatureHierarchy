@@ -28,8 +28,30 @@ colortm[,8] <- 0
 shapetm <- read.csv("/home/susan/Documents/Rprojects/FeatureHierarchy/Data/shape-perceptual-kernel.csv")
 # shapetm[9:10,] <- 0
 # shapetm[, 9:10] <- 0
+shapetm[9,] <- 0
+shapetm[,9] <- 0
+shapetm[10,] <- 0
+shapetm[,10] <- 0
 
 shinyServer(function(input, output, session){
+  
+  observe({
+    input$newdata
+#     input$p
+#     input$N
+#     input$K
+#     input$lambda
+#     input$lambda2
+#     input$nulllambda
+#     input$sd
+#     input$q
+    tmp <- round(runif(50, 1000, 1000000)[50])
+    set.seed(tmp)
+    updateNumericInput(session, "seed", value=tmp)
+  })
+  
+  
+  
   
   # Calculate palettes
   color.pal <- reactive({
@@ -49,13 +71,13 @@ shinyServer(function(input, output, session){
   
   dframe <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda, N=input$N, K=input$K, q=3/4, sd=input$sd)
+      mixture.sim(lambda=input$lambda, N=input$N, K=input$K, q=input$q, sd=input$sd)
     }
   })
   
   dframe2 <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda2, N=input$N, K=input$K, q=3/4, sd=input$sd)
+      mixture.sim(lambda=input$lambda2, N=input$N, K=input$K, q=input$q, sd=input$sd)
     }
   })
   
@@ -80,7 +102,7 @@ shinyServer(function(input, output, session){
     colorp <- color.pal()
     shapep <- shape.pal()
     
-    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) #+ coord_fixed(ratio=1)
+    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) + coord_fixed(ratio=1)
     
     # Set Aesthetics
     if(length(input$aes)==0){
@@ -101,11 +123,11 @@ shinyServer(function(input, output, session){
     }
     
     # Set other geoms/aids
-    if("Regression Line"%in%input$plotopts){
+    if("Reg. Line"%in%input$plotopts){
       plot <- plot + geom_smooth(method="lm", color="black", alpha=.25)
     }
     
-    if("Data Ellipses"%in%input$plotopts){
+    if("Ellipses"%in%input$plotopts){
       if("Color"%in%input$aes){
         plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
       } else if("Shape"%in%input$aes){
@@ -116,7 +138,7 @@ shinyServer(function(input, output, session){
     }
       
     plot
-  }, width=850, height=680)
+  })
   
   output$answer <- renderUI({
     if(input$showAnswer){
@@ -124,8 +146,10 @@ shinyServer(function(input, output, session){
         tab.out <- 
           tags$table(
             tags$tr(
-              tags$td(paste0("Target 1: ", pos()[1])),
-              tags$td(paste0("Target 2: ", pos()[2]))          
+              tags$td(paste0("Target 1: ", pos()[1], " "))
+            ),
+            tags$tr(
+              tags$td(paste0("Target 2: ", pos()[2], " "))          
             )
           )
       } else {
@@ -136,12 +160,15 @@ shinyServer(function(input, output, session){
             )
           )
       }
+      tab.out <- tagList(tab.out,br(),dataTableOutput("stats"))
     } else {
       if(input$p=="2"){
         tab.out <- 
           tags$table(
             tags$tr(
-              tags$td("Target 1: ?"),
+              tags$td("Target 1: ?")
+            ),
+            tags$tr(
               tags$td("Target 2: ?")
             )          
           )
@@ -156,4 +183,48 @@ shinyServer(function(input, output, session){
     }
     tab.out
   })
+  
+  stats <- reactive({
+    
+    dd <- data()
+    
+    dd <- ddply(dd, .(.sample), function(df){ 
+      tmp <- df
+      tmp$kmean.cluster <- kmeans(tmp[,c("x", "y")], input$K, iter.max=100)$cluster
+      return(tmp)
+      }
+    )
+    
+    st <- ddply(dd, .(.sample), summarize, 
+                linear.model.r2 = round(summary(lm(y~x))$r.squared, 4),
+                aes.group.r2 = round(summary(lm(y~factor(group)))$r.squared, 4),
+                kmean.group.r2 = round(summary(lm(y~factor(kmean.cluster)))$r.squared, 4))
+    st    
+  })
+  
+  output$stats <- renderDataTable(stats(), options=list(pageLength=10))
+  
+  output$dataset <- downloadHandler(
+    filename = function(){
+      paste('data-', Sys.time(), '.csv', sep='')
+    }, 
+    content=function(file){
+      st <- isolate(stats())
+      dd <- isolate(data())
+      qdat <- data.frame(ans.1 = isolate(pos()[1]),
+                         ans.2 = isolate(ifelse(input$p=="2", pos()[2], NA)),
+                         seed = input$seed)
+      qdat <- cbind(qdat, data.frame(lapply(input, function(i) paste(ifelse(length(i)==0, " ", i), collapse=","))))
+      names(qdat) <- gsub("plotopts1", "reg.line", names(qdat))
+      names(qdat) <- gsub("plotopts2", "data.ellipse", names(qdat))
+      names(qdat) <- gsub("aes1", "Color", names(qdat))
+      names(qdat) <- gsub("aes2", "Shape", names(qdat))
+      names(qdat) <- gsub("^p$", "num.targets", names(qdat))
+      qdat <- qdat[,!names(qdat)%in%c("showAnswer", "newdata", "aes", "plotopts")]
+      tmp <- merge(dd, st)
+      tmp <- merge(tmp, qdat)
+      tmp <- tmp[,!grepl("(ss\\.net)|(shiny\\.server)", names(tmp))]
+      write.csv(tmp, file, row.names=FALSE)
+    }
+  )
 })
