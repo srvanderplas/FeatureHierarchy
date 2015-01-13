@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{Group beats Trend!? A framework for testing feature hierarchy in statistical graphics}
+\author{Susan VanderPlas, Heike Hofmann\thanks{Department of Statistics and Statistical Laboratory, Iowa State University}}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\maketitle
+\begin{abstract}abstract goes here
+\end{abstract}
+
+\section{Design Choices}
+Perceptual kernels \citep{heer:2014}
+\section{Generating Model}
+
+
+
+\end{document}
