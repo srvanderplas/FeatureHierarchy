@@ -5,6 +5,7 @@
 %\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}
 \usepackage{amssymb}
+\usepackage{natbib}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
 \title{Group beats Trend!? A framework for testing feature hierarchy in statistical graphics}
@@ -20,5 +21,7 @@ Perceptual kernels \citep{heer:2014}
 \section{Generating Model}
 
 
+\bibliographystyle{asa}
+\bibliography{references}
 
 \end{document}
