@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
@@ -8,7 +8,7 @@
 \usepackage{natbib}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
-\title{Group beats Trend!? A framework for testing feature hierarchy in statistical graphics}
+\title{Group beats Trend!? \\Testing feature hierarchy in statistical graphics}
 \author{Susan VanderPlas, Heike Hofmann\thanks{Department of Statistics and Statistical Laboratory, Iowa State University}}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -27,6 +27,8 @@ On the other hand, regression lines should emphasize any linear trends in the da
 \section{Design Choices}
 Perceptual kernels \citep{heer:2014}
 \section{Generating Model}
+We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. We made sure that data from the clustering model $M_C$ shares the same correlation 
+with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
 
 
 \bibliographystyle{asa}

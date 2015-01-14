@@ -62,8 +62,9 @@ mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
   mix.data <- data.frame(
     x=lambda*m1.data$x + (1-lambda)*m2.data$x,
     y=lambda*m1.data$y + (1-lambda)*m2.data$y,
-    group=as.numeric(m1.data$group)
+    group=as.numeric(m1.data$group)  
     )  
+  
   
   # Sample group according to lambda - 
   # If lambda = 1, don't permute. If lambda = 0, permute everything
@@ -79,8 +80,10 @@ mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
   
   mix.data$group <- (1-fix)*mix.data$group + fix*sample(mix.data$group, size=N, replace=F)
   
-  mix.data$group <- mix.data$group%%K + 1
+#  mix.data$group <- mix.data$group%%K + 1
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
   
+  mix.data$group <- cutree(hclust(dist(mix.data[,c("x", "y")])), k=K) # grouping by the best K clusters
+                       
   return(mix.data)
 }

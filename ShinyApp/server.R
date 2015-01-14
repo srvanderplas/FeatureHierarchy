@@ -6,11 +6,14 @@ library(ggthemes)
 library(Cairo)
 options(shiny.usecairo=T)
 
-# functions for generating data
-source("/home/susan/Documents/Rprojects/FeatureHierarchy/Code/MixtureLineups.R")
+#folderStr <- "/home/susan/Documents/Rprojects/FeatureHierarchy"
+folderStr <- "/Users/heike/papers/2015-FeatureHierarchy"
 
 # functions for generating data
-source("/home/susan/Documents/Rprojects/FeatureHierarchy/Code/theme_lineup.R")
+source(sprintf("%s/Code/MixtureLineups.R", folderStr))
+
+# functions for generating data
+source(sprintf("%s/Code/theme_lineup.R", folderStr))
 
 
 
@@ -19,13 +22,13 @@ colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
 
-colortm <- read.csv("/home/susan/Documents/Rprojects/FeatureHierarchy/Data/color-perceptual-kernel.csv")
+colortm <- read.csv(sprintf("%s/Data/color-perceptual-kernel.csv", folderStr))
 # colortm[3,4] <- 0
 # colortm[4,3] <- 0
 colortm[8,] <- 0
 colortm[,8] <- 0
   
-shapetm <- read.csv("/home/susan/Documents/Rprojects/FeatureHierarchy/Data/shape-perceptual-kernel.csv")
+shapetm <- read.csv(sprintf("%s/Data/shape-perceptual-kernel.csv", folderStr))
 # shapetm[9:10,] <- 0
 # shapetm[, 9:10] <- 0
 shapetm[9,] <- 0
