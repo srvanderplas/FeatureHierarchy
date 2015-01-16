@@ -28,14 +28,14 @@ shinyUI(fluidPage(
         ,
         br(),
         h4("Data Generation Options"),
-        sliderInput(inputId="sd", label="Line Std Dev.",
+        sliderInput(inputId="sd", label="Std Dev.",
                     min=.5, max=2, value=1.5, step=0.25, round=F)
         ,
         br(),
         sliderInput(inputId="q", label="Cluster Separation",
-                    min=.05, max=.95, value=.75, step=0.05, round=F)
+                    min=0, max=2, value=.5, step=0.05, round=F)
         
-      )
+      ) 
     ),
     column(5,
            div(align="center", plotOutput("plot", width='100%', height='500px'))

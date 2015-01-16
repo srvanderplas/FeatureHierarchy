@@ -23,7 +23,7 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
 
 
 # q = separation between clusters
-sim.clusters <- function(K, N, q=2/3){
+sim.clusters.old <- function(K, N, q=2/3){
   if(q==0){q <- .01}
   if(q==1){q <- .99}
   
@@ -46,8 +46,36 @@ sim.clusters <- function(K, N, q=2/3){
   m1.data$group <- p1$class
   m1.data$x <- scale(m1.data$x)*2
   m1.data$y <- scale(m1.data$y)*2
+
+  m2.data <- m1.data
+  m2.data$x <- with(m1.data, x+y)
+  m2.data$y <- with(m1.data, y-x)
 #   qplot(x, y, data=m1.data, colour=group)
   
+  return(m2.data)
+}
+
+sim.clusters <- function(K, N, q=2/3, sd=1.5){
+  if(q==0){q <- .01}
+  if(q==1){q <- .99}
+  
+  yc <- scale(runif(K, min=-q*K, max=q*K))*q*K
+  xc <- jitter(seq(0, K, length.out=K))
+  
+  yerr <- rnorm(N, sd=sd)
+  xerr <- rnorm(N, sd=sd)
+  
+  groups <- sample(K, N, replace=TRUE, prob=abs(rnorm(K, mean=1/K, sd=0.5/K^2)))
+  
+  tmp <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
+  m1.data <- tmp
+  
+  m1.data$x <- scale(m1.data$x)
+  m1.data$y <- scale(m1.data$y)
+
+#   m1.data$y <- scale(m1.data$y, center=0, scale=sqrt(1/3*q^2*K^2))*2
+#   m1.data$x <- scale(m1.data$x, center=.5*K, scale=sqrt(1/12*K^2))*2
+# qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
   return(m1.data)
 }
 
@@ -60,11 +88,17 @@ sim.line <- function(K, N, sd=1.5){
 }
 
 mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
-  m1.data <- sim.clusters(K=K, N=N, q=q)
+  m1.data <- sim.clusters(K=K, N=N, q=q, sd=sd)
   m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")]) 
   m2.data <- sim.line(K=K, N=N, sd=sd)
   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
-
+  
+  if(lambda==0){
+    tmp <- m1.data
+    m1.data <- with(tmp, data.frame(x=x, y=.5*x+y, group=group))
+  }
+#   qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
+  
   mix.data <- data.frame(
     x=lambda*m1.data$x + (1-lambda)*m2.data$x,
     y=lambda*m1.data$y + (1-lambda)*m2.data$y,
