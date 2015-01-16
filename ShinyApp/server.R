@@ -7,7 +7,8 @@ library(Cairo)
 options(shiny.usecairo=T)
 
 #folderStr <- "/home/susan/Documents/Rprojects/FeatureHierarchy"
-folderStr <- "/Users/heike/papers/2015-FeatureHierarchy"
+#folderStr <- "/Users/heike/papers/2015-FeatureHierarchy"
+folderStr <- "../"
 
 # functions for generating data
 source(sprintf("%s/Code/MixtureLineups.R", folderStr))
