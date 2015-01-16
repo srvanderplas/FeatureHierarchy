@@ -28,12 +28,18 @@ sim.clusters <- function(K, N, q=2/3){
   if(q==1){q <- .99}
   
   X <- data.frame(matrix(rnorm(N*floor(q*N)), nrow=N))
-  X$class <- rep(1:K, each=ceiling(N/K))[1:N]
+#  X$class <- rep(1:K, each=ceiling(N/K))[1:N]
+  X$class <- sample(K, N, replace=TRUE, prob=abs(rnorm(K, mean=1/K, sd=0.5/K^2)))
   library(MASS)
   l1 <- lda(factor(class)~., data=X)
   p1 <- predict(l1)
 #   qplot(LD1, LD2, data=data.frame(p1$x), colour=p1$class)
-  
+
+#   require(plyr)
+#   dframe <- data.frame(p1$x, p1$class)
+#   names(dframe) <- c("x", "y", "group")
+#   centers <- ddply(dframe, .(group), summarise, meanx = mean(x), meany=mean(y))
+
   # Set up data set
   m1.data <- data.frame(p1$x)
   names(m1.data) <- c("x", "y")
@@ -55,7 +61,7 @@ sim.line <- function(K, N, sd=1.5){
 
 mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
   m1.data <- sim.clusters(K=K, N=N, q=q)
-  m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
+  m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")]) 
   m2.data <- sim.line(K=K, N=N, sd=sd)
   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
 
@@ -63,8 +69,7 @@ mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
     x=lambda*m1.data$x + (1-lambda)*m2.data$x,
     y=lambda*m1.data$y + (1-lambda)*m2.data$y,
     group=as.numeric(m1.data$group)  
-    )  
-  
+    )    
   
   # Sample group according to lambda - 
   # If lambda = 1, don't permute. If lambda = 0, permute everything
