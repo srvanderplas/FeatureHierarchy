@@ -23,7 +23,7 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
 
 
 # q = separation between clusters
-sim.clusters.old <- function(K, N, q=2/3){
+sim.clusters.lda <- function(K, N, q=2/3){
   if(q==0){q <- .01}
   if(q==1){q <- .99}
   
@@ -60,7 +60,7 @@ sim.clusters <- function(K, N, q=2/3, sd=1.5){
   if(q==1){q <- .99}
   
   yc <- scale(runif(K, min=-q*K, max=q*K))*q*K
-  xc <- jitter(seq(0, K, length.out=K))
+  xc <- jitter(seq(0, K-1, length.out=K))
   
   yerr <- rnorm(N, sd=sd)
   xerr <- rnorm(N, sd=sd)
@@ -105,19 +105,19 @@ mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
     group=as.numeric(m1.data$group)  
     )    
   
-  # Sample group according to lambda - 
-  # If lambda = 1, don't permute. If lambda = 0, permute everything
-  # For entries that will be permuted, transition to group +/-1 with equal probability 
-  # (unless edge, then transition to self or either +/- 1 with equal prob).
-  if(lambda>0 & lambda < 1){
-    fix <- rbinom(N, 1, 1-lambda)
-  } else if(lambda==0){
-    fix <- rep(1, N)
-  } else {
-    fix <- 0
-  }
-  
-  mix.data$group <- (1-fix)*mix.data$group + fix*sample(mix.data$group, size=N, replace=F)
+#   # Sample group according to lambda - 
+#   # If lambda = 1, don't permute. If lambda = 0, permute everything
+#   # For entries that will be permuted, transition to group +/-1 with equal probability 
+#   # (unless edge, then transition to self or either +/- 1 with equal prob).
+#   if(lambda>0 & lambda < 1){
+#     fix <- rbinom(N, 1, 1-lambda)
+#   } else if(lambda==0){
+#     fix <- rep(1, N)
+#   } else {
+#     fix <- 0
+#   }
+#   
+#   mix.data$group <- (1-fix)*mix.data$group + fix*sample(mix.data$group, size=N, replace=F)
   
 #  mix.data$group <- mix.data$group%%K + 1
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
