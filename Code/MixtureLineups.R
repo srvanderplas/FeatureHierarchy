@@ -55,27 +55,31 @@ sim.clusters.lda <- function(K, N, q=2/3){
   return(m2.data)
 }
 
-sim.clusters <- function(K, N, q=2/3, sd=1.5){
+sim.clusters <- function(K, N, q=2/3){
   if(q==0){q <- .01}
   if(q==1){q <- .99}
   
-  yc <- scale(runif(K, min=-q*K, max=q*K))*q*K
-  xc <- jitter(seq(0, K-1, length.out=K))
   
-  yerr <- rnorm(N, sd=sd)
-  xerr <- rnorm(N, sd=sd)
+  yc <- sample(1:K, replace=F)
+  xc <- sample(1:K, replace=F)
+  while(cor(xc,yc)<.25){
+    yc <- sample(1:K, replace=F)
+    xc <- sample(1:K, replace=F)
+  }
+  
+  yc <- scale(yc)
+  xc <- scale(xc)
   
   groups <- sample(K, N, replace=TRUE, prob=abs(rnorm(K, mean=1/K, sd=0.5/K^2)))
   
-  tmp <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
-  m1.data <- tmp
+  yerr <- rnorm(N, sd=q)
+  xerr <- rnorm(N, sd=q)
   
-  m1.data$x <- scale(m1.data$x)
-  m1.data$y <- scale(m1.data$y)
+  m1.data <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
 
 #   m1.data$y <- scale(m1.data$y, center=0, scale=sqrt(1/3*q^2*K^2))*2
 #   m1.data$x <- scale(m1.data$x, center=.5*K, scale=sqrt(1/12*K^2))*2
-# qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
+qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
   return(m1.data)
 }
 
