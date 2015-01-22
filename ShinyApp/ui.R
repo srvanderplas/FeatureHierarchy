@@ -10,7 +10,7 @@ shinyUI(fluidPage(
         fluidRow(column(6, numericInput("seed", "Seed Value", value=round(runif(1, 1000, 1000000)))),
                  column(6, radioButtons("p", "# Targets", choices=c("1", "2"), selected=2, inline=T))), 
         fluidRow(column(6, numericInput("N", "Number of Points", value=50, min=25, max=75, step=5)),
-                 column(6, numericInput("K", "Number of groups", value=3, min=3, max=5, step=1))), 
+                 column(6, numericInput("K", "Number of groups", value=3, min=2, max=6, step=1))), 
         br(),
         fluidRow(column(6, checkboxGroupInput("aes", "Aesthetics", c("Color", "Shape"), selected=NULL)),
                  column(6, checkboxGroupInput("plotopts", "Plot Options", c("Reg. Line", "Ellipses"), 
@@ -32,7 +32,7 @@ shinyUI(fluidPage(
         ,
         br(),
         sliderInput(inputId="q", label="Cluster Separation",
-                    min=0, max=2, value=.5, step=0.05, round=F)
+                    min=0, max=.75, value=.3, step=0.01, round=F)
         
       ) 
     ),
