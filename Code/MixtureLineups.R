@@ -60,12 +60,17 @@ sim.clusters <- function(K, N, q=2/3){
   if(q==1){q <- .99}
   
   
-  yc <- sample(1:K, replace=F)
   xc <- sample(1:K, replace=F)
-  while(cor(xc,yc)<.25){
-    yc <- sample(1:K, replace=F)
+  yc <- sample(1:K, replace=F)
+  xc <- jitter(xc, amount=.2)
+  yc <- jitter(yc, amount=.2)
+  while(cor(xc,yc)<.25 | cor(xc,yc)>.9){
     xc <- sample(1:K, replace=F)
+    yc <- sample(1:K, replace=F)
+    xc <- jitter(xc, amount=.2)
+    yc <- jitter(yc, amount=.2)
   }
+
   
   yc <- scale(yc)
   xc <- scale(xc)
@@ -92,7 +97,7 @@ sim.line <- function(K, N, sd=1.5){
 }
 
 mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
-  m1.data <- sim.clusters(K=K, N=N, q=q, sd=sd)
+  m1.data <- sim.clusters(K=K, N=N, q=q)
   m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")]) 
   m2.data <- sim.line(K=K, N=N, sd=sd)
   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
