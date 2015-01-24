@@ -64,7 +64,7 @@ sim.clusters <- function(K, N, q=2/3){
   yc <- sample(1:K, replace=F)
   xc <- jitter(xc, amount=.2)
   yc <- jitter(yc, amount=.2)
-  while(cor(xc,yc)<.25 | cor(xc,yc)>.9){
+  while(cor(xc,yc)<.4 | cor(xc,yc)>.9){
     xc <- sample(1:K, replace=F)
     yc <- sample(1:K, replace=F)
     xc <- jitter(xc, amount=.2)
@@ -84,7 +84,7 @@ sim.clusters <- function(K, N, q=2/3){
 
 #   m1.data$y <- scale(m1.data$y, center=0, scale=sqrt(1/3*q^2*K^2))*2
 #   m1.data$x <- scale(m1.data$x, center=.5*K, scale=sqrt(1/12*K^2))*2
-qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
+ggplot(aes(x=x, y=y), data=m1.data) + geom_point(aes(colour=factor(group)), data=m1.data) + coord_equal(ratio=1) + geom_point(data=m2.data)
   return(m1.data)
 }
 
@@ -102,15 +102,18 @@ mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
   m2.data <- sim.line(K=K, N=N, sd=sd)
   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
   
-  if(lambda==0){
-    tmp <- m1.data
-    m1.data <- with(tmp, data.frame(x=x, y=.5*x+y, group=group))
-  }
+#  if(lambda==0){
+#    tmp <- m1.data
+#    m1.data <- with(tmp, data.frame(x=x, y=.5*x+y, group=group))
+#  }
 #   qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
   
+  ll <- rbinom(n=N, size=1, prob=lambda)  # one model or the other
   mix.data <- data.frame(
-    x=lambda*m1.data$x + (1-lambda)*m2.data$x,
-    y=lambda*m1.data$y + (1-lambda)*m2.data$y,
+  #  x=lambda*m1.data$x + (1-lambda)*m2.data$x,
+  #  y=lambda*m1.data$y + (1-lambda)*m2.data$y,
+    x = ll*m1.data$x + (1-ll)*m2.data$x,  
+    y=ll*m1.data$y + (1-ll)*m2.data$y,
     group=as.numeric(m1.data$group)  
     )    
   

@@ -31,7 +31,7 @@ shinyUI(fluidPage(
                     min=.5, max=2, value=1.5, step=0.25, round=F)
         ,
         br(),
-        sliderInput(inputId="q", label="Cluster Separation",
+        sliderInput(inputId="q", label="Within Cluster Std. Dev.",
                     min=0, max=.75, value=.3, step=0.01, round=F)
         
       ) 
