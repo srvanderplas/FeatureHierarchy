@@ -112,6 +112,12 @@ with the null data, while data from model $M_T$ exhibits a similar amount of clu
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
 
+
+\section{Setup for Lineups}
+I would consider the values $q = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
+We need to re-express the values of $q$ in terms of the standard deviation $s_C$, because the absolute values of $q$ only make sense for the scaled values. 
+
+
 \bibliographystyle{asa}
 \bibliography{references}
 

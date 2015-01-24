@@ -64,7 +64,7 @@ sim.clusters <- function(K, N, q=2/3){
   yc <- sample(1:K, replace=F)
   xc <- jitter(xc, amount=.2)
   yc <- jitter(yc, amount=.2)
-  while(cor(xc,yc)<.4 | cor(xc,yc)>.9){
+  while(cor(xc,yc)<.25 | cor(xc,yc)>.9){
     xc <- sample(1:K, replace=F)
     yc <- sample(1:K, replace=F)
     xc <- jitter(xc, amount=.2)
