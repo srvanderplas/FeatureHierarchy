@@ -9,6 +9,19 @@
 \usepackage{amsmath}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
+%---------------------------------------------------
+%                 Editing Commands
+\newcommand{\done}[2][inline]{\todo[color=SpringGreen, #1]{#2}}  % for todos that have been seen and dealt with
+\newcommand{\meh}[2][inline]{\todo[color=White, #1]{#2}}   % for todos that may no longer be relevant 
+\newcommand{\comment}[2][inline]{\todo[color=SkyBlue, #1]{#2}} % for comments that may not be "to-do"s
+%\newcommand{\mcomment}[1]{\todo[color=SkyBlue]{#1}} % for margin comments
+\newcommand{\newtext}[1]{\todo[inline, color=White]{ \color{OliveGreen}{#1}}} % new text - not necessarily something to be done
+\newcommand{\move}[1]{\todo[inline, color=Lime]{#1}} % new to do item
+%
+%---------------------------------------------------
+
+
+
 \title{Group beats Trend!? \\Testing feature hierarchy in statistical graphics}
 \author{Susan VanderPlas, Heike Hofmann\thanks{Department of Statistics and Statistical Laboratory, Iowa State University}}
 \begin{document}
@@ -59,7 +72,7 @@ with the null data, while data from model $M_T$ exhibits a similar amount of clu
         \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, q)$
       \end{enumerate}
       It may be reasonable to draw $q$ from a distribution of some sort.
-    
+    \newcomment{Let's not worry about getting $q$ from a random distribution, but let's rename it somehow, so it reflects the within cluster deviation a bit better ... $\sigma_C$?}
   \end{enumerate}
 % \begin{enumerate}
 %   \item Generate cluster centers along a line, then generate points around the cluster center. \\
@@ -109,15 +122,17 @@ with the null data, while data from model $M_T$ exhibits a similar amount of clu
 \end{enumerate}
 \subsection{Regression Model $M_T$}
 
+This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
+
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
 
 
-\section{Setup for Lineups}
-I would consider the values $q = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
-We need to re-express the values of $q$ in terms of the standard deviation $s_C$, because the absolute values of $q$ only make sense for the scaled values. 
+\section{Experimental Setup}
+I would consider the values $\sigma_C = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
+The actual values of $\sigma_C$ don't make much sense - because they are only valid within the scaled data values. We might need to re-express the values of $\sigma_C$ in terms of a percentage of the data  or a percentage of the overall variability.
 
-
+For $K=5$ the parameters for $q$ (now $\sigma_C$) and the standard deviation $\sigma_T$ need to be smaller - we could start at 0.2 and 0.75, respectively.
 \bibliographystyle{asa}
 \bibliography{references}
 
