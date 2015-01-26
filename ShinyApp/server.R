@@ -64,25 +64,24 @@ shinyServer(function(input, output, session){
   
   dframe <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda, N=input$N, K=input$K, q=input$q, sd=input$sd)
+      mixture.sim(lambda=1, N=input$N, K=input$K, q=input$q, sd=input$sd)
     }
   })
   
   dframe2 <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=input$lambda2, N=input$N, K=input$K, q=input$q, sd=input$sd)
+      mixture.sim(lambda=0, N=input$N, K=input$K, q=input$q, sd=input$sd)
     }
   })
   
   nulldata <- reactive({
     if(!is.na(input$newdata)){
       rdply(19, function(.sample) 
-        mixture.sim(lambda=input$nulllambda, 
-                    N=input$N, 
+        mixture.sim(lambda=.5, 
+                    N=input$N,  
                     K=input$K, 
                     q=input$q, 
-                    sd=input$sd, 
-                    slope=runif(1, input$nullrange[1], input$nullrange[2])
+                    sd=input$sd
                     ))
     }
   })
@@ -98,45 +97,51 @@ shinyServer(function(input, output, session){
     colorp <- color.pal()
     shapep <- shape.pal()
     
-    plot <- gen.plot(dd, input$aes, input$plotopts, color.pal, shape.pal)
-#     plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) + coord_fixed(ratio=1)
-#     
-#     # Set Aesthetics
-#     if(length(input$aes)==0){
-#       plot <- plot + geom_point(size=3, shape=1) + 
-#         scale_shape_discrete(solid=F)
-#     } else if(length(input$aes)==1){
-#       if("Color"%in%input$aes){
-#         plot <- plot + geom_point(aes(color=factor(group)), size=3, shape=1) + 
-#           scale_color_manual(values=colorp)
-#       } else {
-#         plot <- plot + geom_point(aes(shape=factor(group)), size=3) + 
-#           scale_shape_manual(values=shapep)
-#       }
-#     } else {
-#       plot <- plot + geom_point(aes(color=factor(group), shape=factor(group)), size=3) + 
-#         scale_color_manual(values=colorp) + 
-#         scale_shape_manual(values=shapep)
-#     }
-#     
-#     # Set other geoms/aids
-#     if("Reg. Line"%in%input$plotopts){
-#       plot <- plot + geom_smooth(method="lm", color="black", se=F, fullrange=T)
-#     } 
-#     if("Error Bands"%in%input$plotopts){
-#       plot <- plot + geom_ribbon(stat="smooth", method="lm", fill="black", color="transparent", alpha=.3, fullrange=T)
-#     }
-#     
-#     if("Ellipses"%in%input$plotopts){
-#       if("Color"%in%input$aes){
-#         plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
-#       } else if("Shape"%in%input$aes){
-#         plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
-#       } else {
-#         plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
-#       }
-#     }
-#       
+#     plot <- gen.plot(dd, input$aes, input$plotopts, color.pal, shape.pal)
+    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) #+ coord_fixed(ratio=1)
+    
+    # Set Aesthetics
+    if(length(input$aes)==0){
+      plot <- plot + geom_point(size=3, shape=1) + 
+        scale_shape_discrete(solid=F)
+    } else if(length(input$aes)==1){
+      if("Color"%in%input$aes){
+        plot <- plot + geom_point(aes(color=factor(group)), size=3, shape=1) + 
+          scale_color_manual(values=colorp)
+      } else {
+        plot <- plot + geom_point(aes(shape=factor(group)), size=3) + 
+          scale_shape_manual(values=shapep)
+      }
+    } else {
+      plot <- plot + geom_point(aes(color=factor(group), shape=factor(group)), size=3) + 
+        scale_color_manual(values=colorp) + 
+        scale_shape_manual(values=shapep)
+    }
+    
+    # Set other geoms/aids
+    if("Reg. Line"%in%input$plotopts){
+      plot <- plot + geom_smooth(method="lm", color="black", se=F, fullrange=T)
+    } 
+    if("Error Bands"%in%input$plotopts){
+      xrange <- range(dd$x)
+      tmp <- ddply(dd, .(.sample), function(df){
+        model <- lm(y~x, data=df)
+        newdata <- data.frame(x=seq(xrange[1], xrange[2], length.out=400))
+        data.frame(.sample=unique(df$.sample), x=newdata$x, predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
+      })
+      plot <- plot + geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
+    }
+    
+    if("Ellipses"%in%input$plotopts){
+      if("Color"%in%input$aes){
+        plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
+      } else if("Shape"%in%input$aes){
+        plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
+      } else {
+        plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
+      }
+    }
+      
     plot
   })
   
@@ -170,16 +175,12 @@ shinyServer(function(input, output, session){
     
     dd <- data()
     
-#     dd <- ddply(dd, .(.sample), function(df){ 
-#       tmp <- df
-#       tmp$kmean.cluster <- kmeans(tmp[,c("x", "y")], input$K, iter.max=100)$cluster
-#       return(tmp)
-#       }
-#     )
-    
-    st <- ddply(dd, .(.sample), summarize, 
-                linear.model.r2 = round(summary(lm(y~x))$r.squared, 4),
-                aes.group.r2 = round(summary(lm(y~factor(group)))$r.squared, 4))
+    st <- ddply(dd, .(.sample),
+                function(df){
+                  tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
+                  res <- tmp[[1]]$`Mean Sq`
+                  data.frame(.sample=unique(df$.sample), Fline = round(res[1]/res[3], 2), Fgroup=round(res[2]/res[3], 2))
+                } )
     st    
   })
   

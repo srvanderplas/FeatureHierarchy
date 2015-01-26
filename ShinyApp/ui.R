@@ -15,23 +15,20 @@ shinyUI(fluidPage(
                  column(6, checkboxGroupInput("plotopts", "Plot Options", c("Reg. Line", "Error Bands", "Ellipses"), 
                                               selected=NULL))), 
         br(),        
-        sliderInput(inputId="lambda", label="Group Strength", 
-                    min=0, max=1, value=1, step=.01, round=F),
-        sliderInput(inputId="nulllambda", label="Group Strength (Null Plots)", 
-                    min=0, max=1, value=.5, step=.01, round=F),
-        sliderInput(inputId="lambda2", label="Group Strength (Model 2)", 
-                    min=0, max=1, value=0, step=.01, round=F),
-        br(),
+#         sliderInput(inputId="lambda", label="Group Strength", 
+#                     min=0, max=1, value=1, step=.01, round=F),
+#         sliderInput(inputId="nulllambda", label="Group Strength (Null Plots)", 
+#                     min=0, max=1, value=.5, step=.01, round=F),
+#         sliderInput(inputId="lambda2", label="Group Strength (Model 2)", 
+#                     min=0, max=1, value=0, step=.01, round=F),
+#         br(),
         h4("Data Generation Options"),
         sliderInput(inputId="sd", label="Std Dev.",
-                    min=.2, max=.8, value=.3, step=0.1, round=F)
+                    min=.2, max=.8, value=.3, step=0.05, round=F)
         ,
         br(),
         sliderInput(inputId="q", label="Within Cluster Std. Dev.",
-                    min=.2, max=.8, value=.3, step=0.05, round=F),
-        br(),
-        sliderInput(inputId="nullrange", "Null Slope range", 
-                    min=0, max=1, value=c(.2, .8), step=.05)
+                    min=.2, max=2, value=.3, step=0.05, round=F)
         
       ) 
     ),

@@ -26,7 +26,7 @@ sim.clusters <- function(K, N, q=.3){
   yc <- sample(1:K, replace=F)
   xc <- jitter(xc, amount=.2)
   yc <- jitter(yc, amount=.2)
-  while(cor(xc,yc)<.25 | cor(xc,yc)>.95){
+  while(cor(xc,yc)<.25 | cor(xc,yc)>.75){
     xc <- sample(1:K, replace=F)
     yc <- sample(1:K, replace=F)
     xc <- jitter(xc, amount=.2)
@@ -67,9 +67,9 @@ mixture.sim <- function(lambda, K, N, q=.3, sd=.3, slope=1){
   ll <- rbinom(n=N, size=1, prob=lambda)  # one model or the other
   mix.data <- data.frame(
     x = ll*m1.data$x + (1-ll)*m2.data$x,  
-    y=ll*m1.data$y + (1-ll)*m2.data$y,
+    y = ll*m1.data$y + (1-ll)*m2.data$y,
     group=as.numeric(m1.data$group)  
-    )    
+    )
 
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
   
@@ -104,12 +104,11 @@ gen.data <- function(input){
   data
 }
 
-gen.plot <- function(dd, aes, stats, colorp, shapep){
-#   colorp <- best.combo(length(unique(dd$group)), colors, colortm)
-#   shapep <- best.combo(length(unique(dd$group)), shapes, shapetm)
-#   range <- range(c(dd$x, dd$y))
-#   
-  plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample)  + coord_fixed(ratio=1)
+gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
+  if(is.null(colorp)) colorp <- best.combo(length(unique(dd$group)), colors, colortm)
+  if(is.null(shapep)) shapep <- best.combo(length(unique(dd$group)), shapes, shapetm)
+  
+  plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample)  
   
   # Set Aesthetics
   if(length(aes)==0){
@@ -134,7 +133,14 @@ gen.plot <- function(dd, aes, stats, colorp, shapep){
     plot <- plot + geom_smooth(method="lm", color="black", se=F)
   } 
   if("Error Bands"%in%stats){
-    plot <- plot + geom_ribbon(stat="smooth", method="lm", fill="black", color="transparent", alpha=.3)
+    xrange <- range(dd$x)
+    tmp <- ddply(dd, .(.sample), function(df){
+      model <- lm(y~x, data=df)
+      newdata <- data.frame(x=seq(xrange[1], xrange[2], length.out=400))
+      data.frame(.sample=unique(df$.sample), x=newdata$x, predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
+    })
+    plot <- plot + geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
+    rm("xrange", "tmp")
   }
   
   if("Ellipses"%in%stats){
