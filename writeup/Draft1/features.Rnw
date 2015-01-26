@@ -53,7 +53,7 @@ We compute the correlation coefficient for all of the plots to assess the amount
 \begin{enumerate}
   \item Generate cluster centers along a line, then generate points around the cluster center. \\
   Algorithm: \\
-  Parameters $N$ points, $K$ clusters, $q$ cluster cohesion
+  Parameters $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation
   \begin{enumerate}
     \item Generate cluster centers $(c^x_{i}, c^y_{i}), i=1, ..., K$:
       \begin{enumerate}
@@ -73,8 +73,8 @@ We compute the correlation coefficient for all of the plots to assess the amount
     \item Determine group size $g_i$ for groups $i = 1, ..., K$ as a random draw $g_i \sim \text{Multinomial}(K, p)$ where $p = p_1/\sum_{i=1}^K p_{1i}$ for  $p_{1i} \sim N(\frac{1}{K}, \frac{1}{2 K^2})$. 
     \item Generate points around cluster centers: 
       \begin{enumerate}
-        \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, q)$
-        \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, q)$
+        \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, \sigma_C)$
+        \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, \sigma_C)$
       \end{enumerate}
       It may be reasonable to draw $q$ from a distribution of some sort.
     \comment{Let's not worry about getting $q$ from a random distribution, but let's rename it somehow, so it reflects the within cluster deviation a bit better ... $\sigma_C$?}
