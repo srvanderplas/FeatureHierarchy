@@ -27,16 +27,19 @@ shinyUI(fluidPage(
         br(),
         h4("Data Generation Options"),
         sliderInput(inputId="sd", label="Std Dev.",
-                    min=1, max=2, value=1.5, step=0.1, round=F)
+                    min=.2, max=2, value=.3, step=0.1, round=F)
         ,
         br(),
         sliderInput(inputId="q", label="Within Cluster Std. Dev.",
-                    min=.2, max=.8, value=.3, step=0.05, round=F)
+                    min=.2, max=.8, value=.3, step=0.05, round=F),
+        br(),
+        sliderInput(inputId="nullrange", "Null Slope range", 
+                    min=0, max=1, value=c(.2, .8), step=.05)
         
       ) 
     ),
     column(5,
-           div(align="center", plotOutput("plot", width='100%', height='500px'))
+           div(align="center", plotOutput("plot", width='100%', height='550px'))
     ), 
     column(4,
            downloadButton("dataset", "Download Data"),
