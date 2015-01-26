@@ -49,7 +49,8 @@ sim.clusters <- function(K, N, q=.3){
 
 sim.line <- function(K, N, sd=.3, slope=1){
   # Simulate data from line
-  m2.data <- data.frame(x=jitter(seq(-1-2*sd, 1+2*sd, length.out=N)), y=0)
+  m2.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
+#   m2.data <- data.frame(x=jitter(seq(-1-2*sd, 1+2*sd, length.out=N)), y=0)
   m2.data$y <- slope*m2.data$x + rnorm(N, 0, sd)
   
   return(m2.data)
@@ -57,9 +58,9 @@ sim.line <- function(K, N, sd=.3, slope=1){
 
 mixture.sim <- function(lambda, K, N, q=.3, sd=.3, slope=1){
   m1.data <- sim.clusters(K=K, N=N, q=q)
-#   m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
+  m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
   m2.data <- sim.line(K=K, N=N, sd=sd, slope=slope)
-#   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
+  m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
   
 #   qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
   
