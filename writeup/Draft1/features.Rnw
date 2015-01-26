@@ -132,7 +132,7 @@ Conflict & Color + Trend Line, Color + Trend Line + Error band\\\hline\hline
 I would consider the values $\sigma_C = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
 The actual values of $\sigma_C$ don't make much sense - because they are only valid within the scaled data values. We might need to re-express the values of $\sigma_C$ in terms of a percentage of the data  or a percentage of the overall variability.
 
-For $K=5$ the parameters for $q$ (now $\sigma_C$) and the standard deviation $\sigma_T$ need to be smaller - we could start at 0.2 and 0.75, respectively.
+For $K=5$ the parameters for $\sigma_C$ and the standard deviation $\sigma_T$ need to be smaller - we could start at 0.2 and 0.75, respectively.
 
 \subsection*{Design choices}
 \begin{enumerate}
