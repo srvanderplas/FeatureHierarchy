@@ -1,15 +1,77 @@
-source("./Code/LineupFunctions.R")
+source("./Code/MixtureLineups.R")
+source(("./Code/theme_lineup.R")
 library(ggplot2)
 library(plyr)
 library(dplyr)
 library(reshape2)
 library(nullabor)
 
+# Define colors and shapes
+colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+             "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
+
+colortm <- read.csv("./Data/color-perceptual-kernel.csv")
+# colortm[3,4] <- 0
+# colortm[4,3] <- 0
+colortm[8,] <- 0
+colortm[,8] <- 0
+
+shapetm <- read.csv("./Data/shape-perceptual-kernel.csv")
+# shapetm[9:10,] <- 0
+# shapetm[, 9:10] <- 0
+shapetm[9,] <- 0
+shapetm[,9] <- 0
+shapetm[10,] <- 0
+shapetm[,10] <- 0
+
+# Lineup Design
+
 N <- 3
-parms <- expand.grid(n=c(40, 60, 80, 100),
-                     K=3:5,
-                     SDdata=c(.75, 1.25),
-                     SDgroup=c(.2, .3, .4))
+data.parms <- expand.grid(N=c(40, 60, 80, 100),
+                          K=3:5,
+                          sd=c(.3, .35, .4),
+                          q=c(.3, .35, .4))
+
+plot.parms <- expand.grid(
+  color = c(0,1),
+  shape = c(0,1),
+  reg = c(0,1),
+  err = c(0,1),
+  ell = c(0,1)
+)[c(
+  1, # control
+  2, 3, 17, # color, shape, ellipse alone
+  4, 18, # color + shape, color + ellipse
+  5, 13, # trend, trend + error
+  6, 14 # color + trend, color + trend + error
+  ),]
+
+get.aes <- function(r){
+  c("Color", "Shape")[which(as.logical(r[1:2]))]
+}
+
+get.stats <- function(r){
+  c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
+}
+
+data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
+
+data.stats <- ddply(data, .(set, .sample), summarize, 
+                    linear.r2 = round(summary(lm(y~x))$r.squared, 4),
+                    group.r2 = round(summary(lm(y~factor(group)))$r.squared, 4))
+
+d_ply(data, .(set), function(df){
+  i <- unique(df$set)
+  for(j in 1:nrow(plot.parms)){
+    
+    ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
+                           get.stats(plot.parms[j,])), 
+           filename = sprintf("Images/Lineups/set_%d_plot%d.png", i, j), 
+           width=6, height=6, units="in")
+  }
+})
+
 parms$groupName <- with(parms, paste0("n=", n, "-K=", K, "-SDgroup=", SDgroup, "-SDdata=", SDdata))
 
 n.plotsets <- nrow(parms)
