@@ -87,7 +87,14 @@ shinyServer(function(input, output, session){
   
   nulldata <- reactive({
     if(!is.na(input$newdata)){
-      rdply(19, function(.sample) mixture.sim(lambda=input$nulllambda, N=input$N, K=input$K, q=input$q, sd=input$sd))
+      rdply(19, function(.sample) 
+        mixture.sim(lambda=input$nulllambda, 
+                    N=input$N, 
+                    K=input$K, 
+                    q=input$q, 
+                    sd=input$sd, 
+                    slope=runif(1, input$nullrange[1], input$nullrange[2])
+                    ))
     }
   })
   
