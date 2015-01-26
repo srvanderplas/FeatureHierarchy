@@ -47,6 +47,8 @@ Perceptual kernels \citep{heer:2014}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
 with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
 
+We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel. As a measure of clustering, we can use the $F$ statistic of between versus within group variation.
+
 \subsection{Cluster Model $M_C$}
 \begin{enumerate}
   \item Generate cluster centers along a line, then generate points around the cluster center. \\
@@ -136,6 +138,17 @@ I would consider the values $\sigma_C = 0.3, .35, .4, .45$ for $K = 3$ clusters 
 The actual values of $\sigma_C$ don't make much sense - because they are only valid within the scaled data values. We might need to re-express the values of $\sigma_C$ in terms of a percentage of the data  or a percentage of the overall variability.
 
 For $K=5$ the parameters for $q$ (now $\sigma_C$) and the standard deviation $\sigma_T$ need to be smaller - we could start at 0.2 and 0.75, respectively.
+
+\subsection*{Design choices}
+\begin{enumerate}
+\item Plain: two targets with data from one of each of the two generative models are included in a set of eighteen panels of null data.
+\item Colour/Shape: points in each of the panels are coloured/marked based on the results of a hierarchical clustering . 
+\item Trend line: a line of the least square fit is drawn through the points.
+\item Colour \& Shape
+\item Colour \& trend line: this emphasises both the clustering and the regression - it is not clear, which signal will be stronger.
+\item Colour \& Ellipsoids: around the groups of the same color, ellipsoids are drawn to reflect the 95\% density estimate.
+\end{enumerate}
+
 \bibliographystyle{asa}
 \bibliography{references}
 
