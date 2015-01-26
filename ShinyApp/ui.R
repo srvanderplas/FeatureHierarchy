@@ -4,7 +4,7 @@ shinyUI(fluidPage(
   titlePanel("Mixture Models for Feature Hierarchy Lineups"),
   fluidRow(
     column(
-      3,
+      3, 
       wellPanel(
         actionButton("newdata", "New Data"),
         fluidRow(column(6, numericInput("seed", "Seed Value", value=round(runif(1, 1000, 1000000)))),
@@ -28,11 +28,11 @@ shinyUI(fluidPage(
         br(),
         h4("Data Generation Options"),
         sliderInput(inputId="sd", label="Std Dev.",
-                    min=.5, max=2, value=1.5, step=0.25, round=F)
+                    min=1, max=2, value=1.5, step=0.1, round=F)
         ,
         br(),
         sliderInput(inputId="q", label="Within Cluster Std. Dev.",
-                    min=0, max=.75, value=.3, step=0.01, round=F)
+                    min=.2, max=.8, value=.3, step=0.05, round=F)
         
       ) 
     ),
