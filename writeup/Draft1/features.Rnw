@@ -43,7 +43,8 @@ A further extension of this testing framework are the use of color (in a qualita
 On the other hand, regression lines should emphasize any linear trends in the data.
 
 \section{Design Choices}
-Perceptual kernels \citep{heer:2014}
+We choose colours and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by  \citet{heer:2014} on the so called perceptual kernels.
+
 \section{Generating Model}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
 with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
@@ -84,7 +85,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   \begin{enumerate}
     \item Generate $x_i$, $i=1, ..., N$, a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$)
     \item Jitter $x_i$: $x_i = x_i + \eta_i$, $\eta_i \sim Unif(-z, z)$, $z = 1/5*(2/(N-1)$
-    \item Generate $y_i$: $y_i = a * x_i + e_i$, $e_i \sim N(0, \sigma_T)$
+    \item Generate $y_i$: $y_i = a * x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
   \end{enumerate}
 
 \comment{Would the pictures change dramatically, if you used $x \sim U[-1,1]$ to start out with? that would be easier to explain.}
@@ -93,7 +94,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
 
 Under the null model, $M_T$ slope may be between $(.2, .8)$
-
+\comment{We can't have anything different in the null model from the generating model, but you could vary the slope in $M_T$ itself, that would make sense.}
 
 \section{Experimental Setup}
 \subsection{Design}
