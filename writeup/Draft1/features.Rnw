@@ -82,8 +82,8 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   Algorithm: \\
   Parameters $N$ points, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) 
   \begin{enumerate}
-    \item Generate $x_i$, $i=1, ..., N$, a sequence of evenly spaced points from $[-1-2\sigma_T, 1+2\sigma_T]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$)
-    \item Jitter $x_i$: $x_i = x_i + \eta_i$, $\eta_i \sim Unif(-z, z)$, $z = 1/5*(2+4\sigma_T/(N-1)$
+    \item Generate $x_i$, $i=1, ..., N$, a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$)
+    \item Jitter $x_i$: $x_i = x_i + \eta_i$, $\eta_i \sim Unif(-z, z)$, $z = 1/5*(2/(N-1)$
     \item Generate $y_i$: $y_i = a * x_i + e_i$, $e_i \sim N(0, \sigma_T)$
   \end{enumerate}
 
