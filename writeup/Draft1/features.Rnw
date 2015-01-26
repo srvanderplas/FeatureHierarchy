@@ -79,51 +79,6 @@ We compute the correlation coefficient for all of the plots to assess the amount
       It may be reasonable to draw $q$ from a distribution of some sort.
     \comment{Let's not worry about getting $q$ from a random distribution, but let's rename it somehow, so it reflects the within cluster deviation a bit better ... $\sigma_C$?}
   \end{enumerate}
-% \begin{enumerate}
-%   \item Generate cluster centers along a line, then generate points around the cluster center. \\
-%   Algorithm: \\
-%   Parameters $N$ points, $K$ clusters, $q$ cluster cohesion, $s$ cluster std. dev.
-%   \begin{enumerate}
-%     \item Generate cluster centers $(c^x_i, c^y_i), i=1, ..., K$:
-%       \begin{enumerate}
-%         \item $c^x_i = (i-1)+e_x$, $e_x \sim Unif(-0.2, 0.2)$
-%         \item $c^z \sim Unif(-q*K, q*K)$\\
-%         $c^y_i = (c^z_i-\overline{c^z})/\sigma_{c^z} * q * K$
-%       \end{enumerate}
-%     \item Determine groups: $g \sim Multinomial(K, p)$ where $p = p_1/\sum_1^K p_{1i}$ where  $p_{1i} \sim N(\frac{1}{K}, \frac{1}{2 K^2})$ 
-%     \item Generate points around cluster centers: 
-%       \begin{enumerate}
-%         \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, s)$
-%         \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, s)$
-%       \end{enumerate}
-%     \item Scale points
-%       \begin{enumerate}
-%         \item $x_i = (x^\ast_i - \overline{x^\ast})/sd_{x^\ast}$
-%         \item $y_i = (y^\ast_i - \overline{y^\ast})/sd_{y^\ast}$
-%       \end{enumerate}
-%   \end{enumerate}
-%   Advantages:
-%     \begin{enumerate}
-%       \item Easy to manipulate underlying trend
-%       \item Cluster variance/cohesion can be easily manipulated
-%     \end{enumerate}
-%   Disadvantages:
-%     \begin{enumerate}
-%       \item Works poorly for more than 3 groups
-%       \item Difficult to easily specify cluster distribution along regression line while guaranteeing same underlying regression line
-%       \item Cluster variance (away from line) doesn't show up well - not enough clusters to ensure similar overall variance compared to null plots
-%     \end{enumerate}
-%   \item Generate points in $K$ dimensions using random noise, then use LDA to get $K$ clusters\\
-%     Advantages:
-%     \begin{enumerate}
-%       \item Clusters are separated in space
-%       \item Variance is fairly easy to manipulate
-%     \end{enumerate}
-%   Disadvantages:
-%     \begin{enumerate}
-%       \item Difficult to translate to linear regression because of cluster distribution
-%       \item Clusters are fairly easily identifiable
-%     \end{enumerate}
 \end{enumerate}
 \subsection{Regression Model $M_T$}
 
