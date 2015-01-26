@@ -7,8 +7,7 @@ shinyUI(fluidPage(
       3, 
       wellPanel(
         actionButton("newdata", "New Data"),
-        fluidRow(column(6, numericInput("seed", "Seed Value", value=round(runif(1, 1000, 1000000)))),
-                 column(6, radioButtons("p", "# Targets", choices=c("1", "2"), selected=2, inline=T))), 
+        numericInput("seed", "Seed Value", value=round(runif(1, 1000, 1000000))),
         fluidRow(column(6, numericInput("N", "Number of Points", value=50, min=25, max=75, step=5)),
                  column(6, numericInput("K", "Number of groups", value=3, min=2, max=6, step=1))), 
         br(),
