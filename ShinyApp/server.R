@@ -108,8 +108,9 @@ shinyServer(function(input, output, session){
     dd <- data()
     colorp <- color.pal()
     shapep <- shape.pal()
+    range <- range(c(dd$x, dd$y))+c(-.1, .1)
     
-    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) + coord_fixed(ratio=1)
+    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) + xlim(range) + ylim(range) + coord_fixed(ratio=1)
     
     # Set Aesthetics
     if(length(input$aes)==0){
