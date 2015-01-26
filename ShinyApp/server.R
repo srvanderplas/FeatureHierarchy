@@ -68,7 +68,7 @@ shinyServer(function(input, output, session){
   
   pos <- reactive({
     if(!is.na(input$newdata)){
-      sample(1:20, size=as.numeric(input$p))
+      sample(1:20, size=2)
     }
   })
   
@@ -92,12 +92,8 @@ shinyServer(function(input, output, session){
   })
   
   data <- reactive({
-    if(input$p=='2'){
-      tmp <- lineup(true=dframe(), pos=pos()[1], n=20, samples=nulldata())
-      tmp <- rbind.fill(subset(tmp, .sample!=pos()[2]), cbind(.sample=pos()[2], dframe2()))
-    } else {
-      tmp <- lineup(true=dframe(), pos=pos()[1], n=20, samples=nulldata())
-    }
+    tmp <- lineup(true=dframe(), pos=pos()[1], n=20, samples=nulldata())
+    tmp <- rbind.fill(subset(tmp, .sample!=pos()[2]), cbind(.sample=pos()[2], dframe2()))
     tmp
   })
   
@@ -146,44 +142,26 @@ shinyServer(function(input, output, session){
   
   output$answer <- renderUI({
     if(input$showAnswer){
-      if(input$p=="2"){
-        tab.out <- 
-          tags$table(
-            tags$tr(
-              tags$td(paste0("Target 1: ", pos()[1], " "))
-            ),
-            tags$tr(
-              tags$td(paste0("Target 2: ", pos()[2], " "))          
-            )
+      tab.out <- 
+        tags$table(
+          tags$tr(
+            tags$td(paste0("Target 1: ", pos()[1], " "))
+          ),
+          tags$tr(
+            tags$td(paste0("Target 2: ", pos()[2], " "))          
           )
-      } else {
-        tab.out <- 
-          tags$table(
-            tags$tr(
-              tags$td(paste0("Target: ", pos()[1]))
-            )
-          )
-      }
+        )
       tab.out <- tagList(tab.out,br(),dataTableOutput("stats"))
     } else {
-      if(input$p=="2"){
-        tab.out <- 
-          tags$table(
-            tags$tr(
-              tags$td("Target 1: ?")
-            ),
-            tags$tr(
-              tags$td("Target 2: ?")
-            )          
-          )
-      } else {
-        tab.out <- 
-          tags$table(
-            tags$tr(
-              tags$td("Target: ?")
-            )
-          )
-      }
+      tab.out <- 
+        tags$table(
+          tags$tr(
+            tags$td("Target 1: ?")
+          ),
+          tags$tr(
+            tags$td("Target 2: ?")
+          )          
+        )
     }
     tab.out
   })
