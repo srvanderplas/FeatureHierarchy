@@ -21,7 +21,7 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
   return(palette[clist[which.max(res),]])
 }
 
-sim.clusters <- function(K, N, q=2/3){
+sim.clusters <- function(K, N, q=.3){
   if(q==0){q <- .01}
   if(q==1){q <- .99}
   
@@ -54,53 +54,32 @@ sim.clusters <- function(K, N, q=2/3){
   return(m1.data)
 }
 
-sim.line <- function(K, N, sd=1.5){
+sim.line <- function(K, N, sd=.3, slope=1){
   # Simulate data from line
-  m2.data <- data.frame(x=jitter(seq(-4, 4, length.out=N)), y=0)
-  m2.data$y <- m2.data$x + rnorm(N, 0, sd)
+  m2.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
+  m2.data$y <- slope*m2.data$x + rnorm(N, 0, sd)
   
   return(m2.data)
 }
 
-mixture.sim <- function(lambda, K, N, q=2/3, sd=1.5){
+mixture.sim <- function(lambda, K, N, q=.3, sd=.3, slope=1){
   m1.data <- sim.clusters(K=K, N=N, q=q)
-  m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")]) 
-  m2.data <- sim.line(K=K, N=N, sd=sd)
-  m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
+#   m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
+  m2.data <- sim.line(K=K, N=N, sd=sd, slope=slope)
+#   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
   
-#  if(lambda==0){
-#    tmp <- m1.data
-#    m1.data <- with(tmp, data.frame(x=x, y=.5*x+y, group=group))
-#  }
 #   qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
   
   ll <- rbinom(n=N, size=1, prob=lambda)  # one model or the other
   mix.data <- data.frame(
-  #  x=lambda*m1.data$x + (1-lambda)*m2.data$x,
-  #  y=lambda*m1.data$y + (1-lambda)*m2.data$y,
     x = ll*m1.data$x + (1-ll)*m2.data$x,  
     y=ll*m1.data$y + (1-ll)*m2.data$y,
     group=as.numeric(m1.data$group)  
     )    
-  
-#   # Sample group according to lambda - 
-#   # If lambda = 1, don't permute. If lambda = 0, permute everything
-#   # For entries that will be permuted, transition to group +/-1 with equal probability 
-#   # (unless edge, then transition to self or either +/- 1 with equal prob).
-#   if(lambda>0 & lambda < 1){
-#     fix <- rbinom(N, 1, 1-lambda)
-#   } else if(lambda==0){
-#     fix <- rep(1, N)
-#   } else {
-#     fix <- 0
-#   }
-#   
-#   mix.data$group <- (1-fix)*mix.data$group + fix*sample(mix.data$group, size=N, replace=F)
-  
-#  mix.data$group <- mix.data$group%%K + 1
-  mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
+
+#   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
   
   mix.data$group <- cutree(hclust(dist(mix.data[,c("x", "y")])), k=K) # grouping by the best K clusters
-                       
+
   return(mix.data)
 }
