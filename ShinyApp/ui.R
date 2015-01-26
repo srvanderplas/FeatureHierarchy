@@ -19,11 +19,8 @@ shinyUI(fluidPage(
                     min=0, max=1, value=1, step=.01, round=F),
         sliderInput(inputId="nulllambda", label="Group Strength (Null Plots)", 
                     min=0, max=1, value=.5, step=.01, round=F),
-        conditionalPanel( 
-          condition = "input.p=='2'", 
-          sliderInput(inputId="lambda2", label="Group Strength (Model 2)", 
-                      min=0, max=1, value=0, step=.01, round=F)
-        ),
+        sliderInput(inputId="lambda2", label="Group Strength (Model 2)", 
+                    min=0, max=1, value=0, step=.01, round=F),
         br(),
         h4("Data Generation Options"),
         sliderInput(inputId="sd", label="Std Dev.",
