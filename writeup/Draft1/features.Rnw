@@ -8,6 +8,7 @@
 \usepackage{natbib}
 \usepackage{amsmath}
 \usepackage{color}
+\usepackage{multirow}
 \usepackage[dvipsnames,svgnames]{xcolor}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -50,8 +51,7 @@ with the null data, while data from model $M_T$ exhibits a similar amount of clu
 We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel. As a measure of clustering, we can use the $F$ statistic of between versus within group variation.
 
 \subsection{Cluster Model $M_C$}
-\begin{enumerate}
-  \item Generate cluster centers along a line, then generate points around the cluster center. \\
+We begin by generating cluster centers along a line, then we generate points around the cluster center. \\
   Algorithm: \\
   Parameters $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation
   \begin{enumerate}
@@ -66,29 +66,65 @@ We compute the correlation coefficient for all of the plots to assess the amount
         \tilde{c}^x_{i} = \frac{c^x_{i} - \bar{c}}{s_c} \ \ \text{ and } \ \ \tilde{c}^y_{i} = \frac{c^y_{i} - \bar{c}}{s_c},
       \]
       where $\overline{c} = K(K+1)/2$ and $s_c^2 = \frac{K(K+1)(2K+1)}{6} - \frac{K^2(K+1)^2}{4}$ for all $i = 1, ..., K$.
-%       \begin{enumerate}
-%         \item $c_{xi} = (c_{xi} - \overline{c}_x)/sd_{c_{x}}$
-%         \item $c_{yi} = (c_{yi} - \overline{c}_y)/sd_{c_{y}}$
-%       \end{enumerate}
     \item Determine group size $g_i$ for groups $i = 1, ..., K$ as a random draw $g_i \sim \text{Multinomial}(K, p)$ where $p = p_1/\sum_{i=1}^K p_{1i}$ for  $p_{1i} \sim N(\frac{1}{K}, \frac{1}{2 K^2})$. 
     \item Generate points around cluster centers: 
       \begin{enumerate}
         \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, \sigma_C)$
         \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, \sigma_C)$
       \end{enumerate}
-      It may be reasonable to draw $q$ from a distribution of some sort.
-    \comment{Let's not worry about getting $q$ from a random distribution, but let's rename it somehow, so it reflects the within cluster deviation a bit better ... $\sigma_C$?}
   \end{enumerate}
-\end{enumerate}
+  
+  
 \subsection{Regression Model $M_T$}
 
 This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
 
+  Algorithm: \\
+  Parameters $N$ points, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) 
+  \begin{enumerate}
+    \item Generate $x_i$, $i=1, ..., N$, a sequence of evenly spaced points from [-1, 1]
+    \item Jitter $x_i$: $x_i = x_i + \eta_i$, $\eta_i \sim Unif(-z, z)$, $z = 1/5*2/(N-1)$
+    \item Generate $y_i$: $y_i = a * x_i + e_i$, $e_i \sim N(0, \sigma_T)$
+  \end{enumerate}
+
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
 
+Under the null model, $M_T$ slope may be between $(.2, .8)$
+
 
 \section{Experimental Setup}
+\subsection{Design}
+Factors:
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{lll}
+Parameter & Description & Choices\\\hline
+$N$ & \# Points & 8, 12, 16 per cluster\\
+$K$ & \# Clusters & 3, 4, 5\\
+$\sigma_T$ & Scatter around trend line & \\
+$\sigma_C$ & Scatter around cluster centers & \\\hline
+\end{tabular}
+\end{center}
+\caption{Data Generation Options}
+\end{table}
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{lll}
+Emphasis & Aesthetics \\\hline
+Control & -- \\
+\multirow{2}{*}{Group} & Color, Shape, Ellipse \\
+& Color + Shape, Color + Ellipse\\
+\multirow{2}{*}{Trend} & Line, Error band \\
+& Line + Error band\\
+Conflict & Color + Trend Line, Color + Trend Line + Error band\\\hline
+\end{tabular}
+\end{center}
+\caption{Plot Generation Options}
+\end{table}
+
+
 I would consider the values $\sigma_C = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
 The actual values of $\sigma_C$ don't make much sense - because they are only valid within the scaled data values. We might need to re-express the values of $\sigma_C$ in terms of a percentage of the data  or a percentage of the overall variability.
 
