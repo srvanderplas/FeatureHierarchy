@@ -132,7 +132,15 @@ shinyServer(function(input, output, session){
     
     # Set other geoms/aids
     if("Reg. Line"%in%input$plotopts){
-      plot <- plot + geom_smooth(method="lm", color="black", alpha=.25)
+      if("Error Bands"%in%input$plotopts){
+        plot <- plot + geom_smooth(method="lm", color="black", alpha=.25)
+      } else {
+        plot <- plot + geom_smooth(method="lm", color="black", se=F)
+      }
+    } else {
+      if("Error Bands"%in%input$plotopts){
+        plot <- plot + geom_ribbon(stat="smooth", method="lm", fill="black", color="transparent", alpha=.25)
+      }
     }
     
     if("Ellipses"%in%input$plotopts){
