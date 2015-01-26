@@ -43,7 +43,7 @@ A further extension of this testing framework are the use of color (in a qualita
 On the other hand, regression lines should emphasize any linear trends in the data.
 
 \section{Design Choices}
-We choose colours and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by  \citet{heer:2014} on the so called perceptual kernels.
+We choose colors and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by  \citet{heer:2014} on the so called perceptual kernels.
 
 \section{Generating Model}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
@@ -127,7 +127,8 @@ Conflict & Color + Trend Line, Color + Trend Line + Error band\\\hline\hline
 \caption{Plot Generation Options}
 \end{table}
 
-\comment{What do we do with ellipses alone? Group them (and emphasize the clusters) or not group them (and emphasize the line)?}
+\comment{What do we do with ellipses alone? Group them (and emphasize the clusters) or not group them (and emphasize the line)?
+HH: I would think of ellipses as the analogue to the error bands in trends - so rather not show them alone. I'm not so sure that we need both conflict situations - the trend lines against color are already bad enough - if we additionally have an error band we get into problems with the band on top of the color.  }
 
 
 I would consider the values $\sigma_C = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
@@ -138,11 +139,11 @@ For $K=5$ the parameters for $\sigma_C$ and the standard deviation $\sigma_T$ ne
 \subsection*{Design choices}
 \begin{enumerate}
 \item Plain: two targets with data from one of each of the two generative models are included in a set of eighteen panels of null data.
-\item Colour/Shape: points in each of the panels are coloured/marked based on the results of a hierarchical clustering . 
+\item Color/Shape: points in each of the panels are colored/marked based on the results of a hierarchical clustering . 
 \item Trend line: a line of the least square fit is drawn through the points.
-\item Colour \& Shape
-\item Colour \& trend line: this emphasises both the clustering and the regression - it is not clear, which signal will be stronger.
-\item Colour \& Ellipsoids: around the groups of the same color, ellipsoids are drawn to reflect the 95\% density estimate.
+\item Color \& Shape
+\item Color \& trend line: this emphasises both the clustering and the regression - it is not clear, which signal will be stronger.
+\item Color \& Ellipsoids: around the groups of the same color, ellipsoids are drawn to reflect the 95\% density estimate.
 \end{enumerate}
 
 \bibliographystyle{asa}
