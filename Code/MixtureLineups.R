@@ -21,40 +21,6 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
   return(palette[clist[which.max(res),]])
 }
 
-
-# q = separation between clusters
-sim.clusters.lda <- function(K, N, q=2/3){
-  if(q==0){q <- .01}
-  if(q==1){q <- .99}
-  
-  X <- data.frame(matrix(rnorm(N*floor(q*N)), nrow=N))
-#  X$class <- rep(1:K, each=ceiling(N/K))[1:N]
-  X$class <- sample(K, N, replace=TRUE, prob=abs(rnorm(K, mean=1/K, sd=0.5/K^2)))
-  library(MASS)
-  l1 <- lda(factor(class)~., data=X)
-  p1 <- predict(l1)
-#   qplot(LD1, LD2, data=data.frame(p1$x), colour=p1$class)
-
-#   require(plyr)
-#   dframe <- data.frame(p1$x, p1$class)
-#   names(dframe) <- c("x", "y", "group")
-#   centers <- ddply(dframe, .(group), summarise, meanx = mean(x), meany=mean(y))
-
-  # Set up data set
-  m1.data <- data.frame(p1$x)
-  names(m1.data) <- c("x", "y")
-  m1.data$group <- p1$class
-  m1.data$x <- scale(m1.data$x)*2
-  m1.data$y <- scale(m1.data$y)*2
-
-  m2.data <- m1.data
-  m2.data$x <- with(m1.data, x+y)
-  m2.data$y <- with(m1.data, y-x)
-#   qplot(x, y, data=m1.data, colour=group)
-  
-  return(m2.data)
-}
-
 sim.clusters <- function(K, N, q=2/3){
   if(q==0){q <- .01}
   if(q==1){q <- .99}
@@ -84,7 +50,7 @@ sim.clusters <- function(K, N, q=2/3){
 
 #   m1.data$y <- scale(m1.data$y, center=0, scale=sqrt(1/3*q^2*K^2))*2
 #   m1.data$x <- scale(m1.data$x, center=.5*K, scale=sqrt(1/12*K^2))*2
-ggplot(aes(x=x, y=y), data=m1.data) + geom_point(aes(colour=factor(group)), data=m1.data) + coord_equal(ratio=1) + geom_point(data=m2.data)
+# ggplot(aes(x=x, y=y), data=m1.data) + geom_point(aes(colour=factor(group)), data=m1.data) + coord_equal(ratio=1) + geom_point(data=m2.data)
   return(m1.data)
 }
 
