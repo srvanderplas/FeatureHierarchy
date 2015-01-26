@@ -55,7 +55,7 @@ We begin by generating cluster centers along a line, then we generate points aro
   Algorithm: \\
   Parameters $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation
   \begin{enumerate}
-    \item Generate cluster centers $(c^x_{i}, c^y_{i}), i=1, ..., K$:
+    \item Generate cluster centers $(c^x_{i}, c^y_{i})$ for each of the $K$ clusters, $i=1, ..., K$:
       \begin{enumerate}
         \item Generate vectors $c^{x}$ and $c^y$ as permutations of $\{1, ..., K\}$,
         \item such that the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of [.25, .9].
@@ -66,11 +66,11 @@ We begin by generating cluster centers along a line, then we generate points aro
         \tilde{c}^x_{i} = \frac{c^x_{i} - \bar{c}}{s_c} \ \ \text{ and } \ \ \tilde{c}^y_{i} = \frac{c^y_{i} - \bar{c}}{s_c},
       \]
       where $\overline{c} = K(K+1)/2$ and $s_c^2 = \frac{K(K+1)(2K+1)}{6} - \frac{K^2(K+1)^2}{4}$ for all $i = 1, ..., K$.
-    \item Determine group size $g_i$ for groups $i = 1, ..., K$ as a random draw $g_i \sim \text{Multinomial}(K, p)$ where $p = p_1/\sum_{i=1}^K p_{1i}$ for  $p_{1i} \sim N(\frac{1}{K}, \frac{1}{2 K^2})$. 
+    \item Determine group size $g_i$ for clusters $i = 1, ..., K$ as a random draw $g_i \sim \text{Multinomial}(K, p)$ where $p = p_1/\sum_{i=1}^K p_{1i}$ for  $p_{1i} \sim N(\frac{1}{K}, \frac{1}{2 K^2})$. 
     \item Generate points around cluster centers: 
       \begin{enumerate}
-        \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, \sigma_C)$
-        \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, \sigma_C)$
+        \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, \sigma^2_C)$
+        \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, \sigma^2_C)$
       \end{enumerate}
   \end{enumerate}
   
@@ -86,6 +86,8 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
     \item Jitter $x_i$: $x_i = x_i + \eta_i$, $\eta_i \sim Unif(-z, z)$, $z = 1/5*(2+4\sigma_T/(N-1)$
     \item Generate $y_i$: $y_i = a * x_i + e_i$, $e_i \sim N(0, \sigma_T)$
   \end{enumerate}
+
+\comment{Would the pictures change dramatically, if you used $x \sim U[-1,1]$ to start out with? that would be easier to explain.}
 
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
