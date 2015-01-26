@@ -10,14 +10,6 @@ options(shiny.usecairo=T)
 #folderStr <- "/Users/heike/papers/2015-FeatureHierarchy"
 folderStr <- "../"
 
-# functions for generating data
-source(sprintf("%s/Code/MixtureLineups.R", folderStr))
-
-# functions for generating data
-source(sprintf("%s/Code/theme_lineup.R", folderStr))
-
-
-
 # Define colors and shapes
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -28,7 +20,7 @@ colortm <- read.csv(sprintf("%s/Data/color-perceptual-kernel.csv", folderStr))
 # colortm[4,3] <- 0
 colortm[8,] <- 0
 colortm[,8] <- 0
-  
+
 shapetm <- read.csv(sprintf("%s/Data/shape-perceptual-kernel.csv", folderStr))
 # shapetm[9:10,] <- 0
 # shapetm[, 9:10] <- 0
@@ -37,25 +29,22 @@ shapetm[,9] <- 0
 shapetm[10,] <- 0
 shapetm[,10] <- 0
 
+# functions for generating data
+source(sprintf("%s/Code/MixtureLineups.R", folderStr))
+
+# functions for generating data
+source(sprintf("%s/Code/theme_lineup.R", folderStr))
+
+
+
 shinyServer(function(input, output, session){
   
   observe({
     input$newdata
-#     input$p
-#     input$N
-#     input$K
-#     input$lambda
-#     input$lambda2
-#     input$nulllambda
-#     input$sd
-#     input$q
     tmp <- round(runif(50, 1000, 1000000)[50])
     set.seed(tmp)
     updateNumericInput(session, "seed", value=tmp)
   })
-  
-  
-  
   
   # Calculate palettes
   color.pal <- reactive({
@@ -108,51 +97,46 @@ shinyServer(function(input, output, session){
     dd <- data()
     colorp <- color.pal()
     shapep <- shape.pal()
-    range <- range(c(dd$x, dd$y))+c(-.1, .1)
     
-    plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) + xlim(range) + ylim(range) + coord_fixed(ratio=1)
-    
-    # Set Aesthetics
-    if(length(input$aes)==0){
-      plot <- plot + geom_point(size=3, shape=1) + 
-        scale_shape_discrete(solid=F)
-    } else if(length(input$aes)==1){
-      if("Color"%in%input$aes){
-        plot <- plot + geom_point(aes(color=factor(group)), size=3, shape=1) + 
-          scale_color_manual(values=colorp)
-      } else {
-        plot <- plot + geom_point(aes(shape=factor(group)), size=3) + 
-          scale_shape_manual(values=shapep)
-      }
-    } else {
-      plot <- plot + geom_point(aes(color=factor(group), shape=factor(group)), size=3) + 
-        scale_color_manual(values=colorp) + 
-        scale_shape_manual(values=shapep)
-    }
-    
-    # Set other geoms/aids
-    if("Reg. Line"%in%input$plotopts){
-      if("Error Bands"%in%input$plotopts){
-        plot <- plot + geom_smooth(method="lm", color="black", alpha=.25)
-      } else {
-        plot <- plot + geom_smooth(method="lm", color="black", se=F)
-      }
-    } else {
-      if("Error Bands"%in%input$plotopts){
-        plot <- plot + geom_ribbon(stat="smooth", method="lm", fill="black", color="transparent", alpha=.25)
-      }
-    }
-    
-    if("Ellipses"%in%input$plotopts){
-      if("Color"%in%input$aes){
-        plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
-      } else if("Shape"%in%input$aes){
-        plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
-      } else {
-        plot <- plot + stat_ellipse(geom="polygon", level=.9, colour="black", fill="transparent")
-      }
-    }
-      
+    plot <- gen.plot(dd, input$aes, input$plotopts, color.pal, shape.pal)
+#     plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample) + coord_fixed(ratio=1)
+#     
+#     # Set Aesthetics
+#     if(length(input$aes)==0){
+#       plot <- plot + geom_point(size=3, shape=1) + 
+#         scale_shape_discrete(solid=F)
+#     } else if(length(input$aes)==1){
+#       if("Color"%in%input$aes){
+#         plot <- plot + geom_point(aes(color=factor(group)), size=3, shape=1) + 
+#           scale_color_manual(values=colorp)
+#       } else {
+#         plot <- plot + geom_point(aes(shape=factor(group)), size=3) + 
+#           scale_shape_manual(values=shapep)
+#       }
+#     } else {
+#       plot <- plot + geom_point(aes(color=factor(group), shape=factor(group)), size=3) + 
+#         scale_color_manual(values=colorp) + 
+#         scale_shape_manual(values=shapep)
+#     }
+#     
+#     # Set other geoms/aids
+#     if("Reg. Line"%in%input$plotopts){
+#       plot <- plot + geom_smooth(method="lm", color="black", se=F, fullrange=T)
+#     } 
+#     if("Error Bands"%in%input$plotopts){
+#       plot <- plot + geom_ribbon(stat="smooth", method="lm", fill="black", color="transparent", alpha=.3, fullrange=T)
+#     }
+#     
+#     if("Ellipses"%in%input$plotopts){
+#       if("Color"%in%input$aes){
+#         plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
+#       } else if("Shape"%in%input$aes){
+#         plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
+#       } else {
+#         plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
+#       }
+#     }
+#       
     plot
   })
   
@@ -186,17 +170,16 @@ shinyServer(function(input, output, session){
     
     dd <- data()
     
-    dd <- ddply(dd, .(.sample), function(df){ 
-      tmp <- df
-      tmp$kmean.cluster <- kmeans(tmp[,c("x", "y")], input$K, iter.max=100)$cluster
-      return(tmp)
-      }
-    )
+#     dd <- ddply(dd, .(.sample), function(df){ 
+#       tmp <- df
+#       tmp$kmean.cluster <- kmeans(tmp[,c("x", "y")], input$K, iter.max=100)$cluster
+#       return(tmp)
+#       }
+#     )
     
     st <- ddply(dd, .(.sample), summarize, 
                 linear.model.r2 = round(summary(lm(y~x))$r.squared, 4),
-                aes.group.r2 = round(summary(lm(y~factor(group)))$r.squared, 4),
-                kmean.group.r2 = round(summary(lm(y~factor(kmean.cluster)))$r.squared, 4))
+                aes.group.r2 = round(summary(lm(y~factor(group)))$r.squared, 4))
     st    
   })
   

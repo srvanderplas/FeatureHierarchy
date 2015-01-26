@@ -24,7 +24,7 @@ shinyUI(fluidPage(
         br(),
         h4("Data Generation Options"),
         sliderInput(inputId="sd", label="Std Dev.",
-                    min=.2, max=2, value=.3, step=0.1, round=F)
+                    min=.2, max=.8, value=.3, step=0.1, round=F)
         ,
         br(),
         sliderInput(inputId="q", label="Within Cluster Std. Dev.",

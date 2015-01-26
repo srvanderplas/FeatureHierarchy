@@ -21,22 +21,17 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
   return(palette[clist[which.max(res),]])
 }
 
-sim.clusters <- function(K, N, q=.3){
-  if(q==0){q <- .01}
-  if(q==1){q <- .99}
-  
-  
+sim.clusters <- function(K, N, q=.3){  
   xc <- sample(1:K, replace=F)
   yc <- sample(1:K, replace=F)
   xc <- jitter(xc, amount=.2)
   yc <- jitter(yc, amount=.2)
-  while(cor(xc,yc)<.25 | cor(xc,yc)>.9){
+  while(cor(xc,yc)<.25 | cor(xc,yc)>.95){
     xc <- sample(1:K, replace=F)
     yc <- sample(1:K, replace=F)
     xc <- jitter(xc, amount=.2)
     yc <- jitter(yc, amount=.2)
   }
-
   
   yc <- scale(yc)
   xc <- scale(xc)
@@ -48,15 +43,13 @@ sim.clusters <- function(K, N, q=.3){
   
   m1.data <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
 
-#   m1.data$y <- scale(m1.data$y, center=0, scale=sqrt(1/3*q^2*K^2))*2
-#   m1.data$x <- scale(m1.data$x, center=.5*K, scale=sqrt(1/12*K^2))*2
 # ggplot(aes(x=x, y=y), data=m1.data) + geom_point(aes(colour=factor(group)), data=m1.data) + coord_equal(ratio=1) + geom_point(data=m2.data)
   return(m1.data)
 }
 
 sim.line <- function(K, N, sd=.3, slope=1){
   # Simulate data from line
-  m2.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
+  m2.data <- data.frame(x=jitter(seq(-1-2*sd, 1+2*sd, length.out=N)), y=0)
   m2.data$y <- slope*m2.data$x + rnorm(N, 0, sd)
   
   return(m2.data)
@@ -77,9 +70,81 @@ mixture.sim <- function(lambda, K, N, q=.3, sd=.3, slope=1){
     group=as.numeric(m1.data$group)  
     )    
 
-#   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
+  mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
   
   mix.data$group <- cutree(hclust(dist(mix.data[,c("x", "y")])), k=K) # grouping by the best K clusters
 
   return(mix.data)
+}
+
+gen.data <- function(input){
+  
+  pos <- sample(1:20, size=2)
+  # Trend
+  dframe <- mixture.sim(lambda=0, N=input$N, K=input$K, q=input$q, sd=input$sd)
+  # Clusters
+  dframe2 <- mixture.sim(lambda=1, N=input$N, K=input$K, q=input$q, sd=input$sd)
+  # Nulls
+  nulldata <- rdply(19, function(.sample) 
+        mixture.sim(lambda=.5, 
+                    N=input$N, 
+                    K=input$K, 
+                    q=input$q, 
+                    sd=input$sd, 
+                    slope=runif(1, .2, .8)
+        ))
+
+  data <- lineup(true=dframe, pos=pos[1], n=20, samples=nulldata)
+  data <- rbind.fill(
+    subset(data, .sample!=pos[2]), cbind(.sample=pos[2], dframe2))
+  data$target1 <- pos[1]
+  data$target2 <- pos[2]
+  
+  data
+}
+
+gen.plot <- function(dd, aes, stats, colorp, shapep){
+#   colorp <- best.combo(length(unique(dd$group)), colors, colortm)
+#   shapep <- best.combo(length(unique(dd$group)), shapes, shapetm)
+#   range <- range(c(dd$x, dd$y))
+#   
+  plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample)  + coord_fixed(ratio=1)
+  
+  # Set Aesthetics
+  if(length(aes)==0){
+    plot <- plot + geom_point(size=3, shape=1) + 
+      scale_shape_discrete(solid=F)
+  } else if(length(aes)==1){
+    if("Color"%in%aes){
+      plot <- plot + geom_point(aes(color=factor(group)), size=3, shape=1) + 
+        scale_color_manual(values=colorp)
+    } else {
+      plot <- plot + geom_point(aes(shape=factor(group)), size=3) + 
+        scale_shape_manual(values=shapep)
+    }
+  } else {
+    plot <- plot + geom_point(aes(color=factor(group), shape=factor(group)), size=3) + 
+      scale_color_manual(values=colorp) + 
+      scale_shape_manual(values=shapep)
+  }
+  
+  # Set other geoms/aids
+  if("Reg. Line"%in%stats){
+    plot <- plot + geom_smooth(method="lm", color="black", se=F)
+  } 
+  if("Error Bands"%in%stats){
+    plot <- plot + geom_ribbon(stat="smooth", method="lm", fill="black", color="transparent", alpha=.3)
+  }
+  
+  if("Ellipses"%in%stats){
+    if("Color"%in%aes){
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
+    } else if("Shape"%in%aes){
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
+    } else {
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
+    }
+  }
+  
+  plot
 }
