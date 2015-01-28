@@ -71,13 +71,12 @@ answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), group
 d_ply(data, .(set), function(df){
   i <- unique(df$set)
   for(j in 1:nrow(plot.parms)){
-    
     ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
                            get.stats(plot.parms[j,]), ), 
            filename = sprintf("Images/Lineups/set_%d_plot%d.png", i, j), 
-           width=6, height=6, units="in")
+           width=6, height=6, units="in", dpi=100)
   }
 })
 
-save(data, data.stats, data.parms, plot.parms, file="./Images/Lineups/Lineups.rda")
+save(data, data.stats, data.parms, plot.parms, answers, file="./Images/Lineups/Lineups.rda")
 write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
