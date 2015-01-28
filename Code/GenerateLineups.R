@@ -1,5 +1,5 @@
 source("./Code/MixtureLineups.R")
-source(("./Code/theme_lineup.R")
+source("./Code/theme_lineup.R")
 library(ggplot2)
 library(plyr)
 library(dplyr)
@@ -31,7 +31,8 @@ shapetm[,10] <- 0
 data.parms <- expand.grid(N=c(45, 75),
                           K=c(3, 5),
                           sd=c(.3, .4, .5),
-                          q=c(.3, .4, .5))
+                          q=c(.3, .4, .5),
+                          rep=1:3)
 data.parms[data.parms$K==5]$q = data.parms[data.parms$K==5]$q - .05
 
 plot.parms <- expand.grid(
