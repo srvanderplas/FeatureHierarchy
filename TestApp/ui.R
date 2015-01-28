@@ -6,11 +6,12 @@ shinyUI(fluidPage(
     column(
       3, 
       wellPanel(
-        tags$head(tags$style(type="text/css", "div.checkbox { display: inline-table; width: 15%; margin-right:2%;} div.radio { display: inline-table; width: 15%; margin-right:2%;}")),
+        singleton(tags$head(tags$style(type="text/css", "#lineAnswer div div,#groupAnswer div div { display: inline-table; width: 15%; margin-right:2%;} div.radio { display: inline-table; width: 15%; margin-right:2%;}"))),
         checkboxGroupInput("lineAnswer", "Linear Trend Plot Number(s)?", choices=1:20, selected=NULL, inline=F),
-        radioButtons("lineDifficulty", "Linear Trend: Difficulty", choices=c("very easy", "easy", "medium", "hard", "impossible"), selected=3),
+        radioButtons("lineDifficulty", "Linear Trend: Difficulty", choices=c("very easy", "easy", "medium", "hard", "impossible"), selected = "medium"),
         checkboxGroupInput("groupAnswer", "Clustered Plot Number(s)?", choices=1:20, selected=NULL, inline=F),
-        radioButtons("groupDifficulty", "Cluster Difficulty", choices=c("very easy", "easy", "medium", "hard", "impossible"), selected=3),
+        radioButtons("groupDifficulty", "Cluster Difficulty", choices=c("very easy", "easy", "medium", "hard", "impossible"), selected = "medium"),
+        checkboxGroupInput("problem", "", choices=c("This lineup is problematic"), inline=T),
         actionButton("counter", "Submit Answer", icon=icon("check-square"))
       ) 
     ),
