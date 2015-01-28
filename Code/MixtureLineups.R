@@ -133,10 +133,10 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
     plot <- plot + geom_smooth(method="lm", color="black", se=F)
   } 
   if("Error Bands"%in%stats){
-    xrange <- range(dd$x)
+#     xrange <- range(dd$x)
     tmp <- ddply(dd, .(.sample), function(df){
       model <- lm(y~x, data=df)
-      newdata <- data.frame(x=seq(xrange[1], xrange[2], length.out=400))
+      newdata <- data.frame(x=seq(min(df$x), max(df$x), length.out=400))
       data.frame(.sample=unique(df$.sample), x=newdata$x, predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
     })
     plot <- plot + geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
