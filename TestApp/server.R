@@ -12,7 +12,7 @@ plots$filename <- sprintf("set_%s_plot%s.png", plots$i, plots$j)
 testdata.old<- read.csv("./res.csv", stringsAsFactors=F)
 testdata.old$filename <- sprintf("set_%s_plot%s.png", testdata.old$set, testdata.old$plot)
 
-plots$freqtested <- unlist(lapply(1:nrow(plots), function(i) sum(plots$filename[i]%in%testdata.old$filename)))
+plots$freqtested <- unlist(lapply(1:nrow(plots), function(i) sum(testdata.old$filename%in%plots$filename[i])))
 plots$prob <- 1/(1+plots$freqtested)
 plots$prob <- plots$prob/sum(plots$prob)
 
