@@ -139,7 +139,10 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
       newdata <- data.frame(x=seq(min(df$x), max(df$x), length.out=400))
       data.frame(.sample=unique(df$.sample), x=newdata$x, predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
     })
-    plot <- plot + geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
+    plot <- plot + 
+      geom_line(data=tmp, aes(x=x, y=lwr), linetype=2, inherit.aes=F) + 
+      geom_line(data=tmp, aes(x=x, y=upr), linetype=2, inherit.aes=F)
+      # geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
     rm("xrange", "tmp")
   }
   
