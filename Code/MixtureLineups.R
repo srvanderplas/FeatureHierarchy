@@ -112,14 +112,14 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   
   # Set Aesthetics
   if(length(aes)==0){
-    plot <- plot + geom_point(size=3, shape=1) + 
+    plot <- plot + geom_point(size=2, shape=1) + 
       scale_shape_discrete(solid=F)
   } else if(length(aes)==1){
     if("Color"%in%aes){
-      plot <- plot + geom_point(aes(color=factor(group)), size=3, shape=1) + 
+      plot <- plot + geom_point(aes(color=factor(group)), size=2, shape=1) + 
         scale_color_manual(values=colorp)
     } else {
-      plot <- plot + geom_point(aes(shape=factor(group)), size=3) + 
+      plot <- plot + geom_point(aes(shape=factor(group)), size=2) + 
         scale_shape_manual(values=shapep)
     }
   } else {

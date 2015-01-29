@@ -74,7 +74,7 @@ d_ply(data, .(set), function(df){
     ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
                            get.stats(plot.parms[j,]), ), 
            filename = sprintf("Images/Lineups/set_%d_plot%d.png", i, j), 
-           width=6, height=6, units="in", dpi=100)
+           width=6, height=6, units="in", dpi=150)
   }
 })
 
