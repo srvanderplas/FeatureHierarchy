@@ -8,7 +8,7 @@ shinyUI(fluidPage(
       wellPanel(
         actionButton("newdata", "New Data"),
         numericInput("seed", "Seed Value", value=round(runif(1, 1000, 1000000))),
-        fluidRow(column(6, numericInput("N", "Number of Points", value=50, min=25, max=75, step=5)),
+        fluidRow(column(6, sliderInput("N", "Number of Points per group", value=15, min=10, max=30, step=5, round=TRUE)),
                  column(6, numericInput("K", "Number of groups", value=3, min=2, max=6, step=1))), 
         br(),
         fluidRow(column(6, checkboxGroupInput("aes", "Aesthetics", c("Color", "Shape"), selected=NULL)),
@@ -33,7 +33,7 @@ shinyUI(fluidPage(
       ) 
     ),
     column(5,
-           div(align="center", plotOutput("plot", width='100%', height='550px'))
+           div(align="center", plotOutput("plot1", width='100%', height='auto'))
     ), 
     column(4,
            downloadButton("dataset", "Download Data"),
