@@ -35,6 +35,9 @@
 \end{abstract}
 
 \section{Introduction and background}
+Discussion of preattentive visual features \citep{healey:preattentive}
+
+
 Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}
 
 The change to lineups we make is to introduce a second target to each lineup. We then keep track of how many observers choose any one of the two targets (to assess the difficulty of a lineup), and additionally we  record how often observers choose one target over the other one. This is information that we can use to evaluate how strong the signal of one target is compared to the other one. 
