@@ -30,8 +30,8 @@ shapetm[,10] <- 0
 # Lineup Design
 data.parms <- expand.grid(N=c(45, 75),
                           K=c(3, 5),
-                          sd=c(.3, .4, .5),
-                          q=c(.3, .4, .5),
+                          sd=c(.35, .45, .55),
+                          q=c(.25, .35, .45),
                           rep=1:3)
 data.parms[data.parms$K==5]$q = data.parms[data.parms$K==5]$q - .05
 
