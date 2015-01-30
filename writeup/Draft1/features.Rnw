@@ -95,9 +95,9 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
 
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
-
-Under the null model, $M_T$ slope may be between $(.2, .8)$
-\comment{We can't have anything different in the null model from the generating model, but you could vary the slope in $M_T$ itself, that would make sense.}
+% 
+% Under the null model, $M_T$ slope may be between $(.2, .8)$
+% \comment{We can't have anything different in the null model from the generating model, but you could vary the slope in $M_T$ itself, that would make sense.}
 
 \section{Experimental Setup}
 \subsection{Design}
@@ -106,10 +106,11 @@ Factors:
 \begin{center}
 \begin{tabular}{lll}
 Parameter & Description & Choices\\\hline
-$N$ & \# Points & 30, 40, 50 \\
-$K$ & \# Clusters & 3, 4, 5 \\
-$\sigma_T$ & Scatter around trend line & .3, .4, .5\\
-$\sigma_C$ & Scatter around cluster centers & \\\hline
+$N$ & \# Points & 45, 75 \\
+$K$ & \# Clusters & 3, 5 \\
+$\sigma_T$ & Scatter around trend line &  .35, .45, .55\\
+\multirow{2}{*}{$\sigma_C$} & \multirow{2}{*}{Scatter around cluster centers} & ($K=3$) .25, .35, .45\\
+& & ($K=5$) .2, .3, .4\\\hline
 \end{tabular}
 \end{center}
 \caption{Data Generation Options}
@@ -130,14 +131,17 @@ Conflict & Color + Trend Line, Color + Trend Line + Error band\\\hline\hline
 \caption{Plot Generation Options}
 \end{table}
 
-\comment{What do we do with ellipses alone? Group them (and emphasize the clusters) or not group them (and emphasize the line)?
-HH: I would think of ellipses as the analogue to the error bands in trends - so rather not show them alone. I'm not so sure that we need both conflict situations - the trend lines against color are already bad enough - if we additionally have an error band we get into problems with the band on top of the color.  }
+\comment{
+HH: I would think of ellipses as the analogue to the error bands in trends - so rather not show them alone. I'm not so sure that we need both conflict situations - the trend lines against color are already bad enough - if we additionally have an error band we get into problems with the band on top of the color.  \\
+SVP: I fixed this by changing to lines instead of ribbons. I think it makes it better.}
 
 
 I would consider the values $\sigma_C = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
-The actual values of $\sigma_C$ don't make much sense - because they are only valid within the scaled data values. We might need to re-express the values of $\sigma_C$ in terms of a percentage of the data  or a percentage of the overall variability.
 
+The actual values of $\sigma_C$ don't make much sense - because they are only valid within the scaled data values. We might need to re-express the values of $\sigma_C$ in terms of a percentage of the data  or a percentage of the overall variability.
+\comment{ugh, that sounds like a pain. }
 For $K=5$ the parameters for $\sigma_C$ and the standard deviation $\sigma_T$ need to be smaller - we could start at 0.2 and 0.75, respectively.
+\comment{Why would $\sigma_T$ change? It shouldn't matter for changes in $K$.}
 
 \subsection*{Design choices}
 \begin{enumerate}
@@ -148,6 +152,30 @@ For $K=5$ the parameters for $\sigma_C$ and the standard deviation $\sigma_T$ ne
 \item Color \& trend line: this emphasises both the clustering and the regression - it is not clear, which signal will be stronger.
 \item Color \& Ellipsoids: around the groups of the same color, ellipsoids are drawn to reflect the 95\% density estimate.
 \end{enumerate}
+
+\subsection{Hypothesis}
+The plot most identified as the "target" will change based on plot aesthetics which emphasize linear features or cluster features. This effect will be mediated by the signal strength of the line and cluster features. 
+
+\begin{itemize}
+\item Increasing $N$ will increase signal strength for both line and clusters
+\item Increasing $K$ will decrease signal strength for clusters (fewer points per cluster, thus lower visual cohesiveness)
+\item Increasing $\sigma_T$ will decrease signal strength for lines
+\item Increasing $\sigma_C$ will decrease signal strength for clusters
+\end{itemize}
+
+Plot features will emphasize either lines or clusters as follows: 
+
+\begin{itemize}
+\item None (control)
+\item Color (cluster emphasis)
+\item Shape (cluster emphasis)
+\item Color + shape (double cluster emphasis)
+\item Ellipse + color (doubly cluster emphasis)
+\item Line
+\item Line + Prediction Interval (double line emphasis)
+\item Color + line (conflict)
+\item Color + line + Prediction Interval (conflict)
+\end{itemize}
 
 \bibliographystyle{asa}
 \bibliography{references}
