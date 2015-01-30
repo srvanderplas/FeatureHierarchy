@@ -54,6 +54,8 @@ shinyServer(function(input, output, session){
           )
           
           testdata<- read.csv("./res.csv", stringsAsFactors=F)
+          testdata$target.type <- as.character(testdata$target.type)
+          testdata$target.diff <- as.character(testdata$target.diff)
           testdata<- rbind.fill(testdata, tmp)
           write.csv(testdata, "./res.csv", row.names=F)
         }
