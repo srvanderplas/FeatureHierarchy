@@ -1,83 +1,403 @@
 "set","plot","target.type","target.ans","target.diff","problem"
-84,3,1,9,1,FALSE
-84,3,2,5,2,FALSE
-64,5,1,4,1,FALSE
-64,5,2,14,1,FALSE
-44,6,1,7,1,FALSE
-44,6,2,17,2,FALSE
-89,3,1,12,1,FALSE
-89,3,2,11,2,FALSE
-90,9,1,14,1,FALSE
-90,9,2,12,1,FALSE
-80,1,1,8,1,FALSE
-80,1,2,12,1,FALSE
-51,2,1,14,1,FALSE
-51,2,2,20,2,FALSE
-8,2,1,6,1,FALSE
-8,2,2,5,2,FALSE
-62,2,1,11,1,FALSE
-62,2,2,1,2,FALSE
-22,9,1,4,1,FALSE
-22,9,2,15,2,FALSE
-65,2,1,19,1,FALSE
-65,2,2,6,2,FALSE
-15,6,1,3,1,FALSE
-15,6,2,9,2,FALSE
-11,3,1,13,1,FALSE
-11,3,2,8,2,FALSE
-13,2,1,3,1,FALSE
-13,2,2,10,2,FALSE
-97,1,1,4,1,FALSE
-97,1,2,10,2,FALSE
-17,4,1,9,1,FALSE
-17,4,2,3,1,FALSE
-79,7,1,19,1,FALSE
-79,7,2,3,2,FALSE
-18,4,1,8,1,FALSE
-18,4,2,17,2,FALSE
-77,2,1,8,1,FALSE
-77,2,2,3,1,FALSE
-65,5,1,7,1,FALSE
-65,5,2,19,2,FALSE
-81,7,1,1,1,FALSE
-81,7,2,5,1,FALSE
-57,7,1,4,1,FALSE
-57,7,2,14,1,FALSE
-50,1,1,7,1,FALSE
-50,1,2,13,2,FALSE
-82,3,1,8,1,FALSE
-82,3,2,6,1,FALSE
-4,5,1,18,1,FALSE
-4,5,2,11,1,FALSE
-85,6,1,20,1,FALSE
-85,6,2,17,2,FALSE
-92,6,1,1,1,FALSE
-92,6,2,16,1,FALSE
-6,6,1,11,1,FALSE
-6,6,2,13,2,FALSE
-35,9,1,19,1,FALSE
-35,9,2,15,2,FALSE
-96,2,1,6,1,FALSE
-96,2,2,1,2,FALSE
-48,7,1,19,1,FALSE
-48,7,2,1,1,FALSE
-22,5,1,11,1,FALSE
-22,5,2,15,1,FALSE
-1,5,1,9,1,FALSE
-1,5,2,6,1,FALSE
-2,3,1,8,1,FALSE
-2,3,2,20,1,FALSE
-11,6,1,2,1,FALSE
-11,6,2,14,1,FALSE
-4,7,1,3,1,FALSE
-4,7,2,10,2,FALSE
-65,8,1,20,1,FALSE
-65,8,2,17,1,FALSE
-77,3,1,4,1,FALSE
-77,3,2,7,2,FALSE
-49,9,1,4,1,FALSE
-49,9,2,18,2,FALSE
-80,3,1,17,1,FALSE
-80,3,2,6,1,FALSE
-94,3,1,20,1,FALSE
-94,3,2,17,1,FALSE
+38,5,"line",11,"easy",FALSE
+38,5,"group",6,"very easy",FALSE
+97,2,"line",7,"easy",FALSE
+97,2,"group",2,"very easy",FALSE
+16,4,"line",9,"very easy",FALSE
+16,4,"group",10,"very easy",FALSE
+29,2,"line",4,"very easy",FALSE
+29,2,"group",13,"medium",FALSE
+44,8,"line",19,"very easy",FALSE
+44,8,"group",12,"medium",FALSE
+91,8,"line",12,"easy",FALSE
+91,8,"group",11,"very easy",FALSE
+103,1,"line",6,"very easy",FALSE
+103,1,"group",3,"very easy",FALSE
+68,8,"line",8,"medium",FALSE
+68,8,"group",18,"hard",FALSE
+45,2,"line",5,"very easy",FALSE
+45,2,"group",9,"hard",FALSE
+9,8,"line",10,"hard",FALSE
+9,8,"group",2,"very easy",FALSE
+106,2,"line",14,"easy",FALSE
+106,2,"group",20,"very easy",FALSE
+64,3,"line",20,"very easy",FALSE
+64,3,"group",19,"medium",FALSE
+62,6,"line",7,"very easy",FALSE
+62,6,"group",17,"medium",FALSE
+65,4,"line",4,"easy",FALSE
+65,4,"group",15,"easy",FALSE
+101,1,"line",6,"hard",FALSE
+101,1,"group",5,"medium",FALSE
+27,7,"line",7,"very easy",FALSE
+27,7,"group",15,"medium",FALSE
+102,7,"line",18,"very easy",FALSE
+102,7,"group",5,"medium",FALSE
+22,9,"line",6,"very easy",FALSE
+22,9,"group",9,"easy",FALSE
+11,1,"line",5,"medium",FALSE
+11,1,"group",6,"very easy",FALSE
+45,5,"line",3,"medium",FALSE
+45,5,"group",10,"very easy",FALSE
+47,9,"line",5,"medium",FALSE
+47,9,"group",2,"very easy",FALSE
+75,6,"line",18,"very easy",FALSE
+75,6,"group",13,"easy",FALSE
+72,9,"line",12,"easy",FALSE
+72,9,"group",10,"easy",FALSE
+80,6,"line",11,"easy",FALSE
+80,6,"group",5,"easy",FALSE
+44,1,"line",14,"very easy",FALSE
+44,1,"group",20,"very easy",FALSE
+32,5,"line",12,"easy",FALSE
+32,5,"group",11,"very easy",FALSE
+45,3,"line",20,"very easy",FALSE
+45,3,"group",9,"hard",FALSE
+54,9,"line",8,"easy",FALSE
+54,9,"group",2,"easy",FALSE
+71,7,"line",15,"easy",FALSE
+71,7,"group",6,"easy",FALSE
+94,8,"line",7,"medium",FALSE
+94,8,"group",19,"easy",FALSE
+37,9,"line",19,"easy",FALSE
+37,9,"group",14,"easy",FALSE
+80,9,"line",19,"very easy",FALSE
+80,9,"group",9,"very easy",FALSE
+84,6,"line",14,"very easy",FALSE
+84,6,"group",20,"easy",FALSE
+82,1,"line",4,"very easy",FALSE
+82,1,"group",14,"very easy",FALSE
+15,2,"line",18,"easy",FALSE
+15,2,"group",11,"very easy",FALSE
+103,6,"line",11,"very easy",FALSE
+103,6,"group",15,"medium",FALSE
+30,2,"line",8,"hard",FALSE
+30,2,"group",14,"hard",FALSE
+74,3,"line",2,"very easy",FALSE
+74,3,"group",19,"medium",FALSE
+84,1,"line",9,"very easy",FALSE
+84,1,"group",10,"very easy",FALSE
+53,4,"line",4,"very easy",FALSE
+53,4,"group",14,"easy",FALSE
+91,6,"line",2,"very easy",FALSE
+91,6,"group",6,"very easy",FALSE
+21,7,"line",6,"very easy",FALSE
+21,7,"group",17,"medium",FALSE
+81,9,"line",15,"very easy",FALSE
+81,9,"group",11,"very easy",FALSE
+105,6,"line",4,"medium",FALSE
+105,6,"group",14,"very easy",FALSE
+55,3,"line",19,"easy",FALSE
+55,3,"group",15,"easy",FALSE
+37,7,"line",4,"easy",FALSE
+37,7,"group",5,"hard",FALSE
+72,4,"line",19,"very easy",FALSE
+72,4,"group",9,"very easy",FALSE
+7,3,"line",11,"very easy",FALSE
+7,3,"group",5,"very easy",FALSE
+75,8,"line",3,"very easy",FALSE
+75,8,"group",13,"very easy",FALSE
+29,9,"line",1,"very easy",FALSE
+29,9,"group",10,"very easy",FALSE
+84,9,"line",19,"easy",FALSE
+84,9,"group",1,"easy",FALSE
+11,9,"line",4,"very easy",FALSE
+11,9,"group",14,"easy",FALSE
+26,7,"line",3,"medium",FALSE
+26,7,"group",10,"easy",FALSE
+3,1,"line",18,"very easy",FALSE
+3,1,"group",2,"medium",FALSE
+2,1,"line",18,"easy",FALSE
+2,1,"group",5,"easy",FALSE
+26,2,"line",2,"very easy",FALSE
+26,2,"group",14,"easy",FALSE
+86,8,"line",18,"very easy",FALSE
+86,8,"group",2,"hard",FALSE
+23,7,"line",17,"easy",FALSE
+23,7,"group",2,"medium",FALSE
+98,6,"line",4,"very easy",FALSE
+98,6,"group",10,"medium",FALSE
+70,3,"line",14,"very easy",FALSE
+70,3,"group",4,"easy",FALSE
+96,8,"line",12,"very easy",FALSE
+96,8,"group",11,"easy",FALSE
+88,8,"line",12,"medium",FALSE
+88,8,"group",4,"medium",FALSE
+53,3,"line",6,"very easy",FALSE
+53,3,"group",13,"easy",FALSE
+25,3,"line",2,"easy",FALSE
+25,3,"group",6,"very easy",FALSE
+28,8,"line",11,"easy",FALSE
+28,8,"group",14,"easy",FALSE
+8,1,"line",6,"easy",FALSE
+8,1,"group",10,"medium",FALSE
+88,7,"line",13,"very easy",FALSE
+88,7,"group",1,"very easy",FALSE
+55,1,"line",6,"easy",FALSE
+55,1,"group",13,"easy",FALSE
+94,6,"line",4,"easy",FALSE
+94,6,"group",13,"medium",FALSE
+21,8,"line",19,"easy",FALSE
+21,8,"group",14,"easy",FALSE
+7,6,"line",15,"easy",FALSE
+7,6,"group",11,"easy",FALSE
+89,8,"line",3,"easy",FALSE
+89,8,"group",13,"very easy",FALSE
+29,6,"line",14,"easy",FALSE
+29,6,"group",1,"easy",FALSE
+102,8,"line",19,"easy",FALSE
+102,8,"group",1,"medium",FALSE
+14,6,"line",6,"medium",FALSE
+14,6,"group",9,"medium",FALSE
+3,3,"line",10,"medium",FALSE
+3,3,"group",4,"medium",FALSE
+51,7,"line",18,"very easy",FALSE
+51,7,"group",5,"very easy",FALSE
+87,1,"line",16,"easy",FALSE
+87,1,"group",15,"easy",FALSE
+42,8,"line",19,"easy",FALSE
+42,8,"group",12,"medium",FALSE
+12,5,"line",3,"easy",FALSE
+12,5,"group",19,"very easy",FALSE
+22,8,"line",6,"very easy",FALSE
+22,8,"group",16,"very easy",FALSE
+47,5,"line",19,"easy",FALSE
+47,5,"group",6,"very easy",FALSE
+30,5,"line",3,"hard",FALSE
+30,5,"group",13,"very easy",FALSE
+16,9,"line",2,"medium",FALSE
+16,9,"group",19,"medium",FALSE
+72,1,"line",4,"medium",FALSE
+72,1,"group",13,"easy",FALSE
+52,1,"line",11,"medium",FALSE
+52,1,"group",5,"medium",FALSE
+88,9,"line",1,"medium",FALSE
+88,9,"group",20,"medium",FALSE
+95,5,"line",6,"easy",FALSE
+95,5,"group",13,"easy",FALSE
+100,3,"line",10,"easy",FALSE
+100,3,"group",1,"medium",FALSE
+25,4,"line",8,"very easy",FALSE
+25,4,"group",1,"medium",FALSE
+100,1,"line",11,"very easy",FALSE
+100,1,"group",14,"medium",FALSE
+93,1,"line",8,"very easy",FALSE
+93,1,"group",1,"easy",FALSE
+97,3,"line",15,"easy",FALSE
+97,3,"group",12,"very easy",FALSE
+65,5,"line",9,"easy",FALSE
+65,5,"group",20,"medium",FALSE
+78,5,"line",3,"medium",FALSE
+78,5,"group",9,"medium",FALSE
+70,5,"line",6,"medium",FALSE
+70,5,"group",13,"very easy",FALSE
+59,4,"line",12,"easy",FALSE
+59,4,"group",11,"easy",FALSE
+40,9,"line",3,"medium",FALSE
+40,9,"group",17,"medium",FALSE
+69,8,"line",9,"easy",FALSE
+69,8,"group",17,"easy",FALSE
+67,4,"line",17,"medium",FALSE
+67,4,"group",1,"medium",FALSE
+98,3,"line",15,"medium",FALSE
+98,3,"group",10,"easy",FALSE
+86,3,"line",14,"easy",FALSE
+86,3,"group",10,"medium",FALSE
+92,7,"line",17,"easy",FALSE
+92,7,"group",2,"very easy",FALSE
+21,2,"line",11,"easy",FALSE
+21,2,"group",14,"hard",FALSE
+24,6,"line",4,"medium",FALSE
+24,6,"group",11,"very easy",FALSE
+99,1,"line",16,"medium",FALSE
+99,1,"group",7,"medium",FALSE
+23,3,"line",4,"easy",FALSE
+23,3,"group",7,"medium",FALSE
+78,8,"line",4,"easy",FALSE
+78,8,"group",15,"medium",FALSE
+36,5,"line",6,"medium",FALSE
+36,5,"group",13,"very easy",FALSE
+72,2,"line",5,"very easy",FALSE
+72,2,"group",2,"hard",FALSE
+94,1,"line",11,"easy",FALSE
+94,1,"group",5,"medium",FALSE
+70,8,"line",19,"easy",FALSE
+70,8,"group",14,"very easy",FALSE
+71,4,"line",12,"easy",FALSE
+71,4,"group",11,"easy",FALSE
+79,4,"line",7,"easy",FALSE
+79,4,"group",4,"hard",FALSE
+95,1,"line",8,"medium",FALSE
+95,1,"group",17,"easy",FALSE
+66,1,"line",8,"medium",FALSE
+66,1,"group",6,"medium",FALSE
+104,3,"line",9,"easy",FALSE
+104,3,"group",6,"medium",FALSE
+71,9,"line",11,"medium",FALSE
+71,9,"group",9,"hard",FALSE
+63,4,"line",7,"medium",FALSE
+63,4,"group",9,"medium",FALSE
+31,5,"line",14,"easy",FALSE
+31,5,"group",11,"medium",FALSE
+79,5,"line",10,"easy",FALSE
+79,5,"group",13,"medium",FALSE
+12,9,"line",1,"easy",FALSE
+12,9,"group",17,"very easy",FALSE
+63,5,"line",6,"medium",FALSE
+63,5,"group",16,"easy",FALSE
+46,6,"line",14,"easy",FALSE
+46,6,"group",6,"medium",FALSE
+60,6,"line",4,"easy",FALSE
+60,6,"group",7,"very easy",FALSE
+89,6,"line",6,"medium",FALSE
+89,6,"group",13,"medium",FALSE
+66,6,"line",14,"easy",FALSE
+66,6,"group",1,"easy",FALSE
+2,5,"line",9,"very easy",FALSE
+2,5,"group",6,"easy",FALSE
+59,9,"line",2,"easy",FALSE
+59,9,"group",14,"very easy",FALSE
+62,3,"line",9,"medium",FALSE
+62,3,"group",17,"medium",FALSE
+59,7,"line",4,"very easy",FALSE
+59,7,"group",15,"easy",FALSE
+102,2,"line",3,"medium",FALSE
+102,2,"group",16,"medium",FALSE
+69,9,"line",6,"easy",FALSE
+69,9,"group",9,"very easy",FALSE
+51,3,"line",16,"hard",FALSE
+51,3,"group",1,"very easy",FALSE
+84,3,"line",16,"very easy",FALSE
+84,3,"group",15,"very easy",FALSE
+66,3,"line",4,"very easy",FALSE
+66,3,"group",14,"very easy",FALSE
+8,7,"line",9,"very easy",FALSE
+8,7,"group",8,"easy",FALSE
+8,3,"line",13,"very easy",FALSE
+8,3,"group",1,"very easy",FALSE
+16,5,"line",13,"easy",FALSE
+16,5,"group",1,"very easy",FALSE
+23,1,"line",9,"easy",FALSE
+23,1,"group",13,"easy",FALSE
+108,7,"line",13,"very easy",FALSE
+108,7,"group",3,"very easy",FALSE
+6,4,"line",9,"easy",FALSE
+6,4,"group",15,"hard",FALSE
+62,5,"line",7,"medium",FALSE
+62,5,"group",15,"very easy",FALSE
+95,6,"line",4,"very easy",FALSE
+95,6,"group",15,"medium",FALSE
+59,1,"line",10,"easy",FALSE
+59,1,"group",18,"impossible",FALSE
+96,7,"line",9,"hard",FALSE
+96,7,"group",16,"medium",FALSE
+66,5,"line",6,"very easy",FALSE
+66,5,"group",1,"medium",FALSE
+61,9,"line",9,"hard",FALSE
+61,9,"group",8,"medium",FALSE
+13,8,"line",19,"very easy",FALSE
+13,8,"group",16,"easy",FALSE
+8,4,"line",4,"very easy",FALSE
+8,4,"group",8,"easy",FALSE
+87,8,"line",13,"easy",FALSE
+87,8,"group",1,"very easy",FALSE
+36,1,"line",19,"very easy",FALSE
+36,1,"group",4,"easy",FALSE
+41,4,"line",5,"medium",FALSE
+41,4,"group",9,"impossible",FALSE
+29,7,"line",3,"easy",FALSE
+29,7,"group",4,"very easy",FALSE
+65,2,"line",19,"very easy",FALSE
+65,2,"group",1,"very easy",FALSE
+31,6,"line",6,"medium",FALSE
+31,6,"group",9,"medium",FALSE
+75,3,"line",10,"easy",FALSE
+75,3,"group",12,"hard",FALSE
+50,4,"line",1,"hard",FALSE
+50,4,"group",4,"medium",FALSE
+64,6,"line",8,"very easy",FALSE
+64,6,"group",6,"easy",FALSE
+10,6,"line",7,"very easy",FALSE
+10,6,"group",17,"hard",FALSE
+34,3,"line",11,"medium",FALSE
+34,3,"group",8,"very easy",FALSE
+99,7,"line",19,"very easy",FALSE
+99,7,"group",1,"hard",FALSE
+87,6,"line",4,"very easy",FALSE
+87,6,"group",9,"hard",FALSE
+79,2,"line",19,"very easy",FALSE
+79,2,"group",12,"medium",FALSE
+88,6,"line",8,"easy",FALSE
+88,6,"group",17,"very easy",FALSE
+24,5,"line",6,"very easy",FALSE
+24,5,"group",13,"easy",FALSE
+42,2,"line",16,"very easy",FALSE
+42,2,"group",7,"very easy",FALSE
+4,3,"line",3,"easy",FALSE
+4,3,"group",19,"very easy",FALSE
+86,4,"line",20,"very easy",FALSE
+86,4,"group",17,"very easy",FALSE
+75,4,"line",17,"very easy",FALSE
+75,4,"group",2,"easy",FALSE
+90,8,"line",12,"easy",FALSE
+90,8,"group",11,"easy",FALSE
+28,4,"line",8,"hard",FALSE
+28,4,"group",12,"very easy",FALSE
+30,6,"line",6,"very easy",FALSE
+30,6,"group",10,"easy",FALSE
+54,6,"line",2,"easy",FALSE
+54,6,"group",19,"medium",FALSE
+52,3,"line",15,"easy",FALSE
+52,3,"group",6,"easy",FALSE
+97,1,"line",3,"medium",FALSE
+97,1,"group",4,"hard",FALSE
+99,3,"line",9,"easy",FALSE
+99,3,"group",7,"medium",FALSE
+67,9,"line",4,"medium",FALSE
+67,9,"group",14,"medium",FALSE
+22,6,"line",15,"easy",FALSE
+22,6,"group",7,"medium",FALSE
+21,6,"line",1,"easy",FALSE
+21,6,"group",6,"very easy",FALSE
+13,7,"line",15,"easy",FALSE
+13,7,"group",11,"very easy",FALSE
+63,3,"line",4,"very easy",FALSE
+63,3,"group",13,"easy",FALSE
+107,3,"line",14,"easy",FALSE
+107,3,"group",11,"medium",FALSE
+60,2,"line",13,"easy",FALSE
+60,2,"group",12,"easy",FALSE
+34,9,"line",15,"easy",FALSE
+34,9,"group",2,"hard",FALSE
+102,5,"line",6,"easy",FALSE
+102,5,"group",13,"easy",FALSE
+108,3,"line",6,"medium",FALSE
+108,3,"group",9,"very easy",FALSE
+103,2,"line",4,"medium",FALSE
+103,2,"group",15,"very easy",FALSE
+68,3,"line",11,"easy",FALSE
+68,3,"group",14,"easy",FALSE
+40,5,"line",5,"very easy",FALSE
+40,5,"group",12,"medium",FALSE
+49,4,"line",9,"easy",FALSE
+49,4,"group",17,"easy",FALSE
+17,1,"line",17,"easy",FALSE
+17,1,"group",6,"easy",FALSE
+49,3,"line",13,"easy",FALSE
+49,3,"group",14,"easy",FALSE
+61,2,"line",17,"easy",FALSE
+61,2,"group",3,"medium",FALSE
+96,5,"line",19,"easy",FALSE
+96,5,"group",16,"medium",FALSE
+31,8,"line",5,"medium",FALSE
+31,8,"group",1,"easy",FALSE
+38,9,"line",10,"very easy",FALSE
+38,9,"group",13,"medium",FALSE
+5,1,"line",7,"very easy",FALSE
+5,1,"group",2,"very easy",FALSE
+27,1,"line",19,"easy",FALSE
+27,1,"group",12,"easy",FALSE
+70,9,"line",18,"very easy",FALSE
+70,9,"group",5,"medium",FALSE
+61,6,"line",12,"very easy",FALSE
+61,6,"group",11,"very easy",FALSE
