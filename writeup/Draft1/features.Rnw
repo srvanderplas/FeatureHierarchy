@@ -177,6 +177,18 @@ Plot features will emphasize either lines or clusters as follows:
 \item Color + line + Prediction Interval (conflict)
 \end{itemize}
 
+In a more organized representation:
+\begin{table}[h]
+\centering
+\begin{tabular}{lllll}
+ & & \multicolumn{3}{c}{Line Emphasis}\\\cline{3-5}
+ & & 0 & 1 & 2\\\hline
+\multirow{4}{*}{Cluster Emphasis} & 0 & None & Line & Line + Prediction\\
+& 1 & Color, Shape & Color + Line & Color + Line + Prediction \\
+& \multirow{2}{*}{2} & Color + Shape & &\\
+& & Color + Ellipse & & \\
+\end{tabular}
+\end{table}
 \bibliographystyle{asa}
 \bibliography{references}
 
