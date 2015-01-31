@@ -152,12 +152,17 @@ shinyServer(function(input, output, session){
     
     st <- ddply(dd, .(.sample),
                 function(df){
-                  r2 <- summary(lm(y~x, data=df))
-                  tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
-                  res <- tmp[[1]]$`Mean Sq`
+                  # we need to distinguish between two different models - 
+                  # one is a straight regression line, 
+                  # not considering the groups, 
+                  # the other is the clustering index 
+                  # not considering the line
+                  reg <- lm(y~x, data=df)
+                  clust <- lm(y~factor(group) + 0, data=df)
+                  res <- summary(aov(clust))
                   data.frame(.sample=unique(df$.sample), 
-                             LineRSq = r2$r.squared, 
-                             Fgroup = round(res[2]/res[3], 2))
+                             Fline = round(summary(reg)$r.squared, 2), 
+                             Fgroup=round(res[[1]]$`F value`[1], 2))
                 } )
     st    
   })
