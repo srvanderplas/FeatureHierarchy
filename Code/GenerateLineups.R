@@ -61,10 +61,15 @@ data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.lis
 
 data.stats <- ddply(data, .(set, .sample), 
                     function(df){
+                      r2 <- summary(lm(y~x, data=df))
                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
                       res <- tmp[[1]]$`Mean Sq`
-                      return(data.frame(.set=unique(df$set), .sample=unique(df$.sample), Fline = round(res[1]/res[3], 2), Fgroup=round(res[2]/res[3], 2), lineplot=unique(df$target2), groupplot=unique(df$target1)))
-                    } )
+                      data.frame(.sample=unique(df$.sample), 
+                                 LineRSq = r2$r.squared, 
+                                 Fgroup = round(res[2]/res[3], 2), 
+                                 lineplot=unique(df$target2), 
+                                 groupplot=unique(df$target1))
+                      } )
 
 answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
 
