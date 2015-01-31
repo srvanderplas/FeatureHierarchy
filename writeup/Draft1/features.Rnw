@@ -35,7 +35,10 @@
 \end{abstract}
 
 \section{Introduction and background}
-Discussion of preattentive visual features \citep{healey:preattentive}
+Discussion of pre-attentive visual features \citep{healey:preattentive} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?
+
+
+
 
 
 Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}
@@ -47,6 +50,14 @@ On the other hand, regression lines should emphasize any linear trends in the da
 
 \section{Design Choices}
 We choose colors and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by  \citet{heer:2014} on the so called perceptual kernels.
+Unfortunately, this limits the choice to the set used in the Tableau software. Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
+
+XXX Which other color combinations did we exclude?
+
+
+Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes.
+
+All shapes are non-filled shapes, which means that they all are supporting one of the simplest solutions to overplotting of points in the tradition of \citet{tukey??} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to measure the amount of overplotting.
 
 \section{Generating Model}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
@@ -113,22 +124,23 @@ $\sigma_T$ & Scatter around trend line &  .35, .45, .55\\
 & & ($K=5$) .2, .3, .4\\\hline
 \end{tabular}
 \end{center}
-\caption{Data Generation Options}
+\caption{Parameter settings for Data Generation.}
 \end{table}
 
 \begin{table}[h]
 \begin{center}
-\begin{tabular}{lll}
+\begin{tabular}{ll}
 Emphasis & Aesthetics \\\hline\hline
 Control & -- \\\hline
-\multirow{2}{*}{Group} & Color, Shape, Ellipse \\
-& Color + Shape, Color + Ellipse\\\hline
-\multirow{2}{*}{Trend} & Line, Error band \\
+Group & Color, Shape \\
+& Color + Shape, Color + Ellipse, Color + Shape + Ellipse\\\hline
+Trend & Line \\
 & Line + Error band\\\hline
-Conflict & Color + Trend Line, Color + Trend Line + Error band\\\hline\hline
+Conflict & Color + Trend Line, \\
+& Color + Ellipse + Trend Line + Error band\\\hline\hline
 \end{tabular}
 \end{center}
-\caption{Plot Generation Options}
+\caption{Aesthetics and add-on design choices. }
 \end{table}
 
 \comment{
