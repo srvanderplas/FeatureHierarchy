@@ -184,11 +184,57 @@ In a more organized representation:
  & & \multicolumn{3}{c}{Line Emphasis}\\\cline{3-5}
  & & 0 & 1 & 2\\\hline
 \multirow{4}{*}{Cluster Emphasis} & 0 & None & Line & Line + Prediction\\
-& 1 & Color, Shape & Color + Line & Color + Line + Prediction \\
-& \multirow{2}{*}{2} & Color + Shape & &\\
+& 1 & Color, Shape & Color + Line & \\
+& \multirow{2}{*}{2} & Color + Shape & & Color + Ellipse + Line + Prediction \\
 & & Color + Ellipse & & \\
+& 3 & Color + Shape + Ellipse
 \end{tabular}
 \end{table}
+
+\subsection{Experimental Design}
+Starting with the assumption of a fully factorial, balanced design, with $M$ datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lllll}\hline\hline\\
+Level & Factor & Source & DF & SS \\\hline
+\multirow{16}{*}{Dataset}
+      & $N$    & $\alpha$ & 1 &     \\
+      & $K$    & $\beta$  & 1 &     \\
+      & $\sigma^2_T$ & $\gamma$  & 3 &     \\
+      & $\sigma^2_C$ & $\delta$  & 4 &     \\\cline{3-5}
+      &    & $(\alpha\beta)$ & 1 & \\
+      &    & $(\alpha\gamma)$ & 3 & \\
+      &    & $(\alpha\delta)$ & 4 & \\
+      &    & $(\beta\gamma)$ & 3 & \\
+      &    & $(\beta\delta)$ & 4 & \\
+      &    & $(\gamma\delta)$ & 12 & \\\cline{3-5}
+      &    & $(\alpha\beta\gamma)$ & 3 & \\
+      &    & $(\alpha\beta\delta)$ & 4 & \\
+      &    & $(\beta\gamma\delta)$ & 12 & \\
+      &    & $(\alpha\gamma\delta)$ & 12 & \\\cline{3-5}
+      &    & $(\alpha\beta\gamma\delta)$ & 12 & \\\cline{3-5}
+      & \multicolumn{2}{c}{Dataset Error} & (M-1)(2)(2)(4)(5) & \\\hline\hline
+\multirow{11}{*}{Plot}
+      & Aesthetic & $\tau$ & 10 & \\\cline{3-5}
+      & & color & 1 & \\
+      & & shape & 1 & \\
+      & & line & 1 & \\
+      & & color + shape & 1 & \\
+      & & color + ellipse & 1 & \\
+      & & color + shape + ellipse & 1 & \\
+      & & line + pred. interval & 1 & \\
+      & & color + line & 1 & \\
+      & & color + ellipse + line + pred. interval & 1 & \\\cline{3-5}\cline{2-5}
+      & Data x Aesthetics & & (10)((2)(2)(4)(5)-1) & \\\cline{2-5}
+      & error &  & $(P-1)(11)(M)(2)(2)(4)(5)$ & \\\hline
+      & Total & & I think $P(11)(M)(2)(2)(4)(5)-1$ & \\\hline\hline
+\end{tabular}
+\end{table}
+
+If we then do one replicate of $K=5$ and one of $N=75$ (reducing the full factorial experiment) we should be able to make broad generalizations about the effect of $K$ and $N$ without a fully factorial design. As we don't care about all of the interactions, we can add many of those terms into the error term as well. 
+
+
 \bibliographystyle{asa}
 \bibliography{references}
 
