@@ -151,12 +151,15 @@ source("../../Code/MixtureLineups.R")
 sT = 0.3
 sC = 0.3
 
-res <- data.frame(t(replicate(5000, {
+res <- data.frame(t(replicate(1000, {
+  lp <- data.frame(t(replicate(18, {
   mix = mixture.sim(lambda=0.5, K=3, N=45, q=sC, sd=sT, slope=1)
   reg <- lm(y~x, data=mix)
   clust <- lm(y~factor(group) + 0, data=mix)
-                  res <- summary(aov(clust))
+  res <- summary(aov(clust))
   c(fline=summary(reg)$r.squared, fgroup=res[[1]]$`F value`[1])
+  })))
+  c(fline=max(lp$fline), fgroup=max(lp$fgroup))
   })))
 
 trends <- replicate(10, {
@@ -178,14 +181,17 @@ ggsave("images/fline.pdf", width=8, height=4)
 qplot(fgroup, data=res, bindiwth=10) + geom_vline(aes(xintercept=clusters), colour="red") + theme_bw()
 ggsave("images/fgroup.pdf", width=8, height=4)
 @
+Figures~\ref{fig:fline} and \ref{fig:fgroup} show densities ...
+The red lines show ten samples each from the trend model and the cluster model. The lines for the trend are, relatively, further to the right of the overall distribution than the red lines for the cluster model, indicating that $\sigma_T = 0.3$ is producing target plots that are (relatively) easier to spot that cluster targets with a parameter value of $\sigma_C = 0.3$.
+
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{images/fline.pdf}
-\caption{Histogram of $R^2$ values from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
+\caption{\label{fig:fline}Histogram of $R^2$ values from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{images/fgroup.pdf}
-\caption{Histogram of $F$-statistics measuring the amount of clustering from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are the $F$-statistics  of ten sample data sets from the Clustering model $M_C$. }
+\caption{\label{fig:fgroup}Histogram of $F$-statistics measuring the amount of clustering from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are the $F$-statistics  of ten sample data sets from the Clustering model $M_C$. }
 \end{figure}
 
 
