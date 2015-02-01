@@ -117,11 +117,10 @@ Factors:
 \begin{center}
 \begin{tabular}{lll}
 Parameter & Description & Choices\\\hline
-$N$ & \# Points & 45, 75 \\
 $K$ & \# Clusters & 3, 5 \\
-$\sigma_T$ & Scatter around trend line &  .35, .45, .55\\
-\multirow{2}{*}{$\sigma_C$} & \multirow{2}{*}{Scatter around cluster centers} & ($K=3$) .25, .35, .45\\
-& & ($K=5$) .2, .3, .4\\\hline
+$N$ & \# Points & $15\cdot K$ \\
+$\sigma_T$ & Scatter around trend line &  .3, .4, .5\\
+\multirow{2}{*}{$\sigma_C$} & Scatter around cluster centers &  .20, .25, 0.30, .35, 0.40\\\hline
 \end{tabular}
 \end{center}
 \caption{Parameter settings for Data Generation.}
@@ -143,17 +142,10 @@ Conflict & Color + Trend Line, \\
 \caption{Aesthetics and add-on design choices. }
 \end{table}
 
-\comment{
-HH: I would think of ellipses as the analogue to the error bands in trends - so rather not show them alone. I'm not so sure that we need both conflict situations - the trend lines against color are already bad enough - if we additionally have an error band we get into problems with the band on top of the color.  \\
-SVP: I fixed this by changing to lines instead of ribbons. I think it makes it better.}
+\comment{I'm going forth and back on the parameters for $\sigma_C$ and $\sigma_T$, but I think I really like the ones in the table. For the trend line, we defintile get something along the lines `easy', `medium', and `hard'; for the clustering we should be aiming for the same - it's not quite as clear cut, because there seems to be more variability in the results, so we need to double check the randomly generated results.}
 
 
-I would consider the values $\sigma_C = 0.3, .35, .4, .45$ for $K = 3$ clusters to be interesting. 
 
-The actual values of $\sigma_C$ don't make much sense - because they are only valid within the scaled data values. We might need to re-express the values of $\sigma_C$ in terms of a percentage of the data  or a percentage of the overall variability.
-\comment{ugh, that sounds like a pain. }
-For $K=5$ the parameters for $\sigma_C$ and the standard deviation $\sigma_T$ need to be smaller - we could start at 0.2 and 0.75, respectively.
-\comment{Why would $\sigma_T$ change? It shouldn't matter for changes in $K$.}
 
 \subsection*{Design choices}
 \begin{enumerate}
