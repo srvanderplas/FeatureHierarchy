@@ -144,6 +144,49 @@ Conflict & Color + Trend Line, \\
 
 \comment{I'm going forth and back on the parameters for $\sigma_C$ and $\sigma_T$, but I think I really like the ones in the table. For the trend line, we defintile get something along the lines `easy', `medium', and `hard'; for the clustering we should be aiming for the same - it's not quite as clear cut, because there seems to be more variability in the results, so we need to double check the randomly generated results.}
 
+\comment{We can use the null model to get a distribution for each of the two quality measures for the targets, which gives us an objective measure to assess the difficulty of detecting each of the targets. }
+
+<<null-distribution, echo=FALSE>>=
+source("../../Code/MixtureLineups.R")
+sT = 0.3
+sC = 0.3
+
+res <- data.frame(t(replicate(5000, {
+  mix = mixture.sim(lambda=0.5, K=3, N=45, q=sC, sd=sT, slope=1)
+  reg <- lm(y~x, data=mix)
+  clust <- lm(y~factor(group) + 0, data=mix)
+                  res <- summary(aov(clust))
+  c(fline=summary(reg)$r.squared, fgroup=res[[1]]$`F value`[1])
+  })))
+
+trends <- replicate(10, {
+  mix = mixture.sim(lambda=0, K=3, N=45, q=sC, sd=sT, slope=1)
+  reg <- lm(y~x, data=mix)
+  c(fline=summary(reg)$r.squared)
+  })
+
+clusters <- replicate(10, {
+  mix = mixture.sim(lambda=1, K=3, N=45, q=sC, sd=sT, slope=1)
+  clust <- lm(y~factor(group) + 0, data=mix)
+                  res <- summary(aov(clust))
+  c(fgroup=res[[1]]$`F value`[1])
+  })
+
+require(ggplot2)
+qplot(fline, data=res, binwidth=0.02) + geom_vline(aes(xintercept=trends), colour="red") + theme_bw()
+ggsave("images/fline.pdf", width=8, height=4)
+qplot(fgroup, data=res, bindiwth=10) + geom_vline(aes(xintercept=clusters), colour="red") + theme_bw()
+ggsave("images/fgroup.pdf", width=8, height=4)
+@
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{images/fline.pdf}
+\caption{Histogram of $R^2$ values from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
+\end{figure}
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{images/fgroup.pdf}
+\caption{Histogram of $F$-statistics measuring the amount of clustering from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are the $F$-statistics  of ten sample data sets from the Clustering model $M_C$. }
+\end{figure}
 
 
 
