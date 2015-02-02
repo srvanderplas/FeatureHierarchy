@@ -11,6 +11,7 @@ set.seed(518290387)
 # Define colors and shapes
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+
 shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
 
 colortm <- read.csv("./Data/color-perceptual-kernel.csv")
@@ -28,13 +29,11 @@ shapetm[10,] <- 0
 shapetm[,10] <- 0
 
 # Lineup Design
-data.parms <- expand.grid(N=c(45, 75),
-                          K=c(3, 5),
-                          sd=c(.35, .45, .55, .65),
-                          q=c(.25, .3, .35, .4, .45))
-# Don't do full factorial
-data.parms <- subset(data.parms, !(N==75 & K==3))
-data.parms[data.parms$K==5]$q = data.parms[data.parms$K==5]$q - .05
+data.parms <- expand.grid(K=c(3, 5),
+                          sd=c(.3, .4, .5, .6),
+                          q=c(.2, .25, .3, .35, .4), 
+                          rep=1:3)
+data.parms$N <- 15*data.parms$K
 
 plot.parms <- expand.grid(
   color = c(0,1),
@@ -44,11 +43,16 @@ plot.parms <- expand.grid(
   ell = c(0,1)
 )[c(
   1, # control
-  2, 3, # color, shape
-  4, 18, # color + shape, color + ellipse
-  5, 13, # trend, trend + error
-  6, 14 # color + trend, color + trend + error
-  ),]
+  2, # color
+  3, # shape
+  4, # color + shape
+  18, # color + ellipse
+  20, # color + shape + ellipse
+  5, # trend
+  13, # trend + error
+  6, # color + trend
+  30 # color + ellipse + trend + error
+),]
 
 get.aes <- function(r){
   c("Color", "Shape")[which(as.logical(r[1:2]))]
@@ -79,7 +83,7 @@ d_ply(data, .(set), function(df){
   for(j in 1:nrow(plot.parms)){
     ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
                            get.stats(plot.parms[j,]), ), 
-           filename = sprintf("Images/Lineups/set_%d_plot%d.png", i, j), 
+           filename = sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.png", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i]), 
            width=6, height=6, units="in", dpi=150)
   }
 })
