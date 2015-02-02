@@ -87,8 +87,8 @@ We begin by generating cluster centers along a line, then we generate points aro
     \item Generate cluster centers $(c^x_{i}, c^y_{i})$ for each of the $K$ clusters, $i=1, ..., K$:
       \begin{enumerate}
         \item Generate vectors $c^{x}$ and $c^y$ as permutations of $\{1, ..., K\}$,
-        \item such that the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of [.25, .9].
-        \comment{We might have to go up with the correlation a bit. I'm still worried that people will pick the cluster plot from the trend line lineup because of the lowest slope. }
+        \item such that the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of [.25, .75].
+%         \comment{We might have to go up with the correlation a bit. I'm still worried that people will pick the cluster plot from the trend line lineup because of the lowest slope. }
       \end{enumerate}
       \item Center and standard-normalize cluster centers $(c^x, c^y)$:  
       \[
