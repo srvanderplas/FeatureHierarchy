@@ -30,9 +30,10 @@ shapetm[,10] <- 0
 # Lineup Design
 data.parms <- expand.grid(N=c(45, 75),
                           K=c(3, 5),
-                          sd=c(.35, .45, .55),
-                          q=c(.25, .35, .45),
-                          rep=1:3)
+                          sd=c(.35, .45, .55, .65),
+                          q=c(.25, .3, .35, .4, .45))
+# Don't do full factorial
+data.parms <- subset(data.parms, !(N==75 & K==3))
 data.parms[data.parms$K==5]$q = data.parms[data.parms$K==5]$q - .05
 
 plot.parms <- expand.grid(
