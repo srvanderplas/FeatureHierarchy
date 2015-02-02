@@ -33,6 +33,16 @@
 \maketitle
 \begin{abstract}abstract goes here
 \end{abstract}
+<<setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE>>=
+rm(list=ls())
+options(replace.assign=TRUE,width=70)
+require(knitr)
+opts_chunk$set(fig.path='figure/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE)
+library(reshape2)
+suppressMessages(library(ggplot2))
+library(plyr)
+suppressMessages(library(gridExtra))
+@
 
 \section{Introduction and background}
 Discussion of pre-attentive visual features \citep{healey:preattentive} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?
