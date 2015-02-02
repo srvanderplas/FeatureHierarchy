@@ -9,17 +9,18 @@ options(shiny.usecairo=T)
 load("Lineups.rda")
 plots <- data.frame(expand.grid(j=1:9, i=1:nrow(answers)))
 plots$filename <- sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.png", plots$i, plots$j, data.parms$K[plots$i], data.parms$sd[plots$i], data.parms$q[plots$i])
+plots$shortfilename <- sprintf("Images/Lineups/set-%d-plot-%d.png", plots$i, plots$j)
 testdata.old<- read.csv("./res.csv", stringsAsFactors=F)
 testdata.old$filename <- sprintf("set_%s_plot%s.png", testdata.old$set, testdata.old$plot)
 
-plots$freqtested <- unlist(lapply(1:nrow(plots), function(i) sum(testdata.old$filename%in%plots$filename[i])))
+plots$freqtested <- unlist(lapply(1:nrow(plots), function(i) sum(testdata.old$filename%in%plots$shortfilename[i])))
 plots$prob <- 1/(1+plots$freqtested)
 plots$prob <- plots$prob/sum(plots$prob)
 
 shinyServer(function(input, output, session){
   
   plots <- data.frame(expand.grid(j=1:9, i=1:nrow(answers)))
-  plots$filename <- sprintf("set_%s_plot%s.png", plots$i, plots$j)
+  plots$filename <- sprintf("set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.png", plots$i, plots$j, data.parms$K[plots$i], data.parms$sd[plots$i], data.parms$q[plots$i])
   
   
   set.seed(as.numeric(Sys.time()))
