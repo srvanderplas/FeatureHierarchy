@@ -10,10 +10,6 @@
 \usepackage{color}
 \usepackage{multirow}
 \usepackage[dvipsnames,svgnames]{xcolor}
-\usepackage[utf8]{inputenc}
-\usepackage{ucs}
-\PreloadUnicodePage{37}
-
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage[colorinlistoftodos]{todonotes}
@@ -41,7 +37,7 @@
 rm(list=ls())
 options(replace.assign=TRUE,width=70)
 require(knitr)
-opts_chunk$set(fig.path='figure/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE)
+opts_chunk$set(fig.path='figure/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE)
 library(reshape2)
 suppressMessages(library(ggplot2))
 library(plyr)
@@ -64,14 +60,14 @@ On the other hand, regression lines should emphasize any linear trends in the da
 
 \section{Design Choices}
 We choose colors and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by  \citet{heer:2014} on the so called perceptual kernels.
-Unfortunately, this limits the choice to the set used in the Tableau software. In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green colorblindness\cite{colorvisionuni}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
+Unfortunately, this limits the choice to the set used in the Tableau software. In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green colorblindness\cite{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
 % Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
 
 \comment{we didn't exclude red-green combinations; by excluding grey (which is a horrible color and similar to red, green, turquoise, etc. for colorblind people) we managed to produce palettes which were maximally different and didn't include red/green. We can formally exclude red/green if you'd like. }
 
-Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The characters \unichar{"25B7} and \unichar{"25C1} were excluded due to size differences between unicode and non-unicode shapes. 
+Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The left and right triangle shapes (available only in unicode using R) were excluded due to size differences between unicode and non-unicode shapes. 
 
-All shapes are non-filled shapes, which means that they all are supporting one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to measure the amount of overplotting.
+All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to measure the amount of overplotting.
 
 \section{Generating Model}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
@@ -162,34 +158,37 @@ Conflict & Color + Trend Line, \\
 
 \comment{We can use the null model to get a distribution for each of the two quality measures for the targets, which gives us an objective measure to assess the difficulty of detecting each of the targets. }
 
-<<null-distribution, echo=FALSE, include=FALSE>>=
+<<null-distribution, echo=FALSE, include=FALSE, cache=T>>=
 source("../../Code/MixtureLineups.R")
-sT = 0.3
-sC = 0.3
-
-res <- data.frame(t(replicate(1000, {
-  lp <- data.frame(t(replicate(18, {
-  mix = mixture.sim(lambda=0.5, K=3, N=45, q=sC, sd=sT, slope=1)
-  reg <- lm(y~x, data=mix)
-  clust <- lm(y~factor(group) + 0, data=mix)
-  res <- summary(aov(clust))
-  c(fline=summary(reg)$r.squared, fgroup=res[[1]]$`F value`[1])
-  })))
-  c(fline=max(lp$fline), fgroup=max(lp$fgroup))
-  })))
-
-trends <- replicate(10, {
-  mix = mixture.sim(lambda=0, K=3, N=45, q=sC, sd=sT, slope=1)
-  reg <- lm(y~x, data=mix)
-  c(fline=summary(reg)$r.squared)
-  })
-
-clusters <- replicate(10, {
-  mix = mixture.sim(lambda=1, K=3, N=45, q=sC, sd=sT, slope=1)
-  clust <- lm(y~factor(group) + 0, data=mix)
-                  res <- summary(aov(clust))
-  c(fgroup=res[[1]]$`F value`[1])
-  })
+# sT = 0.3
+# sC = 0.3
+# 
+# res <- data.frame(t(replicate(1000, {
+#   lp <- data.frame(t(replicate(18, {
+#   mix = mixture.sim(lambda=0.5, K=3, N=45, q=sC, sd=sT, slope=1)
+#   reg <- lm(y~x, data=mix)
+#   clust <- lm(y~factor(group) + 0, data=mix)
+#   res <- summary(aov(clust))
+#   c(fline=summary(reg)$r.squared, fgroup=res[[1]]$`F value`[1])
+#   })))
+#   c(fline=max(lp$fline), fgroup=max(lp$fgroup))
+#   })))
+# 
+# trends <- replicate(10, {
+#   mix = mixture.sim(lambda=0, K=3, N=45, q=sC, sd=sT, slope=1)
+#   reg <- lm(y~x, data=mix)
+#   c(fline=summary(reg)$r.squared)
+#   })
+# 
+# clusters <- replicate(10, {
+#   mix = mixture.sim(lambda=1, K=3, N=45, q=sC, sd=sT, slope=1)
+#   clust <- lm(y~factor(group) + 0, data=mix)
+#                   res <- summary(aov(clust))
+#   c(fgroup=res[[1]]$`F value`[1])
+#   })
+# 
+# save(res, trends, clusters, file="./figure/nulldist.Rdata")
+load("./figure/nulldist.Rdata")
 
 require(ggplot2)
 qplot(fline, data=res, binwidth=0.02) + geom_vline(aes(xintercept=trends), colour="red") + theme_bw()
@@ -292,9 +291,9 @@ Level & Factor & Source & DF & SS \\\hline
       & & color + shape & 1 & \\
       & & color + ellipse & 1 & \\
       & & color + shape + ellipse & 1 & \\
-      & & line + pred. interval & 1 & \\
+      & & line + PI & 1 & \\
       & & color + line & 1 & \\
-      & & color + ellipse + line + pred. interval & 1 & \\\cline{3-5}\cline{2-5}
+      & & color + ellipse + line + PI & 1 & \\\cline{3-5}\cline{2-5}
       & Data x Aesthetics & & (10)((2)(2)(4)(5)-1) & \\\cline{2-5}
       & error &  & $(P-1)(11)(M)(2)(2)(4)(5)$ & \\\hline
       & Total & & I think $P(11)(M)(2)(2)(4)(5)-1$ & \\\hline\hline
@@ -302,92 +301,100 @@ Level & Factor & Source & DF & SS \\\hline
 \end{table}
 
 If we then do one replicate of $K=5$ and one of $N=75$ (reducing the full factorial experiment) we should be able to make broad generalizations about the effect of $K$ and $N$ without a fully factorial design. As we don't care about all of the interactions, we can add many of those terms into the error term as well. 
-
+\clearpage
 \subsection{Sample Pictures}
-<<samplepics, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth">>=
+The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
+<<samplepics, eval=FALSE, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='asis', fig.keep='all', fig.align='center', dev='pdf'>>=
 source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
-library(ggplot2)
-library(plyr)
-library(dplyr)
-library(reshape2)
-library(nullabor)
 
-# Define colors and shapes
-colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
-             "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
-shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
-
-colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
-# colortm[3,4] <- 0
-# colortm[4,3] <- 0
-colortm[8,] <- 0
-colortm[,8] <- 0
-
-shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
-# shapetm[9:10,] <- 0
-# shapetm[, 9:10] <- 0
-shapetm[9,] <- 0
-shapetm[,9] <- 0
-shapetm[10,] <- 0
-shapetm[,10] <- 0
-
-# Lineup Design
-data.parms <- expand.grid(N=45,
-                          K=3,
-                          sd=.4,
-                          q=.3)
-
-plot.parms <- expand.grid(
-  color = c(0,1),
-  shape = c(0,1),
-  reg = c(0,1),
-  err = c(0,1),
-  ell = c(0,1)
-)[c(
-  1, # control
-  2, 3, # color, shape
-  4, 18, # color + shape, color + ellipse
-  20, # color + shape + ellipse
-  5, 13, # trend, trend + error
-  6, # color + trend
-  30 # color + ellipse + trend + error
-  ),]
-
-get.aes <- function(r){
-  c("Color", "Shape")[which(as.logical(r[1:2]))]
-}
-
-get.stats <- function(r){
-  c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
-}
-
-data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
-data.stats <- ddply(data, .(set, .sample), 
-                    function(df){
-                      r2 <- summary(lm(y~x, data=df))
-                      tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
-                      res <- tmp[[1]]$`Mean Sq`
-                      data.frame(.sample=unique(df$.sample), 
-                                 LineRSq = r2$r.squared, 
-                                 Fgroup = round(res[2]/res[3], 2), 
-                                 lineplot=unique(df$target2), 
-                                 groupplot=unique(df$target1))
-                      } )
-answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
-
+# # Define colors and shapes
+# colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+#              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+# shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
+# 
+# colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
+# # colortm[3,4] <- 0
+# # colortm[4,3] <- 0
+# colortm[8,] <- 0
+# colortm[,8] <- 0
+# 
+# shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
+# # shapetm[9:10,] <- 0
+# # shapetm[, 9:10] <- 0
+# shapetm[9,] <- 0
+# shapetm[,9] <- 0
+# shapetm[10,] <- 0
+# shapetm[,10] <- 0
+# 
+# # Lineup Design
+# data.parms <- expand.grid(N=45,
+#                           K=3,
+#                           sd=.4,
+#                           q=.3)
+# 
+# plot.parms <- expand.grid(
+#   color = c(0,1),
+#   shape = c(0,1),
+#   reg = c(0,1),
+#   err = c(0,1),
+#   ell = c(0,1)
+# )[c(
+#   1, # control
+#   2, 3, # color, shape
+#   4, 18, # color + shape, color + ellipse
+#   20, # color + shape + ellipse
+#   5, 13, # trend, trend + error
+#   6, # color + trend
+#   30 # color + ellipse + trend + error
+#   ),]
+# 
+# get.aes <- function(r){
+#   c("Color", "Shape")[which(as.logical(r[1:2]))]
+# }
+# 
+# get.stats <- function(r){
+#   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
+# }
+# 
+# data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
+# data.stats <- ddply(data, .(set, .sample), 
+#                     function(df){
+#                       r2 <- summary(lm(y~x, data=df))
+#                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
+#                       res <- tmp[[1]]$`Mean Sq`
+#                       data.frame(.sample=unique(df$.sample), 
+#                                  LineRSq = r2$r.squared, 
+#                                  Fgroup = round(res[2]/res[3], 2), 
+#                                  lineplot=unique(df$target2), 
+#                                  groupplot=unique(df$target1))
+#                       } )
+# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
+# 
+# save(colors, shapes, colortm, shapetm, data, answers, data.parms, plot.parms, get.aes, get.stats, file="figure/lineupex/data.Rdata")
+load("figure/lineupex/data.Rdata")
 d_ply(data, .(set), function(df){
   i <- unique(df$set)
   for(j in 1:nrow(plot.parms)){
     p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
     ggsave(plot = p, 
-           filename = sprintf("figure/set-%d-plot-%d.png", i, j), 
+           filename = sprintf("figure/lineupex/set-%d-plot-%d.png", i, j), 
            width=6, height=6, units="in", dpi=150)
-    p
   }
 })
-
 @
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-1.png}\hfill
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-2.png}\\
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-3.png}\hfill
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-4.png}\\
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-5.png}\hfill
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-6.png}\\
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-7.png}\hfill
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-8.png}\\
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-9.png}\hfill
+\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-10.png}\\
+
+
 \bibliographystyle{asa}
 \bibliography{references}
 
