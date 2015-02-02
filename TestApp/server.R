@@ -8,7 +8,7 @@ options(shiny.usecairo=T)
 
 load("Lineups.rda")
 plots <- data.frame(expand.grid(j=1:9, i=1:nrow(answers)))
-plots$filename <- sprintf("set_%s_plot%s.png", plots$i, plots$j)
+plots$filename <- sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.png", plots$i, plots$j, data.parms$K[plots$i], data.parms$sd[plots$i], data.parms$q[plots$i])
 testdata.old<- read.csv("./res.csv", stringsAsFactors=F)
 testdata.old$filename <- sprintf("set_%s_plot%s.png", testdata.old$set, testdata.old$plot)
 
