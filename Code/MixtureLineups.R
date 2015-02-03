@@ -134,7 +134,7 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   
   if("Ellipses"%in%stats){
     if("Color"%in%aes){
-      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group), fill=factor(group)), alpha=0.2, #fill="transparent")
     } else if("Shape"%in%aes){
       plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), 
                                   colour="grey15", fill="transparent")
