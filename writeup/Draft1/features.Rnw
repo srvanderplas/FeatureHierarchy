@@ -391,7 +391,7 @@ d_ply(data, .(set), function(df){
     p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
     ggsave(plot = p, 
            filename = sprintf("figure/lineupex/set-%d-plot-%d.png", i, j), 
-           width=3.58, height=3.58, units="in", dpi=150)
+           width=5, height=5, units="in", dpi=150)
   }
 })
 @

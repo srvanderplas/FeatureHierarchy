@@ -110,7 +110,40 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   if(is.null(shapep)) shapep <- best.combo(length(unique(dd$group)), shapes, shapetm)
   
   plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample)  
+
+  # lines and ellipses are not data structure, so reduce contrast to emphasize points!  
+  # Set other geoms/aids
+  if("Reg. Line"%in%stats){
+    plot <- plot + geom_smooth(method="lm", color="grey15", se=F)
+  } 
+  if("Error Bands"%in%stats){
+    #     xrange <- range(dd$x)
+    tmp <- ddply(dd, .(.sample), function(df){
+      model <- lm(y~x, data=df)
+      newdata <- data.frame(x=seq(min(df$x), max(df$x), length.out=400))
+      data.frame(.sample=unique(df$.sample), x=newdata$x, 
+                 predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
+    })
+    plot <- plot + 
+      geom_line(data=tmp, aes(x=x, y=lwr), linetype=2, inherit.aes=F) + 
+      geom_line(data=tmp, aes(x=x, y=upr), linetype=2, inherit.aes=F)
+    # geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
+    rm("xrange", "tmp")
+  }
   
+  if("Ellipses"%in%stats){
+    if("Color"%in%aes){
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
+    } else if("Shape"%in%aes){
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), 
+                                  colour="grey15", fill="transparent")
+    } else {
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), 
+                                  colour="grey15", fill="transparent")
+    }
+  }
+  
+  # points on top of everything
   # Set Aesthetics
   if(length(aes)==0){
     plot <- plot + geom_point(size=pointsize, shape=1) + 
@@ -128,34 +161,7 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
       scale_color_manual(values=colorp) + 
       scale_shape_manual(values=shapep)
   }
-  
-  # Set other geoms/aids
-  if("Reg. Line"%in%stats){
-    plot <- plot + geom_smooth(method="lm", color="black", se=F)
-  } 
-  if("Error Bands"%in%stats){
-#     xrange <- range(dd$x)
-    tmp <- ddply(dd, .(.sample), function(df){
-      model <- lm(y~x, data=df)
-      newdata <- data.frame(x=seq(min(df$x), max(df$x), length.out=400))
-      data.frame(.sample=unique(df$.sample), x=newdata$x, predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
-    })
-    plot <- plot + 
-      geom_line(data=tmp, aes(x=x, y=lwr), linetype=2, inherit.aes=F) + 
-      geom_line(data=tmp, aes(x=x, y=upr), linetype=2, inherit.aes=F)
-      # geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
-    rm("xrange", "tmp")
-  }
-  
-  if("Ellipses"%in%stats){
-    if("Color"%in%aes){
-      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), fill="transparent")
-    } else if("Shape"%in%aes){
-      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
-    } else {
-      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), colour="black", fill="transparent")
-    }
-  }
+
   
   plot
 }
