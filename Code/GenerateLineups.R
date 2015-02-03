@@ -32,8 +32,8 @@ shapetm[,10] <- 0
 data.parms <- expand.grid(K=c(3, 5),
                           sd=c(.3, .4, .5, .6),
                           q=c(.2, .25, .3, .35, .4), 
-                          rep=1:2)
-data.parms <- subset(data.parms, (K==3) | (K==5 & sd%in%c(.3, .5)&q %in%c(.25, .35)))
+                          rep=1)
+# data.parms <- subset(data.parms, (K==3) | (K==5 & sd%in%c(.3, .5)&q %in%c(.25, .35)))
 data.parms$N <- 15*data.parms$K
 
 plot.parms <- expand.grid(
