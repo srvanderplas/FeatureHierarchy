@@ -366,7 +366,7 @@ Level & Factor & Source & DF & SS \\\hline
                            \overline{y}_{\cdot j\cdot\cdot\cdot\cdot} - 
                            \overline{y}_{\cdot\cdot\cdot\cdot m\cdot} + 
                            \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
-      & Aes x $\sigma_C$ & $(\gamma\delta)$ & 27 & 
+      & Aes x $\sigma_C$ & $(\gamma\delta)$ & 36 & 
       $\sum_{km} (2)(4)(P)(\overline{y}_{\cdot\cdot k\cdot m\cdot}- 
                            \overline{y}_{\cdot\cdot k\cdot\cdot\cdot} - 
                            \overline{y}_{\cdot\cdot\cdot\cdot m\cdot} + 
@@ -398,7 +398,86 @@ Level & Factor & Source & DF & SS \\\hline
 \caption{Evaluation of sources of error in a full factorial version of the experiment, with $r$ replicates of each parameter combination and $P$ participant evaluations of each plot(data/aesthetic combination).}
 \end{sidewaystable}
 
-If we then do one replicate of $K=5$ and one of $N=75$ (reducing the full factorial experiment) we should be able to make broad generalizations about the effect of $K$ and $N$ without a fully factorial design. As we don't care about all of the interactions, we can add many of those terms into the error term as well. 
+We have a couple of options:
+\begin{itemize}
+\item keep the full factorial experiment, use one (at most two) replicates, and use higher level factorial effects to beef up any error variance terms. 
+\item Do a full factorial experiment for $K=3$ and use a subset of the factorial experiment for $K=5$ (either using a subset of cases for $\sigma_T$ and $\sigma_C$, or a subset of combinations of the two cases/fractional factorial.)
+\end{itemize}
+
+\comment{
+The fractional factorial option will be a pain to explain when we write things up; it will be simpler to explain using a subset of cases. Given that we don't particularly care about the third-order effects (and possibly not even the second-order effects) for the parameters, I'm inclined to say that the single-replicate option is the easiest way to go (and lets us keep the simple SSQ in the table, which is a huge bonus in my opinion). Even if we just use the third-order interaction effect as error, we still have 12 degrees of freedom; that should be plenty - we'd only need F=\Sexpr{round(qf(.95, 12, 12), 2)} to get a significant result for even the $(\sigma_T\sigma_C)$ test. }
+
+\begin{sidewaystable}[h]
+\caption{ANOVA table - only one replicate. Evaluation of sources of error in a full factorial version of the experiment, with one replicate of each parameter combination and $P$ participant evaluations of each plot(data/aesthetic combination).}
+\centering\footnotesize
+\begin{tabular}{lllll}\hline\hline\\
+Level & Factor & Source & DF & SS \\\hline
+\multirow{5}{*}{Dataset}
+      & $K$    & $\alpha$  & 1 & 
+      $\sum_i (4)(5)(10P)(\overline{y}_{i\cdot\cdot\cdot\cdot}-
+                          \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & $\sigma^2_T$ & $\beta$  & 3 & 
+      $\sum_j (2)(5)(10P)(\overline{y}_{\cdot j\cdot\cdot\cdot}-
+                          \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & $\sigma^2_C$ & $\gamma$  & 4 & 
+      $\sum_i (2)(4)(10P)(\overline{y}_{\cdot\cdot k\cdot\cdot}-
+                          \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & & Resid. & 22 & difference \\
+      \cline{2-5}
+      & Total & & 39 & 
+      $\sum_{ijk} (10P)(\overline{y}_{ijk\cdot\cdot}-
+                        \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \hline\\\hline
+\multirow{7}{*}{Plot}
+      & Dataset & blocks & 39 & 
+      $\sum_{ijk} (10P)(\overline{y}_{ijk\cdot\cdot}-
+                        \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Aes. & $\delta$ & 9 & 
+      $\sum_{m} (2)(4)(5)(P)(\overline{y}_{\cdot\cdot\cdot m\cdot}-                        
+                             \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Aes x $K$ & $(\alpha\delta)$ & 9 & 
+      $\sum_{im} (4)(5)(P)(\overline{y}_{i \cdot\cdot m\cdot}- 
+                           \overline{y}_{i \cdot\cdot\cdot\cdot} - 
+                           \overline{y}_{\cdot\cdot\cdot m\cdot} + 
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & Aes x $\sigma_T$ & $(\beta\delta)$ & 27 & 
+      $\sum_{jm} (2)(5)(P)(\overline{y}_{\cdot j\cdot m\cdot}- 
+                           \overline{y}_{\cdot j\cdot\cdot\cdot} - 
+                           \overline{y}_{\cdot\cdot\cdot m\cdot} + 
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & Aes x $\sigma_C$ & $(\gamma\delta)$ & 36 & 
+      $\sum_{km} (2)(4)(P)(\overline{y}_{\cdot\cdot k m\cdot}- 
+                           \overline{y}_{\cdot\cdot k\cdot\cdot} - 
+                           \overline{y}_{\cdot\cdot\cdot m\cdot} + 
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Resid & & 9(31) & difference \\
+      \cline{2-5}
+      & Total & & 399 & 
+      $\sum_{ijkm} (P)(\overline{y}_{ijkm\cdot}-
+                       \overline{y}_{ijk\cdot\cdot})^2$ \\
+      \hline\\\hline
+\multirow{4}{*}{Trial}
+      & Picture & Sub-blocks & 399 & 
+      $\sum_{ijkm} (P)(\overline{y}_{ijkm\cdot}-
+                       \overline{y}_{ijk\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Participants & $\tau$ & $P-1$ & 
+      $\sum_{n} (2)(4)(5)(10) (\overline{y}_{\cdot\cdot\cdot\cdot n} -
+                            \overline{y}_{\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Resid & & $399(P-1)$ & difference \\
+      \cline{2-5}
+      & Total & & $400P-1$ & 
+      $\sum_{ijkmn} (y_{ijkmn} - 
+                     \overline{y}_{\cdot\cdot\cdot\cdot})^2$ \\
+      \hline\hline
+\end{tabular}
+\end{sidewaystable}
+
 \clearpage
 \subsection{Sample Pictures}
 The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
