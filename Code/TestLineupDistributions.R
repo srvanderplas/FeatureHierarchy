@@ -48,6 +48,7 @@ longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
 longres$dist <- c("Data", "Max(18 Null Plots)")[1+grepl("null", longres$type)]
 longres$type <- gsub("null.", "", longres$type, fixed=T)
 longres$sd.trend <- round(longres$sd.trend, 2)
+longres$sd.cluster <- round(longres$sd.cluster, 2)
 
 qplot(data=subset(longres, sd.trend==.2), x=value, y=..scaled.., stat="density", color=dist, linetype=factor(K), geom="line", main="Simulation Results: Trials where SD_T=.2", xlab="Statistic Value") + facet_grid(sd.cluster~type+K, scales="free", labeller=label_both) + scale_color_discrete("Distribution") + scale_linetype_discrete("K")
 ggsave("Images/Cluster Results (SD_T=0.2).pdf", width=6, height=6, units="in")
