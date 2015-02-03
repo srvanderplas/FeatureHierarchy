@@ -84,6 +84,10 @@ d_ply(data, .(set), function(df){
   for(j in 1:nrow(plot.parms)){
     ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
                            get.stats(plot.parms[j,]), ), 
+           filename = sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.pdf", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i]), 
+           width=6, height=6, units="in", dpi=150)
+    ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
+                           get.stats(plot.parms[j,]), ), 
            filename = sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.png", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i]), 
            width=6, height=6, units="in", dpi=150)
   }
