@@ -9,6 +9,7 @@
 \usepackage{amsmath}
 \usepackage{color}
 \usepackage{multirow}
+\usepackage{rotating}
 \usepackage[dvipsnames,svgnames]{xcolor}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -260,45 +261,130 @@ In a more organized representation:
 \end{table}
 
 \subsection{Experimental Design}
-Starting with the assumption of a fully factorial, balanced design, with $M$ datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$
+Initially, assume a fully factorial, balanced design, with $M$ datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K \in \{3, 5\}$, $\sigma_T \in \{.3, .4, .5, .6\}$, and $\sigma_C \in \{.2, .25, .3, .35, .4\}$. At the second level, there are blocks (by data set), and then 10 aesthetic combinations. 
 
-\begin{table}[h]
-\centering
+
+\comment{We'll have to use contrasts to measure the effect of color individually, etc., for now let's just consider the ANOVA evaluation}
+
+Finally, at the lowest level, there are participant effects. 
+
+\comment{At the participant level, we need to decide if we're going to fully randomize, try to block, etc. - are participants going to get 10 different data sets? 5? Not sure how to conceptualize that, and I would imagine it will affect how we organize model evaluation. Grr, I hate mixed models. }
+
+
+\comment{Modified from Table 10.6 (pg 181) of Design of Experiments by Dr. Morris. The table in the book has a four-factor split plot design with three levels (randomized, block, block). }
+
+\begin{sidewaystable}[h]
+\centering\footnotesize
 \begin{tabular}{lllll}\hline\hline\\
 Level & Factor & Source & DF & SS \\\hline
-\multirow{16}{*}{Dataset}
-      & $N$    & $\alpha$ & 1 &     \\
-      & $K$    & $\beta$  & 1 &     \\
-      & $\sigma^2_T$ & $\gamma$  & 3 &     \\
-      & $\sigma^2_C$ & $\delta$  & 4 &     \\\cline{3-5}
-      &    & $(\alpha\beta)$ & 1 & \\
-      &    & $(\alpha\gamma)$ & 3 & \\
-      &    & $(\alpha\delta)$ & 4 & \\
-      &    & $(\beta\gamma)$ & 3 & \\
-      &    & $(\beta\delta)$ & 4 & \\
-      &    & $(\gamma\delta)$ & 12 & \\\cline{3-5}
-      &    & $(\alpha\beta\gamma)$ & 3 & \\
-      &    & $(\alpha\beta\delta)$ & 4 & \\
-      &    & $(\beta\gamma\delta)$ & 12 & \\
-      &    & $(\alpha\gamma\delta)$ & 12 & \\\cline{3-5}
-      &    & $(\alpha\beta\gamma\delta)$ & 12 & \\\cline{3-5}
-      & \multicolumn{2}{c}{Dataset Error} & (M-1)(2)(2)(4)(5) & \\\hline\hline
-\multirow{11}{*}{Plot}
-      & Aesthetic & $\tau$ & 10 & \\\cline{3-5}
-      & & color & 1 & \\
-      & & shape & 1 & \\
-      & & line & 1 & \\
-      & & color + shape & 1 & \\
-      & & color + ellipse & 1 & \\
-      & & color + shape + ellipse & 1 & \\
-      & & line + PI & 1 & \\
-      & & color + line & 1 & \\
-      & & color + ellipse + line + PI & 1 & \\\cline{3-5}\cline{2-5}
-      & Data x Aesthetics & & (10)((2)(2)(4)(5)-1) & \\\cline{2-5}
-      & error &  & $(P-1)(11)(M)(2)(2)(4)(5)$ & \\\hline
-      & Total & & I think $P(11)(M)(2)(2)(4)(5)-1$ & \\\hline\hline
+\multirow{11}{*}{Dataset}
+      & $K$    & $\alpha$  & 1 & 
+      $\sum_i (4)(5)(r)(10P)(\overline{y}_{i\cdot\cdot\cdot\cdot\cdot}-
+                               \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & $\sigma^2_T$ & $\beta$  & 3 & 
+      $\sum_j (2)(5)(r)(10P)(\overline{y}_{\cdot j\cdot\cdot\cdot\cdot}-
+                               \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & $\sigma^2_C$ & $\gamma$  & 4 & 
+      $\sum_i (2)(4)(r)(10P)(\overline{y}_{\cdot\cdot k\cdot\cdot\cdot}-
+                               \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      &    & $(\alpha\beta)$ & 3 & 
+      $\sum_{ij} (5)(r)(10P)(\overline{y}_{ij\cdot\cdot\cdot\cdot}-
+                               \overline{y}_{i\cdot\cdot\cdot\cdot\cdot} - 
+                               \overline{y}_{\cdot j\cdot\cdot\cdot\cdot} + 
+                               \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      &    & $(\alpha\gamma)$ & 4 & 
+      $\sum_{ik} (4)(r)(10P)(\overline{y}_{i\cdot k\cdot\cdot\cdot}-
+                               \overline{y}_{i\cdot\cdot\cdot\cdot\cdot} - 
+                               \overline{y}_{\cdot\cdot k\cdot\cdot\cdot} + 
+                               \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      &    & $(\beta\gamma)$ & 12 & 
+      $\sum_{jk} (2)(r)(10P)(\overline{y}_{\cdot jk\cdot\cdot\cdot}-
+                               \overline{y}_{\cdot j\cdot\cdot\cdot\cdot} - 
+                               \overline{y}_{\cdot\cdot k\cdot\cdot\cdot} + 
+                               \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      &    & \multirow{2}{*}{$(\alpha\beta\gamma)$} & \multirow{2}{*}{3} & 
+      $\sum_{ijk} (r)(10P)(\overline{y}_{ijk\cdot\cdot\cdot}-
+                             \overline{y}_{i\cdot\cdot\cdot\cdot\cdot} -
+                             \overline{y}_{\cdot j\cdot\cdot\cdot\cdot} - 
+                             \overline{y}_{\cdot\cdot k\cdot\cdot\cdot} $\\
+      &&&&\hphantom{$\sum_{ijk} (r)(10P)($}$ + 
+                             \overline{y}_{ij\cdot\cdot\cdot\cdot} +
+                             \overline{y}_{\cdot jk\cdot\cdot\cdot} + 
+                             \overline{y}_{i\cdot k\cdot\cdot\cdot}- 
+                             \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & & \multirow{2}{*}{Resid.} & \multirow{2}{*}{$(2)(4)(5)(r-1)$} & 
+      $\sum_{ijkl} (10P)(\overline{y}_{ijkl\cdot\cdot}-
+                           \overline{y}_{i\cdot\cdot\cdot\cdot\cdot} -
+                           \overline{y}_{\cdot j\cdot\cdot\cdot\cdot} - 
+                           \overline{y}_{\cdot\cdot k\cdot\cdot\cdot} + 
+                           \overline{y}_{ij\cdot\cdot\cdot\cdot} +
+                           \overline{y}_{\cdot jk\cdot\cdot\cdot} $\\
+      & & & &
+      \hphantom{$\sum_{ijkl} (10P)($}$ + 
+                           \overline{y}_{i\cdot k\cdot\cdot\cdot} -
+                           \overline{y}_{ijk\cdot\cdot\cdot} -
+                           \overline{y}_{ij\cdot l\cdot\cdot} -
+                           \overline{y}_{i\cdot kl\cdot\cdot\cdot} - 
+                           \overline{y}_{\cdot jkl\cdot\cdot\cdot} +                           
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Total & & $(2)(4)(5)(r)-1$ & 
+      $\sum_{ijkl} (10P)(\overline{y}_{ijkl\cdot\cdot}-
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \hline\\\hline
+\multirow{8}{*}{Plot}
+      & Dataset & blocks & $(2)(4)(5)(r)-1$ & 
+      $\sum_{ijkl} (10P)(\overline{y}_{ijkl\cdot\cdot}-
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Aes. & $\delta$ & 9 & 
+      $\sum_{m} (2)(4)(5)(P)(\overline{y}_{\cdot\cdot\cdot\cdot m\cdot}-                        
+                             \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Aes x $K$ & $(\alpha\delta)$ & 9 & 
+      $\sum_{im} (4)(5)(P)(\overline{y}_{i \cdot\cdot\cdot m\cdot}- 
+                           \overline{y}_{i \cdot\cdot\cdot\cdot\cdot} - 
+                           \overline{y}_{\cdot\cdot\cdot\cdot m\cdot} + 
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & Aes x $\sigma_T$ & $(\beta\delta)$ & 27 & 
+      $\sum_{jm} (2)(5)(P)(\overline{y}_{\cdot j\cdot\cdot m\cdot}- 
+                           \overline{y}_{\cdot j\cdot\cdot\cdot\cdot} - 
+                           \overline{y}_{\cdot\cdot\cdot\cdot m\cdot} + 
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      & Aes x $\sigma_C$ & $(\gamma\delta)$ & 27 & 
+      $\sum_{km} (2)(4)(P)(\overline{y}_{\cdot\cdot k\cdot m\cdot}- 
+                           \overline{y}_{\cdot\cdot k\cdot\cdot\cdot} - 
+                           \overline{y}_{\cdot\cdot\cdot\cdot m\cdot} + 
+                           \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Others & & 9(31) & \multirow{2}{*}{difference }\\
+      & Resid & & 40(rP-1)-(40r-1)  & \\
+      \cline{2-5}
+      & Total & & $400r-1$ & 
+      $\sum_{ijklm} (P)(\overline{y}_{ijklm\cdot}-
+                        \overline{y}_{ijkl\cdot\cdot})^2$ \\
+      \hline\\\hline
+\multirow{4}{*}{Trial}
+      & Picture & Sub-blocks & $400r-1$ & 
+      $\sum_{ijklm} (P)(\overline{y}_{ijklm\cdot}-
+                        \overline{y}_{ijkl\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Participants & $\tau$ & $P-1$ & 
+      $\sum_{n} (2)(4)(5)(r)(10) (\overline{y}_{\cdot\cdot\cdot\cdot\cdot n} -
+                            \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \cline{2-5}
+      & Resid & & $(400r-1)(P)$ & difference \\
+      \cline{2-5}
+      & Total & & $400(r)(P)-1$ & 
+      $\sum_{ijklmn} (y_{ijklmn} - 
+                      \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
+      \hline\hline
 \end{tabular}
-\end{table}
+\caption{Evaluation of sources of error in a full factorial version of the experiment, with $r$ replicates of each parameter combination and $P$ participant evaluations of each plot(data/aesthetic combination).}
+\end{sidewaystable}
 
 If we then do one replicate of $K=5$ and one of $N=75$ (reducing the full factorial experiment) we should be able to make broad generalizations about the effect of $K$ and $N$ without a fully factorial design. As we don't care about all of the interactions, we can add many of those terms into the error term as well. 
 \clearpage
