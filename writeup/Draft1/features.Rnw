@@ -29,7 +29,6 @@
 \title{Group beats Trend!? \\Testing feature hierarchy in statistical graphics}
 \author{Susan VanderPlas, Heike Hofmann\thanks{Department of Statistics and Statistical Laboratory, Iowa State University}}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 \maketitle
 \begin{abstract}abstract goes here
 \end{abstract}
@@ -43,6 +42,7 @@ suppressMessages(library(ggplot2))
 library(plyr)
 suppressMessages(library(gridExtra))
 @
+
 
 \section{Introduction and background}
 Discussion of pre-attentive visual features \citep{healey:preattentive} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?
@@ -116,6 +116,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
 Yes - the issue is the variability in the range of x, because normalization would make certain plots with lower range more "squishy". 
 }
 
+
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
 % 
@@ -160,9 +161,10 @@ Conflict & Color + Trend Line, \\
 
 <<null-distribution, echo=FALSE, include=FALSE, cache=T>>=
 source("../../Code/MixtureLineups.R")
-# sT = 0.3
-# sC = 0.3
-# 
+sT = 0.30
+sC = 0.25
+N = 1000
+
 if (file.exists("./figure/nulldist.Rdata")) {
   load("./figure/nulldist.Rdata")
 } else {
@@ -193,9 +195,6 @@ nulldist<- function(N, sT=0.3, sC=0.3) {
   list(nulls=nulls, trends=trends, clusters=clusters)
 }
 
-sT = 0.35
-sC = 0.25
-N = 1000
 res <- nulldist(N=N, sC=sC, sT=sT)
 
 save(res, file="./figure/nulldist.Rdata")
@@ -204,20 +203,22 @@ save(res, file="./figure/nulldist.Rdata")
 require(ggplot2)
 qplot(fline, data=res$nulls, binwidth=0.02) + geom_vline(aes(xintercept=res$trends), colour="red") + theme_bw()
 ggsave("figure/fline.pdf", width=8, height=4)
-qplot(fgroup, data=res$nulls, bindiwth=10) + geom_vline(aes(xintercept=res$clusters), colour="red") + theme_bw()
+qplot(fgroup, data=res$nulls, binwidth=0.01) + geom_vline(aes(xintercept=res$clusters), colour="red") + theme_bw()
 ggsave("figure/fgroup.pdf", width=8, height=4)
 @
+
 Figures~\ref{fig:fline} and \ref{fig:fgroup} show densities ...
-The red lines show ten samples each from the trend model and the cluster model. The lines for the trend are, relatively, further to the right of the overall distribution than the red lines for the cluster model, indicating that $\sigma_T = 0.3$ is producing target plots that are (relatively) easier to spot that cluster targets with a parameter value of $\sigma_C = 0.3$.
+The red lines show ten samples each from the trend model and the cluster model. 
+The lines for the cluster are, relatively, further to the right of the overall distribution than the red lines for the trend model, indicating that $\sigma_C = 0.25$ is producing target plots that are a bit easier to spot thnt trend targets with a parameter value of $\sigma_T = 0.30$.
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{figure/fline.pdf}
-\caption{\label{fig:fline}Histogram of $R^2$ values from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
+\caption{\label{fig:fline}Histogram of $R^2$ values from 1000 data sets of the null model ($K=3, N=45, \sigma_C=$0.25, $\sigma_T=$0.30). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{figure/fgroup.pdf}
-\caption{\label{fig:fgroup}Histogram of $F$-statistics measuring the amount of clustering from 5000 data sets of the null model ($K=3, N=45, \sigma_C=0.3, \sigma_T=0.3$). The lines in red are the $F$-statistics  of ten sample data sets from the Clustering model $M_C$. }
+\caption{\label{fig:fgroup}Histogram of $F$-statistics measuring the amount of clustering from 1000 data sets of the null model ($K=3, N=45, \sigma_C=$0.25, $\sigma_T=$0.30). The lines in red are the $F$-statistics  of ten sample data sets from the Clustering model $M_C$. }
 \end{figure}
 
 
