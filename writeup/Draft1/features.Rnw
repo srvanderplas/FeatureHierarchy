@@ -61,10 +61,14 @@ On the other hand, regression lines should emphasize any linear trends in the da
 
 \section{Design Choices}
 We choose colors and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by  \citet{heer:2014} on the so called perceptual kernels.
+
 Unfortunately, this limits the choice to the set used in the Tableau software. In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
+
 % Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
 
-\comment{we didn't exclude red-green combinations; by excluding grey (which is a horrible color and similar to red, green, turquoise, etc. for colorblind people) we managed to produce palettes which were maximally different and didn't include red/green. We can formally exclude red/green if you'd like. }
+\comment{we didn't exclude red-green combinations; by excluding grey (which is a horrible color and similar to red, green, turquoise, etc. for colorblind people) we managed to produce palettes which were maximally different and didn't include red/green. We can formally exclude red/green if you'd like. 
+
+HH: I'm completely fine with leaving things as is - I just didn't remember that excluding grey had this effect.}
 
 Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The left and right triangle shapes (available only in unicode using R) were excluded due to size differences between unicode and non-unicode shapes. 
 
@@ -74,7 +78,7 @@ All shapes are non-filled shapes, which means that they are consistent with one 
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
 with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
 
-We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel. As a measure of clustering, we can use the $F$ statistic of between versus within group variation.
+We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel.  \newtext{As a measure of clustering we use a similar coefficient: here, we assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  } 
 
 \subsection{Cluster Model $M_C$}
 We begin by generating cluster centers along a line, then we generate points around the cluster center. \\
@@ -115,6 +119,8 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
 
 \comment{Would the pictures change dramatically, if you used $x \sim U[-1,1]$ to start out with? that would be easier to explain.\\
 Yes - the issue is the variability in the range of x, because normalization would make certain plots with lower range more "squishy". 
+
+HH: ok, then let's just leave the descitption - and the construction as is - we could note somewhere that we needed to make sure to use the full range of possible values.
 }
 
 
@@ -133,8 +139,8 @@ Factors:
 Parameter & Description & Choices\\\hline
 $K$ & \# Clusters & 3, 5 \\
 $N$ & \# Points & $15\cdot K$ \\
-$\sigma_T$ & Scatter around trend line &  .3, .4, .5\\
-\multirow{2}{*}{$\sigma_C$} & Scatter around cluster centers &  .20, .25, 0.30, .35, 0.40\\\hline
+$\sigma_T$ & Scatter around trend line &  .35, .45, .55\\
+$\sigma_C$ & Scatter around cluster centers &  .25, 0.30, .35, 0.40\\\hline
 \end{tabular}
 \end{center}
 \caption{Parameter settings for Data Generation.}
@@ -156,7 +162,7 @@ Conflict & Color + Trend Line, \\
 \caption{Aesthetics and add-on design choices. }
 \end{table}
 
-\comment{I'm going forth and back on the parameters for $\sigma_C$ and $\sigma_T$, but I think I really like the ones in the table. For the trend line, we defintile get something along the lines `easy', `medium', and `hard'; for the clustering we should be aiming for the same - it's not quite as clear cut, because there seems to be more variability in the results, so we need to double check the randomly generated results.}
+\comment{I'm going forth and back on the parameters for $\sigma_C$ and $\sigma_T$, but I think I really like the ones in the table. For the trend line, we definitely get something along the lines `easy', `medium', and `hard'; for the clustering we should be aiming for the same - it's not quite as clear cut, because there seems to be more variability in the results, so we need to double check the randomly generated results.}
 
 \comment{We can use the null model to get a distribution for each of the two quality measures for the targets, which gives us an objective measure to assess the difficulty of detecting each of the targets. }
 
@@ -208,18 +214,18 @@ qplot(fgroup, data=res$nulls, binwidth=0.01) + geom_vline(aes(xintercept=res$clu
 ggsave("figure/fgroup.pdf", width=8, height=4)
 @
 
-Figures~\ref{fig:fline} and \ref{fig:fgroup} show densities ...
+Figures~\ref{fig:fline} and \ref{fig:fgroup} show histograms of the marginal densities ...
 The red lines show ten samples each from the trend model and the cluster model. 
-The lines for the cluster are, relatively, further to the right of the overall distribution than the red lines for the trend model, indicating that $\sigma_C = 0.25$ is producing target plots that are a bit easier to spot thnt trend targets with a parameter value of $\sigma_T = 0.30$.
+The lines for the cluster are, relatively, further to the right of the overall distribution than the red lines for the trend model, indicating that $\sigma_C = 0.25$ is producing target plots that are a bit easier to spot than trend targets with a parameter value of $\sigma_T = 0.30$.
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{figure/fline.pdf}
-\caption{\label{fig:fline}Histogram of $R^2$ values from 1000 data sets of the null model ($K=3, N=45, \sigma_C=$0.25, $\sigma_T=$0.30). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
+\caption{\label{fig:fline}Histogram of $R^2$ values from \Sexpr{N} data sets of the null model ($K=3, N=45, \sigma_C=$\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{figure/fgroup.pdf}
-\caption{\label{fig:fgroup}Histogram of $F$-statistics measuring the amount of clustering from 1000 data sets of the null model ($K=3, N=45, \sigma_C=$0.25, $\sigma_T=$0.30). The lines in red are the $F$-statistics  of ten sample data sets from the Clustering model $M_C$. }
+\caption{\label{fig:fgroup}Histogram of the distribution of the cluster measure based on \Sexpr{N} data sets from the null model ($K=3, N=45, \sigma_C= $\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in red correspond to the cluster measure from ten sample data sets from the Clustering model $M_C$. }
 \end{figure}
 
 
@@ -281,7 +287,9 @@ Initially, assume a fully factorial, balanced design, with $r$ unique datasets p
 
 Finally, at the lowest level, there are participant effects. 
 
-\comment{At the participant level, we need to decide if we're going to fully randomize, try to block, etc. - are participants going to get 10 different data sets? 5? Not sure how to conceptualize that, and I would imagine it will affect how we organize model evaluation. Grr, I hate mixed models. }
+\comment{At the participant level, we need to decide if we're going to fully randomize, try to block, etc. - are participants going to get 10 different data sets? 5? Not sure how to conceptualize that, and I would imagine it will affect how we organize model evaluation. Grr, I hate mixed models. 
+
+HH: yes, I would assume that participants get ten plots each, one from each of the designs in a random order. (We have the data base set up that way).}
 
 
 \comment{Modified from Table 10.6 (pg 181) of Design of Experiments by Dr. Morris. The table in the book has a four-factor split plot design with three levels (randomized, block, block). }
