@@ -117,13 +117,6 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
     \item Generate $y_i$: $y_i = a * x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
   \end{enumerate}
 
-\comment{Would the pictures change dramatically, if you used $x \sim U[-1,1]$ to start out with? that would be easier to explain.\\
-Yes - the issue is the variability in the range of x, because normalization would make certain plots with lower range more "squishy". 
-
-HH: ok, then let's just leave the descitption - and the construction as is - we could note somewhere that we needed to make sure to use the full range of possible values.
-}
-
-
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
 % 
@@ -139,8 +132,8 @@ Factors:
 Parameter & Description & Choices\\\hline
 $K$ & \# Clusters & 3, 5 \\
 $N$ & \# Points & $15\cdot K$ \\
-$\sigma_T$ & Scatter around trend line &  .35, .45, .55\\
-$\sigma_C$ & Scatter around cluster centers &  .25, 0.30, .35, 0.40\\\hline
+$\sigma_T$ & Scatter around trend line &  .3, .4, .5, .6\\
+$\sigma_C$ & Scatter around cluster centers &  .20, .25, 0.30, .35, 0.40\\\hline
 \end{tabular}
 \end{center}
 \caption{Parameter settings for Data Generation.}
@@ -325,7 +318,7 @@ Level & Factor & Source & DF & Sum of Squares \\\hline
                                \overline{y}_{\cdot\cdot k\cdot\cdot\cdot} + 
                                \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\
       \cline{2-5}
-      &    & \multirow{2}{*}{$(\alpha\beta\gamma)$} & \multirow{2}{*}{3} & 
+      &    & \multirow{2}{*}{$(\alpha\beta\gamma)$} & \multirow{2}{*}{12} & 
       $\sum_{ijk} (r)(10P)(\overline{y}_{ijk\cdot\cdot\cdot}-
                              \overline{y}_{i\cdot\cdot\cdot\cdot\cdot} -
                              \overline{y}_{\cdot j\cdot\cdot\cdot\cdot} - 
