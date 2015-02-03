@@ -114,13 +114,14 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   # lines and ellipses are not data structure, so reduce contrast to emphasize points!  
   # Set other geoms/aids
   if("Reg. Line"%in%stats){
-    plot <- plot + geom_smooth(method="lm", color="grey15", se=F)
+    plot <- plot + geom_smooth(method="lm", color="grey30", se=F, fullrange=TRUE)
   } 
   if("Error Bands"%in%stats){
     #     xrange <- range(dd$x)
     tmp <- ddply(dd, .(.sample), function(df){
       model <- lm(y~x, data=df)
-      newdata <- data.frame(x=seq(min(df$x), max(df$x), length.out=400))
+      range <- diff(range(df$x))
+      newdata <- data.frame(x=seq(min(dd$x)-.1*range, max(dd$x)+.1*range, length.out=400))
       data.frame(.sample=unique(df$.sample), x=newdata$x, 
                  predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
     })
