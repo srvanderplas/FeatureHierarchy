@@ -95,13 +95,13 @@ shinyServer(function(input, output, session){
     tmp
   })
   
-  output$plot <- renderPlot({
-    dd <- data()
-    colorp <- color.pal()
-    shapep <- shape.pal()
-    plot <- gen.plot(dd, input$aes, input$plotopts, colorp, shapep)
-    plot
-  })
+#   output$plot <- renderPlot({
+#     dd <- data()
+#     colorp <- color.pal()
+#     shapep <- shape.pal()
+#     plot <- gen.plot(dd, input$aes, input$plotopts, colorp, shapep)
+#     plot
+#   })
   
   output$plot1 <- renderImage({
     # A temp file to save the output. It will be deleted after renderImage
