@@ -125,7 +125,7 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
       data.frame(.sample=unique(df$.sample), x=newdata$x, 
                  predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
     })
-    if("Shade Error Bands"%in%stats){
+    if("Shade Error Bands"%in%stats & "Error Bands"%in%stats){
       plot <- plot + 
         geom_line(data=tmp, aes(x=x, y=lwr), linetype=2, inherit.aes=F) + 
         geom_line(data=tmp, aes(x=x, y=upr), linetype=2, inherit.aes=F) + 
@@ -154,10 +154,8 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
     }
   }
 
-  if("Shade Ellipses"%in%stats){
-    if("Color"%in%aes){
-      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(fill=factor(group)), alpha=0.2)
-    } 
+  if("Shade Ellipses"%in%stats & "Ellipses" %in% stats){
+    plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), alpha=0.1, fill="black", color="transparent") 
   }
   
   # points on top of everything
