@@ -30,7 +30,6 @@
 \title{Group beats Trend!? \\Testing feature hierarchy in statistical graphics}
 \author{Susan VanderPlas, Heike Hofmann\thanks{Department of Statistics and Statistical Laboratory, Iowa State University}}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 \maketitle
 \begin{abstract}abstract goes here
 \end{abstract}
@@ -390,7 +389,7 @@ If we then do one replicate of $K=5$ and one of $N=75$ (reducing the full factor
 \clearpage
 \subsection{Sample Pictures}
 The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
-<<samplepics, eval=FALSE, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='asis', fig.keep='all', fig.align='center', dev='pdf'>>=
+<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='hold', fig.keep='all', fig.align='center', warning=FALSE, message=FALSE>>=
 source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
 
@@ -464,21 +463,22 @@ d_ply(data, .(set), function(df){
   for(j in 1:nrow(plot.parms)){
     p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
     ggsave(plot = p, 
-           filename = sprintf("figure/lineupex/set-%d-plot-%d.png", i, j), 
+           filename = sprintf("figure/lineupex/set-%d-plot-%d.pdf", i, j), 
            width=6, height=6, units="in", dpi=150)
+    print(p)
   }
 })
 @
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-1.png}\hfill
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-2.png}\\
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-3.png}\hfill
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-4.png}\\
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-5.png}\hfill
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-6.png}\\
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-7.png}\hfill
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-8.png}\\
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-9.png}\hfill
-\includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-10.png}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-1.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-2.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-3.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-4.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-5.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-6.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-7.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-8.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-9.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-10.pdf}\\
 
 
 \bibliographystyle{asa}
