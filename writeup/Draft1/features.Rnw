@@ -285,10 +285,10 @@ Finally, at the lowest level, there are participant effects.
 
 \comment{Modified from Table 10.6 (pg 181) of Design of Experiments by Dr. Morris. The table in the book has a four-factor split plot design with three levels (randomized, block, block). }
 
-\begin{sidewaystable}[h]
-\centering\footnotesize
+\begin{table}[h]
+\centering\tiny
 \begin{tabular}{lllll}\hline\hline\\
-Level & Factor & Source & DF & SS \\\hline
+Level & Factor & Source & DF & Sum of Squares \\\hline
 \multirow{11}{*}{Dataset}
       & $K$    & $\alpha$  & 1 & 
       $\sum_i (4)(5)(r)(10P)(\overline{y}_{i\cdot\cdot\cdot\cdot\cdot}-
@@ -396,7 +396,7 @@ Level & Factor & Source & DF & SS \\\hline
       \hline\hline
 \end{tabular}
 \caption{Evaluation of sources of error in a full factorial version of the experiment, with $r$ replicates of each parameter combination and $P$ participant evaluations of each plot(data/aesthetic combination).}
-\end{sidewaystable}
+\end{table}
 
 We have a couple of options:
 \begin{itemize}
@@ -407,11 +407,11 @@ We have a couple of options:
 \comment{
 The fractional factorial option will be a pain to explain when we write things up; it will be simpler to explain using a subset of cases. Given that we don't particularly care about the third-order effects (and possibly not even the second-order effects) for the parameters, I'm inclined to say that the single-replicate option is the easiest way to go (and lets us keep the simple SSQ in the table, which is a huge bonus in my opinion). Even if we just use the third-order interaction effect as error, we still have 12 degrees of freedom; that should be plenty - we'd only need F=\Sexpr{round(qf(.95, 12, 12), 2)} to get a significant result for even the $(\sigma_T\sigma_C)$ test. }
 
-\begin{sidewaystable}[h]
+\begin{table}[h]
 \caption{ANOVA table - only one replicate. Evaluation of sources of error in a full factorial version of the experiment, with one replicate of each parameter combination and $P$ participant evaluations of each plot(data/aesthetic combination).}
 \centering\footnotesize
 \begin{tabular}{lllll}\hline\hline\\
-Level & Factor & Source & DF & SS \\\hline
+Level & Factor & Source & DF & Sum of Squares \\\hline
 \multirow{5}{*}{Dataset}
       & $K$    & $\alpha$  & 1 & 
       $\sum_i (4)(5)(10P)(\overline{y}_{i\cdot\cdot\cdot\cdot}-
@@ -476,7 +476,7 @@ Level & Factor & Source & DF & SS \\\hline
                      \overline{y}_{\cdot\cdot\cdot\cdot})^2$ \\
       \hline\hline
 \end{tabular}
-\end{sidewaystable}
+\end{table}
 
 \clearpage
 \subsection{Sample Pictures}
