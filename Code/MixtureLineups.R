@@ -159,3 +159,16 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   
   plot
 }
+
+
+cluster <- function(dframe) {
+  # we assume to have x, y, and a group variable
+  xmean <- mean(dframe$x)
+  ymean <- mean(dframe$y)
+  dframe$dist <- with(dframe, (x-xmean)^2 + (y-ymean)^2)
+  SSTotal <- sum(dframe$dist)
+  dframe <- ddply(dframe, .(group), transform, xgroup=mean(x), ygroup=mean(y))
+  dframe$gdist <- with(dframe, (x-xgroup)^2 + (y-ygroup)^2)
+  SSGroup <- sum(dframe$gdist)
+  (SSTotal - SSGroup)/SSTotal
+}
