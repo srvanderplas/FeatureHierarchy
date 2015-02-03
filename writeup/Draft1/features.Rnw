@@ -285,7 +285,9 @@ Initially, assume a fully factorial, balanced design, with $r$ unique datasets p
 
 Finally, at the lowest level, there are participant effects. 
 
-\comment{At the participant level, we need to decide if we're going to fully randomize, try to block, etc. - are participants going to get 10 different data sets? 5? Not sure how to conceptualize that, and I would imagine it will affect how we organize model evaluation. Grr, I hate mixed models. }
+\comment{At the participant level, we need to decide if we're going to fully randomize, try to block, etc. - are participants going to get 10 different data sets? 5? Not sure how to conceptualize that, and I would imagine it will affect how we organize model evaluation. Grr, I hate mixed models. 
+
+HH: yes, I would assume that participants get ten plots each, one from each of the designs in a random order. (We have the data base set up that way).}
 
 
 \comment{Modified from Table 10.6 (pg 181) of Design of Experiments by Dr. Morris. The table in the book has a four-factor split plot design with three levels (randomized, block, block). }
