@@ -125,16 +125,26 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
       data.frame(.sample=unique(df$.sample), x=newdata$x, 
                  predict.lm(model, newdata=newdata, interval="prediction", level=0.9))
     })
-    plot <- plot + 
-      geom_line(data=tmp, aes(x=x, y=lwr), linetype=2, inherit.aes=F) + 
-      geom_line(data=tmp, aes(x=x, y=upr), linetype=2, inherit.aes=F)
-    # geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.3, inherit.aes=F)
-    rm("xrange", "tmp")
+    if("Shade Error Bands"%in%stats){
+      plot <- plot + 
+        geom_line(data=tmp, aes(x=x, y=lwr), linetype=2, inherit.aes=F) + 
+        geom_line(data=tmp, aes(x=x, y=upr), linetype=2, inherit.aes=F) + 
+        geom_ribbon(data=tmp, aes(x=x, ymin=lwr, ymax=upr), fill="black", color="transparent", alpha=.1, inherit.aes=F)
+    } else {
+      plot <- plot + 
+        geom_line(data=tmp, aes(x=x, y=lwr), linetype=2, inherit.aes=F) + 
+        geom_line(data=tmp, aes(x=x, y=upr), linetype=2, inherit.aes=F)
+    }
   }
   
   if("Ellipses"%in%stats){
     if("Color"%in%aes){
-      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), alpha=0.2, fill="transparent")
+      if("Shade Ellipses"%in%stats){
+        plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(fill=factor(group), colour=factor(group)), alpha=0.1) + 
+          scale_fill_manual(values=colorp)
+      } else {
+        plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(colour=factor(group)), alpha=0.2, fill="transparent")
+      }
     } else if("Shape"%in%aes){
       plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), 
                                   colour="grey15", fill="transparent")
@@ -142,6 +152,12 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
       plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(group=factor(group)), 
                                   colour="grey15", fill="transparent")
     }
+  }
+
+  if("Shade Ellipses"%in%stats){
+    if("Color"%in%aes){
+      plot <- plot + stat_ellipse(geom="polygon", level=.9, aes(fill=factor(group)), alpha=0.2)
+    } 
   }
   
   # points on top of everything

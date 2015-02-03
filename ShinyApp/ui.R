@@ -12,7 +12,7 @@ shinyUI(fluidPage(
                  column(6, numericInput("K", "Number of groups", value=3, min=2, max=6, step=1))), 
         br(),
         fluidRow(column(6, checkboxGroupInput("aes", "Aesthetics", c("Color", "Shape"), selected=NULL)),
-                 column(6, checkboxGroupInput("plotopts", "Plot Options", c("Reg. Line", "Error Bands", "Ellipses"), 
+                 column(6, checkboxGroupInput("plotopts", "Plot Options", c("Reg. Line", "Error Bands", "Ellipses", "Shade Error Bands", "Shade Ellipses"), 
                                               selected=NULL))), 
         br(),        
 #         sliderInput(inputId="lambda", label="Group Strength", 
