@@ -261,19 +261,20 @@ Plot features will emphasize either lines or clusters as follows:
 In a more organized representation:
 \begin{table}[h]
 \centering
-\begin{tabular}{lllll}
- & & \multicolumn{3}{c}{Line Emphasis}\\\cline{3-5}
- & & 0 & 1 & 2\\\hline
-\multirow{4}{*}{Cluster Emphasis} & 0 & None & Line & Line + Prediction\\
-& 1 & Color, Shape & Color + Line & \\
-& \multirow{2}{*}{2} & Color + Shape & & Color + Ellipse + Line + Prediction \\
-& & Color + Ellipse & & \\
-& 3 & Color + Shape + Ellipse
+\begin{tabular}{cc|c|c|c|}\cline{3-5}
+ & \multicolumn{1}{c}{} & \multicolumn{3}{|c|}{Line Emphasis}\\\cline{3-5}
+ & & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{2}\\\hline
+\multicolumn{1}{|c|}{\multirow{5}{*}{Cluster Emphasis}} & 
+  \multicolumn{1}{|c|}{0} & None & Line & Line + Prediction\\\cline{2-5}
+\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{1} & Color, Shape & Color + Line & \\\cline{2-5}
+\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{\multirow{2}{*}{2}} & Color + Shape  & & Color + Ellipse + Line + Prediction \\
+\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{}& Color + Ellipse & & \\\cline{2-5}
+\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{3} & Color + Shape + Ellipse & &\\\hline
 \end{tabular}
 \end{table}
 
 \subsection{Experimental Design}
-Initially, assume a fully factorial, balanced design, with $M$ datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K \in \{3, 5\}$, $\sigma_T \in \{.3, .4, .5, .6\}$, and $\sigma_C \in \{.2, .25, .3, .35, .4\}$. At the second level, there are blocks (by data set), and then 10 aesthetic combinations. 
+Initially, assume a fully factorial, balanced design, with $r$ unique datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K \in \{3, 5\}$, $\sigma_T \in \{.3, .4, .5, .6\}$, and $\sigma_C \in \{.2, .25, .3, .35, .4\}$. At the second level, there are blocks (by data set), and then 10 aesthetic combinations. 
 
 
 \comment{We'll have to use contrasts to measure the effect of color individually, etc., for now let's just consider the ANOVA evaluation}
