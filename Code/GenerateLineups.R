@@ -30,10 +30,11 @@ shapetm[,10] <- 0
 
 # Lineup Design
 data.parms <- expand.grid(K=c(3, 5),
-                          sd=c(.3, .4, .5, .6),
-                          q=c(.2, .25, .3, .35, .4), 
-                          rep=1)
-# data.parms <- subset(data.parms, (K==3) | (K==5 & sd%in%c(.3, .5)&q %in%c(.25, .35)))
+                          sd=round(c(.25, .35, .45), 2),
+                          q=round(c(.2, .25, .3, .35), 2), 
+                          rep=1:10)
+data.parms$q[data.parms$K==5] <- data.parms$q[data.parms$K==5]-.05
+data.parms$q <- round(data.parms$q, 2)
 data.parms$N <- 15*data.parms$K
 
 plot.parms <- expand.grid(
@@ -65,17 +66,45 @@ get.stats <- function(r){
 
 data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
 
-data.stats <- ddply(data, .(set, .sample), 
-                    function(df){
-                      r2 <- summary(lm(y~x, data=df))
-                      tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
-                      res <- tmp[[1]]$`Mean Sq`
-                      data.frame(.sample=unique(df$.sample), 
-                                 LineRSq = r2$r.squared, 
-                                 Fgroup = round(res[2]/res[3], 2), 
-                                 lineplot=unique(df$target2), 
-                                 groupplot=unique(df$target1))
-                      } )
+data.subplot.stats <- ddply(data, .(set, .sample), 
+                            function(df){
+                              r2 <- summary(lm(y~x, data=df))
+                              data.frame(.sample=unique(df$.sample), 
+                                         LineSig = r2$r.squared, 
+                                         ClusterSig = cluster(df), 
+                                         lineplot=unique(df$target2), 
+                                         groupplot=unique(df$target1))
+                            } )
+
+
+data.stats <- ddply(data.subplot.stats, .(set), summarize, 
+                    line=LineSig[.sample==lineplot], 
+                    cluster=ClusterSig[.sample==groupplot], 
+                    null.line = max(LineSig[.sample!=lineplot]), 
+                    null.cluster=max(ClusterSig[.sample!=lineplot]))
+
+data.stats <- cbind(data.parms, data.stats)
+names(data.stats)[2:3] <- c("sd.trend", "sd.cluster")
+
+load("./Data/SimulationResults.Rdata")
+res$sd.cluster <- round(res$sd.cluster, 2)
+res$sd.trend <- round(res$sd.trend, 2)
+sim.quantile <- function(x){
+  df <- subset(res, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K)
+  if(nrow(df)==0){
+    warning(sprintf("Parameter Set (K=%s, SD_T=%.2f, SD_C=%.2f) not found", x$K, x$sd.trend, x$sd.cluster))
+    return(data.frame(line=NA, cluster=NA, null.line=NA, null.cluster=NA))
+  } 
+  data.frame(
+    line=sum(x$line>=res$line)/length(res$line),
+    cluster=sum(x$cluster>=res$cluster)/length(res$cluster),
+    null.line=sum(x$null.line>=res$null.line)/length(res$null.line),
+    null.cluster=sum(x$null.cluster>=res$null.cluster)/length(res$null.cluster)
+    )
+}
+
+tmp <- ddply(data.stats, .(K, sd.trend, sd.cluster, rep), sim.quantile)
+
 
 answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
 
