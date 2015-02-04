@@ -80,8 +80,8 @@ data.subplot.stats <- ddply(data, .(set, .sample),
 data.stats <- ddply(data.subplot.stats, .(set), summarize, 
                     line=LineSig[.sample==lineplot], 
                     cluster=ClusterSig[.sample==groupplot], 
-                    null.line = max(LineSig[.sample!=lineplot]), 
-                    null.cluster=max(ClusterSig[.sample!=lineplot]))
+                    null.line = max(LineSig[.sample!=lineplot & .sample!=groupplot]), 
+                    null.cluster=max(ClusterSig[.sample!=groupplot & .sample!=lineplot]))
 
 data.stats <- cbind(data.parms, data.stats)
 names(data.stats)[2:3] <- c("sd.trend", "sd.cluster")
@@ -104,6 +104,9 @@ sim.quantile <- function(x){
 }
 
 tmp <- ddply(data.stats, .(K, sd.trend, sd.cluster, rep), sim.quantile)
+tmp2 <- melt(tmp, id.vars=1:4, variable.name="dist", value.name="quantile")
+
+qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", geom="line", color=dist, size=I(2))
 
 
 answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
