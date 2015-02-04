@@ -132,8 +132,8 @@ Factors:
 Parameter & Description & Choices\\\hline
 $K$ & \# Clusters & 3, 5 \\
 $N$ & \# Points & $15\cdot K$ \\
-$\sigma_T$ & Scatter around trend line &  .3, .4, .5, .6\\
-$\sigma_C$ & Scatter around cluster centers &  .20, .25, 0.30, .35, 0.40\\\hline
+$\sigma_T$ & Scatter around trend line &  .25, .35, .45\\
+$\sigma_C$ & Scatter around cluster centers &  .20, .25, 0.30, .35\\\hline
 \end{tabular}
 \end{center}
 \caption{Parameter settings for Data Generation.}
