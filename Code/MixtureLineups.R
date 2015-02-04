@@ -99,6 +99,31 @@ gen.data <- function(input){
   data
 }
 
+eval.df <- function(df){
+  data.frame(
+    line=summary(lm(y~x, data=df))$r.squared, 
+    group=cluster(df)
+  )
+}
+
+eval.data <- function(df){
+  
+  nulls <- subset(df, .sample!=target1 & .sample!=target2)
+  groups <- subset(df, .sample==target1)
+  lines <- subset(df, .sample==target2)
+  
+  nl <- ddply(nulls, .(.sample), eval.df)
+  
+  cl <- eval.df(groups)
+  ll <- eval.df(lines)
+  
+  c(N=N, K=K, sd.cluster=sC, sd.trend=sT, 
+    null.line = max(nl$line), 
+    null.cluster = max(nl$group), 
+    line=ll$line, 
+    cluster=cl$group)
+}
+
 gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   pointsize <- 1.5
   if(is.null(colorp)) colorp <- best.combo(length(unique(dd$group)), colors, colortm)

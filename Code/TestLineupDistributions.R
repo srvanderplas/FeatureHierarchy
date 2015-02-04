@@ -13,35 +13,16 @@ data.parms <- expand.grid(K=c(3, 5),
                           q=round(seq(.1, .4, by=.05), 2))
 data.parms$N <- data.parms$K*15
 
+
 tmp <- function(M=2500, N=45, K=3, sT=0.3, sC=0.3) {
-  nulls <- data.frame(t(replicate(M, {
-    lp <- data.frame(t(replicate(18, {
-      mix = mixture.sim(lambda=0.5, K=K, N=N, q=sC, sd=sT)
-      reg <- lm(y~x, data=mix)
-      
-      c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
-    })))
-    c(fline=max(lp$fline), fgroup=max(lp$fgroup))
+  
+  data.frame(t(replicate(M, {
+    eval.data(gen.data(list(N=N, K=K, sd=sT, q=sC)))
   })))
-  
-  trends <- replicate(M, {
-    mix = mixture.sim(lambda=0, K=K, N=N, q=sC, sd=sT)
-    reg <- lm(y~x, data=mix)
-    c(fline=summary(reg)$r.squared)
-  })
-  
-  clusters <- replicate(M, {
-    mix = mixture.sim(lambda=1, K=K, N=N, q=sC, sd=sT)
-    clust <- lm(y~factor(group) + 0, data=mix)
-    res <- summary(aov(clust))
-    c(fgroup=cluster(mix))
-  })
-  
-  data.frame(N=N, K=K, sd.cluster=sC, sd.trend=sT, null.line = nulls$fline, null.cluster = nulls$fgroup, line=trends, cluster=clusters)
 }
 nulldist<- cmpfun(tmp)
 
-res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd, sC=q)), .parallel=TRUE)
+res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1500, N=N, K=K, sT=sd, sC=q)), .parallel=TRUE)
 res$sd.trend <- round(res$sd.trend, 2)
 res$sd.cluster <- round(res$sd.cluster, 2)
 

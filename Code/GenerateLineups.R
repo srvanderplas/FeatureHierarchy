@@ -31,9 +31,10 @@ shapetm[,10] <- 0
 # Lineup Design
 data.parms <- expand.grid(K=c(3, 5),
                           sd=round(c(.25, .35, .45), 2),
-                          q=round(c(.2, .25, .3, .35), 2), 
-                          rep=1:10)
-data.parms$q[data.parms$K==5] <- data.parms$q[data.parms$K==5]-.05
+                          q=1:3, 
+                          rep=1:50)
+data.parms$q[data.parms$K==5] <- c(.2, .25, .3)[data.parms$q[data.parms$K==5]]
+data.parms$q[data.parms$K==3] <- c(.25, .3, .35)[data.parms$q[data.parms$K==3]]
 data.parms$q <- round(data.parms$q, 2)
 data.parms$N <- 15*data.parms$K
 
@@ -68,9 +69,9 @@ data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.lis
 
 data.subplot.stats <- ddply(data, .(set, .sample), 
                             function(df){
-                              r2 <- summary(lm(y~x, data=df))
+                              reg <- lm(y~x, data=df)
                               data.frame(.sample=unique(df$.sample), 
-                                         LineSig = r2$r.squared, 
+                                         LineSig = summary(reg)$r.squared, 
                                          ClusterSig = cluster(df), 
                                          lineplot=unique(df$target2), 
                                          groupplot=unique(df$target1))
@@ -107,6 +108,11 @@ tmp <- ddply(data.stats, .(K, sd.trend, sd.cluster, rep), sim.quantile)
 tmp2 <- melt(tmp, id.vars=1:4, variable.name="dist", value.name="quantile")
 
 qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", geom="line", color=dist, size=I(2))
+
+qplot(data=subset(tmp2, K==3 & sd.trend==.35), x=quantile, ylab="Count", xlab="Quantile of Simulated Distribution", stat="bin", geom="histogram", fill=dist) + facet_wrap(~dist)
+
+qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", group=interaction(sd.trend, sd.cluster, K, dist), geom="line", color=dist, linetype=factor(K)) + facet_grid(sd.cluster~sd.trend+dist, labeller=label_both)
+
 
 
 answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
