@@ -1,49 +1,50 @@
+source("Code/MixtureLineups.R")
+library(compiler)
+library(doMC)
+registerDoMC(12)
+library(plyr)
+library(reshape2)
+
 # Simulation parameters
 data.parms <- expand.grid(K=c(3, 5),
                           sd=seq(.2, .5, by=.05),
                           q=seq(.1, .4, by=.05))
 data.parms$N <- data.parms$K*15
 
-source("Code/MixtureLineups.R")
+# 
+# tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.3) {
+#   nulls <- data.frame(t(replicate(M, {
+#     lp <- data.frame(t(replicate(18, {
+#       mix = mixture.sim(lambda=0.5, K=K, N=N, q=sC, sd=sT, slope=1)
+#       reg <- lm(y~x, data=mix)
+#       
+#       c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
+#     })))
+#     c(fline=max(lp$fline), fgroup=max(lp$fgroup))
+#   })))
+#   
+#   trends <- replicate(M, {
+#     mix = mixture.sim(lambda=0, K=K, N=N, q=sC, sd=sT, slope=1)
+#     reg <- lm(y~x, data=mix)
+#     c(fline=summary(reg)$r.squared)
+#   })
+#   
+#   clusters <- replicate(M, {
+#     mix = mixture.sim(lambda=1, K=K, N=N, q=sC, sd=sT, slope=1)
+#     clust <- lm(y~factor(group) + 0, data=mix)
+#     res <- summary(aov(clust))
+#     c(fgroup=cluster(mix))
+#   })
+#   
+#   data.frame(N=N, K=K, sd.cluster=sC, sd.trend=sT, null.line = nulls$fline, null.cluster = nulls$fgroup, line=trends, cluster=clusters)
+# }
+# nulldist<- cmpfun(tmp)
+# 
+# res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd, sC=q)), .parallel=TRUE)
+# 
+# save(res, file = "./Data/SimulationResults.Rdata")
+load("./Data/SimulationResults.Rdata")
 
-library(compiler)
-tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.3) {
-  nulls <- data.frame(t(replicate(M, {
-    lp <- data.frame(t(replicate(18, {
-      mix = mixture.sim(lambda=0.5, K=K, N=N, q=sC, sd=sT, slope=1)
-      reg <- lm(y~x, data=mix)
-      
-      c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
-    })))
-    c(fline=max(lp$fline), fgroup=max(lp$fgroup))
-  })))
-  
-  trends <- replicate(M, {
-    mix = mixture.sim(lambda=0, K=K, N=N, q=sC, sd=sT, slope=1)
-    reg <- lm(y~x, data=mix)
-    c(fline=summary(reg)$r.squared)
-  })
-  
-  clusters <- replicate(M, {
-    mix = mixture.sim(lambda=1, K=K, N=N, q=sC, sd=sT, slope=1)
-    clust <- lm(y~factor(group) + 0, data=mix)
-    res <- summary(aov(clust))
-    c(fgroup=cluster(mix))
-  })
-  
-  data.frame(N=N, K=K, sd.cluster=sC, sd.trend=sT, null.line = nulls$fline, null.cluster = nulls$fgroup, line=trends, cluster=clusters)
-}
-nulldist<- cmpfun(tmp)
-
-
-library(doMC)
-registerDoMC(12)
-
-res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd, sC=q)), .parallel=TRUE)
-
-save(res, file = "./Data/SimulationResults.Rdata")
-
-library(reshape2)
 longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
 longres$dist <- c("Data", "Max(18 Null Plots)")[1+grepl("null", longres$type)]
 longres$type <- gsub("null.", "", longres$type, fixed=T)
@@ -74,3 +75,9 @@ ggsave("Images/Line Results (SD_C=0.3).pdf", width=6, height=6, units="in")
 
 qplot(data=subset(longres, sd.cluster==.4), x=value, y=..scaled.., stat="density", color=dist, linetype=factor(K), geom="line", main="Simulation Results: Trials where SD_C=.4", xlab="Statistic Value") + facet_grid(sd.trend~type+K, scales="free", labeller=label_both) + scale_color_discrete("Distribution") + scale_linetype_discrete("K")
 ggsave("Images/Line Results (SD_C=0.4).pdf", width=6, height=6, units="in")
+
+
+
+dataset.criteria <- ddply(longres, .(type, dist, sd.trend, sd.cluster, K), summarize, LB = quantile(value, .25), UB = quantile(value, .75))
+
+save(dataset.criteria, file="./Data/SimulationDatasetCriteria.Rdata")
