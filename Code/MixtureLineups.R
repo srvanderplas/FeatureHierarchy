@@ -42,27 +42,22 @@ sim.clusters <- function(K, N, q=.3){
   xerr <- rnorm(N, sd=q)
   
   m1.data <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
-
-# ggplot(aes(x=x, y=y), data=m1.data) + geom_point(aes(colour=factor(group)), data=m1.data) + coord_equal(ratio=1) + geom_point(data=m2.data)
   return(m1.data)
 }
 
-sim.line <- function(K, N, sd=.3, slope=1){
+sim.line <- function(K, N, sd=.3){
   # Simulate data from line
   m2.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
-#   m2.data <- data.frame(x=jitter(seq(-1-2*sd, 1+2*sd, length.out=N)), y=0)
-  m2.data$y <- slope*m2.data$x + rnorm(N, 0, sd)
+  m2.data$y <- m2.data$x + rnorm(N, 0, sd)
   
   return(m2.data)
 }
 
-mixture.sim <- function(lambda, K, N, q=.3, sd=.3, slope=1){
+mixture.sim <- function(lambda, K, N, q=.3, sd=.3){
   m1.data <- sim.clusters(K=K, N=N, q=q)
   m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
-  m2.data <- sim.line(K=K, N=N, sd=sd, slope=slope)
+  m2.data <- sim.line(K=K, N=N, sd=sd)
   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
-  
-#   qplot(data=m1.data, x=x, y=y, color=factor(group), size=I(3)) + coord_equal(ratio=1)
   
   ll <- rbinom(n=N, size=1, prob=lambda)  # one model or the other
   mix.data <- data.frame(
@@ -73,7 +68,8 @@ mixture.sim <- function(lambda, K, N, q=.3, sd=.3, slope=1){
 
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
   
-  mix.data$group <- cutree(hclust(dist(mix.data[,c("x", "y")])), k=K) # grouping by the best K clusters
+  mix.data$group <- cutree(hclust(dist(mix.data[,c("x", "y")])), k=K) 
+  # grouping by the best K clusters
 
   return(mix.data)
 }
@@ -91,8 +87,7 @@ gen.data <- function(input){
                     N=input$N, 
                     K=input$K, 
                     q=input$q, 
-                    sd=input$sd, 
-                    slope=runif(1, .2, .8)
+                    sd=input$sd
         ))
 
   data <- lineup(true=dframe, pos=pos[1], n=20, samples=nulldata)
