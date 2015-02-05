@@ -411,7 +411,8 @@ We have a couple of options:
 
 \comment{
 The fractional factorial option will be a pain to explain when we write things up; it will be simpler to explain using a subset of cases. Given that we don't particularly care about the third-order effects (and possibly not even the second-order effects) for the parameters, I'm inclined to say that the single-replicate option is the easiest way to go (and lets us keep the simple SSQ in the table, which is a huge bonus in my opinion). Even if we just use the third-order interaction effect as error, we still have 12 degrees of freedom; that should be plenty - we'd only need F=\Sexpr{round(qf(.95, 12, 12), 2)} to get a significant result for even the $(\sigma_T\sigma_C)$ test. 
-}
+
+HH: We might not care about interpreting the two-way interactions, but unfortunately they will be there (see comment at the back). So I would suggest to go with a full factorial design in $\sigma_C, \sigma_T$, and $K$, with three replications each (we need the replicates, also explained in the back). This gives us 18 parameter settings, and $18\cdot 3 = 54$ data sets. In case you still want to consider the effect of the number of datapoints $N$, we could switch from fully factorial to fractional factorial and replace the three-way interaction of $\sigma_C, \sigma_T$, and $K$ by the settings of $N$. That way we will keep the 18 settings. }
 
 \begin{table}[h]
 \caption{ANOVA table - only one replicate. Evaluation of sources of error in a full factorial version of the experiment, with one replicate of each parameter combination and $P$ participant evaluations of each plot(data/aesthetic combination).}
