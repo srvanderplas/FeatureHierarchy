@@ -579,7 +579,7 @@ d_ply(data, .(set), function(df){
 \bibliography{references}
 
 \section*{Simulation Studies of Parameter Space}
-Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of "easy", "medium" and "hard" parameter values for line and cluster tasks. 
+Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
 
 <<simulationparameters,echo=F,include=T, fig.width=10, fig.height=10, out.width='.8\\linewidth'>>=
 load("../../Data/SimulationDatasetCriteria.Rdata")
@@ -588,6 +588,7 @@ dataset.criteria$ParameterSet <- with(dataset.criteria, sprintf("sdT%.2f-sdC%.2f
 dataset.criteria$ParameterSet[dataset.criteria$type=="cluster"] <- with(dataset.criteria[dataset.criteria$type=="cluster",], sprintf("sdC%.2f-sdT%.2f", sd.cluster, sd.trend))
 
 
-qplot(data=dataset.criteria, x=LB, xend=UB, y=ParameterSet, yend=ParameterSet, color=dist, geom="segment") + geom_point(aes(x=LB, y=ParameterSet, color=dist))  + geom_point(aes(x=UB, y=ParameterSet, color=dist)) + facet_wrap(~type+K, scales="free") 
+qplot(data=dataset.criteria, x=LB, xend=UB, y=ParameterSet, yend=ParameterSet, color=dist, geom="segment") + geom_point(aes(x=LB, y=ParameterSet, color=dist))  + geom_point(aes(x=UB, y=ParameterSet, color=dist)) + facet_grid(type~K, scales="free", labeller="label_both")  + theme_bw() + 
+  scale_colour_brewer(palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) and target distribution (red) of quality measures.")
 @
 \end{document}
