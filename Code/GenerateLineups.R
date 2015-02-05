@@ -32,7 +32,7 @@ shapetm[,10] <- 0
 data.parms <- expand.grid(K=c(3, 5),
                           sd=round(c(.25, .35, .45), 2),
                           q=1:3, 
-                          rep=1:50)
+                          rep=1:3)
 data.parms$q[data.parms$K==5] <- c(.2, .25, .3)[data.parms$q[data.parms$K==5]]
 data.parms$q[data.parms$K==3] <- c(.25, .3, .35)[data.parms$q[data.parms$K==3]]
 data.parms$q <- round(data.parms$q, 2)
@@ -73,8 +73,8 @@ data.subplot.stats <- ddply(data, .(set, .sample),
                               data.frame(.sample=unique(df$.sample), 
                                          LineSig = summary(reg)$r.squared, 
                                          ClusterSig = cluster(df), 
-                                         lineplot=unique(df$target2), 
-                                         groupplot=unique(df$target1))
+                                         lineplot=unique(df$target1), 
+                                         groupplot=unique(df$target2))
                             } )
 
 
@@ -97,10 +97,10 @@ sim.quantile <- function(x){
     return(data.frame(line=NA, cluster=NA, null.line=NA, null.cluster=NA))
   } 
   data.frame(
-    line=sum(x$line>=res$line)/length(res$line),
-    cluster=sum(x$cluster>=res$cluster)/length(res$cluster),
-    null.line=sum(x$null.line>=res$null.line)/length(res$null.line),
-    null.cluster=sum(x$null.cluster>=res$null.cluster)/length(res$null.cluster)
+    line=sum(x$line>=df$line)/length(df$line),
+    cluster=sum(x$cluster>=df$cluster)/length(df$cluster),
+    null.line=sum(x$null.line>=df$null.line)/length(df$null.line),
+    null.cluster=sum(x$null.cluster>=df$null.cluster)/length(df$null.cluster)
     )
 }
 
