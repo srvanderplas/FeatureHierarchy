@@ -109,8 +109,8 @@ eval.df <- function(df){
 eval.data <- function(df){
   
   nulls <- subset(df, .sample!=target1 & .sample!=target2)
-  groups <- subset(df, .sample==target1)
-  lines <- subset(df, .sample==target2)
+  groups <- subset(df, .sample==target2)
+  lines <- subset(df, .sample==target1)
   
   nl <- ddply(nulls, .(.sample), eval.df)
   
