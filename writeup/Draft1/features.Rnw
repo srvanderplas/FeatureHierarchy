@@ -66,10 +66,6 @@ Unfortunately, this limits the choice to the set used in the Tableau software. I
 
 % Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
 
-\comment{we didn't exclude red-green combinations; by excluding grey (which is a horrible color and similar to red, green, turquoise, etc. for colorblind people) we managed to produce palettes which were maximally different and didn't include red/green. We can formally exclude red/green if you'd like. 
-
-HH: I'm completely fine with leaving things as is - I just didn't remember that excluding grey had this effect.}
-
 Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The left and right triangle shapes (available only in unicode using R) were excluded due to size differences between unicode and non-unicode shapes. 
 
 All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to measure the amount of overplotting.
@@ -78,7 +74,10 @@ All shapes are non-filled shapes, which means that they are consistent with one 
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
 with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
 
-We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel.  \newtext{As a measure of clustering we use a similar coefficient: here, we assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  } 
+We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel. 
+
+As a measure of clustering we use a similar coefficient: here, we assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  
+\comment{Formula?}
 
 \subsection{Cluster Model $M_C$}
 We begin by generating cluster centers along a line, then we generate points around the cluster center. \\
@@ -155,10 +154,10 @@ Conflict & Color + Trend Line, \\
 \caption{Aesthetics and add-on design choices. }
 \end{table}
 
-\comment{I'm going forth and back on the parameters for $\sigma_C$ and $\sigma_T$, but I think I really like the ones in the table. For the trend line, we definitely get something along the lines `easy', `medium', and `hard'; for the clustering we should be aiming for the same - it's not quite as clear cut, because there seems to be more variability in the results, so we need to double check the randomly generated results.}
 
-\comment{We can use the null model to get a distribution for each of the two quality measures for the targets, which gives us an objective measure to assess the difficulty of detecting each of the targets. }
+\newtext{Based on simulations from the null we get a distribution for each of the two quality measures for the targets under each parameter setting. This gives us an objective measure to assess the difficulty of detecting each of the targets. An overview of the results can be seen in the appendix.}
 
+\comment{Should we keep these two histograms to explain in more detail how the simulation from the null model works? }
 <<null-distribution, echo=FALSE, include=FALSE, cache=T>>=
 source("../../Code/MixtureLineups.R")
 sT = 0.30
@@ -234,11 +233,12 @@ The lines for the cluster are, relatively, further to the right of the overall d
 \end{enumerate}
 
 \subsection{Hypothesis}
-The plot most identified as the "target" will change based on plot aesthetics which emphasize linear features or cluster features. This effect will be mediated by the signal strength of the line and cluster features. 
+The plot most identified as the ``target" will change based on plot aesthetics which emphasize linear features or cluster features. This effect will be mediated by the signal strength of the line and cluster features. 
 
+\comment{Could you re-phrase these items so they always give an increase in the visual outcome? (or always a decrease, but the emphasis is on the outcome not on increasing the parameters).}
 \begin{itemize}
 \item Increasing $N$ will increase signal strength for both line and clusters
-\item Increasing $K$ will decrease signal strength for clusters (fewer points per cluster, thus lower visual cohesiveness)
+\item Increasing $K$ will decrease signal strength for clusters (at the same variability, there's less space to spread clusters out resulting in less visual separability)
 \item Increasing $\sigma_T$ will decrease signal strength for lines
 \item Increasing $\sigma_C$ will decrease signal strength for clusters
 \end{itemize}
@@ -250,12 +250,15 @@ Plot features will emphasize either lines or clusters as follows:
 \item Color (cluster emphasis)
 \item Shape (cluster emphasis)
 \item Color + shape (double cluster emphasis)
-\item Ellipse + color (doubly cluster emphasis)
+\item Ellipse + color (double cluster emphasis)
 \item Line
 \item Line + Prediction Interval (double line emphasis)
 \item Color + line (conflict)
 \item Color + line + Prediction Interval (conflict)
 \end{itemize}
+
+\comment{The primary purpose of the study is to detect how using visual aesthetics emphasizes one of two features and lead to detection of one feature over another feature.}
+\comment{A secondary purpose of the study is to relate signal strength to detection in a visualization by a human observer.}
 
 In a more organized representation:
 \begin{table}[h]
@@ -407,7 +410,8 @@ We have a couple of options:
 \end{itemize}
 
 \comment{
-The fractional factorial option will be a pain to explain when we write things up; it will be simpler to explain using a subset of cases. Given that we don't particularly care about the third-order effects (and possibly not even the second-order effects) for the parameters, I'm inclined to say that the single-replicate option is the easiest way to go (and lets us keep the simple SSQ in the table, which is a huge bonus in my opinion). Even if we just use the third-order interaction effect as error, we still have 12 degrees of freedom; that should be plenty - we'd only need F=\Sexpr{round(qf(.95, 12, 12), 2)} to get a significant result for even the $(\sigma_T\sigma_C)$ test. }
+The fractional factorial option will be a pain to explain when we write things up; it will be simpler to explain using a subset of cases. Given that we don't particularly care about the third-order effects (and possibly not even the second-order effects) for the parameters, I'm inclined to say that the single-replicate option is the easiest way to go (and lets us keep the simple SSQ in the table, which is a huge bonus in my opinion). Even if we just use the third-order interaction effect as error, we still have 12 degrees of freedom; that should be plenty - we'd only need F=\Sexpr{round(qf(.95, 12, 12), 2)} to get a significant result for even the $(\sigma_T\sigma_C)$ test. 
+}
 
 \begin{table}[h]
 \caption{ANOVA table - only one replicate. Evaluation of sources of error in a full factorial version of the experiment, with one replicate of each parameter combination and $P$ participant evaluations of each plot(data/aesthetic combination).}
@@ -581,6 +585,7 @@ d_ply(data, .(set), function(df){
 \section*{Simulation Studies of Parameter Space}
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
 
+\comment{What we also see from these plots, is that we do have a $\sigma_C \sigma_T$ interaction: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. We might also have a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. I am not sure whether that is an actual three-way interaction or just all three two-way interactions, but it doesn't matter, at this point we are just talking about potentially saving one parameter. What is clear, is that we need to block by parameter setting. We do so, by blocking on each dataset. Each dataset is non-deterministic, though, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. We therefore need repetitions of the data generation to be able to separate the variabiltiy coming from within the parameter setting from the additional variability introduced by the subjects' evaluations of the lineups. }
 <<simulationparameters,echo=F,include=T, fig.width=10, fig.height=6.5, out.width='.8\\linewidth'>>=
 load("../../Data/SimulationDatasetCriteria.Rdata")
 
