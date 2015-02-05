@@ -22,11 +22,12 @@ tmp <- function(M=2500, N=45, K=3, sT=0.3, sC=0.3) {
 }
 nulldist<- cmpfun(tmp)
 
-res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1500, N=N, K=K, sT=sd, sC=q)), .parallel=TRUE)
+res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd, sC=q)), .parallel=TRUE)
 res$sd.trend <- round(res$sd.trend, 2)
 res$sd.cluster <- round(res$sd.cluster, 2)
 
 save(res, file = "./Data/SimulationResults.Rdata")
+
 load("./Data/SimulationResults.Rdata")
 
 longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
