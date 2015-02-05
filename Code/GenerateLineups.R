@@ -91,7 +91,7 @@ load("./Data/SimulationResults.Rdata")
 res$sd.cluster <- round(res$sd.cluster, 2)
 res$sd.trend <- round(res$sd.trend, 2)
 sim.quantile <- function(x){
-  df <- subset(res, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K)
+  df <- subset(res, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K & N ==x$N)
   if(nrow(df)==0){
     warning(sprintf("Parameter Set (K=%s, SD_T=%.2f, SD_C=%.2f) not found", x$K, x$sd.trend, x$sd.cluster))
     return(data.frame(line=NA, cluster=NA, null.line=NA, null.cluster=NA))
@@ -104,7 +104,7 @@ sim.quantile <- function(x){
     )
 }
 
-tmp <- ddply(data.stats, .(K, sd.trend, sd.cluster, rep), sim.quantile)
+tmp <- ddply(data.stats, .(K, sd.trend, sd.cluster, rep, N), sim.quantile)
 tmp2 <- melt(tmp, id.vars=1:4, variable.name="dist", value.name="quantile")
 
 qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", geom="line", color=dist, size=I(2))
