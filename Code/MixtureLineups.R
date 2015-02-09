@@ -1,3 +1,23 @@
+interactive_lineup <- function(method, dframe, filename, script, toggle="toggle", aes, stats) {
+  z = as.list(match.call()[-1])
+  
+  eval(call(eval(z$method), dframe, aes, stats))
+  require(gridSVG)
+  grobs <- grid.ls()
+  
+  idx <- grep("panel-", grobs$name)
+  for (i in idx) { 
+    grid.garnish(grobs$name[i],
+                 onmouseover=paste("frame('",grobs$name[i+2], ".1')", sep=""),
+                 onmouseout=paste("deframe('",grobs$name[i+2], ".1')", sep=""), 
+                 onmousedown=paste(sprintf("%shigh(evt, '", toggle),grobs$name[i+2], ".1')", sep=""))
+  }
+  
+  # use script on server to get locally executable javascript code
+  # or use inline option
+  grid.script(filename=script)
+  grid.export(filename, uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+}
 
 #' Function to find the subset of a palette with the largest total pairwise distance
 #' @param ngroups size of subset
@@ -117,8 +137,7 @@ eval.data <- function(df){
   cl <- eval.df(groups)
   ll <- eval.df(lines)
   
-  c(N=N, K=K, sd.cluster=sC, sd.trend=sT, 
-    null.line = max(nl$line), 
+  c(null.line = max(nl$line), 
     null.cluster = max(nl$group), 
     line=ll$line, 
     cluster=cl$group)

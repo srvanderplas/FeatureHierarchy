@@ -1,7 +1,8 @@
 source("Code/MixtureLineups.R")
+library(nullabor)
 library(compiler)
 library(doMC)
-registerDoMC(12)
+registerDoMC(6)
 library(plyr)
 library(reshape2)
 library(ggplot2)
@@ -15,14 +16,15 @@ data.parms$N <- data.parms$K*15
 
 
 tmp <- function(M=2500, N=45, K=3, sT=0.3, sC=0.3) {
-  
   data.frame(t(replicate(M, {
-    eval.data(gen.data(list(N=N, K=K, sd=sT, q=sC)))
+    input.pars <- list(N=N, K=K, sd=sT, q=sC)
+    c(unlist(input.pars), eval.data(gen.data(input.pars)))
   })))
 }
 nulldist<- cmpfun(tmp)
 
-res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd, sC=q)), .parallel=TRUE)
+res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd, sC=q)))
+names(res)[3:4] <- c("sd.trend", "sd.cluster")
 res$sd.trend <- round(res$sd.trend, 2)
 res$sd.cluster <- round(res$sd.cluster, 2)
 
@@ -31,7 +33,7 @@ save(res, file = "./Data/SimulationResults.Rdata")
 load("./Data/SimulationResults.Rdata")
 
 longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
-longres$dist <- c("Data", "Max(18 Null Plots)")[1+grepl("null", longres$type)]
+longres$dist <- c("Data", "Max(18 Nulls)")[1+grepl("null", longres$type)]
 longres$type <- gsub("null.", "", longres$type, fixed=T)
 
 qplot(data=subset(longres, sd.trend==.2), x=value, y=..scaled.., stat="density", color=dist, linetype=factor(K), geom="line", main="Simulation Results: Trials where SD_T=.2", xlab="Statistic Value") + facet_grid(sd.cluster~type+K, scales="free", labeller=label_both) + scale_color_discrete("Distribution") + scale_linetype_discrete("K")
