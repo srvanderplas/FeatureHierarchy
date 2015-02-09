@@ -32,7 +32,7 @@ shapetm[,10] <- 0
 data.parms <- expand.grid(K=c(3, 5),
                           sd=round(c(.25, .35, .45), 2),
                           q=1:3, 
-                          rep=1:100)
+                          rep=1:50)
 data.parms$q[data.parms$K==5] <- c(.2, .25, .3)[data.parms$q[data.parms$K==5]]
 data.parms$q[data.parms$K==3] <- c(.25, .3, .35)[data.parms$q[data.parms$K==3]]
 data.parms$q <- round(data.parms$q, 2)
@@ -122,7 +122,7 @@ tmp.sub <- subset(tmp, rowSums(tmp[,6:9]>.2 & tmp[,6:9]<.8)==4)
 # Find first data set with each parameter values and acceptable quantiles
 chosen.data.sets <- 
   ddply(tmp.sub, .(K, sd.trend, sd.cluster, N), function(df){
-    par.row <- subset(df, rep==min(df$rep))
+    par.row <- subset(df, rep%in%order(unique(df$rep), increasing==TRUE)[1:3])
     return(c(set=subset(data.parms, N==par.row$N & K==par.row$K & sd==par.row$sd.trend & q==par.row$sd.cluster & rep==par.row$rep)$set))
 })
 
@@ -133,10 +133,10 @@ data.parms <- subset(data.parms, set%in%chosen.data.sets$set)
 data.subplot.stats <- subset(data.subplot.stats, set%in%chosen.data.sets$set)
 data.stats <- merge(data.stats, unique(data.subplot.stats[,c("set", "lineplot", "groupplot")]))
 
-
-
-
 answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
+
+save(data, data.stats, data.parms, plot.parms, answers, file="./Images/Lineups/Lineups.rda")
+write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
 
 d_ply(data, .(set), function(df){
   i <- unique(df$set)
@@ -153,5 +153,3 @@ d_ply(data, .(set), function(df){
   }
 })
 
-save(data, data.stats, data.parms, plot.parms, answers, file="./Images/Lineups/Lineups.rda")
-write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
