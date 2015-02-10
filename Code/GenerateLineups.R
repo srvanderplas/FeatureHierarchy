@@ -140,9 +140,11 @@ get.stats <- function(r){
 # data$set <- as.numeric(factor(data$set, levels=data.sets))
 # 
 # answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
+# 
+# save(data, data.stats, data.parms, plot.parms, data.subplot.stats, data.sets, chosen.data.sets, answers, file="./Images/Lineups/Lineups.rda")
+# write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
 
-save(data, data.stats, data.parms, plot.parms, data.subplot.stats, data.sets, chosen.data.sets, answers, file="./Images/Lineups/Lineups.rda")
-write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
+load("./Images/Lineups/Lineups.rda")
 
 d_ply(data, .(set), function(df){
   i <- unique(df$set)
