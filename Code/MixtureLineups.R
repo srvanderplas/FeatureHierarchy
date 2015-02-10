@@ -16,7 +16,7 @@ interactive_lineup <- function(method, dframe, filename, script, toggle="toggle"
   # use script on server to get locally executable javascript code
   # or use inline option
   grid.script(filename=script)
-  grid.export(filename, uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+  grid.export(filename, uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline", width=6, height=6)
 }
 
 #' Function to find the subset of a palette with the largest total pairwise distance

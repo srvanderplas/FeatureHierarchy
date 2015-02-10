@@ -122,16 +122,21 @@ tmp.sub <- subset(tmp, rowSums(tmp[,6:9]>.2 & tmp[,6:9]<.8)==4)
 # Find first data set with each parameter values and acceptable quantiles
 chosen.data.sets <- 
   ddply(tmp.sub, .(K, sd.trend, sd.cluster, N), function(df){
-    par.row <- subset(df, rep%in%order(unique(df$rep), increasing==TRUE)[1:3])
+    par.row <- subset(df, rep%in%order(unique(df$rep), decreasing = TRUE)[1:3])
     return(c(set=subset(data.parms, N==par.row$N & K==par.row$K & sd==par.row$sd.trend & q==par.row$sd.cluster & rep==par.row$rep)$set))
 })
 
 # Subset all data-generating sets
 data <- subset(data, set%in%chosen.data.sets$set)
+data.sets <- unique(data$set)
 data.stats <- subset(data.stats, set%in%chosen.data.sets$set)
+data.stats$set <- as.numeric(factor(data.stats$set, levels=data.sets))
 data.parms <- subset(data.parms, set%in%chosen.data.sets$set)
+data.parms$set <- as.numeric(factor(data.parms$set, levels=data.sets))
 data.subplot.stats <- subset(data.subplot.stats, set%in%chosen.data.sets$set)
+data.subplot.stats$set <- as.numeric(factor(data.subplot.stats$set, levels=data.sets))
 data.stats <- merge(data.stats, unique(data.subplot.stats[,c("set", "lineplot", "groupplot")]))
+data$set <- as.numeric(factor(data$set, levels=data.sets))
 
 answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
 
@@ -153,3 +158,13 @@ d_ply(data, .(set), function(df){
   }
 })
 
+picture.details <- ddply(data, .(set), function(df){
+  i <- unique(df$set)
+  j <- 1:10
+  c(
+    sample_size=data.parms$K[i])
+})
+
+data.frame(
+  pic_id = 
+  )
