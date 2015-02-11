@@ -110,3 +110,7 @@ sympy-plots-for-*.tex/
 # xindy
 *.xdy
 .Rproj.user
+
+
+# Generated Lineups
+Images/Lineups
