@@ -5,6 +5,9 @@ library(plyr)
 library(dplyr)
 library(reshape2)
 library(nullabor)
+library(doMC)
+registerDoMC(6)
+
 
 set.seed(518290387)
 
@@ -149,15 +152,16 @@ load("./Images/Lineups/Lineups.rda")
 d_ply(data, .(set), function(df){
   i <- unique(df$set)
   for(j in 1:nrow(plot.parms)){
-    ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
-                           get.stats(plot.parms[j,])), 
-           filename = sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.pdf", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i]), 
-           width=6, height=6, units="in", dpi=150)
-    ggsave(plot = gen.plot(df, get.aes(plot.parms[j,]), 
-                           get.stats(plot.parms[j,]), ), 
-           filename = sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.png", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i]), 
-           width=6, height=6, units="in", dpi=150)
-    interactive_lineup("gen.plot", df, filename=sprintf("Images/Lineups/set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f.svg", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i]), script="http://www.hofroe.net/examples/lineup/fhaction.js", aes=get.aes(plot.parms[j,]), stats=get.stats(plot.parms[j,]))
+    fname <- sprintf("set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i])
+    plotobj <- gen.plot(df, aes=get.aes(plot.parms[j,]), stats=get.stats(plot.parms[j,]))
+    
+    write.csv(df, file = paste0("Images/Lineups/Data/", fname, ".csv"), row.names=FALSE)
+    ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
+    ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".png"), width=6, height=6, dpi=100)
+    
+    interactive_lineup("print", plotobj,
+                       filename=paste0("Images/Lineups/", fname, ".svg"), 
+                       script="http://www.hofroe.net/examples/lineup/fhaction.js")
   }
 })
 

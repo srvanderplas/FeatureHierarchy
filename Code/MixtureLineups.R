@@ -1,7 +1,6 @@
-interactive_lineup <- function(method, dframe, filename, script, toggle="toggle", aes, stats) {
+interactive_lineup <- function(method, plotobj, filename, script, toggle="toggle") {
   z = as.list(match.call()[-1])
-  
-  eval(call(eval(z$method), dframe, aes, stats))
+  eval(call(eval(z$method), plotobj))
   require(gridSVG)
   grobs <- grid.ls()
   
@@ -16,7 +15,7 @@ interactive_lineup <- function(method, dframe, filename, script, toggle="toggle"
   # use script on server to get locally executable javascript code
   # or use inline option
   grid.script(filename=script)
-  grid.export(filename, uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline", width=6, height=6)
+  grid.export(filename, uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
 }
 
 #' Function to find the subset of a palette with the largest total pairwise distance
