@@ -7,5 +7,5 @@ theme_lineup <- function(base_size = 12, base_family = ""){
           axis.text=element_blank(),
           axis.title=element_blank(),
           axis.ticks=element_blank(),
-          plot.margin=unit(c(0,0,-1,-1), "line")
+          plot.margin=unit(c(0,0,0,0), "line")
     )}
