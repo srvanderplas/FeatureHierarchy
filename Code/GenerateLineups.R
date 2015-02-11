@@ -70,7 +70,7 @@ get.stats <- function(r){
 #   30 # color + ellipse + trend + error
 # ),]
 # 
-# data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
+# data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))}, .parallel=T)
 # 
 # data.subplot.stats <- ddply(data, .(set, .sample), 
 #                             function(df){
@@ -80,17 +80,18 @@ get.stats <- function(r){
 #                                          ClusterSig = cluster(df), 
 #                                          lineplot=unique(df$target1), 
 #                                          groupplot=unique(df$target2))
-#                             } )
-# 
+#                             } , .parallel=T)
 # 
 # data.stats <- ddply(data.subplot.stats, .(set), summarize, 
 #                     line=LineSig[.sample==lineplot], 
 #                     cluster=ClusterSig[.sample==groupplot], 
 #                     null.line = max(LineSig[.sample!=lineplot & .sample!=groupplot]), 
-#                     null.cluster=max(ClusterSig[.sample!=groupplot & .sample!=lineplot]))
+#                     null.cluster=max(ClusterSig[.sample!=groupplot & .sample!=lineplot]),
+#                     lineplot = unique(lineplot),
+#                     groupplot = unique(groupplot), .parallel=T)
 # 
-# data.stats <- cbind(data.parms, data.stats)
-# names(data.stats)[2:3] <- c("sd.trend", "sd.cluster")
+# data.stats <- merge(data.parms[,c(1:3, 5:6)], data.stats, all.x=T, all.y=T)
+# names(data.stats)[3:4] <- c("sd.trend", "sd.cluster")
 # 
 # load("./Data/SimulationResults.Rdata")
 # sim.quantile <- function(x){
@@ -108,15 +109,13 @@ get.stats <- function(r){
 # }
 # 
 # # Calculate quantiles of datasets compared to simulated quantiles
-# tmp <- ddply(data.stats, .(K, sd.trend, sd.cluster, rep, N), sim.quantile)
+# tmp <- ddply(data.stats, .(set, K, sd.trend, sd.cluster, N), sim.quantile, .parallel=T)
 # 
 # # # Ensure uniform distribution for quantiles
 # # tmp2 <- melt(tmp, id.vars=1:5, variable.name="dist", value.name="quantile")
 # # tmp2$par <- paste(tmp2$K, round(tmp2$sd.trend, 2), round(tmp2$sd.cluster, 2), tmp2$N, sep=", ")
 # # 
 # # qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", geom="line", color=dist, size=I(2)) + facet_wrap(~par)
-# # 
-# # qplot(data=subset(tmp2, K==3 & sd.trend==.35), x=quantile, ylab="Count", xlab="Quantile of Simulated Distribution", stat="bin", geom="histogram", fill=dist) + facet_wrap(~dist)
 # # 
 # # qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", group=interaction(sd.trend, sd.cluster, K, dist), geom="line", color=dist, linetype=factor(K)) + facet_grid(sd.cluster~sd.trend+dist, labeller=label_both)
 # 
@@ -126,8 +125,7 @@ get.stats <- function(r){
 # # Find first data set with each parameter values and acceptable quantiles
 # chosen.data.sets <- 
 #   ddply(tmp.sub, .(K, sd.trend, sd.cluster, N), function(df){
-#     par.row <- subset(df, rep%in%order(unique(df$rep), decreasing = TRUE)[1:3])
-#     return(c(set=subset(data.parms, N==par.row$N & K==par.row$K & sd==par.row$sd.trend & q==par.row$sd.cluster & rep==par.row$rep)$set))
+#     return(data.frame(set=df$set[1:3]))
 # })
 # 
 # # Subset all data-generating sets
@@ -142,36 +140,54 @@ get.stats <- function(r){
 # data.stats <- merge(data.stats, unique(data.subplot.stats[,c("set", "lineplot", "groupplot")]))
 # data$set <- as.numeric(factor(data$set, levels=data.sets))
 # 
-# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
-# 
-# save(data, data.stats, data.parms, plot.parms, data.subplot.stats, data.sets, chosen.data.sets, answers, file="./Images/Lineups/Lineups.rda")
-# write.csv(answers, "./Images/Lineups/LineupKey.csv", row.names=FALSE)
+# save(data, data.stats, plot.parms, data.subplot.stats, data.sets, chosen.data.sets, file="./Images/Lineups/Lineups.rda")
 
 load("./Images/Lineups/Lineups.rda")
 
-d_ply(data, .(set), function(df){
-  i <- unique(df$set)
-  for(j in 1:nrow(plot.parms)){
-    fname <- sprintf("set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, j, data.parms$K[i], data.parms$sd[i], data.parms$q[i])
-    plotobj <- gen.plot(df, aes=get.aes(plot.parms[j,]), stats=get.stats(plot.parms[j,]))
-    
-    write.csv(df, file = paste0("Images/Lineups/Data/", fname, ".csv"), row.names=FALSE)
-    ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
-    ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".png"), width=6, height=6, dpi=100)
-    
-    interactive_lineup("print", plotobj,
-                       filename=paste0("Images/Lineups/", fname, ".svg"), 
-                       script="http://www.hofroe.net/examples/lineup/fhaction.js")
+library(digest)
+
+plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
+
+save.pics <- function(df, datastats, plotparms, plotname){
+  dataname <- sprintf("set-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, 
+                      datastats$K, datastats$sd.trend, datastats$sd.cluster)
+  realfname <- sprintf("set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, j, 
+                       datastats$K, datastats$sd.trend, datastats$sd.cluster)
+  fname <- digest(realfname)
+  
+  plotobj <- gen.plot(df, aes=get.aes(plotparms), stats=get.stats(plotparms))
+  
+  if(plotname=="plain") {
+    write.csv(df, file = paste0("Images/Lineups/Data/", dataname, ".csv"), row.names=FALSE)
   }
-})
+  ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
+#   ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".png"), width=6, height=6, dpi=100)
+  
+  interactive_lineup("print", plotobj,
+                     filename=paste0("Images/Lineups/", fname, ".svg"), 
+                     script="http://www.hofroe.net/examples/lineup/fhaction.js")
+  
+  data.frame(
+    pic_id = unique(df$set),
+    sample_size = datastats$K,
+    test_param = sprintf("turk16-%s", plotname),
+    param_value = sprintf("k-%d-sdline-%.2f-sdgroup-%.2f", datastats$K, datastats$sd.trend, datastats$sd.cluster),
+    p_value = sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster),
+    obs_plot_location = sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
+    pic_name = paste0("Images/Lineups/", fname, ".svg"),
+    experiment = "turk16",
+    difficulty = unique(df$set),
+    data_name = dataname
+  )
+}
 
 picture.details <- ddply(data, .(set), function(df){
   i <- unique(df$set)
-  j <- 1:10
-  c(
-    sample_size=data.parms$K[i])
-})
+  z <- data.frame()
+  for(j in 1:nrow(plot.parms)){
+    z <- rbind(z, save.pics(df, datastats=data.stats[i,], plotparms=plot.parms[j,], plotname=plot.names[j]))
+  }
+  return(z)
+}, .parallel=T)
 
-data.frame(
-  pic_id = 
-  )
+write.csv("./Images/Lineups/picture-details.csv", row.names=FALSE)
