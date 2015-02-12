@@ -150,7 +150,8 @@ eval.data.quantiles <- function(i, data.set.parms, reps=3){
   pardata.stats <- data.frame()
   ntries <- 0
   while(sum(tmp.sub)<reps & ntries < 100){
-    data.sub <- data.frame(set=i*reps+sum(as.numeric(tmp.sub)), gen.data(as.list(data.set.parms)))
+    set <- i*(reps-1)+1+sum(as.numeric(tmp.sub))
+    data.sub <- data.frame(set=set, gen.data(as.list(data.set.parms)))
     data.sub.subplot.stats <- 
       ddply(data.sub, .(set, .sample), 
             function(df){
@@ -177,7 +178,7 @@ eval.data.quantiles <- function(i, data.set.parms, reps=3){
     tmp <- data.frame(
       data.set.parms[,c("K", "sd.trend", "sd.cluster", "N")], 
       sim.quantile(data.sub.stats))
-    tmp$set <- i*reps+sum(as.numeric(tmp.sub))
+    tmp$set <- set
     
     # Require all quantiles to be between (.2, .8)
     tmp.sub1 <- as.logical(rowSums(
