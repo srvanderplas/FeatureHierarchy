@@ -114,13 +114,12 @@ load("./Data/Lineups.Rdata")
 
 plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
 
-picture.details <- ddply(data, .(set), function(df){
-  i <- unique(df$set)
-  z <- data.frame()
-  for(j in 1:nrow(plot.parms)){
-    z <- rbind(z, save.pics(df, datastats=data.stats[i,], plotparms=plot.parms[j,], plotname=plot.names[j]))
-  }
-  return(z)
+plot.opts <- data.frame(expand.grid(i=unique(data$set), j=1:10))
+
+picture.details <- ddply(plot.opts, .(i,j), function(idx){
+  i <- idx[1,1]
+  j <- idx[1,2]
+  save.pics(subset(data, set==i), datastats=data.stats[i,], plotparms=plot.parms[j,], plotname=plot.names[j])
 }, .parallel=T)
 
 write.csv(picture.details, "./Images/Lineups/picture-details.csv", row.names=FALSE)
