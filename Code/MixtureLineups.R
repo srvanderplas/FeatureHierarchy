@@ -142,6 +142,67 @@ eval.data <- function(df){
     cluster=cl$group)
 }
 
+eval.data.quantiles <- function(i, data.set.parms, reps=3){
+  tmp.sub <- NULL
+  partmp <- data.frame()
+  pardata <- data.frame()
+  pardata.subplot.stats <- data.frame()
+  pardata.stats <- data.frame()
+  ntries <- 0
+  while(sum(tmp.sub)<reps & ntries < 100){
+    data.sub <- data.frame(set=i*reps+sum(as.numeric(tmp.sub)), gen.data(as.list(data.set.parms)))
+    data.sub.subplot.stats <- 
+      ddply(data.sub, .(set, .sample), 
+            function(df){
+              reg <- lm(y~x, data=df)
+              data.frame(.sample=unique(df$.sample), 
+                         LineSig = summary(reg)$r.squared, 
+                         ClusterSig = cluster(df), 
+                         lineplot=unique(df$target1), 
+                         groupplot=unique(df$target2))
+            })
+    data.sub.stats <- data.frame(
+      data.set.parms[,c("K", "sd.trend", "sd.cluster", "N")], 
+      summarize(
+        data.sub.subplot.stats,
+        set=unique(set),
+        line=LineSig[.sample==lineplot], 
+        cluster=ClusterSig[.sample==groupplot], 
+        null.line = max(LineSig[.sample!=lineplot & .sample!=groupplot]), 
+        null.cluster=max(ClusterSig[.sample!=groupplot & .sample!=lineplot]),
+        lineplot = unique(lineplot),
+        groupplot = unique(groupplot)))
+    
+    # Calculate quantiles of datasets compared to simulated quantiles
+    tmp <- data.frame(
+      data.set.parms[,c("K", "sd.trend", "sd.cluster", "N")], 
+      sim.quantile(data.sub.stats))
+    tmp$set <- i*reps+sum(as.numeric(tmp.sub))
+    
+    # Require all quantiles to be between (.2, .8)
+    tmp.sub1 <- as.logical(rowSums(
+      tmp[,c("line", "cluster", "null.line", "null.cluster")]>.2 & 
+        tmp[,c("line", "cluster", "null.line", "null.cluster")]<.8)==4)
+    
+    # increment ntries
+    ntries <- ntries + 1
+    
+    if(tmp.sub1){
+      tmp.sub <- c(tmp.sub, tmp.sub1)
+      partmp <- rbind.fill(partmp, tmp)
+      pardata <- rbind.fill(pardata, data.sub)
+      pardata.stats <- rbind.fill(pardata.stats, data.sub.stats)
+      pardata.subplot.stats <- rbind.fill(pardata.subplot.stats, data.sub.subplot.stats)
+    }
+  }
+  
+  if(ntries==100){
+    warning(paste0("Limit of 100 tries reached for \n", paste(names(data.set.parms), data.set.parms, sep="\t", collapse="\n"), "\nIncomplete results returned."))
+  }
+  
+  return(list(data=pardata, data.stats=pardata.stats, data.subplot.stats=pardata.subplot.stats, quantile.eval=partmp, ntries=ntries))
+}
+
 gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   pointsize <- 1.5
   if(is.null(colorp)) colorp <- best.combo(length(unique(dd$group)), colors, colortm)
