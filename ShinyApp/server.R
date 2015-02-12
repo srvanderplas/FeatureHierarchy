@@ -67,13 +67,13 @@ shinyServer(function(input, output, session){
   
   dframe <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=1, N=computeN(), K=input$K, q=input$q, sd=input$sd)
+      mixture.sim(lambda=1, N=computeN(), K=input$K, sd.cluster=input$sd.cluster, sd.trend=input$sd.trend)
     }
   })
   
   dframe2 <- reactive({
     if(!is.na(input$newdata)){
-      mixture.sim(lambda=0, N=computeN(), K=input$K, q=input$q, sd=input$sd)
+      mixture.sim(lambda=0, N=computeN(), K=input$K, sd.cluster=input$sd.cluster, sd.trend=input$sd.trend)
     }
   })
   
@@ -83,8 +83,8 @@ shinyServer(function(input, output, session){
         mixture.sim(lambda=.5, 
                     N=computeN(),  
                     K=input$K, 
-                    q=input$q, 
-                    sd=input$sd
+                    sd.cluster=input$sd.cluster, 
+                    sd.trend=input$sd.trend
                     ))
     }
   })
