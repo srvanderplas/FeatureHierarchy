@@ -280,7 +280,6 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   plot
 }
 
-
 cluster <- function(dframe) {
   # we assume to have x, y, and a group variable
   xmean <- mean(dframe$x)
@@ -291,4 +290,37 @@ cluster <- function(dframe) {
   dframe$gdist <- with(dframe, (x-xgroup)^2 + (y-ygroup)^2)
   SSGroup <- sum(dframe$gdist)
   (SSTotal - SSGroup)/SSTotal
+}
+
+save.pics <- function(df, datastats, plotparms, plotname){
+  dataname <- sprintf("set-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, 
+                      datastats$K, datastats$sd.trend, datastats$sd.cluster)
+  realfname <- sprintf("set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, j, 
+                       datastats$K, datastats$sd.trend, datastats$sd.cluster)
+  fname <- digest(realfname, serialize=FALSE)
+  
+  plotobj <- gen.plot(df, aes=get.aes(plotparms), stats=get.stats(plotparms))
+  
+  if(plotname=="plain") {
+    write.csv(df, file = paste0("Images/Lineups/Data/", dataname, ".csv"), row.names=FALSE)
+  }
+  ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
+  #   ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".png"), width=6, height=6, dpi=100)
+  
+  interactive_lineup("print", plotobj,
+                     filename=paste0("Images/Lineups/", fname, ".svg"), 
+                     script="http://www.hofroe.net/examples/lineup/fhaction.js")
+  
+  data.frame(
+    pic_id = unique(df$set),
+    sample_size = datastats$K,
+    test_param = sprintf("turk16-%s", plotname),
+    param_value = sprintf("k-%d-sdline-%.2f-sdgroup-%.2f", datastats$K, datastats$sd.trend, datastats$sd.cluster),
+    p_value = sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster),
+    obs_plot_location = sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
+    pic_name = paste0("Images/Lineups/", fname, ".svg"),
+    experiment = "turk16",
+    difficulty = unique(df$set),
+    data_name = dataname
+  )
 }
