@@ -150,7 +150,8 @@ eval.data.quantiles <- function(i, data.set.parms, reps=3){
   pardata.stats <- data.frame()
   ntries <- 0
   while(sum(tmp.sub)<reps & ntries < 100){
-    set <- i*(reps-1)+1+sum(as.numeric(tmp.sub))
+    set <- (i-1)*reps+sum(as.numeric(tmp.sub))+1
+    message(paste0("set = ", set))
     data.sub <- data.frame(set=set, gen.data(as.list(data.set.parms)))
     data.sub.subplot.stats <- 
       ddply(data.sub, .(set, .sample), 
