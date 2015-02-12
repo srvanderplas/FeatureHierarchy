@@ -1,8 +1,9 @@
-interactive_lineup <- function(method, plotobj, filename, script, toggle="toggle") {
-  z = as.list(match.call()[-1])
-  eval(call(eval(z$method), plotobj))
+interactive_lineup <- function(plotobj, fname, script, toggle="toggle") {
+  ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
+  CairoPDF(file=tempfile(), width=6, height=6)
+  print(plotobj)
   require(gridSVG)
-  grobs <- grid.ls()
+  grobs <- grid.ls(print=FALSE)
   
   idx <- grep("panel-", grobs$name)
   for (i in idx) { 
@@ -15,13 +16,10 @@ interactive_lineup <- function(method, plotobj, filename, script, toggle="toggle
   # use script on server to get locally executable javascript code
   # or use inline option
   grid.script(filename=script)
-  grid.export(filename, uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+  grid.export(name=paste0("Images/Lineups/", fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+  dev.off()
 }
 
-#' Function to find the subset of a palette with the largest total pairwise distance
-#' @param ngroups size of subset
-#' @param palette a vector of aesthetic options
-#' @param dist.matrix a distance matrix corresponding to palette
 best.combo <- function(ngroups=3, palette, dist.matrix){
   # check distance matrix
   if(nrow(dist.matrix)!=length(palette) | ncol(dist.matrix)!=length(palette)){
@@ -308,11 +306,11 @@ save.pics <- function(df, datastats, plotparms, plotname){
   if(plotname=="plain") {
     write.csv(df, file = paste0("Images/Lineups/Data/", dataname, ".csv"), row.names=FALSE)
   }
-  ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
+  
   #   ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".png"), width=6, height=6, dpi=100)
   
-  interactive_lineup("print", plotobj,
-                     filename=paste0("Images/Lineups/", fname, ".svg"), 
+  interactive_lineup(plotobj,
+                     fname=fname, 
                      script="http://www.hofroe.net/examples/lineup/fhaction.js")
   
   data.frame(
