@@ -6,10 +6,9 @@ library(dplyr)
 library(reshape2)
 library(nullabor)
 library(doMC)
-registerDoMC(6)
+registerDoMC(12)
+library(digest)
 
-
-set.seed(518290387)
 
 # Define colors and shapes
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
@@ -31,155 +30,89 @@ shapetm[,9] <- 0
 shapetm[10,] <- 0
 shapetm[,10] <- 0
 
+# function to create a list of chosen aesthetics
 get.aes <- function(r){
   c("Color", "Shape")[which(as.logical(r[1:2]))]
 }
 
+# function to create a list of chosen statistics
 get.stats <- function(r){
   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
 }
-
-
-# Lineup Design
-data.parms <- expand.grid(K=c(3, 5),
-                          sd=round(c(.25, .35, .45), 2),
-                          q=1:3, 
-                          rep=1:50)
-data.parms$q[data.parms$K==5] <- c(.2, .25, .3)[data.parms$q[data.parms$K==5]]
-data.parms$q[data.parms$K==3] <- c(.25, .3, .35)[data.parms$q[data.parms$K==3]]
-data.parms$q <- round(data.parms$q, 2)
-data.parms$N <- 15*data.parms$K
-data.parms$set <- 1:nrow(data.parms)
-
-plot.parms <- expand.grid(
-  color = c(0,1),
-  shape = c(0,1),
-  reg = c(0,1),
-  err = c(0,1),
-  ell = c(0,1)
-)[c(
-  1, # control
-  2, # color
-  3, # shape
-  4, # color + shape
-  18, # color + ellipse
-  20, # color + shape + ellipse
-  5, # trend
-  13, # trend + error
-  6, # color + trend
-  30 # color + ellipse + trend + error
-),]
-
-data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))}, .parallel=T)
-
-data.subplot.stats <- ddply(data, .(set, .sample), 
-                            function(df){
-                              reg <- lm(y~x, data=df)
-                              data.frame(.sample=unique(df$.sample), 
-                                         LineSig = summary(reg)$r.squared, 
-                                         ClusterSig = cluster(df), 
-                                         lineplot=unique(df$target1), 
-                                         groupplot=unique(df$target2))
-                            } , .parallel=T)
-
-data.stats <- ddply(data.subplot.stats, .(set), summarize, 
-                    line=LineSig[.sample==lineplot], 
-                    cluster=ClusterSig[.sample==groupplot], 
-                    null.line = max(LineSig[.sample!=lineplot & .sample!=groupplot]), 
-                    null.cluster=max(ClusterSig[.sample!=groupplot & .sample!=lineplot]),
-                    lineplot = unique(lineplot),
-                    groupplot = unique(groupplot), .parallel=T)
-
-data.stats <- merge(data.parms[,c(1:3, 5:6)], data.stats, all.x=T, all.y=T)
-names(data.stats)[3:4] <- c("sd.trend", "sd.cluster")
-
-load("./Data/SimulationResults.Rdata")
-sim.quantile <- function(x){
-  df <- subset(res, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K & N ==x$N)
-  if(nrow(df)==0){
-    warning(sprintf("Parameter Set (K=%s, SD_T=%.2f, SD_C=%.2f) not found", x$K, x$sd.trend, x$sd.cluster))
-    return(data.frame(line=NA, cluster=NA, null.line=NA, null.cluster=NA))
-  } 
-  data.frame(
-    line=sum(x$line>=df$line)/length(df$line),
-    cluster=sum(x$cluster>=df$cluster)/length(df$cluster),
-    null.line=sum(x$null.line>=df$null.line)/length(df$null.line),
-    null.cluster=sum(x$null.cluster>=df$null.cluster)/length(df$null.cluster)
-    )
-}
-
-# Calculate quantiles of datasets compared to simulated quantiles
-tmp <- ddply(data.stats, .(set, K, sd.trend, sd.cluster, N), sim.quantile, .parallel=T)
-
-# # Ensure uniform distribution for quantiles
-# tmp2 <- melt(tmp, id.vars=1:5, variable.name="dist", value.name="quantile")
-# tmp2$par <- paste(tmp2$K, round(tmp2$sd.trend, 2), round(tmp2$sd.cluster, 2), tmp2$N, sep=", ")
 # 
-# qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", geom="line", color=dist, size=I(2)) + facet_wrap(~par)
+# load("./Data/SimulationResults.Rdata")
+# sim.quantile <- function(x){
+#   df <- subset(simulation.results, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K & N ==x$N)
+#   if(nrow(df)==0){
+#     warning(sprintf("Parameter Set (K=%s, SD_T=%.2f, SD_C=%.2f) not found", x$K, x$sd.trend, x$sd.cluster))
+#     return(data.frame(line=NA, cluster=NA, null.line=NA, null.cluster=NA))
+#   } 
+#   data.frame(
+#     line=sum(x$line>=df$line)/length(df$line),
+#     cluster=sum(x$cluster>=df$cluster)/length(df$cluster),
+#     null.line=sum(x$null.line>=df$null.line)/length(df$null.line),
+#     null.cluster=sum(x$null.cluster>=df$null.cluster)/length(df$null.cluster)
+#     )
+# }
 # 
-# qplot(data=tmp2, x=quantile, y=..scaled.., ylab="Scaled Density", xlab="Quantile of Simulated Distribution", stat="density", group=interaction(sd.trend, sd.cluster, K, dist), geom="line", color=dist, linetype=factor(K)) + facet_grid(sd.cluster~sd.trend+dist, labeller=label_both)
+# 
+# # Lineup Design
+# data.parms.full <- expand.grid(K=c(3, 5),
+#                           sd.trend=round(c(.25, .35, .45), 2),
+#                           sd.cluster=1:3)
+# data.parms.full$sd.cluster[data.parms.full$K==5] <- c(.2, .25, .3)[data.parms.full$sd.cluster[data.parms.full$K==5]]
+# data.parms.full$sd.cluster[data.parms.full$K==3] <- c(.25, .3, .35)[data.parms.full$sd.cluster[data.parms.full$K==3]]
+# data.parms.full$sd.cluster <- round(data.parms.full$sd.cluster, 2)
+# data.parms.full$N <- 15*data.parms.full$K
+# 
+# plot.parms <- expand.grid(
+#   color = c(0,1),
+#   shape = c(0,1),
+#   reg = c(0,1),
+#   err = c(0,1),
+#   ell = c(0,1)
+# )[c(
+#   1, # control
+#   2, # color
+#   3, # shape
+#   4, # color + shape
+#   18, # color + ellipse
+#   20, # color + shape + ellipse
+#   5, # trend
+#   13, # trend + error
+#   6, # color + trend
+#   30 # color + ellipse + trend + error
+# ),]
+# 
+# set.seed(518290387)
+# 
+# res <- llply(1:nrow(data.parms.full), function(i){
+#   z <- eval.data.quantiles(i, data.parms.full[i,])
+#   return(z)
+# }, .parallel=T)
+# 
+# 
+# data <- data.frame()
+# data.parms <- data.frame()
+# data.stats <- data.frame()
+# data.subplot.stats <- data.frame()
+# data.quantiles <- data.frame()
+# data.ntries <- NULL
+# 
+# for(i in 1:length(res)){
+#   data <- rbind.fill(data, res[[i]]$data)
+#   data.parms <- rbind.fill(data.parms, data.frame(set=res[[i]]$data.stats$set, data.parms.full[rep(i, nrow(res[[i]]$data.stats)),]))
+#   data.stats <- rbind.fill(data.stats, res[[i]]$data.stats)
+#   data.subplot.stats <- rbind.fill(data.subplot.stats, res[[i]]$data.subplot.stats)
+#   data.quantiles <- rbind.fill(data.quantiles, res[[i]]$quantile.eval)
+#   data.ntries <- c(data.ntries, res[[i]]$ntries)
+# }
+# 
+# save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
 
-# Require all quantiles to be between (.2, .8)
-tmp.sub <- subset(tmp, rowSums(tmp[,6:9]>.2 & tmp[,6:9]<.8)==4)
-
-# Find first data set with each parameter values and acceptable quantiles
-chosen.data.sets <- 
-  ddply(tmp.sub, .(K, sd.trend, sd.cluster, N), function(df){
-    return(data.frame(set=df$set[1:3]))
-})
-
-# Subset all data-generating sets
-data <- subset(data, set%in%chosen.data.sets$set)
-data.sets <- unique(data$set)
-data.stats <- subset(data.stats, set%in%chosen.data.sets$set)
-data.stats$set <- as.numeric(factor(data.stats$set, levels=data.sets))
-data.parms <- subset(data.parms, set%in%chosen.data.sets$set)
-data.parms$set <- as.numeric(factor(data.parms$set, levels=data.sets))
-data.subplot.stats <- subset(data.subplot.stats, set%in%chosen.data.sets$set)
-data.subplot.stats$set <- as.numeric(factor(data.subplot.stats$set, levels=data.sets))
-data.stats <- merge(data.stats, unique(data.subplot.stats[,c("set", "lineplot", "groupplot")]))
-data$set <- as.numeric(factor(data$set, levels=data.sets))
-
-save(data, data.stats, plot.parms, data.subplot.stats, data.sets, chosen.data.sets, file="./Images/Lineups/Lineups.rda")
-
-load("./Images/Lineups/Lineups.rda")
-
-library(digest)
+load("./Data/Lineups.Rdata")
 
 plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
-
-save.pics <- function(df, datastats, plotparms, plotname){
-  dataname <- sprintf("set-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, 
-                      datastats$K, datastats$sd.trend, datastats$sd.cluster)
-  realfname <- sprintf("set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, j, 
-                       datastats$K, datastats$sd.trend, datastats$sd.cluster)
-  fname <- digest(realfname)
-  
-  plotobj <- gen.plot(df, aes=get.aes(plotparms), stats=get.stats(plotparms))
-  
-  if(plotname=="plain") {
-    write.csv(df, file = paste0("Images/Lineups/Data/", dataname, ".csv"), row.names=FALSE)
-  }
-  ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
-#   ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".png"), width=6, height=6, dpi=100)
-  
-  interactive_lineup("print", plotobj,
-                     filename=paste0("Images/Lineups/", fname, ".svg"), 
-                     script="http://www.hofroe.net/examples/lineup/fhaction.js")
-  
-  data.frame(
-    pic_id = unique(df$set),
-    sample_size = datastats$K,
-    test_param = sprintf("turk16-%s", plotname),
-    param_value = sprintf("k-%d-sdline-%.2f-sdgroup-%.2f", datastats$K, datastats$sd.trend, datastats$sd.cluster),
-    p_value = sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster),
-    obs_plot_location = sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
-    pic_name = paste0("Images/Lineups/", fname, ".svg"),
-    experiment = "turk16",
-    difficulty = unique(df$set),
-    data_name = dataname
-  )
-}
 
 picture.details <- ddply(data, .(set), function(df){
   i <- unique(df$set)
