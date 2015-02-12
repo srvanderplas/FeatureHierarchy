@@ -295,9 +295,11 @@ cluster <- function(dframe) {
 }
 
 save.pics <- function(df, datastats, plotparms, plotname){
+  i <- unique(df$set)
   dataname <- sprintf("set-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, 
                       datastats$K, datastats$sd.trend, datastats$sd.cluster)
-  realfname <- sprintf("set-%d-plot-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, j, 
+  realfname <- sprintf("set-%d-plot-%s-k-%d-sdline-%.2f-sdgroup-%.2f", 
+                       i, plotname, 
                        datastats$K, datastats$sd.trend, datastats$sd.cluster)
   fname <- digest(realfname, serialize=FALSE)
   
@@ -322,7 +324,7 @@ save.pics <- function(df, datastats, plotparms, plotname){
     obs_plot_location = sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
     pic_name = paste0("Images/Lineups/", fname, ".svg"),
     experiment = "turk16",
-    difficulty = unique(df$set),
+    difficulty = i,
     data_name = dataname
   )
 }
