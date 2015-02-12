@@ -40,7 +40,7 @@ best.combo <- function(ngroups=3, palette, dist.matrix){
   return(palette[clist[which.max(res),]])
 }
 
-sim.clusters <- function(K, N, q=.3){  
+sim.clusters <- function(K, N, sd.cluster=.3){  
   xc <- sample(1:K, replace=F)
   yc <- sample(1:K, replace=F)
   xc <- jitter(xc, amount=.2)
@@ -57,25 +57,25 @@ sim.clusters <- function(K, N, q=.3){
   
   groups <- sample(K, N, replace=TRUE, prob=abs(rnorm(K, mean=1/K, sd=0.5/K^2)))
   
-  yerr <- rnorm(N, sd=q)
-  xerr <- rnorm(N, sd=q)
+  yerr <- rnorm(N, sd=sd.cluster)
+  xerr <- rnorm(N, sd=sd.cluster)
   
   m1.data <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
   return(m1.data)
 }
 
-sim.line <- function(K, N, sd=.3){
+sim.line <- function(K, N, sd.trend=.3){
   # Simulate data from line
   m2.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
-  m2.data$y <- m2.data$x + rnorm(N, 0, sd)
+  m2.data$y <- m2.data$x + rnorm(N, 0, sd.trend)
   
   return(m2.data)
 }
 
-mixture.sim <- function(lambda, K, N, q=.3, sd=.3){
-  m1.data <- sim.clusters(K=K, N=N, q=q)
+mixture.sim <- function(lambda, K, N, sd.trend=.3, sd.cluster=.3){
+  m1.data <- sim.clusters(K=K, N=N, sd.cluster=sd.cluster)
   m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
-  m2.data <- sim.line(K=K, N=N, sd=sd)
+  m2.data <- sim.line(K=K, N=N, sd.trend=sd.trend)
   m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
   
   ll <- rbinom(n=N, size=1, prob=lambda)  # one model or the other
@@ -94,25 +94,19 @@ mixture.sim <- function(lambda, K, N, q=.3, sd=.3){
 }
 
 gen.data <- function(input){
-  if(is.null(input$q) & !is.null(input$sd.cluster)){
-    input$q <- input$sd.cluster
-  }
-  if(is.null(input$sd) & !is.null(input$sd.trend)){
-    input$sd <- input$sd.trend
-  }
-  
+
   pos <- sample(1:20, size=2)
   # Trend
-  dframe <- mixture.sim(lambda=0, N=input$N, K=input$K, q=input$q, sd=input$sd)
+  dframe <- mixture.sim(lambda=0, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
   # Clusters
-  dframe2 <- mixture.sim(lambda=1, N=input$N, K=input$K, q=input$q, sd=input$sd)
+  dframe2 <- mixture.sim(lambda=1, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
   # Nulls
   nulldata <- rdply(19, function(.sample) 
         mixture.sim(lambda=.5, 
                     N=input$N, 
                     K=input$K, 
-                    q=input$q, 
-                    sd=input$sd
+                    sd.cluster=input$sd.cluster, 
+                    sd.trend=input$sd.trend
         ))
 
   data <- lineup(true=dframe, pos=pos[1], n=20, samples=nulldata)

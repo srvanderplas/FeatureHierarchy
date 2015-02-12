@@ -10,29 +10,28 @@ library(grid)
 
 # Simulation parameters
 data.parms <- expand.grid(K=c(3, 5),
-                          sd=round(seq(.2, .5, by=.05), 2),
-                          q=round(seq(.1, .4, by=.05), 2))
+                          sd.trend=round(seq(.2, .5, by=.05), 2),
+                          sd.cluster=round(seq(.1, .4, by=.05), 2))
 data.parms$N <- data.parms$K*15
 
 
 tmp <- function(M=2500, N=45, K=3, sT=0.3, sC=0.3) {
   data.frame(t(replicate(M, {
-    input.pars <- list(N=N, K=K, sd=sT, q=sC)
+    input.pars <- list(N=N, K=K, sd.trend=sT, sd.cluster=sC)
     c(unlist(input.pars), eval.data(gen.data(input.pars)))
   })))
 }
 nulldist<- cmpfun(tmp)
 
-res <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd, sC=q)))
-names(res)[3:4] <- c("sd.trend", "sd.cluster")
-res$sd.trend <- round(res$sd.trend, 2)
-res$sd.cluster <- round(res$sd.cluster, 2)
-
-save(res, file = "./Data/SimulationResults.Rdata")
+simulation.results <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd.trend, sC=sd.cluster)))
+names(simulation.results)[3:4] <- c("sd.trend", "sd.cluster")
+simulation.results$sd.trend <- round(simulation.results$sd.trend, 2)
+simulation.results$sd.cluster <- round(simulation.results$sd.cluster, 2)
+save(simulation.results, file = "./Data/SimulationResults.Rdata")
 
 load("./Data/SimulationResults.Rdata")
 
-longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
+longres <- melt(simulation.results, id.vars=1:4, variable.name="type", value.name = "value")
 longres$dist <- c("Data", "Max(18 Nulls)")[1+grepl("null", longres$type)]
 longres$type <- gsub("null.", "", longres$type, fixed=T)
 
