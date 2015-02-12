@@ -94,6 +94,12 @@ mixture.sim <- function(lambda, K, N, q=.3, sd=.3){
 }
 
 gen.data <- function(input){
+  if(is.null(input$q) & !is.null(input$sd.cluster)){
+    input$q <- input$sd.cluster
+  }
+  if(is.null(input$sd) & !is.null(input$sd.trend)){
+    input$sd <- input$sd.trend
+  }
   
   pos <- sample(1:20, size=2)
   # Trend
