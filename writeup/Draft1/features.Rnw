@@ -70,6 +70,9 @@ Shapes - there were some problems with reliable unicode representations in the l
 
 All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to measure the amount of overplotting.
 
+\comment{How do the shapes we picked fare in the discussion of shapes by \citet{robinson:03} see http://stat-computing.org/newsletter/issues/scgn-14-1.pdf? }
+
+
 \section{Generating Model}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
 with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
