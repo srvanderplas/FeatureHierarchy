@@ -1,5 +1,5 @@
 interactive_lineup <- function(plotobj, fname, script, toggle="toggle") {
-  ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".pdf"), width=6, height=6, dpi=100)
+  ggsave(plotobj, filename=paste0("Images/Lineups/pdfs/", fname, ".pdf"), width=6, height=6, dpi=100)
   CairoPDF(file=tempfile(), width=6, height=6)
   print(plotobj)
   require(gridSVG)
@@ -16,7 +16,7 @@ interactive_lineup <- function(plotobj, fname, script, toggle="toggle") {
   # use script on server to get locally executable javascript code
   # or use inline option
   grid.script(filename=script)
-  grid.export(name=paste0("Images/Lineups/", fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+  grid.export(name=paste0("Images/Lineups/svgs/", fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
   dev.off()
 }
 
@@ -339,12 +339,17 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
   if(plotname=="plain") {
     write.csv(df, file = paste0("Images/Lineups/Data/", dataname, ".csv"), row.names=FALSE)
   }
+
+  if(testplot){
+    interactive_lineup(plotobj,
+                       fname=fname, 
+                       script="http://www.hofroe.net/examples/lineup/fhaction.js", toggle="select")
+  } else {
+    interactive_lineup(plotobj,
+                       fname=fname, 
+                       script="http://www.hofroe.net/examples/lineup/fhaction.js")
+  }
   
-  #   ggsave(plotobj, filename=paste0("Images/Lineups/", fname, ".png"), width=6, height=6, dpi=100)
-  
-  interactive_lineup(plotobj,
-                     fname=fname, 
-                     script="http://www.hofroe.net/examples/lineup/fhaction.js")
   
   obsPlotLocation <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, 
                             sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
@@ -361,7 +366,7 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
     param_value = sprintf("k-%d-sdline-%.2f-sdgroup-%.2f", datastats$K, datastats$sd.trend, datastats$sd.cluster),
     p_value = pValue,
     obs_plot_location = obsPlotLocation,
-    pic_name = paste0("Images/Lineups/", fname, ".svg"),
+    pic_name = paste0("Images/Lineups/svgs/", fname, ".svg"),
     experiment = "turk16",
     difficulty = diff.sign*i,
     data_name = dataname
