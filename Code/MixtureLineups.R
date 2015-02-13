@@ -116,6 +116,30 @@ gen.data <- function(input){
   data
 }
 
+gen.test.data <- function(input, type="trend"){
+  
+  pos <- sample(1:20, size=1)
+  if(type=="trend"){
+    dframe <- mixture.sim(lambda=0, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
+  } else {
+    dframe <- mixture.sim(lambda=1, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
+  }
+  # Nulls
+  nulldata <- rdply(19, function(.sample) 
+    mixture.sim(lambda=.5, 
+                N=input$N, 
+                K=input$K, 
+                sd.cluster=input$sd.cluster, 
+                sd.trend=input$sd.trend
+    ))
+  
+  data <- lineup(true=dframe, pos=pos[1], n=20, samples=nulldata)
+  
+  data$target1 <- pos[1]
+  
+  data
+}
+
 eval.df <- function(df){
   data.frame(
     line=summary(lm(y~x, data=df))$r.squared, 
@@ -292,15 +316,24 @@ cluster <- function(dframe) {
   (SSTotal - SSGroup)/SSTotal
 }
 
-save.pics <- function(df, datastats, plotparms, plotname){
+save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
   i <- unique(df$set)
-  dataname <- sprintf("set-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, 
-                      datastats$K, datastats$sd.trend, datastats$sd.cluster)
-  realfname <- sprintf("set-%d-plot-%s-k-%d-sdline-%.2f-sdgroup-%.2f", 
-                       i, plotname, 
-                       datastats$K, datastats$sd.trend, datastats$sd.cluster)
-  fname <- digest(realfname, serialize=FALSE)
-  
+  if(testplot){
+    dataname <- sprintf("test-set-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, 
+                        datastats$K, datastats$sd.trend, datastats$sd.cluster)
+    realfname <- sprintf("test-set-%d-plot-%s-k-%d-sdline-%.2f-sdgroup-%.2f", 
+                         i, plotname, 
+                         datastats$K, datastats$sd.trend, datastats$sd.cluster)
+    fname <- realfname
+  } else {
+    dataname <- sprintf("set-%d-k-%d-sdline-%.2f-sdgroup-%.2f", i, 
+                        datastats$K, datastats$sd.trend, datastats$sd.cluster)
+    realfname <- sprintf("set-%d-plot-%s-k-%d-sdline-%.2f-sdgroup-%.2f", 
+                         i, plotname, 
+                         datastats$K, datastats$sd.trend, datastats$sd.cluster)
+    fname <- digest(realfname, serialize=FALSE)
+  }
+ 
   plotobj <- gen.plot(df, aes=get.aes(plotparms), stats=get.stats(plotparms))
   
   if(plotname=="plain") {
@@ -313,16 +346,24 @@ save.pics <- function(df, datastats, plotparms, plotname){
                      fname=fname, 
                      script="http://www.hofroe.net/examples/lineup/fhaction.js")
   
+  obsPlotLocation <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, 
+                            sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
+                            datastats$target1)
+  diff.sign <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, 1, -1)
+  
+  pValue <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster), 
+                   sprintf("%s-%.5f", datastats$type, datastats$target.sig))
+  
   data.frame(
     pic_id = unique(df$set),
     sample_size = datastats$K,
     test_param = sprintf("turk16-%s", plotname),
     param_value = sprintf("k-%d-sdline-%.2f-sdgroup-%.2f", datastats$K, datastats$sd.trend, datastats$sd.cluster),
-    p_value = sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster),
-    obs_plot_location = sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
+    p_value = pValue,
+    obs_plot_location = obsPlotLocation,
     pic_name = paste0("Images/Lineups/", fname, ".svg"),
     experiment = "turk16",
-    difficulty = i,
+    difficulty = diff.sign*i,
     data_name = dataname
   )
 }

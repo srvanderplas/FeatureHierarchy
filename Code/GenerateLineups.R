@@ -8,7 +8,7 @@ library(nullabor)
 library(doMC)
 registerDoMC(12)
 library(digest)
-
+library(Cairo)
 
 # Define colors and shapes
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
@@ -39,7 +39,7 @@ get.aes <- function(r){
 get.stats <- function(r){
   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
 }
-# 
+ 
 # load("./Data/SimulationResults.Rdata")
 # sim.quantile <- function(x){
 #   df <- subset(simulation.results, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K & N ==x$N)
@@ -109,6 +109,43 @@ get.stats <- function(r){
 # }
 # 
 # save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
+# 
+# test.data.parms <- data.frame(K=c(3, 3, 5, 5),
+#                               type=c("trend", "cluster", "trend", "cluster"),
+#                               sd.trend=.2,
+#                               sd.cluster=.15)
+# test.data.parms$sd.cluster[test.data.parms$K==3] <- .2
+# test.data.parms$sd.cluster <- round(test.data.parms$sd.cluster, 2)
+# test.data.parms$N <- 15*test.data.parms$K
+# test.data.parms$set <- 1:nrow(test.data.parms)
+# 
+# test.data <- ldply(1:nrow(test.data.parms), function(i){ data.frame(set=i, gen.test.data(test.data.parms[i,]))}, .parallel=T)
+# test.data <- merge(test.data, test.data.parms[,c("set", "type")], all.x=T, all.y=T)
+# test.data.subplot.stats <- 
+#   ddply(test.data, .(set, .sample), 
+#         function(df){
+#           reg <- lm(y~x, data=df)
+#           data.frame(.sample=unique(df$.sample), 
+#                      LineSig = summary(reg)$r.squared, 
+#                      ClusterSig = cluster(df), 
+#                      target1=unique(df$target1), 
+#                      type=unique(df$type))
+#         })
+# test.stats <- 
+#   ddply(test.data.subplot.stats, .(set), summarize, 
+#     set=unique(set),
+#     type = unique(type),
+#     target1 = unique(target1),
+#     target.sig = ifelse(unique(type)=="trend", LineSig[.sample==unique(target1)], ClusterSig[.sample==unique(target1)]),
+#     null.sig = ifelse(unique(type)=="trend", max(LineSig[.sample!=unique(target1)]), max(ClusterSig[.sample!=unique(target1)])),
+#     K = subset(test.data.parms, test.data.parms$set==unique(set))$K,
+#     sd.trend = subset(test.data.parms, test.data.parms$set==unique(set))$sd.trend,
+#     sd.cluster = subset(test.data.parms, test.data.parms$set==unique(set))$sd.cluster
+#   )
+# test.stats$N <- test.stats$K*15
+# 
+# save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
+
 
 load("./Data/Lineups.Rdata")
 
@@ -123,3 +160,14 @@ picture.details <- ddply(plot.opts, .(i,j), function(idx){
 }, .parallel=T)
 
 write.csv(picture.details, "./Images/Lineups/picture-details.csv", row.names=FALSE)
+
+
+load("./Data/TestLineups.Rdata")
+
+picture.details <- ldply(unique(test.data$set), function(i){
+  save.pics(df=subset(test.data, set==i), datastats=test.stats[i,], 
+            plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
+}, .parallel=T)
+
+write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
+
