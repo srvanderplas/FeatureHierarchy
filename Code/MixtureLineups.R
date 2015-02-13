@@ -336,7 +336,7 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
  
   plotobj <- gen.plot(df, aes=get.aes(plotparms), stats=get.stats(plotparms))
   
-  if(plotname=="plain") {
+  if(plotname=="plain" | testplot) {
     write.csv(df, file = paste0("Images/Lineups/Data/", dataname, ".csv"), row.names=FALSE)
   }
 
