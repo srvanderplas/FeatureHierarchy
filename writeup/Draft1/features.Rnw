@@ -172,7 +172,7 @@ Conflict & Color + Trend Line, \\
 source("../../Code/MixtureLineups.R")
 sT = 0.30
 sC = 0.25
-N = 1000
+N = 5000
 
 if (file.exists("./figure/nulldist.Rdata")) {
   load("./figure/nulldist.Rdata")
@@ -180,7 +180,7 @@ if (file.exists("./figure/nulldist.Rdata")) {
 nulldist<- function(N, sT=0.3, sC=0.3) {
   nulls <- data.frame(t(replicate(N, {
     lp <- data.frame(t(replicate(18, {
-      mix = mixture.sim(lambda=0.5, K=3, N=45, q=sC, sd=sT)
+      mix = mixture.sim(lambda=0.5, K=3, N=45, sd.cluster=sC, sd.trend=sT)
       reg <- lm(y~x, data=mix)
       
       c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
@@ -189,13 +189,13 @@ nulldist<- function(N, sT=0.3, sC=0.3) {
   })))
   
   trends <- replicate(10, {
-    mix = mixture.sim(lambda=0, K=3, N=45, q=sC, sd=sT)
+    mix = mixture.sim(lambda=0, K=3, N=45, sd.cluster=sC, sd.trend=sT)
     reg <- lm(y~x, data=mix)
     c(fline=summary(reg)$r.squared)
   })
   
   clusters <- replicate(10, {
-    mix = mixture.sim(lambda=1, K=3, N=45, q=sC, sd=sT)
+    mix = mixture.sim(lambda=1, K=3, N=45, sd.cluster=sC, sd.trend=sT)
     clust <- lm(y~factor(group) + 0, data=mix)
     res <- summary(aov(clust))
     c(fgroup=cluster(mix))
@@ -210,9 +210,9 @@ save(res, file="./figure/nulldist.Rdata")
 }
 
 require(ggplot2)
-qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$trends), colour="black") + theme_bw()
+qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$trends), colour="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
 ggsave("figure/fline.pdf", width=8, height=4)
-qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$clusters), colour="black") + theme_bw()
+qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$clusters), colour="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
 ggsave("figure/fgroup.pdf", width=8, height=4)
 @
 
