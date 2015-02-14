@@ -68,9 +68,9 @@ Unfortunately, this limits the choice to the set used in the Tableau software. I
 
 Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The left and right triangle shapes (available only in unicode using R) were excluded due to size differences between unicode and non-unicode shapes. 
 
-All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to measure the amount of overplotting.
+All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
-\comment{How do the shapes we picked fare in the discussion of shapes by \citet{robinson:03} see http://stat-computing.org/newsletter/issues/scgn-14-1.pdf? }
+\comment{How do the shapes we picked compare to the shapes discussed in \citet{robinson:03} see http://stat-computing.org/newsletter/issues/scgn-14-1.pdf? }
 
 
 \section{Generating Model}
@@ -203,9 +203,9 @@ save(res, file="./figure/nulldist.Rdata")
 }
 
 require(ggplot2)
-qplot(fline, data=res$nulls, binwidth=0.02) + geom_vline(aes(xintercept=res$trends), colour="red") + theme_bw()
+qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$trends), colour="black") + theme_bw()
 ggsave("figure/fline.pdf", width=8, height=4)
-qplot(fgroup, data=res$nulls, binwidth=0.01) + geom_vline(aes(xintercept=res$clusters), colour="red") + theme_bw()
+qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$clusters), colour="black") + theme_bw()
 ggsave("figure/fgroup.pdf", width=8, height=4)
 @
 
@@ -214,13 +214,15 @@ The red lines show ten samples each from the trend model and the cluster model.
 The lines for the cluster are, relatively, further to the right of the overall distribution than the red lines for the trend model, indicating that $\sigma_C = 0.25$ is producing target plots that are a bit easier to spot than trend targets with a parameter value of $\sigma_T = 0.30$.
 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{figure/fline.pdf}
-\caption{\label{fig:fline}Histogram of $R^2$ values from \Sexpr{N} data sets of the null model ($K=3, N=45, \sigma_C=$\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
+\centering
+\includegraphics[width=.6\textwidth]{figure/fline.pdf}
+\caption{\label{fig:fline}Histogram of $R^2$ values from \Sexpr{N} data sets of the null model ($K=3, N=45, \sigma_C=$\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in black are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{figure/fgroup.pdf}
-\caption{\label{fig:fgroup}Histogram of the distribution of the cluster measure based on \Sexpr{N} data sets from the null model ($K=3, N=45, \sigma_C= $\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in red correspond to the cluster measure from ten sample data sets from the Clustering model $M_C$. }
+\centering
+\includegraphics[width=.6\textwidth]{figure/fgroup.pdf}
+\caption{\label{fig:fgroup}Histogram of the distribution of the cluster measure based on \Sexpr{N} data sets from the null model ($K=3, N=45, \sigma_C= $\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in black correspond to the cluster measure from ten sample data sets from the Clustering model $M_C$. }
 \end{figure}
 
 
