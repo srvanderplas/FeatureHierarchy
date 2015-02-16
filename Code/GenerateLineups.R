@@ -112,8 +112,8 @@ get.stats <- function(r){
 # 
 # test.data.parms <- data.frame(K=rep(3, 10),
 #                               type=rep(c("trend", "cluster"), each=5),
-#                               sd.trend=.2,
-#                               sd.cluster=.2)
+#                               sd.trend=rep(c(.2, .25), each=5),
+#                               sd.cluster=rep(c(.25, .15), each=5))
 # test.data.parms$N <- 15*test.data.parms$K
 # test.data.parms$set <- 1:nrow(test.data.parms)
 # 
@@ -142,6 +142,9 @@ get.stats <- function(r){
 #   )
 # test.stats$N <- test.stats$K*15
 # 
+# # tmp <- melt(test.stats, id.vars=c(1:3, 6:9), variable.name="sub.type", value.name="significance")
+# # qplot(data=tmp, x=significance, color=sub.type, geom="density") + facet_wrap(~type)
+# 
 # save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
 # 
 # 
@@ -165,7 +168,7 @@ load("./Data/TestLineups.Rdata")
 picture.details <- ldply(unique(test.data$set), function(i){
   save.pics(df=subset(test.data, set==i), datastats=test.stats[i,], 
             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
-})
+}, .parallel=T)
 
 write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
 

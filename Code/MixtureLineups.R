@@ -58,29 +58,29 @@ sim.clusters <- function(K, N, sd.cluster=.3){
   yerr <- rnorm(N, sd=sd.cluster)
   xerr <- rnorm(N, sd=sd.cluster)
   
-  m1.data <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
-  return(m1.data)
+  cluster.data <- data.frame(x=xc[groups]+xerr, y=yc[groups]+yerr, group=groups)
+  return(cluster.data)
 }
 
 sim.line <- function(K, N, sd.trend=.3){
   # Simulate data from line
-  m2.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
-  m2.data$y <- m2.data$x + rnorm(N, 0, sd.trend)
+  line.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
+  line.data$y <- line.data$x + rnorm(N, 0, sd.trend)
   
-  return(m2.data)
+  return(line.data)
 }
 
 mixture.sim <- function(lambda, K, N, sd.trend=.3, sd.cluster=.3){
-  m1.data <- sim.clusters(K=K, N=N, sd.cluster=sd.cluster)
-  m1.data[,c("x", "y")] <- scale(m1.data[,c("x", "y")])
-  m2.data <- sim.line(K=K, N=N, sd.trend=sd.trend)
-  m2.data[,c("x", "y")] <- scale(m2.data[,c("x", "y")])
+  cluster.data <- sim.clusters(K=K, N=N, sd.cluster=sd.cluster)
+  cluster.data[,c("x", "y")] <- scale(cluster.data[,c("x", "y")])
+  line.data <- sim.line(K=K, N=N, sd.trend=sd.trend)
+  line.data[,c("x", "y")] <- scale(line.data[,c("x", "y")])
   
   ll <- rbinom(n=N, size=1, prob=lambda)  # one model or the other
   mix.data <- data.frame(
-    x = ll*m1.data$x + (1-ll)*m2.data$x,  
-    y = ll*m1.data$y + (1-ll)*m2.data$y,
-    group=as.numeric(m1.data$group)  
+    x = ll*cluster.data$x + (1-ll)*line.data$x,  
+    y = ll*cluster.data$y + (1-ll)*line.data$y,
+    group=as.numeric(cluster.data$group)  
     )
 
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
@@ -92,12 +92,11 @@ mixture.sim <- function(lambda, K, N, sd.trend=.3, sd.cluster=.3){
 }
 
 gen.data <- function(input){
-
   pos <- sample(1:20, size=2)
   # Trend
-  dframe <- mixture.sim(lambda=0, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
+  trenddata <- mixture.sim(lambda=0, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
   # Clusters
-  dframe2 <- mixture.sim(lambda=1, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
+  clusterdata <- mixture.sim(lambda=1, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
   # Nulls
   nulldata <- rdply(19, function(.sample) 
         mixture.sim(lambda=.5, 
@@ -107,23 +106,27 @@ gen.data <- function(input){
                     sd.trend=input$sd.trend
         ))
 
-  data <- lineup(true=dframe, pos=pos[1], n=20, samples=nulldata)
+  data <- lineup(true=trenddata, pos=pos[1], n=20, samples=nulldata)
   data <- rbind.fill(
-    subset(data, .sample!=pos[2]), cbind(.sample=pos[2], dframe2))
+    subset(data, .sample!=pos[2]), cbind(.sample=pos[2], clusterdata))
   data$target1 <- pos[1]
   data$target2 <- pos[2]
   
   data
 }
 
-gen.test.data <- function(input, type="trend"){
+gen.test.data <- function(input, type=NULL){
+  
+  if(is.null(type)){
+    if("type"%in%names(input)) type <- input$type
+    else {
+      warning("type not specified - proceeding using 'trend'")
+      type <- 'trend'
+    }
+  }
   
   pos <- sample(1:20, size=1)
-  if(type=="trend"){
-    dframe <- mixture.sim(lambda=0, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
-  } else {
-    dframe <- mixture.sim(lambda=1, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
-  }
+
   # Nulls
   nulldata <- rdply(19, function(.sample) 
     mixture.sim(lambda=.5, 
@@ -133,9 +136,16 @@ gen.test.data <- function(input, type="trend"){
                 sd.trend=input$sd.trend
     ))
   
-  data <- lineup(true=dframe, pos=pos[1], n=20, samples=nulldata)
+  # Signal 
+  if(type=='trend'){
+    signaldata <- mixture.sim(lambda=0, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
+  } else {
+    signaldata <- mixture.sim(lambda=1, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
+  }
   
-  data$target1 <- pos[1]
+  data <- lineup(true=signaldata, pos=pos, n=20, samples=nulldata)
+  
+  data$target1 <- pos
   
   data
 }
