@@ -84,30 +84,39 @@ with the null data, while data from model $M_T$ exhibits a similar amount of clu
 This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
 
 \comment{Isn't there some centering or scaling missing? How do we make sure, that the regression model and the cluster model are on the same x scale?  Only for $K=3$ does the scaling in the clustering model boil down to values between [-1,1].  For $K=5$ the values are further out. }
-\begin{algorithm}
+\begin{algorithm}\hfill\newline
   Input Parameters: $N$ points, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) \\
   Output: \comment{specify output}
   \begin{enumerate}
-    \item Generate $x_i$, $i=1, ..., N$, a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$) \comment{I don't understand the text in the parenthesis}
-    \item Jitter $x_i$: $x_i = x_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5*(2/(N-1)$
-    \comment{There's something going on with the parentheses: two opening, only one closing}
+    \item Generate $x_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$) \comment{I don't understand the text in the parenthesis}
+    \item Jitter $x_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = x_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5*(2/(N-1)$
+    \comment{There's something going on with the parentheses: two opening, only one closing; we also cannot write $x_i = x_i + \eta_i$ -- that's programming, not math. so rename any of the pre-jittered $x$s to $\tilde{x}$. }
     \item Generate $y_i$: $y_i = a  x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
   \end{enumerate}
 \end{algorithm}
-\newtext{
+
 We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel, computed as 
 \[
 1 - RSS/TSS,
 \]
 where TSS is the total sum of square, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$.
-The expected correlation coefficient in this scenario is $RSS = N*\sigma^2_T$ and $TSS = \sum_{i=1}^N y_i^2$ because $E[Y] = 0$.}
+The expected correlation coefficient $\rho$ in this scenario is 
+\[
+E[\rho] = \frac{\frac{1}{3}a^2}{\frac{1}{3}a^2 + \sigma^2_T},
+\]
+because
+$E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E[y_i^2]$  (as $E[Y] = 0$), where 
+\[
+E[y_i^2] = E[a^2 x_i^2 + e_i^2 + 2 ax_ie_i] = \frac{1}{3}a^2 + \sigma^2_T. 
+\]
+
 
 
 \comment{Include some examples here. }
 
 \subsection{Cluster Model $M_C$}
 We begin by generating $K$ cluster centers on a $K \times K$ grid, then we generate points around the cluster center. 
-\begin{algorithm}
+\begin{algorithm}\hfill\newline
   Input Parameters:  $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation \\
   Output: \comment{specify output}
   \begin{enumerate}
@@ -136,7 +145,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 \end{algorithm} 
 
 
-As a measure of clustering we use a similar coefficient: here, we assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  
+As a measure of clustering we use a  coefficient to assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we implicitly assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  
 
 \comment{some examples? with colour?, K = 3 ... 6? maybe two different standard deviations? }  
   
