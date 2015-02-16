@@ -110,12 +110,10 @@ get.stats <- function(r){
 # 
 # save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
 # 
-# test.data.parms <- data.frame(K=c(3, 3, 5, 5),
-#                               type=c("trend", "cluster", "trend", "cluster"),
+# test.data.parms <- data.frame(K=rep(3, 10),
+#                               type=rep(c("trend", "cluster"), each=5),
 #                               sd.trend=.2,
-#                               sd.cluster=.15)
-# test.data.parms$sd.cluster[test.data.parms$K==3] <- .2
-# test.data.parms$sd.cluster <- round(test.data.parms$sd.cluster, 2)
+#                               sd.cluster=.2)
 # test.data.parms$N <- 15*test.data.parms$K
 # test.data.parms$set <- 1:nrow(test.data.parms)
 # 
@@ -145,21 +143,21 @@ get.stats <- function(r){
 # test.stats$N <- test.stats$K*15
 # 
 # save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
-
-
-load("./Data/Lineups.Rdata")
-
-plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
-
-plot.opts <- data.frame(expand.grid(i=unique(data$set), j=1:10))
-
-picture.details <- ddply(plot.opts, .(i,j), function(idx){
-  i <- idx[1,1]
-  j <- idx[1,2]
-  save.pics(subset(data, set==i), datastats=data.stats[i,], plotparms=plot.parms[j,], plotname=plot.names[j])
-}, .parallel=T)
-
-write.csv(picture.details, "./Images/Lineups/picture-details.csv", row.names=FALSE)
+# 
+# 
+# load("./Data/Lineups.Rdata")
+# 
+# plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
+# 
+# plot.opts <- data.frame(expand.grid(i=unique(data$set), j=1:10))
+# 
+# picture.details <- ddply(plot.opts, .(i,j), function(idx){
+#   i <- idx[1,1]
+#   j <- idx[1,2]
+#   save.pics(subset(data, set==i), datastats=data.stats[i,], plotparms=plot.parms[j,], plotname=plot.names[j])
+# }, .parallel=T)
+# 
+# write.csv(picture.details, "./Images/Lineups/picture-details.csv", row.names=FALSE)
 
 
 load("./Data/TestLineups.Rdata")
@@ -167,7 +165,7 @@ load("./Data/TestLineups.Rdata")
 picture.details <- ldply(unique(test.data$set), function(i){
   save.pics(df=subset(test.data, set==i), datastats=test.stats[i,], 
             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
-}, .parallel=T)
+})
 
 write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
 
