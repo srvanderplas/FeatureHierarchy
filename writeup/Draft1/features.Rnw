@@ -97,17 +97,17 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
 
 We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel, computed as 
 \[
-1 - RSS/TSS,
+r = 1 - RSS/TSS,
 \]
 where TSS is the total sum of square, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$.
 The expected correlation coefficient $\rho$ in this scenario is 
 \[
-E[\rho] = \frac{\frac{1}{3}a^2}{\frac{1}{3}a^2 + \sigma^2_T},
+\rho = \frac{\frac{1}{3}a^2}{\frac{1}{3}a^2 + \sigma^2_T},
 \]
 because
-$E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E[y_i^2]$  (as $E[Y] = 0$), where 
+$E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E\left[y_i^2\right]$  (as $E[Y] = 0$), where 
 \[
-E[y_i^2] = E[a^2 x_i^2 + e_i^2 + 2 ax_ie_i] = \frac{1}{3}a^2 + \sigma^2_T. 
+E\left[y_i^2\right] = E\left[a^2 x_i^2 + e_i^2 + 2 ax_ie_i\right] = \frac{1}{3}a^2 + \sigma^2_T. 
 \]
 
 
@@ -133,13 +133,13 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
       where $\overline{c} = K(K+1)/2$ and $s_c^2 = \frac{K(K+1)(2K+1)}{6} - \frac{K^2(K+1)^2}{4}$ for all $i = 1, ..., K$.
     \item For the $K$ clusters, we want to have nearly equal sized groups, but uphold some variability. Group sizes are therefore determined as a draw from a multinomial distribution: determine group sizes $g = (g_1, ..., g_K)$, with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ as a random draw 
     \[
-    g \sim \text{Multinomial}(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i,
+    g \sim \text{Multinomial}(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N(\frac{1}{K}, \frac{1}{2 K^2}).
     \]
-    for  $\tilde{p} \sim N(\frac{1}{K}, \frac{1}{2 K^2})$. 
+     
     \item Generate points around cluster centers: 
       \begin{enumerate}
-        \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, \sigma^2_C)$
-        \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, \sigma^2_C)$
+        \item $x_i = c^x_{g_i} + e^x_i$, where $e^x_i \sim N(0, \sigma^2_C)$
+        \item $y_i = c^y_{g_i} + e^y_i$, where $e^y_i \sim N(0, \sigma^2_C)$
       \end{enumerate}
   \end{enumerate}
 \end{algorithm} 
