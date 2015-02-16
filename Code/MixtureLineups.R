@@ -1,4 +1,4 @@
-interactive_lineup <- function(plotobj, fname, script, toggle="toggle", width=6, height=6, ex=FALSE) {
+interactive_lineup <- function(plotobj, fname, script, toggle="toggle", width=6, height=6, ex=FALSE, trial=FALSE) {
   path <- ifelse(ex, "Images/Lineups/example/", "Images/Lineups/")
   ggsave(plotobj, filename=paste0(path, "pdfs/", fname, ".pdf"), width=width, height=height, dpi=100)
   CairoPDF(file=tempfile(), width=width, height=height)
@@ -17,7 +17,7 @@ interactive_lineup <- function(plotobj, fname, script, toggle="toggle", width=6,
   # use script on server to get locally executable javascript code
   # or use inline option
   grid.script(filename=script)
-  grid.export(name=paste0(path, "svgs/", fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+  grid.export(name=paste0(path, ifelse(trial, "trials/", "svgs/"), fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
   dev.off()
 }
 

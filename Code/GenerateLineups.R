@@ -167,7 +167,7 @@ get.stats <- function(r){
 # 
 # picture.details <- ldply(unique(test.data$set), function(i){
 #   save.pics(df=subset(test.data, set==i), datastats=test.stats[i,], 
-#             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
+#             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T, trial=TRUE)
 # }, .parallel=T)
 # 
 # write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
