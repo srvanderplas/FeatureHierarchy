@@ -94,9 +94,13 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
     \item Generate $y_i$: $y_i = a  x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
   \end{enumerate}
 \end{algorithm}
-
-We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel. 
-\comment{Include formula of correlation coefficient in the new notation here}
+\newtext{
+We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel, computed as 
+\[
+1 - RSS/TSS,
+\]
+where TSS is the total sum of square, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$.
+The expected correlation coefficient in this scenario is $RSS = N*\sigma^2_T$ and $TSS = \sum_{i=1}^N y_i^2$ because $E[Y] = 0$.}
 
 
 \comment{Include some examples here. }
