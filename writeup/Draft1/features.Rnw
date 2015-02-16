@@ -24,8 +24,10 @@
 \newcommand{\move}[1]{\todo[inline, color=Lime]{#1}} % new to do item
 %
 %---------------------------------------------------
-
-
+% Define new environment
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{algorithm}[theorem]{Algorithm}
+%---------------------------------------------------
 
 \title{Group beats Trend!? \\Testing feature hierarchy in statistical graphics}
 \author{Susan VanderPlas, Heike Hofmann\thanks{Department of Statistics and Statistical Laboratory, Iowa State University}}
@@ -68,59 +70,95 @@ Unfortunately, this limits the choice to the set used in the Tableau software. I
 
 Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The left and right triangle shapes (available only in unicode using R) were excluded due to size differences between unicode and non-unicode shapes. 
 
-All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to measure the amount of overplotting.
+All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
+
+\comment{How do the shapes we picked compare to the shapes discussed in \citet{robinson:03} see http://stat-computing.org/newsletter/issues/scgn-14-1.pdf? }
+
 
 \section{Generating Model}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
 with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
 
-We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel. 
+\subsection{Regression Model $M_T$}
 
-As a measure of clustering we use a similar coefficient: here, we assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  
-\comment{Formula?}
+This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
+
+\comment{Isn't there some centering or scaling missing? How do we make sure, that the regression model and the cluster model are on the same x scale?  Only for $K=3$ does the scaling in the clustering model boil down to values between [-1,1].  For $K=5$ the values are further out. }
+\begin{algorithm}\hfill\newline
+  Input Parameters: $N$ points, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) \\
+  Output: \comment{specify output}
+  \begin{enumerate}
+    \item Generate $x_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$) \comment{I don't understand the text in the parenthesis}
+    \item Jitter $x_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = x_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5*(2/(N-1)$
+    \comment{There's something going on with the parentheses: two opening, only one closing; we also cannot write $x_i = x_i + \eta_i$ -- that's programming, not math. so rename any of the pre-jittered $x$s to $\tilde{x}$. }
+    \item Generate $y_i$: $y_i = a  x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
+  \end{enumerate}
+\end{algorithm}
+
+We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel, computed as 
+\[
+r = 1 - RSS/TSS,
+\]
+where TSS is the total sum of square, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$.
+The expected correlation coefficient $\rho$ in this scenario is 
+\[
+\rho = \frac{\frac{1}{3}a^2}{\frac{1}{3}a^2 + \sigma^2_T},
+\]
+because
+$E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E\left[y_i^2\right]$  (as $E[Y] = 0$), where 
+\[
+E\left[y_i^2\right] = E\left[a^2 x_i^2 + e_i^2 + 2 ax_ie_i\right] = \frac{1}{3}a^2 + \sigma^2_T. 
+\]
+
+
+
+\comment{Include some examples here. }
 
 \subsection{Cluster Model $M_C$}
-We begin by generating cluster centers along a line, then we generate points around the cluster center. \\
-  Algorithm: \\
-  Parameters $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation
+We begin by generating $K$ cluster centers on a $K \times K$ grid, then we generate points around the cluster center. 
+\begin{algorithm}\hfill\newline
+  Input Parameters:  $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation \\
+  Output: \comment{specify output}
   \begin{enumerate}
     \item Generate cluster centers $(c^x_{i}, c^y_{i})$ for each of the $K$ clusters, $i=1, ..., K$:
       \begin{enumerate}
-        \item Generate vectors $c^{x}$ and $c^y$ as permutations of $\{1, ..., K\}$,
-        \item such that the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of [.25, .75].
+        \item in form of two vectors $c^{x}$ and $c^y$ of permutations of $\{1, ..., K\}$, such that
+        \item the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of $[.25, .75]$.
 %         \comment{We might have to go up with the correlation a bit. I'm still worried that people will pick the cluster plot from the trend line lineup because of the lowest slope. }
       \end{enumerate}
       \item Center and standard-normalize cluster centers $(c^x, c^y)$:  
       \[
         \tilde{c}^x_{i} = \frac{c^x_{i} - \bar{c}}{s_c} \ \ \text{ and } \ \ \tilde{c}^y_{i} = \frac{c^y_{i} - \bar{c}}{s_c},
       \]
-      where $\overline{c} = K(K+1)/2$ and $s_c^2 = \frac{K(K+1)(2K+1)}{6} - \frac{K^2(K+1)^2}{4}$ for all $i = 1, ..., K$.
-    \item Determine group size $g_i$ for clusters $i = 1, ..., K$ as a random draw $g_i \sim \text{Multinomial}(K, p)$ where $p = p_1/\sum_{i=1}^K p_{1i}$ for  $p_{1i} \sim N(\frac{1}{K}, \frac{1}{2 K^2})$. 
+      where $\overline{c} = (K+1)/2$ and $s_c^2 = \frac{K(K+1)}{12}$ for all $i = 1, ..., K$.
+    \item For the $K$ clusters, we want to have nearly equal sized groups, but uphold some variability. Group sizes are therefore determined as a draw from a multinomial distribution: determine group sizes $g = (g_1, ..., g_K)$, with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ as a random draw 
+    \[
+    g \sim \text{Multinomial}(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N(\frac{1}{K}, \frac{1}{2 K^2}).
+    \]
+     
     \item Generate points around cluster centers: 
       \begin{enumerate}
-        \item $x^\ast_i = c^x_{g_i} + e$, $e_i \sim N(0, \sigma^2_C)$
-        \item $y^\ast_i = c^y_{g_i} + e$, $e_i \sim N(0, \sigma^2_C)$
+        \item $x_i = \tilde{c}^x_{g_i} + e^x_i$, where $e^x_i \sim N(0, \sigma^2_C)$
+        \item $y_i = \tilde{c}^y_{g_i} + e^y_i$, where $e^y_i \sim N(0, \sigma^2_C)$
       \end{enumerate}
   \end{enumerate}
-  
-  
-\subsection{Regression Model $M_T$}
+\end{algorithm} 
 
-This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
 
-  Algorithm: \\
-  Parameters $N$ points, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) 
-  \begin{enumerate}
-    \item Generate $x_i$, $i=1, ..., N$, a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$)
-    \item Jitter $x_i$: $x_i = x_i + \eta_i$, $\eta_i \sim Unif(-z, z)$, $z = 1/5*(2/(N-1)$
-    \item Generate $y_i$: $y_i = a * x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
-  \end{enumerate}
+As a measure of clustering we use a  coefficient to assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we implicitly assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  
+
+\comment{some examples? with colour?, K = 3 ... 6? maybe two different standard deviations? }  
+  
 
 \subsection{Null Model $M_0$}
 The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
 % 
 % Under the null model, $M_T$ slope may be between $(.2, .8)$
 % \comment{We can't have anything different in the null model from the generating model, but you could vary the slope in $M_T$ itself, that would make sense.}
+
+
+\comment{and a set of examples, here, with varying lambda}
+
 
 \section{Experimental Setup}
 \subsection{Design}
@@ -162,7 +200,7 @@ Conflict & Color + Trend Line, \\
 source("../../Code/MixtureLineups.R")
 sT = 0.30
 sC = 0.25
-N = 1000
+N = 5000
 
 if (file.exists("./figure/nulldist.Rdata")) {
   load("./figure/nulldist.Rdata")
@@ -170,7 +208,7 @@ if (file.exists("./figure/nulldist.Rdata")) {
 nulldist<- function(N, sT=0.3, sC=0.3) {
   nulls <- data.frame(t(replicate(N, {
     lp <- data.frame(t(replicate(18, {
-      mix = mixture.sim(lambda=0.5, K=3, N=45, q=sC, sd=sT)
+      mix = mixture.sim(lambda=0.5, K=3, N=45, sd.cluster=sC, sd.trend=sT)
       reg <- lm(y~x, data=mix)
       
       c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
@@ -179,13 +217,13 @@ nulldist<- function(N, sT=0.3, sC=0.3) {
   })))
   
   trends <- replicate(10, {
-    mix = mixture.sim(lambda=0, K=3, N=45, q=sC, sd=sT)
+    mix = mixture.sim(lambda=0, K=3, N=45, sd.cluster=sC, sd.trend=sT)
     reg <- lm(y~x, data=mix)
     c(fline=summary(reg)$r.squared)
   })
   
   clusters <- replicate(10, {
-    mix = mixture.sim(lambda=1, K=3, N=45, q=sC, sd=sT)
+    mix = mixture.sim(lambda=1, K=3, N=45, sd.cluster=sC, sd.trend=sT)
     clust <- lm(y~factor(group) + 0, data=mix)
     res <- summary(aov(clust))
     c(fgroup=cluster(mix))
@@ -200,9 +238,9 @@ save(res, file="./figure/nulldist.Rdata")
 }
 
 require(ggplot2)
-qplot(fline, data=res$nulls, binwidth=0.02) + geom_vline(aes(xintercept=res$trends), colour="red") + theme_bw()
+qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$trends), colour="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
 ggsave("figure/fline.pdf", width=8, height=4)
-qplot(fgroup, data=res$nulls, binwidth=0.01) + geom_vline(aes(xintercept=res$clusters), colour="red") + theme_bw()
+qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$clusters), colour="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
 ggsave("figure/fgroup.pdf", width=8, height=4)
 @
 
@@ -211,13 +249,15 @@ The red lines show ten samples each from the trend model and the cluster model.
 The lines for the cluster are, relatively, further to the right of the overall distribution than the red lines for the trend model, indicating that $\sigma_C = 0.25$ is producing target plots that are a bit easier to spot than trend targets with a parameter value of $\sigma_T = 0.30$.
 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{figure/fline.pdf}
-\caption{\label{fig:fline}Histogram of $R^2$ values from \Sexpr{N} data sets of the null model ($K=3, N=45, \sigma_C=$\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in red are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
+\centering
+\includegraphics[width=.6\textwidth]{figure/fline.pdf}
+\caption{\label{fig:fline}Histogram of $R^2$ values from \Sexpr{N} data sets of the null model ($K=3, N=45, \sigma_C=$\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in black are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{figure/fgroup.pdf}
-\caption{\label{fig:fgroup}Histogram of the distribution of the cluster measure based on \Sexpr{N} data sets from the null model ($K=3, N=45, \sigma_C= $\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in red correspond to the cluster measure from ten sample data sets from the Clustering model $M_C$. }
+\centering
+\includegraphics[width=.6\textwidth]{figure/fgroup.pdf}
+\caption{\label{fig:fgroup}Histogram of the distribution of the cluster measure based on \Sexpr{N} data sets from the null model ($K=3, N=45, \sigma_C= $\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in black correspond to the cluster measure from ten sample data sets from the Clustering model $M_C$. }
 \end{figure}
 
 
