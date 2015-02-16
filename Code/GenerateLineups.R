@@ -161,14 +161,34 @@ get.stats <- function(r){
 # }, .parallel=T)
 # 
 # write.csv(picture.details, "./Images/Lineups/picture-details.csv", row.names=FALSE)
+# 
+# 
+# load("./Data/TestLineups.Rdata")
+# 
+# picture.details <- ldply(unique(test.data$set), function(i){
+#   save.pics(df=subset(test.data, set==i), datastats=test.stats[i,], 
+#             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
+# }, .parallel=T)
+# 
+# write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
 
+ex.pars <- data.frame(K=rep(3, 2), type=c("trend", "cluster"), sd.trend=c(.2, .25), sd.cluster=c(.25, .15))
+ex.pars$N <- 15*ex.pars$K
 
-load("./Data/TestLineups.Rdata")
+ex.data <- ldply(1:nrow(ex.pars), function(i){ data.frame(set=i, gen.test.data(ex.pars[i,], N=5))}, .parallel=T)
+ex.stats <- ex.pars
+ex.stats$lineplot <- 0
+ex.stats$groupplot <- 0
+ex.stats$target.sig <- 0
+ex.stats$target.plot <- c(unique(subset(ex.data, set==1)$target1), unique(subset(ex.data, set==2)$target1))
 
-picture.details <- ldply(unique(test.data$set), function(i){
-  save.pics(df=subset(test.data, set==i), datastats=test.stats[i,], 
-            plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
-}, .parallel=T)
-
-write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
-
+for(i in 1:nrow(ex.pars)){
+  dataname <- sprintf("example-set-%d", i)
+  realfname <- sprintf("example-set-%d", i)
+  fname <- realfname
+  plotobj <- gen.plot(subset(ex.data, set==i), aes=NULL, stats=NULL)
+  interactive_lineup(plotobj,
+                     fname=fname, 
+                     script="http://www.hofroe.net/examples/lineup/fhaction.js", 
+                     toggle="select", width=6, height=1.5, ex=TRUE)
+}

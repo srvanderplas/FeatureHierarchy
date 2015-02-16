@@ -1,6 +1,7 @@
-interactive_lineup <- function(plotobj, fname, script, toggle="toggle") {
-  ggsave(plotobj, filename=paste0("Images/Lineups/pdfs/", fname, ".pdf"), width=6, height=6, dpi=100)
-  CairoPDF(file=tempfile(), width=6, height=6)
+interactive_lineup <- function(plotobj, fname, script, toggle="toggle", width=6, height=6, ex=FALSE) {
+  path <- ifelse(ex, "Images/Lineups/example/", "Images/Lineups/")
+  ggsave(plotobj, filename=paste0(path, "pdfs/", fname, ".pdf"), width=width, height=height, dpi=100)
+  CairoPDF(file=tempfile(), width=width, height=height)
   print(plotobj)
   require(gridSVG)
   grobs <- grid.ls(print=FALSE)
@@ -16,7 +17,7 @@ interactive_lineup <- function(plotobj, fname, script, toggle="toggle") {
   # use script on server to get locally executable javascript code
   # or use inline option
   grid.script(filename=script)
-  grid.export(name=paste0("Images/Lineups/svgs/", fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+  grid.export(name=paste0(path, "svgs/", fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
   dev.off()
 }
 
@@ -115,7 +116,7 @@ gen.data <- function(input){
   data
 }
 
-gen.test.data <- function(input, type=NULL){
+gen.test.data <- function(input, type=NULL, N=20){
   
   if(is.null(type)){
     if("type"%in%names(input)) type <- input$type
@@ -125,10 +126,10 @@ gen.test.data <- function(input, type=NULL){
     }
   }
   
-  pos <- sample(1:20, size=1)
+  pos <- sample(1:N)[1]
 
   # Nulls
-  nulldata <- rdply(19, function(.sample) 
+  nulldata <- rdply(N-1, function(.sample) 
     mixture.sim(lambda=.5, 
                 N=input$N, 
                 K=input$K, 
@@ -143,7 +144,7 @@ gen.test.data <- function(input, type=NULL){
     signaldata <- mixture.sim(lambda=1, N=input$N, K=input$K, sd.trend=input$sd.trend, sd.cluster=input$sd.cluster)
   }
   
-  data <- lineup(true=signaldata, pos=pos, n=20, samples=nulldata)
+  data <- lineup(true=signaldata, pos=pos, n=N, samples=nulldata)
   
   data$target1 <- pos
   
@@ -242,7 +243,7 @@ gen.plot <- function(dd, aes, stats, colorp=NULL, shapep=NULL){
   if(is.null(colorp)) colorp <- best.combo(length(unique(dd$group)), colors, colortm)
   if(is.null(shapep)) shapep <- best.combo(length(unique(dd$group)), shapes, shapetm)
   
-  plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample)  
+  plot <- ggplot(data=dd, aes(x=x, y=y)) + theme_lineup() + facet_wrap(~.sample, ncol=5)  
 
   # lines and ellipses are not data structure, so reduce contrast to emphasize points!  
   # Set other geoms/aids
