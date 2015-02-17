@@ -109,10 +109,17 @@ $E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E\left[y_i^2\right]$  (as $E[Y
 \[
 E\left[y_i^2\right] = E\left[a^2 x_i^2 + e_i^2 + 2 ax_ie_i\right] = \frac{1}{3}a^2 + \sigma^2_T. 
 \]
-
-
-
-\comment{Include some examples here. }
+\begin{figure}[ht]
+<<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE>>=
+source("../../Code/MixtureLineups.R")
+sd <- c(0.2, 0.3, 0.4, 0.5)
+res <- ldply(sd, function(x) { data.frame(sd.trend=x, sim.line(N=45, sd.trend=x)) })
+suppressMessages(library(ggplot2))
+res$label <- paste("sigma[T] :",res$sd.trend)
+qplot(x,y, data=res) + facet_grid(facets=.~label, labeller="label_parsed") + theme_bw()
+@
+\caption{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for $\sigma_T = 0.2, 0.3, 0.4, 0.5$.}
+\end{figure}
 
 \subsection{Cluster Model $M_C$}
 We begin by generating $K$ cluster centers on a $K \times K$ grid, then we generate points around the cluster center. 
