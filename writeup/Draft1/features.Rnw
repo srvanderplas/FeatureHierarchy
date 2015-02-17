@@ -70,7 +70,7 @@ Unfortunately, this limits the choice to the set used in the Tableau software. I
 
 Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The left and right triangle shapes (available only in unicode using R) were excluded due to size differences between unicode and non-unicode shapes. 
 
-All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
+All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
 \comment{How do the shapes we picked compare to the shapes discussed in \citet{robinson:03} see http://stat-computing.org/newsletter/issues/scgn-14-1.pdf? }
 \comment{For $K=3$ we have one shape each from Robinson's group 1, 2, and 9 - these groups are choses such that they all ``show differences in their preattentive properties"; for $K=5$, we have one shape each from groups 1, 2, 3,  9, and 10. }
