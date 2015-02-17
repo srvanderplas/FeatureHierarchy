@@ -40,23 +40,7 @@ get.stats <- function(r){
   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
 }
  
-# load("./Data/SimulationResults.Rdata")
-# sim.quantile <- function(x){
-#   df <- subset(simulation.results, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K & N ==x$N)
-#   if(nrow(df)==0){
-#     warning(sprintf("Parameter Set (K=%s, SD_T=%.2f, SD_C=%.2f) not found", x$K, x$sd.trend, x$sd.cluster))
-#     return(data.frame(line=NA, cluster=NA, null.line=NA, null.cluster=NA))
-#   } 
-#   data.frame(
-#     line=sum(x$line>=df$line)/length(df$line),
-#     cluster=sum(x$cluster>=df$cluster)/length(df$cluster),
-#     null.line=sum(x$null.line>=df$null.line)/length(df$null.line),
-#     null.cluster=sum(x$null.cluster>=df$null.cluster)/length(df$null.cluster)
-#     )
-# }
-# 
-# 
-# # Lineup Design
+# #----- Set Up Data Generation (Actual Plots) ----
 # data.parms.full <- expand.grid(sd.trend=round(c(.25, .35, .45), 2),
 #                                sd.cluster=1:3,
 #                                K=c(3, 5))
@@ -87,6 +71,21 @@ get.stats <- function(r){
 #   30 # color + ellipse + trend + error
 # ),]
 # 
+# load("./Data/SimulationResults.Rdata")
+# sim.quantile <- function(x){
+#   df <- subset(simulation.results, sd.trend==x$sd.trend & sd.cluster==x$sd.cluster & K==x$K & N ==x$N)
+#   if(nrow(df)==0){
+#     warning(sprintf("Parameter Set (K=%s, SD_T=%.2f, SD_C=%.2f) not found", x$K, x$sd.trend, x$sd.cluster))
+#     return(data.frame(line=NA, cluster=NA, null.line=NA, null.cluster=NA))
+#   } 
+#   data.frame(
+#     line=sum(x$line>=df$line)/length(df$line),
+#     cluster=sum(x$cluster>=df$cluster)/length(df$cluster),
+#     null.line=sum(x$null.line>=df$null.line)/length(df$null.line),
+#     null.cluster=sum(x$null.cluster>=df$null.cluster)/length(df$null.cluster)
+#     )
+# }
+# 
 # set.seed(518290387)
 # 
 # res <- llply(1:nrow(data.parms.full), function(i){
@@ -115,6 +114,7 @@ get.stats <- function(r){
 # 
 # save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
 # 
+# #----- Set Up Data Generation (Trial Plots) ----
 # test.data.parms <- data.frame(K=rep(3, 10),
 #                               type=rep(c("trend", "cluster"), each=5),
 #                               sd.trend=rep(c(.2, .25), each=5),
@@ -153,6 +153,7 @@ get.stats <- function(r){
 # save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
 # 
 # 
+# #----- Plot Generation (Actual Plots) ----
 # load("./Data/Lineups.Rdata")
 # 
 # plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
@@ -172,6 +173,7 @@ get.stats <- function(r){
 # file.remove(gsub("svg", "pdf", files)[del.files])
 # file.remove(files[del.files])
 # 
+# #----- Plot Generation (Trial Plots) ----
 # load("./Data/TestLineups.Rdata")
 # 
 # picture.details <- ldply(unique(test.data$set), function(i){
@@ -181,6 +183,7 @@ get.stats <- function(r){
 # 
 # write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
 # 
+# #----- Set Up Data Generation (Example Plots) ----
 # ex.pars <- data.frame(K=rep(3, 2), type=c("trend", "cluster"), sd.trend=c(.2, .25), sd.cluster=c(.25, .15))
 # ex.pars$N <- 15*ex.pars$K
 # 
@@ -191,11 +194,13 @@ get.stats <- function(r){
 # ex.stats$target.sig <- 0
 # ex.stats$target.plot <- c(unique(subset(ex.data, set==1)$target1), unique(subset(ex.data, set==2)$target1))
 # 
+# #----- Plot Generation (Example Plots) ----
 # for(i in 1:nrow(ex.pars)){
 #   dataname <- sprintf("example-set-%d", i)
 #   realfname <- sprintf("example-set-%d", i)
 #   fname <- realfname
 #   plotobj <- gen.plot(subset(ex.data, set==i), aes=NULL, stats=NULL)
+#   write.csv(subset(ex.data, set==i), sprintf("example-data-%d.csv", i), row.names=FALSE)
 #   interactive_lineup(plotobj,
 #                      fname=fname, 
 #                      script="http://www.hofroe.net/examples/lineup/fhaction.js", 
