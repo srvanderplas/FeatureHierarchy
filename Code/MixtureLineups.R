@@ -366,6 +366,8 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
                             sprintf("%d, %d", datastats$lineplot, datastats$groupplot),
                             datastats$target1)
   diff.sign <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, 1, -1)
+  l3 <- which(plotname==c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError"))-1
+  difficulty <- as.numeric(sprintf('%d%d%d', datastats$l1, datastats$l2, l3))
   
   pValue <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster), 
                    sprintf("%s-%.5f", datastats$type, datastats$target.sig))
@@ -379,7 +381,7 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
     obs_plot_location = obsPlotLocation,
     pic_name = paste0("Images/Lineups/svgs/", fname, ".svg"),
     experiment = "turk16",
-    difficulty = diff.sign*i,
+    difficulty = diff.sign*difficulty,
     data_name = dataname
   )
 }

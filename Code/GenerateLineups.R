@@ -57,13 +57,16 @@ get.stats <- function(r){
 # 
 # 
 # # Lineup Design
-# data.parms.full <- expand.grid(K=c(3, 5),
-#                           sd.trend=round(c(.25, .35, .45), 2),
-#                           sd.cluster=1:3)
+# data.parms.full <- expand.grid(sd.trend=round(c(.25, .35, .45), 2),
+#                                sd.cluster=1:3,
+#                                K=c(3, 5))
+# 
+# data.parms.full$N <- 15*data.parms.full$K
+# data.parms.full$l1 <- rep(1:2, each=9)
+# data.parms.full$l2 <- rep(1:9, times=2)
 # data.parms.full$sd.cluster[data.parms.full$K==5] <- c(.2, .25, .3)[data.parms.full$sd.cluster[data.parms.full$K==5]]
 # data.parms.full$sd.cluster[data.parms.full$K==3] <- c(.25, .3, .35)[data.parms.full$sd.cluster[data.parms.full$K==3]]
 # data.parms.full$sd.cluster <- round(data.parms.full$sd.cluster, 2)
-# data.parms.full$N <- 15*data.parms.full$K
 # 
 # plot.parms <- expand.grid(
 #   color = c(0,1),
@@ -108,6 +111,8 @@ get.stats <- function(r){
 #   data.ntries <- c(data.ntries, res[[i]]$ntries)
 # }
 # 
+# data.stats <- merge(data.stats, data.parms.full)
+# 
 # save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
 # 
 # test.data.parms <- data.frame(K=rep(3, 10),
@@ -142,8 +147,8 @@ get.stats <- function(r){
 #   )
 # test.stats$N <- test.stats$K*15
 # 
-# # tmp <- melt(test.stats, id.vars=c(1:3, 6:9), variable.name="sub.type", value.name="significance")
-# # qplot(data=tmp, x=significance, color=sub.type, geom="density") + facet_wrap(~type)
+# tmp <- melt(test.stats, id.vars=c(1:3, 6:9), variable.name="sub.type", value.name="significance")
+# qplot(data=tmp, x=significance, color=sub.type, geom="density") + facet_wrap(~type)
 # 
 # save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
 # 
@@ -162,6 +167,10 @@ get.stats <- function(r){
 # 
 # write.csv(picture.details, "./Images/Lineups/picture-details.csv", row.names=FALSE)
 # 
+# files <- paste0("Images/Lineups/svgs/", list.files("./Images/Lineups/svgs"))
+# del.files <- !(files%in%picture.details$pic_name)
+# file.remove(gsub("svg", "pdf", files)[del.files])
+# file.remove(files[del.files])
 # 
 # load("./Data/TestLineups.Rdata")
 # 
@@ -171,24 +180,24 @@ get.stats <- function(r){
 # }, .parallel=T)
 # 
 # write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
-
-ex.pars <- data.frame(K=rep(3, 2), type=c("trend", "cluster"), sd.trend=c(.2, .25), sd.cluster=c(.25, .15))
-ex.pars$N <- 15*ex.pars$K
-
-ex.data <- ldply(1:nrow(ex.pars), function(i){ data.frame(set=i, gen.test.data(ex.pars[i,], N=5))}, .parallel=T)
-ex.stats <- ex.pars
-ex.stats$lineplot <- 0
-ex.stats$groupplot <- 0
-ex.stats$target.sig <- 0
-ex.stats$target.plot <- c(unique(subset(ex.data, set==1)$target1), unique(subset(ex.data, set==2)$target1))
-
-for(i in 1:nrow(ex.pars)){
-  dataname <- sprintf("example-set-%d", i)
-  realfname <- sprintf("example-set-%d", i)
-  fname <- realfname
-  plotobj <- gen.plot(subset(ex.data, set==i), aes=NULL, stats=NULL)
-  interactive_lineup(plotobj,
-                     fname=fname, 
-                     script="http://www.hofroe.net/examples/lineup/fhaction.js", 
-                     toggle="select", width=6, height=1.5, ex=TRUE)
-}
+# 
+# ex.pars <- data.frame(K=rep(3, 2), type=c("trend", "cluster"), sd.trend=c(.2, .25), sd.cluster=c(.25, .15))
+# ex.pars$N <- 15*ex.pars$K
+# 
+# ex.data <- ldply(1:nrow(ex.pars), function(i){ data.frame(set=i, gen.test.data(ex.pars[i,], N=5))}, .parallel=T)
+# ex.stats <- ex.pars
+# ex.stats$lineplot <- 0
+# ex.stats$groupplot <- 0
+# ex.stats$target.sig <- 0
+# ex.stats$target.plot <- c(unique(subset(ex.data, set==1)$target1), unique(subset(ex.data, set==2)$target1))
+# 
+# for(i in 1:nrow(ex.pars)){
+#   dataname <- sprintf("example-set-%d", i)
+#   realfname <- sprintf("example-set-%d", i)
+#   fname <- realfname
+#   plotobj <- gen.plot(subset(ex.data, set==i), aes=NULL, stats=NULL)
+#   interactive_lineup(plotobj,
+#                      fname=fname, 
+#                      script="http://www.hofroe.net/examples/lineup/fhaction.js", 
+#                      toggle="select", width=6, height=1.5, ex=TRUE)
+# }
