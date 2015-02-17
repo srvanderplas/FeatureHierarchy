@@ -73,7 +73,7 @@ Shapes - there were some problems with reliable unicode representations in the l
 All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
 \comment{How do the shapes we picked compare to the shapes discussed in \citet{robinson:03} see http://stat-computing.org/newsletter/issues/scgn-14-1.pdf? }
-
+\comment{For $K=3$ we have one shape each from Robinson's group 1, 2, and 9 - which all show differences in their preattentive properties; for $K=5$, we have one shape each from groups 1, 2, 3, and 9, 10. }
 
 \section{Generating Model}
 We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
@@ -116,7 +116,8 @@ sd <- c(0.2, 0.3, 0.4, 0.5)
 res <- ldply(sd, function(x) { data.frame(sd.trend=x, sim.line(N=45, sd.trend=x)) })
 suppressMessages(library(ggplot2))
 res$label <- paste("sigma[T] :",res$sd.trend)
-qplot(x,y, data=res) + facet_grid(facets=.~label, labeller="label_parsed") + theme_bw()
+qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_parsed") + theme_bw() + 
+  theme(plot.margin=unit(c(0,0,0,0), "cm"))
 @
 \caption{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for $\sigma_T = 0.2, 0.3, 0.4, 0.5$.}
 \end{figure}
