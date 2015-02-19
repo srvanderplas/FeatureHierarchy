@@ -115,10 +115,13 @@ get.stats <- function(r){
 # save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
 # 
 # #----- Set Up Data Generation (Trial Plots) ----
-# test.data.parms <- data.frame(K=rep(3, 10),
-#                               type=rep(c("trend", "cluster"), each=5),
-#                               sd.trend=rep(c(.2, .25), each=5),
-#                               sd.cluster=rep(c(.25, .15), each=5))
+# set.seed(32509803)
+# test.data.parms <- data.frame(K=rep(3, 20),
+#                               type=rep(c("trend", "cluster"), each=10),
+#                               sd.trend=rep(c(.2, .25), each=10),
+#                               sd.cluster=rep(c(.25, .15), each=10))
+# test.data.parms$l1 <- rep(1, 20)
+# test.data.parms$l2 <- rep(c(1,2), each=10)
 # test.data.parms$N <- 15*test.data.parms$K
 # test.data.parms$set <- 1:nrow(test.data.parms)
 # 
@@ -143,11 +146,13 @@ get.stats <- function(r){
 #     null.sig = ifelse(unique(type)=="trend", max(LineSig[.sample!=unique(target1)]), max(ClusterSig[.sample!=unique(target1)])),
 #     K = subset(test.data.parms, test.data.parms$set==unique(set))$K,
 #     sd.trend = subset(test.data.parms, test.data.parms$set==unique(set))$sd.trend,
-#     sd.cluster = subset(test.data.parms, test.data.parms$set==unique(set))$sd.cluster
+#     sd.cluster = subset(test.data.parms, test.data.parms$set==unique(set))$sd.cluster,
+#     l1 = subset(test.data.parms, test.data.parms$set==unique(set))$l1,
+#     l2 = subset(test.data.parms, test.data.parms$set==unique(set))$l2
 #   )
 # test.stats$N <- test.stats$K*15
 # 
-# tmp <- melt(test.stats, id.vars=c(1:3, 6:9), variable.name="sub.type", value.name="significance")
+# tmp <- melt(test.stats, id.vars=c(1:3, 6:11), variable.name="sub.type", value.name="significance")
 # qplot(data=tmp, x=significance, color=sub.type, geom="density") + facet_wrap(~type)
 # 
 # save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
@@ -166,7 +171,7 @@ get.stats <- function(r){
 #   save.pics(subset(data, set==i), datastats=data.stats[i,], plotparms=plot.parms[j,], plotname=plot.names[j])
 # }, .parallel=T)
 # 
-# write.csv(picture.details, "./Images/Lineups/picture-details.csv", row.names=FALSE)
+# write.csv(picture.details[,-c(1:2)], "./Images/Lineups/picture-details.csv", row.names=FALSE)
 # 
 # files <- paste0("Images/Lineups/svgs/", list.files("./Images/Lineups/svgs"))
 # del.files <- !(files%in%picture.details$pic_name)
@@ -176,12 +181,12 @@ get.stats <- function(r){
 # #----- Plot Generation (Trial Plots) ----
 # load("./Data/TestLineups.Rdata")
 # 
-# picture.details <- ldply(unique(test.data$set), function(i){
+# test.picture.details <- ldply(unique(test.data$set), function(i){
 #   save.pics(df=subset(test.data, set==i), datastats=test.stats[i,], 
-#             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T, trial=TRUE)
+#             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
 # }, .parallel=T)
 # 
-# write.csv(picture.details, "./Images/Lineups/test-picture-details.csv", row.names=FALSE)
+# write.csv(test.picture.details, "./Images/Lineups/picture-details-trial.csv", row.names=FALSE)
 # 
 # #----- Set Up Data Generation (Example Plots) ----
 # ex.pars <- data.frame(K=rep(3, 2), type=c("trend", "cluster"), sd.trend=c(.2, .25), sd.cluster=c(.25, .15))
@@ -200,9 +205,9 @@ get.stats <- function(r){
 #   realfname <- sprintf("example-set-%d", i)
 #   fname <- realfname
 #   plotobj <- gen.plot(subset(ex.data, set==i), aes=NULL, stats=NULL)
-#   write.csv(subset(ex.data, set==i), sprintf("example-data-%d.csv", i), row.names=FALSE)
+#   write.csv(subset(ex.data, set==i), sprintf("Images/Lineups/example/data/example-data-%d.csv", i), row.names=FALSE)
 #   interactive_lineup(plotobj,
 #                      fname=fname, 
 #                      script="http://www.hofroe.net/examples/lineup/fhaction.js", 
-#                      toggle="select", width=6, height=1.5, ex=TRUE)
+#                      toggle="select", width=6, height=1.5, ex=T)
 # }

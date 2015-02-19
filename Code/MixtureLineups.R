@@ -1,26 +1,3 @@
-interactive_lineup <- function(plotobj, fname, script, toggle="toggle", width=6, height=6, ex=FALSE, trial=FALSE) {
-  path <- ifelse(ex, "Images/Lineups/example/", "Images/Lineups/")
-  ggsave(plotobj, filename=paste0(path, "pdfs/", fname, ".pdf"), width=width, height=height, dpi=100)
-  CairoPDF(file=tempfile(), width=width, height=height)
-  print(plotobj)
-  require(gridSVG)
-  grobs <- grid.ls(print=FALSE)
-  
-  idx <- grep("panel-", grobs$name)
-  for (i in idx) { 
-    grid.garnish(grobs$name[i],
-                 onmouseover=paste("frame('",grobs$name[i+2], ".1')", sep=""),
-                 onmouseout=paste("deframe('",grobs$name[i+2], ".1')", sep=""), 
-                 onmousedown=paste(sprintf("%shigh(evt, '", toggle),grobs$name[i+2], ".1')", sep=""))
-  }
-  
-  # use script on server to get locally executable javascript code
-  # or use inline option
-  grid.script(filename=script)
-  grid.export(name=paste0(path, ifelse(trial, "trials/", "svgs/"), fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
-  dev.off()
-}
-
 best.combo <- function(ngroups=3, palette, dist.matrix){
   # check distance matrix
   if(nrow(dist.matrix)!=length(palette) | ncol(dist.matrix)!=length(palette)){
@@ -354,7 +331,7 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
   if(testplot){
     interactive_lineup(plotobj,
                        fname=fname, 
-                       script="http://www.hofroe.net/examples/lineup/fhaction.js", toggle="select")
+                       script="http://www.hofroe.net/examples/lineup/fhaction.js", toggle="select", trial=TRUE)
   } else {
     interactive_lineup(plotobj,
                        fname=fname, 
@@ -371,17 +348,46 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
   
   pValue <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster), 
                    sprintf("%s-%.5f", datastats$type, datastats$target.sig))
+  picName <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, 
+                    paste0("Images/Lineups/svgs/", fname, ".svg"), 
+                    paste0("Images/Lineups/trials/", fname, ".svg"))
   
   data.frame(
-    pic_id = unique(df$set),
+    pic_id = unique(df$set)+l3/10,
     sample_size = datastats$K,
     test_param = sprintf("turk16-%s", plotname),
     param_value = sprintf("k-%d-sdline-%.2f-sdgroup-%.2f", datastats$K, datastats$sd.trend, datastats$sd.cluster),
     p_value = pValue,
     obs_plot_location = obsPlotLocation,
-    pic_name = paste0("Images/Lineups/svgs/", fname, ".svg"),
+    pic_name = picName,
     experiment = "turk16",
     difficulty = diff.sign*difficulty,
     data_name = dataname
   )
+}
+
+interactive_lineup <- function(plotobj, fname, script, toggle="toggle", width=6, height=6, trial=FALSE, ex=FALSE) {
+  path <- ifelse(ex, "Images/Lineups/example/", "Images/Lineups/")
+  if(ex){
+    ggsave(plotobj, filename=paste0(path, "pngs/", fname, ".png"), width=width, height=height, dpi=100)
+  }
+  ggsave(plotobj, filename=paste0(path, "pdfs/", fname, ".pdf"), width=width, height=height, dpi=100)
+  CairoPDF(file=tempfile(), width=width, height=height)
+  print(plotobj)
+  require(gridSVG)
+  grobs <- grid.ls(print=FALSE)
+  
+  idx <- grep("panel-", grobs$name)
+  for (i in idx) { 
+    grid.garnish(grobs$name[i],
+                 onmouseover=paste("frame('",grobs$name[i+2], ".1')", sep=""),
+                 onmouseout=paste("deframe('",grobs$name[i+2], ".1')", sep=""), 
+                 onmousedown=paste(sprintf("%shigh(evt, '", toggle),grobs$name[i+2], ".1')", sep=""))
+  }
+  
+  # use script on server to get locally executable javascript code
+  # or use inline option
+  grid.script(filename=script)
+  grid.export(name=paste0(path, ifelse(trial, "trials/", "svgs/"), fname, ".svg"), uniqueNames=FALSE, exportJS="inline", exportCoords="inline", exportMappings="inline")
+  dev.off()
 }
