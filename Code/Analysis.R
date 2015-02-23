@@ -21,14 +21,27 @@ correct.ans <- function(x,y){
   answers <- str_trim(unlist(str_split(y, ",")))
   lineplot <- as.numeric(answers[1])
   groupplot <- as.numeric(answers[2])
-  c(line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, n.answers=length(x1))
+  c(line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, n.answers=length(x1), both.correct = lineplot%in%x1 & groupplot%in%x1, neither=!(lineplot%in%x1 | groupplot%in%x1))
 }
 
 useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
 useranswers <- merge(useranswers, tmp)
+useranswers$plottype <- gsub("turk16-", "", useranswers$test_param)
 
-useranswers.long <- melt(useranswers, id.vars=c(1, 4:21), value.vars=c("line.correct", "group.correct"), value.name="correct", variable.name="answer.type")
+useranswers.long <- melt(useranswers, id.vars=c(1, 4:22), value.vars=c("line.correct", "group.correct", "both.correct", "neither"), value.name="correct", variable.name="answer.type")
 useranswers.long$answer.type <- gsub(".correct", "", useranswers.long$answer.type)
 qplot(x=factor(correct), fill=factor(answer.type), geom="histogram", data=useranswers.long, position="dodge") + 
   facet_grid(k+sd.line~sd.cluster, labeller=label_both)
 
+useranswers.long$plottype <- factor(useranswers.long$plottype, levels=c("plain", "trend", "color", "shape", "colorShape", "colorEllipse", "colorTrend",  "trendError", "colorShapeEllipse", "colorEllipseTrendError"))
+useranswers.long$sd.cluster <- factor(useranswers.long$sd.cluster)
+useranswers.long$sd.line <- factor(useranswers.long$sd.line)
+useranswers.long$k <- factor(useranswers.long$k)
+
+fixed.ef.model <- glm(correct~plottype+sd.cluster*sd.line+k, data=useranswers.long, family = binomial(link="logit"))
+summary(fixed.ef.model)
+
+participant.scores <- ddply(useranswers, .(nick_name, ip_address, sd.cluster), summarize, line.correct=mean(line.correct), group.correct=mean(group.correct))
+participant.scores <- melt(participant.scores, id.vars=1:3, variable.name="type", value.name="percent.correct")
+participant.scores$type <- gsub(".correct", "", participant.scores$type)
+qplot(data=participant.scores, x=type, y=percent.correct, color=type, geom="violin") + facet_wrap(~sd.cluster)
