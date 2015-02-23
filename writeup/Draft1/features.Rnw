@@ -83,15 +83,16 @@ with the null data, while data from model $M_T$ exhibits a similar amount of clu
 
 This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
 
-\comment{Isn't there some centering or scaling missing? How do we make sure, that the regression model and the cluster model are on the same x scale?  Only for $K=3$ does the scaling in the clustering model boil down to values between [-1,1].  For $K=5$ the values are further out. }
+\comment{Isn't there some centering or scaling missing? How do we make sure, that the regression model and the cluster model are on the same x scale?  Only for $K=3$ does the scaling in the clustering model boil down to values between [-1,1].  For $K=5$ the values are further out. \\
+\textit{The scaling and centering happens in a different function. I've added that now.}}
 \begin{algorithm}\hfill\newline
   Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) \\
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
-    \item Generate $x_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$) \comment{I don't understand the text in the parenthesis}
-    \item Jitter $x_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = x_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5*(2/(N-1)$
-    \comment{There's something going on with the parentheses: two opening, only one closing; we also cannot write $x_i = x_i + \eta_i$ -- that's programming, not math. so rename any of the pre-jittered $x$s to $\tilde{x}$. }
+    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$) \comment{I don't understand the text in the parenthesis}
+    \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5*(2/(N-1)$
     \item Generate $y_i$: $y_i = a  x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
+    \item Center and scale $x_i$, $y_i$
   \end{enumerate}
 \end{algorithm}
 
@@ -132,7 +133,6 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
       \begin{enumerate}
         \item in form of two vectors $c^{x}$ and $c^y$ of permutations of $\{1, ..., K\}$, such that
         \item the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of $[.25, .75]$.
-%         \comment{We might have to go up with the correlation a bit. I'm still worried that people will pick the cluster plot from the trend line lineup because of the lowest slope. }
       \end{enumerate}
       \item Center and standard-normalize cluster centers $(c^x, c^y)$:  
       \[
@@ -149,6 +149,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
         \item $x_i = \tilde{c}^x_{g_i} + e^x_i$, where $e^x_i \sim N(0, \sigma^2_C)$
         \item $y_i = \tilde{c}^y_{g_i} + e^y_i$, where $e^y_i \sim N(0, \sigma^2_C)$
       \end{enumerate}
+    \item Center and scale $x_i$, $y_i$
   \end{enumerate}
 \end{algorithm} 
 
