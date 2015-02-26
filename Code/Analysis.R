@@ -33,6 +33,9 @@ useranswers$sd.line <- factor(useranswers$sd.line)
 useranswers$k <- factor(useranswers$k)
 useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
 
+# User answer tendencies...
+user.stats <- dcast(subset(useranswers, !grepl(",", response_no)), nick_name~response_no, fun.aggregate=length)
+subset(user.stats, rowSums(user.stats[,3:22]>0)<4& rowSums(user.stats[,3:22]>6))
 
 
 useranswers.long <- melt(useranswers, id.vars=c(1, 7:25), value.vars=c("line.correct", "group.correct", "both.correct", "neither"), value.name="correct", variable.name="answer.type")
@@ -58,3 +61,7 @@ plot.answers$plottype.fac <- as.character(as.numeric(factor(plot.answers$plottyp
 # plot.answers <- melt(plot.answers, id.vars=1:5, variable.name="type", value.name="percent.correct")
 qplot(data=plot.answers, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=as.character(0:9), labels=levels(plot.answers$plottype)) #+ scale_color_discrete("Parameter Rep")
 
+head(plot.answers)
+
+plain.color <- subset(plot.answers, plottype%in%c("plain", "color"))
+qplot(data=plain.color, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=c(0, "c"), labels=c("plain", "color"))
