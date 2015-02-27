@@ -11,6 +11,7 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage[dvipsnames,svgnames]{xcolor}
+\graphicspath{{figure/}}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage[colorinlistoftodos]{todonotes}
@@ -48,10 +49,36 @@ suppressMessages(library(gridExtra))
 
 
 \section{Introduction and background}
-Discussion of pre-attentive visual features \citep{healey:preattentive} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?
+\comment{Discussion of pre-attentive visual features \citep{healey:preattentive} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?}
+\newtext{
+Our understanding of the perception of statistical charts is informed by several levels of research. Cognitive psychologists and neuroscientists often focus on pre-attentive perception, which occurs automatically in the first 200 ms of exposure to a visual stimulus. Gestalt psychologists focus instead on perception as a wholistic experience; they consider the heuristics used to transform visual stimuli into useful, coherent information. Finally, statistical graphics researchers apply low-level perceptual research and gestalt ideas to statistical charts, using tools such as lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010,Hofmann:2012ts} to determine which graphics are accurately perceived and communicate information effectively. 
+}
+\newtext{
+Research into the preattentive stage of visual perception provides us with some information about the temporal hierarchy of graphical feature processing. Color, line orientation, and shape are processed preattentively; that is, within 200 ms, it is possible to identify a single target in a field of distractors, if the target differs with respect to color or shape \citep{goldstein2009encyclopedia}. \citet{healey1999large} extended this work, demonstrating that certain features of three-dimensional data displays are processed preattentively, but that this does not always translate into faster or more accurate inference about the data displayed, particularly when participants must integrate several preattentive features to understand the data. 
+}
+\newtext{
+Gestalt rules of perception also impact statistical graphics. These rules describe the way we organize visual input, focusing on the wholistic experience rather than the individual perceptual features. For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. The rules of perceptual grouping or organization, as stated in \citet{goldstein2009encyclopedia} are:
+\begin{itemize}
+\item Proximity: two elements which are close together are more likely to belong to a single unit.
+\item Similarity: the more similar two elements are, the more likely they belong to a single unit.
+\item Common fate: two elements moving together likely belong to a single unit.
+\item Good continuation: two elements which blend together smoothly likely belong to one unit.
+\item Closure: elements which can be assembled into closed or convex objects likely belong together. 
+\item Common region: elements contained within a common region likely belong together. 
+\item Connectedness: elements physically connected to each other are more likely to belong together.
+\end{itemize}
+}
 
+\begin{figure}[htbp]\centering
+\includegraphics[width=.9\textwidth]{gestalt}
+\caption[The gestalt laws of perception]{The gestalt laws of perception}\label{fig:gestaltlaws}
+% \protect\footnotetext{From \url{http://yusylvia.files.wordpress.com/2010/03/gestalt_illustration-01.jpg}}
+\end{figure}
 
+\newtext{
+Figure \ref{fig:gestaltlaws} shows examples of many of the gestalt laws, which when combined help to order our perceptual experience. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (connectedness, closure, and/or common region). The use of physical location, color, and shape to organize graphical units mentally utilizes both preattentive processing and higher-order gestalt schemas, identifying and grouping similar graphical features and simultaneously directing attention to graphical features which stand alone. 
 
+}
 
 
 Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}
