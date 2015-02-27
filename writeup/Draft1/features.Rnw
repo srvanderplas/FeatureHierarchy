@@ -110,13 +110,13 @@ with the null data, while data from model $M_T$ exhibits a similar amount of clu
 
 This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
 
-\comment{Isn't there some centering or scaling missing? How do we make sure, that the regression model and the cluster model are on the same x scale?  Only for $K=3$ does the scaling in the clustering model boil down to values between [-1,1].  For $K=5$ the values are further out. \\
-\textit{The scaling and centering happens in a different function. I've added that now.}}
+% \comment{Isn't there some centering or scaling missing? How do we make sure, that the regression model and the cluster model are on the same x scale?  Only for $K=3$ does the scaling in the clustering model boil down to values between [-1,1].  For $K=5$ the values are further out. \\
+% \textit{The scaling and centering happens in a different function. I've added that now.}}
 \begin{algorithm}\hfill\newline
   Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) \\
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
-    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ ($\sigma_T$ added and subtracted to match the range of cluster points in $x$) \comment{I don't understand the text in the parenthesis}
+    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ 
     \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5*(2/(N-1)$
     \item Generate $y_i$: $y_i = a  x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
     \item Center and scale $x_i$, $y_i$
@@ -140,14 +140,14 @@ E\left[y_i^2\right] = E\left[a^2 x_i^2 + e_i^2 + 2 ax_ie_i\right] = \frac{1}{3}a
 \begin{figure}[ht]
 <<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE>>=
 source("../../Code/MixtureLineups.R")
-sd <- c(0.2, 0.3, 0.4, 0.5)
+sd <- c(0.1, 0.2, 0.3, 0.4)
 res <- ldply(sd, function(x) { data.frame(sd.trend=x, sim.line(N=45, sd.trend=x)) })
 suppressMessages(library(ggplot2))
 res$label <- paste("sigma[T] :",res$sd.trend)
 qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"))
 @
-\caption{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for parameter values of  $\sigma_T \in \{0.2, 0.3, 0.4, 0.5\}$.}
+\caption{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for parameter values of  $\sigma_T \in \{0.1, 0.2, 0.3, 0.4\}$.}
 \end{figure}
 
 \subsection{Cluster Model $M_C$}
@@ -226,8 +226,8 @@ Factors:
 Parameter & Description & Choices\\\hline
 $K$ & \# Clusters & 3, 5 \\
 $N$ & \# Points & $15\cdot K$ \\
-$\sigma_T$ & Scatter around trend line &  .25, .35, .45\\
-$\sigma_C$ & Scatter around cluster centers &  .20, .25, 0.30, .35\\\hline
+$\sigma_T$ & Scatter around trend line &  .15, .25, .35\\
+$\sigma_C$ & Scatter around cluster centers &  .15, .20, .25, 0.30\\\hline
 \end{tabular}
 \end{center}
 \caption{Parameter settings for Data Generation.}
