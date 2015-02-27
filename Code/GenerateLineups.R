@@ -39,17 +39,17 @@ get.aes <- function(r){
 get.stats <- function(r){
   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
 }
- 
+#  
 # #----- Set Up Data Generation (Actual Plots) ----
-# data.parms.full <- expand.grid(sd.trend=round(c(.25, .35, .45), 2),
+# data.parms.full <- expand.grid(sd.trend=round(c(.15, .25, .35), 2),
 #                                sd.cluster=1:3,
 #                                K=c(3, 5))
 # 
 # data.parms.full$N <- 15*data.parms.full$K
 # data.parms.full$l1 <- rep(1:2, each=9)
 # data.parms.full$l2 <- rep(1:9, times=2)
-# data.parms.full$sd.cluster[data.parms.full$K==5] <- c(.2, .25, .3)[data.parms.full$sd.cluster[data.parms.full$K==5]]
-# data.parms.full$sd.cluster[data.parms.full$K==3] <- c(.25, .3, .35)[data.parms.full$sd.cluster[data.parms.full$K==3]]
+# data.parms.full$sd.cluster[data.parms.full$K==5] <- c(.15, .2, .25)[data.parms.full$sd.cluster[data.parms.full$K==5]]
+# data.parms.full$sd.cluster[data.parms.full$K==3] <- c(.2, .25, .3)[data.parms.full$sd.cluster[data.parms.full$K==3]]
 # data.parms.full$sd.cluster <- round(data.parms.full$sd.cluster, 2)
 # 
 # plot.parms <- expand.grid(
@@ -158,7 +158,7 @@ get.stats <- function(r){
 # save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
 # 
 # 
-# #----- Plot Generation (Actual Plots) ----
+#----- Plot Generation (Actual Plots) ----
 # load("./Data/Lineups.Rdata")
 # 
 # plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
@@ -205,7 +205,7 @@ get.stats <- function(r){
 #   realfname <- sprintf("example-set-%d", i)
 #   fname <- realfname
 #   plotobj <- gen.plot(subset(ex.data, set==i), aes=NULL, stats=NULL)
-#   write.csv(subset(ex.data, set==i), sprintf("Images/Lineups/example/data/example-data-%d.csv", i), row.names=FALSE)
+#   write.csv(subset(ex.data, set==i), sprintf("./Images/Lineups/Data/example-data-%d.csv", i), row.names=FALSE)
 #   interactive_lineup(plotobj,
 #                      fname=fname, 
 #                      script="http://www.hofroe.net/examples/lineup/fhaction.js", 

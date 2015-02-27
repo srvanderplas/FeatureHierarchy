@@ -63,7 +63,32 @@ mixture.sim <- function(lambda, K, N, sd.trend=.3, sd.cluster=.3){
 
   mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
   
-  mix.data$group <- cutree(hclust(dist(mix.data[,c("x", "y")])), k=K) 
+#   clusters <- hclust(dist(mix.data[,c("x", "y")]))
+#   mix.data$group <- cutree(clusters, k=K)
+  
+  iter <- 1
+  repeat{
+    if(iter==1){
+      centers <- apply(mix.data[,c("x", "y")], 2, function(x) quantile(x, seq(0, 1, length.out=2*K+1)[(1:K)*2]))
+    } else {
+      centers <- mix.data[sample(1:nrow(mix.data), K, replace=FALSE),c("x", "y")]
+    }
+    
+    clusters <- try(kmeans(mix.data[,c("x", "y")], centers=centers))
+    # if kmeans doesn't fail, then test for cluster size equality
+    if(mode(clusters)!="character"){
+      if(sum(clusters$size>(N/(K*2+1)))==K & sum(clusters$size>=4)==K){
+        break;
+      }
+    }
+    if(iter>100){
+      warning("Max kmeans iterations")
+      break;
+    }
+    iter <- iter+1
+  }
+  
+  mix.data$group <- clusters$cluster
   # grouping by the best K clusters
 
   return(mix.data)
@@ -131,7 +156,8 @@ gen.test.data <- function(input, type=NULL, N=20){
 eval.df <- function(df){
   data.frame(
     line=summary(lm(y~x, data=df))$r.squared, 
-    group=cluster(df)
+    group=cluster(df),
+    gini=gini(df$group)
   )
 }
 
@@ -148,8 +174,29 @@ eval.data <- function(df){
   
   c(null.line = max(nl$line), 
     null.cluster = max(nl$group), 
-    line=ll$line, 
-    cluster=cl$group)
+    null.gini = max(nl$gini),
+    line = ll$line, 
+    cluster = cl$group,
+    line.gini = ll$gini,
+    cluster.gini = cl$gini)
+}
+
+gini <- function(y, unbiased = TRUE, na.rm = FALSE){
+  if (!is.numeric(y)){
+    warning("'y' is not numeric; returning NA")
+    return(NA)
+  }
+  if (!na.rm && any(na.ind <- is.na(y)))
+    stop("'x' contain NAs")
+  if (na.rm)
+    y <- y[!na.ind]
+  x <- as.numeric(table(y))
+  n <- length(x)
+  mu <- mean(x)
+  N <- if (unbiased) n * (n - 1) else n * n
+  ox <- x[order(x)]
+  dsum <- drop(crossprod(2 * 1:n - n - 1,  ox))
+  dsum / (mu * N)
 }
 
 eval.data.quantiles <- function(i, data.set.parms, reps=3){
