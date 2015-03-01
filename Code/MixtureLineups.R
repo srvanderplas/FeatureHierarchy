@@ -400,7 +400,7 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
                     paste0("Images/Lineups/trials/", fname, ".svg"))
   
   data.frame(
-    pic_id = unique(df$set)+l3/10,
+    pic_id = unique(df$set)*10+l3,
     sample_size = datastats$K,
     test_param = sprintf("turk16-%s", plotname),
     param_value = sprintf("k-%d-sdline-%.2f-sdgroup-%.2f", datastats$K, datastats$sd.trend, datastats$sd.cluster),
