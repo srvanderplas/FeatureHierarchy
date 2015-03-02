@@ -3,7 +3,7 @@ library(plyr)
 library(reshape2)
 library(ggplot2)
 
-lineups <- read.csv("./Images/Turk16/picture-details.csv", stringsAsFactors=FALSE)
+lineups <- read.csv("./Images/Turk16/data-picture-details.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
 
@@ -38,10 +38,10 @@ user.stats <- dcast(subset(useranswers, !grepl(",", response_no)), nick_name~res
 subset(user.stats, rowSums(user.stats[,3:22]>0)<4& rowSums(user.stats[,3:22]>6))
 
 
-useranswers.long <- melt(useranswers, id.vars=c(1, 7:25), value.vars=c("line.correct", "group.correct", "both.correct", "neither"), value.name="correct", variable.name="answer.type")
+useranswers.long <- melt(useranswers, id.vars=c(1, 4, 7:25), value.vars=c("line.correct", "group.correct", "both.correct", "neither"), value.name="correct", variable.name="answer.type")
 useranswers.long$answer.type <- gsub(".correct", "", useranswers.long$answer.type)
-# qplot(x=factor(correct), fill=factor(answer.type), geom="histogram", data=useranswers.long, position="dodge") + 
-  # facet_grid(k+sd.line~sd.cluster, labeller=label_both)
+qplot(x=factor(answer.type), fill=factor(answer.type), weight=correct, geom="histogram", data=useranswers.long, position="dodge") + 
+  facet_grid(k+sd.line~sd.cluster, labeller=label_both)
 
 
 fixed.ef.model <- glm(correct~plottype+sd.cluster*sd.line+k, data=subset(useranswers.long, answer.type=="group"), family = binomial(link="logit"))
@@ -58,8 +58,9 @@ plot.answers <- ddply(useranswers, .(pic_id, test_param, param_value, p_value, p
 plot.answers <- merge(plot.answers, dataset.answers)
 plot.answers$plottype.fac <- as.character(as.numeric(factor(plot.answers$plottype))-1)
 
-# plot.answers <- melt(plot.answers, id.vars=1:5, variable.name="type", value.name="percent.correct")
-qplot(data=plot.answers, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=as.character(0:9), labels=levels(plot.answers$plottype)) #+ scale_color_discrete("Parameter Rep")
+qplot(data=plot.answers, x=line.correct, y=group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=as.character(0:9), labels=levels(plot.answers$plottype)) 
+
+qplot(data=plot.answers, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=as.character(0:9), labels=levels(plot.answers$plottype)) 
 
 head(plot.answers)
 
