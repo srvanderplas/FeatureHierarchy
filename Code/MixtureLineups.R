@@ -81,7 +81,7 @@ mixture.sim <- function(lambda, K, N, sd.trend=.3, sd.cluster=.3){
         break;
       }
     }
-    if(iter>100){
+    if(iter>500){
       warning("Max kmeans iterations")
       break;
     }
@@ -372,7 +372,7 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
   plotobj <- gen.plot(df, aes=get.aes(plotparms), stats=get.stats(plotparms))
   
   if(plotname=="plain" | testplot) {
-    write.csv(df, file = paste0("Images/Lineups/Data/", dataname, ".csv"), row.names=FALSE)
+    write.csv(df, file = paste0("Images/Turk18/Data/", dataname, ".csv"), row.names=FALSE)
   }
 
   if(testplot){
@@ -396,8 +396,8 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
   pValue <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, sprintf("line-%.5f-cluster-%.5f", datastats$line, datastats$cluster), 
                    sprintf("%s-%.5f", datastats$type, datastats$target.sig))
   picName <- ifelse(sum(c("lineplot", "groupplot")%in%names(datastats))==2, 
-                    paste0("Images/Lineups/svgs/", fname, ".svg"), 
-                    paste0("Images/Lineups/trials/", fname, ".svg"))
+                    paste0("Images/Turk18/svgs/", fname, ".svg"), 
+                    paste0("Images/Turk18/trials/", fname, ".svg"))
   
   data.frame(
     pic_id = unique(df$set)*10+l3,
@@ -414,7 +414,7 @@ save.pics <- function(df, datastats, plotparms, plotname, testplot=FALSE){
 }
 
 interactive_lineup <- function(plotobj, fname, script, toggle="toggle", width=6, height=6, trial=FALSE, ex=FALSE) {
-  path <- ifelse(ex, "Images/Lineups/example/", "Images/Lineups/")
+  path <- ifelse(ex, "Images/Turk18/example/", "Images/Turk18/")
   if(ex){
     ggsave(plotobj, filename=paste0(path, "pngs/", fname, ".png"), width=width, height=height, dpi=100)
   }

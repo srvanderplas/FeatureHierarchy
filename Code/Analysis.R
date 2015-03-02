@@ -3,7 +3,7 @@ library(plyr)
 library(reshape2)
 library(ggplot2)
 
-lineups <- read.csv("./Images/Lineups/picture-details.csv", stringsAsFactors=FALSE)
+lineups <- read.csv("./Images/Turk16/picture-details.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
 
@@ -64,4 +64,4 @@ qplot(data=plot.answers, x=line.correct-mean.line.correct, y=group.correct-mean.
 head(plot.answers)
 
 plain.color <- subset(plot.answers, plottype%in%c("plain", "color"))
-qplot(data=plain.color, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=c(0, "c"), labels=c("plain", "color"))
+qplot(data=plain.color, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=c("x", "c"), labels=c("plain", "color"))
