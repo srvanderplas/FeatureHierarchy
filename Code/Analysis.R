@@ -66,3 +66,17 @@ head(plot.answers)
 
 plain.color <- subset(plot.answers, plottype%in%c("plain", "color"))
 qplot(data=plain.color, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=c("x", "c"), labels=c("plain", "color"))
+
+modeldata <- useranswers[,c(1, 4, 7:25, 2, 3, 5, 6)]
+modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], c("", "neither")[1+as.numeric(modeldata$neither==1)], sep="")
+modeldata$outcome[modeldata$both.correct==1] <- "both"
+
+modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
+modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>% str_replace("set-", "") %>% as.numeric)
+modeldata$individualID <- factor(sprintf("%s-%s", modeldata$ip_address, modeldata$nick_name))
+
+library(lme4)
+
+line.model <- glmer(line.correct~plottype + (1|individualID) + (1|dataset), data=modeldata, family = binomial(link="logit"))
+
+group.model <- glmer(group.correct~plottype + (1|individualID) + (1|dataset), data=modeldata, family = binomial(link="logit"))
