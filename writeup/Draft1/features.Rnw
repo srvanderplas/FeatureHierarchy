@@ -89,7 +89,7 @@ y2 <- x2 + rnorm(25, sd=0.1)
 
 qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") 
 @
-\caption{\label{fig:gestalt} Proximity renders the fifty points of the first scatterplot as two distinct ( and equal-sized) groups. Shapes and colors create different groups of points in the middle scatterplot. This Gestalt principle is called Similarity. \newtext{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
+\caption{\label{fig:gestalt} Proximity renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create different groups of points in the middle scatterplot. This Gestalt principle is called Similarity. Good Continuation renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
 \end{figure}
 
 \newtext{
@@ -106,7 +106,7 @@ A further extension of this testing framework are the use of color (in a qualita
 On the other hand, regression lines should emphasize any linear trends in the data.
 
 \section{Design Choices}
-We choose colors and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by  \citet{heer:2014} on the so called perceptual kernels.
+We choose colors and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by \citet{heer:2014} on the so called perceptual kernels.
 
 Unfortunately, this limits the choice to the set used in the Tableau software. In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
 
@@ -134,7 +134,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
     \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ 
-    \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5*(2/(N-1)$
+    \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5 \cdot 2/(N-1)$
     \item Generate $y_i$: $y_i = a  x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
     \item Center and scale $x_i$, $y_i$
   \end{enumerate}
@@ -171,7 +171,7 @@ qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_pars
 We begin by generating $K$ cluster centers on a $K \times K$ grid, then we generate points around the cluster center. 
 \begin{algorithm}\hfill\newline
   Input Parameters:  $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation \\
-  Output: \comment{specify output}
+  Output: $N$ points, in form of vectors $x$ and $y$. \comment{specify output}
   \begin{enumerate}
     \item Generate cluster centers $(c^x_{i}, c^y_{i})$ for each of the $K$ clusters, $i=1, ..., K$:
       \begin{enumerate}
@@ -203,7 +203,7 @@ As a measure of clustering we use a  coefficient to assess the amount of variabi
 \comment{some examples? with color?, K = 3 ... 6? maybe two different standard deviations? }  
 
 \begin{figure}[ht]
-<<cluster, fig.width=8, fig.height=6, out.width='\\textwidth', echo=FALSE>>=
+<<cluster, fig.width=8, fig.height=5, out.width='\\textwidth', echo=FALSE>>=
 sd <- c(0.15, 0.2, 0.25, 0.3)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -219,13 +219,13 @@ res$Klabel <- paste("K :",res$K)
 qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) + 
   facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
-  scale_color_manual(values=colors) 
+  scale_color_manual(values=colors) + theme(aspect.ratio=1)
 @
-\caption{\label{fig:clusters} .}
+\caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom).}
 \end{figure}
 
 \subsection{Null Model $M_0$}
-The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using k-means clustering, where the clustering is repeated until all $K$ clusters contain at least $N/(K*2+1)$ points; this condition ensures that clusters will not attract participant attention for being too ``uneven" and thus bias the results. 
+The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using k-means clustering, where the clustering is repeated until all $K$ clusters contain at least $N/(2K+1)$ points; this condition ensures that clusters will not attract participant attention for being too ``uneven" and thus bias the results. 
 % 
 % Under the null model, $M_T$ slope may be between $(.2, .8)$
 % \comment{We can't have anything different in the null model from the generating model, but you could vary the slope in $M_T$ itself, that would make sense.}
