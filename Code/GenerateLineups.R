@@ -108,7 +108,7 @@ get.stats <- function(r){
 # 
 # data.stats <- merge(data.stats, data.parms.full)
 # 
-# save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
+# save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Images/Turk18/Lineups.Rdata")
 # 
 # #----- Set Up Data Generation (Trial Plots) ----
 # set.seed(32509803)
@@ -151,11 +151,11 @@ get.stats <- function(r){
 # # tmp <- melt(test.stats, id.vars=c(1:3, 6:11), variable.name="sub.type", value.name="significance")
 # # qplot(data=tmp, x=significance, color=sub.type, geom="density") + facet_wrap(~type)
 # 
-# save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
+# save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Images/Turk18/TestLineups.Rdata")
 # 
 # 
 # # ----- Plot Generation (Actual Plots) ----
-# load("./Data/Lineups.Rdata")
+# load("./Images/Turk18/Lineups.Rdata")
 # 
 # plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
 # 
