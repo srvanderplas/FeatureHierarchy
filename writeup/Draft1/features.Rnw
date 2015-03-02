@@ -208,7 +208,7 @@ qplot(x,y, data=res, pch=I(1), colour=factor(group), shape=factor(group)) +
 \end{figure}
 
 \subsection{Null Model $M_0$}
-The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$.
+The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using k-means clustering, where the clustering is repeated until all $K$ clusters contain at least $N/(K*2+1)$ points; this condition ensures that clusters will not attract participant attention for being too ``uneven" and thus bias the results. 
 % 
 % Under the null model, $M_T$ slope may be between $(.2, .8)$
 % \comment{We can't have anything different in the null model from the generating model, but you could vary the slope in $M_T$ itself, that would make sense.}
@@ -322,11 +322,11 @@ The lines for the cluster are, relatively, further to the right of the overall d
 \subsection*{Design choices}
 \begin{enumerate}
 \item Plain: two targets with data from one of each of the two generative models are included in a set of eighteen panels of null data.
-\item Color/Shape: points in each of the panels are colored/marked based on the results of a hierarchical clustering . 
+\item Color: points in each of the panels are colored based on the results of k-means clustering. 
 \item Trend line: a line of the least square fit is drawn through the points.
-\item Color \& Shape
+% \item Color \& Shape
 \item Color \& trend line: this emphasises both the clustering and the regression - it is not clear, which signal will be stronger.
-\item Color \& Ellipsoids: around the groups of the same color, ellipsoids are drawn to reflect the 95\% density estimate.
+% \item Color \& Ellipsoids: around the groups of the same color, ellipsoids are drawn to reflect the 95\% density estimate.
 \end{enumerate}
 
 \subsection{Hypothesis}
@@ -373,7 +373,7 @@ In a more organized representation:
 \end{table}
 
 \subsection{Experimental Design}
-Initially, assume a fully factorial, balanced design, with $r$ unique datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K \in \{3, 5\}$, $\sigma_T \in \{.3, .4, .5, .6\}$, and $\sigma_C \in \{.2, .25, .3, .35, .4\}$. At the second level, there are blocks (by data set), and then 10 aesthetic combinations. 
+Initially, assume a fully factorial, balanced design, with $r$ unique datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K =3$, $\sigma_T \in \{.15, .25, .35}$, and $\sigma_C \in \{.15, .25, .35\}$. At the second level, there are blocks (by data set), and then 4 aesthetic combinations. 
 
 
 \comment{We'll have to use contrasts to measure the effect of color individually, etc., for now let's just consider the ANOVA evaluation}
