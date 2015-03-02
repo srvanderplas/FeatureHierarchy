@@ -50,14 +50,15 @@ suppressMessages(library(gridExtra))
 
 \section{Introduction and background}
 \comment{Discussion of pre-attentive visual features \citep{healey:preattentive} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?}
-\newtext{
-Our understanding of the perception of statistical charts is informed by several levels of research. Cognitive psychologists and neuroscientists often focus on pre-attentive perception, which occurs automatically in the first 200 ms of exposure to a visual stimulus. Gestalt psychologists focus instead on perception as a wholistic experience; they consider the heuristics used to transform visual stimuli into useful, coherent information. Finally, statistical graphics researchers apply low-level perceptual research and gestalt ideas to statistical charts, using tools such as lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010,Hofmann:2012ts} to determine which graphics are accurately perceived and communicate information effectively. 
-}
-\newtext{
-Research into the preattentive stage of visual perception provides us with some information about the temporal hierarchy of graphical feature processing. Color, line orientation, and shape are processed preattentively; that is, within 200 ms, it is possible to identify a single target in a field of distractors, if the target differs with respect to color or shape \citep{goldstein2009encyclopedia}. \citet{healey1999large} extended this work, demonstrating that certain features of three-dimensional data displays are processed preattentively, but that this does not always translate into faster or more accurate inference about the data displayed, particularly when participants must integrate several preattentive features to understand the data. 
-}
-\newtext{
-Gestalt rules of perception also impact statistical graphics. These rules describe the way we organize visual input, focusing on the wholistic experience rather than the individual perceptual features. For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. The rules of perceptual grouping or organization, as stated in \citet{goldstein2009encyclopedia} are:
+
+Our understanding of the perception of statistical charts is informed by several levels of research. Cognitive psychologists and neuroscientists often focus on pre-attentive perception, which occurs automatically in the first 200 ms of exposure to a visual stimulus. Gestalt psychologists focus instead on perception as a holistic experience; they consider the heuristics used to transform visual stimuli into useful, coherent information. Finally, statistical graphics researchers apply low-level perceptual research and gestalt ideas to statistical charts, using tools such as lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010,Hofmann:2012ts} to determine which graphics are accurately perceived and communicate information effectively. 
+
+
+Research into the preattentive stage of visual perception provides us with some information about the temporal hierarchy of graphical feature processing. Color, line orientation, and shape are processed preattentively; that is, within 200 ms, it is possible to identify a single target in a field of distractors, if the target differs with respect to color or shape \citep{goldstein2009encyclopedia}. 
+\citet{healey1999large} extended this work, demonstrating that certain features of three-dimensional data displays are processed preattentively, but that \newtext{neither target identification nor three-dimensional data processing} always translate into faster or more accurate inference about the data displayed, particularly when participants must integrate several preattentive features to understand the data. 
+
+
+Gestalt rules of perception also impact statistical graphics. These rules describe the way we organize visual input, focusing on the holistic experience rather than the individual perceptual features. For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. The rules of perceptual grouping or organization, as stated in \citet{goldstein2009encyclopedia} are:
 \begin{itemize}
 \item Proximity: two elements which are close together are more likely to belong to a single unit.
 \item Similarity: the more similar two elements are, the more likely they belong to a single unit.
@@ -67,12 +68,38 @@ Gestalt rules of perception also impact statistical graphics. These rules descri
 \item Common region: elements contained within a common region likely belong together. 
 \item Connectedness: elements physically connected to each other are more likely to belong together.
 \end{itemize}
-}
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.9\textwidth]{gestalt}
-\caption[The gestalt laws of perception]{The gestalt laws of perception}\label{fig:gestaltlaws}
+\caption[The gestalt laws of perception]{The gestalt laws of perception. }\label{fig:gestaltlaws}
 % \protect\footnotetext{From \url{http://yusylvia.files.wordpress.com/2010/03/gestalt_illustration-01.jpg}}
+\end{figure}
+
+\comment{I like the chart, but it's not ours - let's replace it with scatterplots and point out Gestalt principles in them.}
+
+\begin{figure}
+<<gestalt1, echo =FALSE, out.width='0.3\\textwidth', fig.width=3, fig.height=3>>=
+x1 <- rnorm(25, mean=4, sd=0.5)
+x2 <- rnorm(25, mean=0, sd=0.5)
+y1 <- rnorm(25, mean=1, sd=0.5)
+y2 <- rnorm(25, mean=2, sd=0.5)
+qplot(c(x1,x2), c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
+@
+<<gestalt2, echo =FALSE, out.width='0.3\\textwidth', fig.width=3, fig.height=3>>=
+x <- rnorm(60)
+y <- rnorm(60)
+group <- rep(1:4, length=60)
+qplot(x,y, colour=factor(group%/%2), shape=factor(group%/%2)) + theme_bw() + xlab("x") + ylab("y") + scale_colour_brewer(palette="Set1") + theme(legend.position="none")
+@
+<<gestalt3, echo =FALSE, out.width='0.3\\textwidth', fig.width=3, fig.height=3>>=
+x1 <- runif(50,-.75,1.25)
+y1 <- x1^2 - x1 + rnorm(50, sd=0.1)
+x2 <- runif(25,-.75,1.25)
+y2 <- x2 + rnorm(25, sd=0.1)
+
+qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") 
+@
+\caption{\label{fig:gestalt} Proximity renders the fifty points of the first scatterplot as two distinct ( and equal-sized) groups. Shapes and colours create different groups of points in the middle scatterplot. This Gestalt principle is called Similarity. Common Fate renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
 \end{figure}
 
 \newtext{
