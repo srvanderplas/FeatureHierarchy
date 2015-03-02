@@ -69,29 +69,19 @@ Gestalt rules of perception also impact statistical graphics. These rules descri
 \item Connectedness: elements physically connected to each other are more likely to belong together.
 \end{itemize}
 
-\begin{figure}[htbp]\centering
-\includegraphics[width=.9\textwidth]{gestalt}
-\caption[The gestalt laws of perception]{The gestalt laws of perception. }\label{fig:gestaltlaws}
-% \protect\footnotetext{From \url{http://yusylvia.files.wordpress.com/2010/03/gestalt_illustration-01.jpg}}
-\end{figure}
-
-\comment{I like the chart, but it's not ours - let's replace it with scatterplots and point out Gestalt principles in them.}
-
 \begin{figure}
-<<gestalt1, echo =FALSE, out.width='0.3\\textwidth', fig.width=3, fig.height=3>>=
+<<gestalt1, echo =FALSE, out.width='0.32\\textwidth', fig.width=3, fig.height=3, fig.show='hold'>>=
 x1 <- rnorm(25, mean=4, sd=0.5)
 x2 <- rnorm(25, mean=0, sd=0.5)
 y1 <- rnorm(25, mean=1, sd=0.5)
 y2 <- rnorm(25, mean=2, sd=0.5)
 qplot(c(x1,x2), c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
-@
-<<gestalt2, echo =FALSE, out.width='0.3\\textwidth', fig.width=3, fig.height=3>>=
+
 x <- rnorm(60)
 y <- rnorm(60)
 group <- rep(1:4, length=60)
-qplot(x,y, colour=factor(group%/%2), shape=factor(group%/%2)) + theme_bw() + xlab("x") + ylab("y") + scale_colour_brewer(palette="Set1") + theme(legend.position="none")
-@
-<<gestalt3, echo =FALSE, out.width='0.3\\textwidth', fig.width=3, fig.height=3>>=
+qplot(x,y, color=factor(group%/%2), shape=factor(group%/%2)) + theme_bw() + xlab("x") + ylab("y") + scale_color_brewer(palette="Set1") + theme(legend.position="none")
+
 x1 <- runif(50,-.75,1.25)
 y1 <- x1^2 - x1 + rnorm(50, sd=0.1)
 x2 <- runif(25,-.75,1.25)
@@ -99,7 +89,7 @@ y2 <- x2 + rnorm(25, sd=0.1)
 
 qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") 
 @
-\caption{\label{fig:gestalt} Proximity renders the fifty points of the first scatterplot as two distinct ( and equal-sized) groups. Shapes and colours create different groups of points in the middle scatterplot. This Gestalt principle is called Similarity. Common Fate renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
+\caption{\label{fig:gestalt} Proximity renders the fifty points of the first scatterplot as two distinct ( and equal-sized) groups. Shapes and colors create different groups of points in the middle scatterplot. This Gestalt principle is called Similarity. \newtext{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
 \end{figure}
 
 \newtext{
@@ -210,7 +200,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 
 As a measure of clustering we use a  coefficient to assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we implicitly assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  
 
-\comment{some examples? with colour?, K = 3 ... 6? maybe two different standard deviations? }  
+\comment{some examples? with color?, K = 3 ... 6? maybe two different standard deviations? }  
 
 \begin{figure}[ht]
 <<cluster, fig.width=8, fig.height=6, out.width='\\textwidth', echo=FALSE>>=
@@ -226,10 +216,10 @@ res <- rbind(res, res2)
 suppressMessages(library(ggplot2))
 res$label <- paste("sigma[C] :",res$sd.cluster)
 res$Klabel <- paste("K :",res$K)
-qplot(x,y, data=res, pch=I(1), colour=factor(group), shape=factor(group)) + 
+qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) + 
   facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
-  scale_colour_manual(values=colors) 
+  scale_color_manual(values=colors) 
 @
 \caption{\label{fig:clusters} .}
 \end{figure}
@@ -322,9 +312,9 @@ save(res, file="./figure/nulldist.Rdata")
 }
 
 require(ggplot2)
-qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$trends), colour="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
+qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$trends), color="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
 ggsave("figure/fline.pdf", width=8, height=4)
-qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), colour=I("grey20")) + geom_vline(aes(xintercept=res$clusters), colour="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
+qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$clusters), color="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
 ggsave("figure/fgroup.pdf", width=8, height=4)
 @
 
@@ -376,13 +366,139 @@ Plot features will emphasize either lines or clusters as follows:
 \item Color + shape (double cluster emphasis)
 \item Ellipse + color (double cluster emphasis)
 \item Line
-\item Line + Prediction Interval (double line emphasis)
+\item Line + prediction interval (double line emphasis)
 \item Color + line (conflict)
-\item Color + line + Prediction Interval (conflict)
+\item Color + ellipse + line + prediction interval (double conflict)
 \end{itemize}
 
 \comment{The primary purpose of the study is to detect how using visual aesthetics emphasizes one of two features and lead to detection of one feature over another feature.}
 \comment{A secondary purpose of the study is to relate signal strength to detection in a visualization by a human observer.}
+
+\clearpage
+\subsection{Sample Pictures}
+The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
+<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='hold', fig.keep='all', fig.align='center', warning=FALSE, message=FALSE>>=
+source("../../Code/MixtureLineups.R")
+source("../../Code/theme_lineup.R")
+
+# # Define colors and shapes
+# colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+#              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+# shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
+# 
+# colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
+# # colortm[3,4] <- 0
+# # colortm[4,3] <- 0
+# colortm[8,] <- 0
+# colortm[,8] <- 0
+# 
+# shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
+# # shapetm[9:10,] <- 0
+# # shapetm[, 9:10] <- 0
+# shapetm[9,] <- 0
+# shapetm[,9] <- 0
+# shapetm[10,] <- 0
+# shapetm[,10] <- 0
+# 
+# # Lineup Design
+# data.parms <- expand.grid(N=45,
+#                           K=3,
+#                           sd=.4,
+#                           q=.3)
+# 
+# plot.parms <- expand.grid(
+#   color = c(0,1),
+#   shape = c(0,1),
+#   reg = c(0,1),
+#   err = c(0,1),
+#   ell = c(0,1)
+# )[c(
+#   1, # control
+#   2, 3, # color, shape
+#   4, 18, # color + shape, color + ellipse
+#   20, # color + shape + ellipse
+#   5, 13, # trend, trend + error
+#   6, # color + trend
+#   30 # color + ellipse + trend + error
+#   ),]
+# 
+# get.aes <- function(r){
+#   c("Color", "Shape")[which(as.logical(r[1:2]))]
+# }
+# 
+# get.stats <- function(r){
+#   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
+# }
+# 
+# data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
+# data.stats <- ddply(data, .(set, .sample), 
+#                     function(df){
+#                       r2 <- summary(lm(y~x, data=df))
+#                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
+#                       res <- tmp[[1]]$`Mean Sq`
+#                       data.frame(.sample=unique(df$.sample), 
+#                                  LineRSq = r2$r.squared, 
+#                                  Fgroup = round(res[2]/res[3], 2), 
+#                                  lineplot=unique(df$target2), 
+#                                  groupplot=unique(df$target1))
+#                       } )
+# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
+# 
+# save(colors, shapes, colortm, shapetm, data, answers, data.parms, plot.parms, get.aes, get.stats, file="figure/lineupex/data.Rdata")
+load("figure/lineupex/data.Rdata")
+d_ply(data, .(set), function(df){
+  i <- unique(df$set)
+  for(j in 1:nrow(plot.parms)){
+    p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
+    ggsave(plot = p, 
+           filename = sprintf("figure/lineupex/set-%d-plot-%d.pdf", i, j), 
+           width=6, height=6, units="in", dpi=150)
+    print(p)
+  }
+})
+@
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-1.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-2.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-3.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-4.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-5.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-6.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-7.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-8.pdf}\\
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-9.pdf}\hfill
+% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-10.pdf}\\
+
+
+\bibliographystyle{asa}
+\bibliography{references}
+
+\section*{Simulation Studies of Parameter Space}
+Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
+
+\comment{What we also see from these plots, is that we do have a $\sigma_C \sigma_T$ interaction: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. We might also have a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. I am not sure whether that is an actual three-way interaction or just all three two-way interactions, but it doesn't matter, at this point we are just talking about potentially saving one parameter. What is clear, is that we need to block by parameter setting. We do so, by blocking on each dataset. Each dataset is non-deterministic, though, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. We therefore need repetitions of the data generation to be able to separate the variability coming from within the parameter setting from the additional variability introduced by the subjects' evaluations of the lineups. }
+<<simulationparameters,echo=F,include=T, fig.width=10, fig.height=6.5, out.width='.8\\linewidth'>>=
+load("../../Data/SimulationDatasetCriteria.Rdata")
+
+dataset.criteria$ParameterSet <- with(dataset.criteria, sprintf("sdT%.2f-sdC%.2f", sd.trend, sd.cluster))
+dataset.criteria$ParameterSet[dataset.criteria$type=="cluster"] <- with(dataset.criteria[dataset.criteria$type=="cluster",], sprintf("sdC%.2f-sdT%.2f", sd.cluster, sd.trend))
+
+dataset.criteria$lsc <- paste("sigma[C]: ", round(dataset.criteria$sd.cluster, 2))
+dataset.criteria$lst <- paste("sigma[T]: ", round(dataset.criteria$sd.trend, 2))
+dataset.criteria$lK <- paste("K: ", dataset.criteria$K)
+qplot(data=subset(dataset.criteria, type=="line"), x=LB, xend=UB, y=sd.cluster, yend=sd.cluster, color=dist, geom="segment") +
+  geom_point(aes(x=LB, y=sd.cluster, color=dist))  + 
+  geom_point(aes(x=UB, y=sd.cluster, color=dist)) + 
+  facet_grid(lst~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
+  scale_color_brewer("Distribution",palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) \nand target distribution (red) of linearity measured in R squared.") + ylab(expression("Cluster variability":sigma[C]))
+
+qplot(data=subset(dataset.criteria, type=="cluster"), x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segment") +
+  geom_point(aes(x=LB, y=sd.trend, color=dist))  + 
+  geom_point(aes(x=UB, y=sd.trend, color=dist)) + 
+  facet_grid(lsc~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
+  scale_color_brewer("Distribution", palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) \nand target distribution (red) of amount of clustering.") + ylab(expression( "Variability along the trend":sigma[T]))
+@
+
+\section*{Experimental Design}
 
 In a more organized representation:
 \begin{table}[h]
@@ -400,7 +516,7 @@ In a more organized representation:
 \end{table}
 
 \subsection{Experimental Design}
-Initially, assume a fully factorial, balanced design, with $r$ unique datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K =3$, $\sigma_T \in \{.15, .25, .35}$, and $\sigma_C \in \{.15, .25, .35\}$. At the second level, there are blocks (by data set), and then 4 aesthetic combinations. 
+Initially, assume a fully factorial, balanced design, with $r$ unique datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K =3$, $\sigma_T \in \{.15, .25, .35\}$, and $\sigma_C \in \{.15, .25, .35\}$. At the second level, there are blocks (by data set), and then 4 aesthetic combinations. 
 
 
 \comment{We'll have to use contrasts to measure the effect of color individually, etc., for now let's just consider the ANOVA evaluation}
@@ -609,133 +725,4 @@ Level & Factor & Source & DF & Sum of Squares \\\hline
 \end{tabular}
 \end{table}
 
-\clearpage
-\subsection{Sample Pictures}
-The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
-<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='hold', fig.keep='all', fig.align='center', warning=FALSE, message=FALSE>>=
-source("../../Code/MixtureLineups.R")
-source("../../Code/theme_lineup.R")
-
-# # Define colors and shapes
-# colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
-#              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
-# shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
-# 
-# colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
-# # colortm[3,4] <- 0
-# # colortm[4,3] <- 0
-# colortm[8,] <- 0
-# colortm[,8] <- 0
-# 
-# shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
-# # shapetm[9:10,] <- 0
-# # shapetm[, 9:10] <- 0
-# shapetm[9,] <- 0
-# shapetm[,9] <- 0
-# shapetm[10,] <- 0
-# shapetm[,10] <- 0
-# 
-# # Lineup Design
-# data.parms <- expand.grid(N=45,
-#                           K=3,
-#                           sd=.4,
-#                           q=.3)
-# 
-# plot.parms <- expand.grid(
-#   color = c(0,1),
-#   shape = c(0,1),
-#   reg = c(0,1),
-#   err = c(0,1),
-#   ell = c(0,1)
-# )[c(
-#   1, # control
-#   2, 3, # color, shape
-#   4, 18, # color + shape, color + ellipse
-#   20, # color + shape + ellipse
-#   5, 13, # trend, trend + error
-#   6, # color + trend
-#   30 # color + ellipse + trend + error
-#   ),]
-# 
-# get.aes <- function(r){
-#   c("Color", "Shape")[which(as.logical(r[1:2]))]
-# }
-# 
-# get.stats <- function(r){
-#   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
-# }
-# 
-# data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
-# data.stats <- ddply(data, .(set, .sample), 
-#                     function(df){
-#                       r2 <- summary(lm(y~x, data=df))
-#                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
-#                       res <- tmp[[1]]$`Mean Sq`
-#                       data.frame(.sample=unique(df$.sample), 
-#                                  LineRSq = r2$r.squared, 
-#                                  Fgroup = round(res[2]/res[3], 2), 
-#                                  lineplot=unique(df$target2), 
-#                                  groupplot=unique(df$target1))
-#                       } )
-# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
-# 
-# save(colors, shapes, colortm, shapetm, data, answers, data.parms, plot.parms, get.aes, get.stats, file="figure/lineupex/data.Rdata")
-load("figure/lineupex/data.Rdata")
-d_ply(data, .(set), function(df){
-  i <- unique(df$set)
-  for(j in 1:nrow(plot.parms)){
-    p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
-    ggsave(plot = p, 
-           filename = sprintf("figure/lineupex/set-%d-plot-%d.pdf", i, j), 
-           width=6, height=6, units="in", dpi=150)
-    print(p)
-  }
-})
-@
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-1.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-2.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-3.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-4.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-5.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-6.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-7.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-8.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-9.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-10.pdf}\\
-
-
-\bibliographystyle{asa}
-\bibliography{references}
-
-\section*{Simulation Studies of Parameter Space}
-Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
-
-\comment{What we also see from these plots, is that we do have a $\sigma_C \sigma_T$ interaction: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. We might also have a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. I am not sure whether that is an actual three-way interaction or just all three two-way interactions, but it doesn't matter, at this point we are just talking about potentially saving one parameter. What is clear, is that we need to block by parameter setting. We do so, by blocking on each dataset. Each dataset is non-deterministic, though, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. We therefore need repetitions of the data generation to be able to separate the variabiltiy coming from within the parameter setting from the additional variability introduced by the subjects' evaluations of the lineups. }
-<<simulationparameters,echo=F,include=T, fig.width=10, fig.height=6.5, out.width='.8\\linewidth'>>=
-load("../../Data/SimulationDatasetCriteria.Rdata")
-
-dataset.criteria$ParameterSet <- with(dataset.criteria, sprintf("sdT%.2f-sdC%.2f", sd.trend, sd.cluster))
-dataset.criteria$ParameterSet[dataset.criteria$type=="cluster"] <- with(dataset.criteria[dataset.criteria$type=="cluster",], sprintf("sdC%.2f-sdT%.2f", sd.cluster, sd.trend))
-
-  
-#qplot(data=dataset.criteria, x=LB, xend=UB, y=ParameterSet, yend=ParameterSet, color=dist, geom="segment") + geom_point(aes(x=LB, y=ParameterSet, color=dist))  + geom_point(aes(x=UB, y=ParameterSet, color=dist)) + facet_grid(type~K, scales="free", labeller="label_both")  + theme_bw() + 
-#  scale_colour_brewer(palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) and target distribution (red) of quality measures.")
-
-dataset.criteria$lsc <- paste("sigma[C]: ", round(dataset.criteria$sd.cluster, 2))
-dataset.criteria$lst <- paste("sigma[T]: ", round(dataset.criteria$sd.trend, 2))
-dataset.criteria$lK <- paste("K: ", dataset.criteria$K)
-qplot(data=subset(dataset.criteria, type=="line"), x=LB, xend=UB, y=sd.cluster, yend=sd.cluster, color=dist, geom="segment") +
-  geom_point(aes(x=LB, y=sd.cluster, color=dist))  + 
-  geom_point(aes(x=UB, y=sd.cluster, color=dist)) + 
-  facet_grid(lst~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
-  scale_colour_brewer("distribution",palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) and target distribution (red) of linearity measured in R squared.") + ylab(expression("Cluster variability":sigma[C]))
-
-qplot(data=subset(dataset.criteria, type=="cluster"), x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segment") +
-  geom_point(aes(x=LB, y=sd.trend, color=dist))  + 
-  geom_point(aes(x=UB, y=sd.trend, color=dist)) + 
-  facet_grid(lsc~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
-  scale_colour_brewer("distribution", palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) and target distribution (red) of amount of clustering.") + ylab(expression( "Variability along the trend":sigma[T]))
-
-
-@
 \end{document}
