@@ -290,94 +290,11 @@ The parameter values were chosen after examining the full parameter space throug
 
 \subsection{Plot Aesthetics}
 \newtext{
-Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions would modify the perception of ambiguous graphs, emphasizing clustered data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset generated as described in the previous section, we will examine the following combinations of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) in order to assess the visual impact of these aesthetics on target identification. 
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions would modify the perception of ambiguous graphs, emphasizing clustered data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset generated as described in the previous section, we will examine the combinations of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics} in order to assess the visual impact of these aesthetics on target identification. Examples of these plot aesthetics are shown in figure \ref{fig:plotExamples}.
 }
 
-\begin{table}[h]
-\begin{center}
-\begin{tabular}{ll}
-Emphasis & Aesthetics \\\hline\hline
-Control & -- \\\hline
-Group & Color, Shape \\
-& Color + Shape, Color + Ellipse, Color + Shape + Ellipse\\\hline
-Trend & Line \\
-& Line + Error band\\\hline
-Conflict & Color + Trend Line, \\
-& Color + Ellipse + Trend Line + Error band\\\hline\hline
-\end{tabular}
-\end{center}
-\caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
-\end{table}
-
-\newtext{
-We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses will increase the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics will decrease the probability of a participant selecting the target plot with data generated from $M_T$, the linear model. 
-}
-
-\newtext{
-Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval will increase the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decrease the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model. 
-}
-
-Specifically, we predict that plot features will emphasize either lines or clusters as follows: 
-
-\begin{itemize}
-\item None (control)
-\item Color (cluster emphasis)
-\item Shape (cluster emphasis)
-\item Color + shape (double cluster emphasis)
-\item Ellipse + color (double cluster emphasis)
-\item Line (trend emphasis)
-\item Line + prediction interval (double trend emphasis)
-\item Color + line (conflict)
-\item Color + ellipse + line + prediction interval (double conflict)
-\end{itemize}
-
-\subsection{Color and Shape Palettes}
-Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
-
-\begin{figure}
-<<color-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth',dependson='setup'>>=
-colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
-            "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
-qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lineup()
-@
-\caption{Colors in \citet{heer:2014}. This study removed grey from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
-\end{figure}
-
-\newtext{The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software.}
-In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
-
-% Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
-
-\begin{figure}
-<<shape-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth', dependson='setup',message=F, warning=F>>=
-shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
-
-qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lineup()
-@
-\caption{Shapes in \citet{heer:2014}. In order to control for varying point size due to Unicode vs. non-Unicode characters, the last two shapes were removed.\label{fig:shapes}}
-\end{figure}
-
-\newtext{Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} (shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 group datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.}
-
-\subsection{Hypotheses}
-\newtext{
-The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses, will increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, will increase the probability of detecting the linear relationship. 
-}
-
-\newtext{
-A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
-}
-
-\subsection{Experimental Design}
-\newtext{
-The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination. 
-}
-\comment{Need to find some graphic/table which makes this a bit more clear.}
-
-\clearpage
-\subsection{Sample Pictures}
-The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
-<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='hold', fig.keep='all', fig.align='center', warning=FALSE, message=FALSE>>=
+\begin{figure}[ht]
+<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".3\\linewidth", fig.show='hold', fig.align='center', warning=FALSE, message=FALSE>>=
 # source("../../Code/MixtureLineups.R")
 # source("../../Code/theme_lineup.R")
 # 
@@ -450,16 +367,90 @@ d_ply(data, .(set), function(df){
   i <- unique(df$set)
   for(j in 1:nrow(plot.parms)){
     p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
-    ggsave(plot = p, 
-           filename = sprintf("figure/lineupex/set-%d-plot-%d.pdf", i, j), 
-           width=6, height=6, units="in", dpi=150)
+#     ggsave(plot = p, 
+#            filename = sprintf("figure/lineupex/set-%d-plot-%d.pdf", i, j), 
+#            width=6, height=6, units="in", dpi=150)
     print(p)
   }
 })
 @
+\caption{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=.25$ and $\sigma_C=.2$. \label{fig:plotExamples}}
+\end{figure}
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{ll}
+Emphasis & Aesthetics \\\hline\hline
+Control & -- \\\hline
+\multirow{3}{*}{Group} & Color, Shape \\
+& Color + Shape, Color + Ellipse\\
+& Color + Shape + Ellipse\\\hline
+\multirow{2}{*}{Trend} & Line \\
+& Line + Error band\\\hline
+\multirow{2}{*}{Conflict} & Color + Trend Line, \\
+& Color + Ellipse + Trend Line + Error band\\\hline\hline
+\end{tabular}
+\end{center}
+\caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
+\end{table}
+
+\newtext{
+We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses will increase the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics will decrease the probability of a participant selecting the target plot with data generated from $M_T$, the linear model. 
+}
+
+\newtext{
+Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval will increase the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decrease the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model. 
+}
+
+\subsection{Experimental Design}
+\newtext{
+The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination. 
+}
+\comment{Need to find some graphic/table which makes this a bit more clear.}
+
+\subsection{Color and Shape Palettes}
+Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
+
+\begin{figure}
+<<color-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth',dependson='setup'>>=
+colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+            "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lineup()
+@
+\caption{Colors in \citet{heer:2014}. This study removed grey from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
+\end{figure}
+
+\newtext{The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software.}
+In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
+
+% Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
+
+\begin{figure}
+<<shape-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth', dependson='setup',message=F, warning=F>>=
+shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
+
+qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lineup()
+@
+\caption{Shapes in \citet{heer:2014}. In order to control for varying point size due to Unicode vs. non-Unicode characters, the last two shapes were removed.\label{fig:shapes}}
+\end{figure}
+
+\newtext{Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} (shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 group datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.}
+
+\subsection{Hypotheses}
+\newtext{
+The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses, will increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, will increase the probability of detecting the linear relationship. 
+}
+
+\newtext{
+A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
+}
+
+\clearpage
 
 \bibliographystyle{asa}
 \bibliography{references}
+
+\clearpage
 
 \section*{Simulation Studies of Parameter Space}
 \subsection{Simulation 1}
