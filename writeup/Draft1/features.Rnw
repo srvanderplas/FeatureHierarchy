@@ -45,18 +45,25 @@ library(reshape2)
 suppressMessages(library(ggplot2))
 library(plyr)
 suppressMessages(library(gridExtra))
+
+
+source("../../Code/MixtureLineups.R")
+source("../../Code/theme_lineup.R")
 @
 
 
 \section{Introduction and background}
 \comment{Discussion of pre-attentive visual features \citep{healey:preattentive} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?}
 
+\todo{Soft introduction}
+
 Our understanding of the perception of statistical charts is informed by several levels of research. Cognitive psychologists and neuroscientists often focus on pre-attentive perception, which occurs automatically in the first 200 ms of exposure to a visual stimulus. Gestalt psychologists focus instead on perception as a holistic experience; they consider the heuristics used to transform visual stimuli into useful, coherent information. Finally, statistical graphics researchers apply low-level perceptual research and gestalt ideas to statistical charts, using tools such as lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010,Hofmann:2012ts} to determine which graphics are accurately perceived and communicate information effectively. 
 
-
 Research into the preattentive stage of visual perception provides us with some information about the temporal hierarchy of graphical feature processing. Color, line orientation, and shape are processed preattentively; that is, within 200 ms, it is possible to identify a single target in a field of distractors, if the target differs with respect to color or shape \citep{goldstein2009encyclopedia}. 
-\citet{healey1999large} extended this work, demonstrating that certain features of three-dimensional data displays are processed preattentively, but that \newtext{neither target identification nor three-dimensional data processing} always translate into faster or more accurate inference about the data displayed, particularly when participants must integrate several preattentive features to understand the data. 
+\citet{healey1999large} extended this work, demonstrating that certain features of three-dimensional data displays are processed preattentively, but that neither target identification nor three-dimensional data processing always translate into faster or more accurate inference about the data displayed, particularly when participants must integrate several preattentive features to understand the data. 
 
+\comment{add citations and text describing preattentive interference.}
+\comment{add a bit of transition between preattentive stages of perception and gestalt rules.}
 
 Gestalt rules of perception also impact statistical graphics. These rules describe the way we organize visual input, focusing on the holistic experience rather than the individual perceptual features. For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. The rules of perceptual grouping or organization, as stated in \citet{goldstein2009encyclopedia} are:
 \begin{itemize}
@@ -89,48 +96,61 @@ y2 <- x2 + rnorm(25, sd=0.1)
 
 qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") 
 @
-\caption{\label{fig:gestalt} Proximity renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create different groups of points in the middle scatterplot. This Gestalt principle is called Similarity. Good Continuation renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
+\caption{\label{fig:gestalt} \emph{Proximity} renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create different groups of points in the middle scatterplot, invoking the Gestalt principle of \emph{Similarity}. \emph{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
 \end{figure}
 
+The plots in figure \ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (connectedness, closure, and/or common region). 
+\comment{clarify next sentence}
+The use of physical location, color, and shape to organize graphical units mentally utilizes both preattentive processing and higher-order gestalt schemas, identifying and grouping similar graphical features and simultaneously directing attention to graphical features which stand alone. 
 \newtext{
-The plots in figure \ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (connectedness, closure, and/or common region). The use of physical location, color, and shape to organize graphical units mentally utilizes both preattentive processing and higher-order gestalt schemas, identifying and grouping similar graphical features and simultaneously directing attention to graphical features which stand alone. 
-
+Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli; theoretically, subsequent top-down gestalt heuristics can be applied to such stimuli more quickly. 
 }
 
+\newtext{
+This study is designed to understand the hierarchy of gestalt principles in perception of statistical graphics. We utilize information from previous studies \citep{heer:2014, robinson:03} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
+}
+\comment{might be useful to have a small diagram describing the perceptual process (with preattentive processing way at the top and gestalt heuristic processing in the middle, with "cognitive effort" at the bottom). Not sure if it's necessary, though.}
 
-Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}
+\subsection{Statistical Lineups}
 
-The change to lineups we make is to introduce a second target to each lineup. We then keep track of how many observers choose any one of the two targets (to assess the difficulty of a lineup), and additionally we  record how often observers choose one target over the other one. This is information that we can use to evaluate how strong the signal of one target is compared to the other one. 
+\todo[inline]{Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}.}
+\comment{Describe the lineup protocol, including basic statistics. Link to the psychological "target and distractors" approach, which can be used to justify the addition of a second target, even with the PITA of the statistical complications. }
 
-A further extension of this testing framework are the use of color (in a qualitative color scheme), the use of shapes, and additional density lines - we anticipate that all of these features are going to emphasize the clustering component. 
-On the other hand, regression lines should emphasize any linear trends in the data.
 
-\section{Design Choices}
-We choose colors and shapes for the lineups in our study to be the most different from a set of ten choices as evaluated by participants in the study by \citet{heer:2014} on the so called perceptual kernels.
+\newtext{In this study, we modify the lineup protocol by introducing a second target to each lineup. The two targets represent two different, competing signals; the participant's choice then demonstrates empirically which signal is more salient. By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. At this level, signal strength is determined by the data and generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system. }
 
-Unfortunately, this limits the choice to the set used in the Tableau software. In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
+\newtext{Extending this testing framework, we can apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers may emphasize either target, affecting the overall visual signal of one or the other target plots relative to the null plots. We expect that in a situation similar to the third plot of figure \ref{fig:gestalt}, the addition of two trend lines would emphasize the "good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure would be enhanced if the points in each group were colored differently, as the proximity heuristic would be supplemented by similarity. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may "tip the balance" in favor of recognizing one type of signal.}
+% A further extension of this testing framework are the use of color (in a qualitative color scheme), the use of shapes, and additional density lines - we anticipate that all of these features are going to emphasize the clustering component. 
+% On the other hand, regression lines should emphasize any linear trends in the data.
+\newtext{
+This study is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. %awesome alliteration, right? 
+}
 
-% Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
+\section{Experimental Design}
+\newtext{
+In this section, we discuss the generating data models for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
+}
 
-Shapes - there were some problems with reliable unicode representations in the lineups, which led to using slightly modified shapes. The left and right triangle shapes (available only in unicode using R) were excluded due to size differences between unicode and non-unicode shapes. 
+\comment{I know this will have to be rearranged, expanded, and transitions between sections will need to be added, but I want to get the paragraphs out.}
 
-All shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
+\subsection{Data Generation}
+\newtext{
+Lineups require a single "target" data set (which we are expanding to two competing "target" data sets), and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through bootstrap sampling, but this introduces some dependencies between target and null plots which complicate the statistical analysis of the results.
+}
+\comment{need citations}
+\newtext{
+When possible, it is desireable to generate true null plots, which are generated from the null model and do not depend on the data used in the target plot. 
+This experiment will measure two competing gestalt heuristics, proximity and good continuation, using two data-generating models: $M_C$, which generates data with $K$ clusters, and $M_T$, which generates data with a positive correlation between $x$ and $y$. 
+True null datasets are created using a mixture model $M_0$ which combines $M_C$ and $M_T$. Both $M_C$ and $M_T$ generate data in the same range of values. 
+Additionally, $M_C$ generates clustered data with linear correlations that are within $\rho = (0.25, 0.75)$, similar to the linear relationship between datasets generated by $M_0$, and $M_T$ generates data with clustering similar to $M_0$. These constraints provide some assurance that participants who select a plot with data generated from $M_T$ are doing so because of visual cues indicating a linear trend (rather than a lack of clustering compared to plots with data generated from $M_0$), and participants who select a plot with data generated from $M_C$ are doing so because of visual cues indicating clustering, rather than a lack of a linear relationship relative to plots with data generated from $M_0$. 
+}
 
-\comment{How do the shapes we picked compare to the shapes discussed in \citet{robinson:03} see http://stat-computing.org/newsletter/issues/scgn-14-1.pdf? }
-\comment{For $K=3$ we have one shape each from Robinson's group 1, 2, and 9 - these groups are choses such that they all ``show differences in their preattentive properties"; for $K=5$, we have one shape each from groups 1, 2, 3,  9, and 10. }
+\subsubsection{Regression Model $M_T$}
 
-\section{Generating Model}
-We are working with two  models $M_C$ and $M_T$ to generate data for the target plots. The null plots are showing data generate from a mixture model $M_0$. Both models generate data in the same range of values. We made also sure that data from the clustering model $M_C$ shares the same correlation 
-with the null data, while data from model $M_T$ exhibits a similar amount of clustering as the null data. 
+This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. It generates $N$ points $(x_i, y_i), i=1, ..., N$ where $x$ and $y$ have a positive linear relationship. The data generation mechanism is as follows: 
 
-\subsection{Regression Model $M_T$}
-
-This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. 
-
-% \comment{Isn't there some centering or scaling missing? How do we make sure, that the regression model and the cluster model are on the same x scale?  Only for $K=3$ does the scaling in the clustering model boil down to values between [-1,1].  For $K=5$ the values are further out. \\
-% \textit{The scaling and centering happens in a different function. I've added that now.}}
 \begin{algorithm}\hfill\newline
-  Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line, slope $a$ (1 by default) \\
+  Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line \\
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
     \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ 
@@ -144,22 +164,20 @@ We compute the correlation coefficient for all of the plots to assess the amount
 \[
 r = 1 - RSS/TSS,
 \]
-where TSS is the total sum of square, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$.
+where TSS is the total sum of squares, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$, the residual sum of squares.
 The expected correlation coefficient $\rho$ in this scenario is 
 \[
-\rho = \frac{\frac{1}{3}a^2}{\frac{1}{3}a^2 + \sigma^2_T},
+\rho = \frac{\frac{1}{3}}{\frac{1}{3} + \sigma^2_T},
 \]
 because
 $E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E\left[y_i^2\right]$  (as $E[Y] = 0$), where 
-\[
-E\left[y_i^2\right] = E\left[a^2 x_i^2 + e_i^2 + 2 ax_ie_i\right] = \frac{1}{3}a^2 + \sigma^2_T. 
-\]
+$$
+E\left[y_i^2\right] = E\left[x_i^2 + e_i^2 + 2 x_ie_i\right] = \frac{1}{3} + \sigma^2_T. 
+$$
 \begin{figure}[ht]
-<<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE>>=
-source("../../Code/MixtureLineups.R")
+<<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE, dependson='setup'>>=
 sd <- c(0.1, 0.2, 0.3, 0.4)
 res <- ldply(sd, function(x) { data.frame(sd.trend=x, sim.line(N=45, sd.trend=x)) })
-suppressMessages(library(ggplot2))
 res$label <- paste("sigma[T] :",res$sd.trend)
 qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"))
@@ -167,23 +185,23 @@ qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_pars
 \caption{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for parameter values of  $\sigma_T \in \{0.1, 0.2, 0.3, 0.4\}$.}
 \end{figure}
 
-\subsection{Cluster Model $M_C$}
-We begin by generating $K$ cluster centers on a $K \times K$ grid, then we generate points around the cluster center. 
+\subsubsection{Cluster Model $M_C$}
+We begin by generating $K$ cluster centers on a $K \times K$ grid, then we generate points around selected cluster centers. 
 \begin{algorithm}\hfill\newline
   Input Parameters:  $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation \\
-  Output: $N$ points, in form of vectors $x$ and $y$. \comment{specify output}
+  Output: $N$ points, in form of vectors $x$ and $y$. 
   \begin{enumerate}
     \item Generate cluster centers $(c^x_{i}, c^y_{i})$ for each of the $K$ clusters, $i=1, ..., K$:
       \begin{enumerate}
         \item in form of two vectors $c^{x}$ and $c^y$ of permutations of $\{1, ..., K\}$, such that
         \item the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of $[.25, .75]$.
       \end{enumerate}
-      \item Center and standard-normalize cluster centers $(c^x, c^y)$:  
+      \item Center and standardize cluster centers $(c^x, c^y)$:  
       \[
         \tilde{c}^x_{i} = \frac{c^x_{i} - \bar{c}}{s_c} \ \ \text{ and } \ \ \tilde{c}^y_{i} = \frac{c^y_{i} - \bar{c}}{s_c},
       \]
       where $\overline{c} = (K+1)/2$ and $s_c^2 = \frac{K(K+1)}{12}$ for all $i = 1, ..., K$.
-    \item For the $K$ clusters, we want to have nearly equal sized groups, but uphold some variability. Group sizes are therefore determined as a draw from a multinomial distribution: determine group sizes $g = (g_1, ..., g_K)$, with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ as a random draw 
+    \item For the $K$ clusters, we want to have nearly equal sized groups, but allow some variability. Group sizes are therefore determined as a draw from a multinomial distribution: determine group sizes $g = (g_1, ..., g_K)$, with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ as a random draw 
     \[
     g \sim \text{Multinomial}(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N(\frac{1}{K}, \frac{1}{2 K^2}).
     \]
@@ -198,12 +216,10 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 \end{algorithm} 
 
 
-As a measure of clustering we use a  coefficient to assess the amount of variability taken care of by including the grouping variable, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we implicitly assume that the values in $x$ and $y$ are on the same scale (which we can easily achieve by an appropriate re-scaling).  
-
-\comment{some examples? with color?, K = 3 ... 6? maybe two different standard deviations? }  
+As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
 
 \begin{figure}[ht]
-<<cluster, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE>>=
+<<cluster, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE,dependson='setup'>>=
 sd <- c(0.15, 0.2, 0.25, 0.3)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -224,19 +240,34 @@ qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) +
 \caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom).}
 \end{figure}
 
-\subsection{Null Model $M_0$}
-The generative model for null data  is created as a mixture model $M_0$ that draws $n_c \sim B_{N, \lambda}$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using k-means clustering, where the clustering is repeated until all $K$ clusters contain at least $N/(2K+1)$ points; this condition ensures that clusters will not attract participant attention for being too ``uneven" and thus bias the results. 
-% 
-% Under the null model, $M_T$ slope may be between $(.2, .8)$
-% \comment{We can't have anything different in the null model from the generating model, but you could vary the slope in $M_T$ itself, that would make sense.}
+\subsubsection{Null Model $M_0$}
+\newtext{The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). }
 
+\begin{figure}[ht]
+<<lambda, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE>>=
+lambda <- c(.25, .5, .75)
+colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+             "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 
-\comment{and a set of examples, here, with varying lambda}
+res <- ldply(sd, function(x) { data.frame(lambda=x, mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)) })
+res$K <- 3
+res2 <- ldply(sd, function(x) { data.frame(lambda=x, mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)) })
+res2$K <- 5
+res <- rbind(res, res2)
+res$label <- paste("lambda :",res$lambda)
+res$Klabel <- paste("K :",res$K)
+qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) + 
+  facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
+  theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
+  scale_color_manual(values=colors) + theme(aspect.ratio=1)
+@
+\caption{\label{fig:lambda} Scatterplots of data generated from $M_0$ using different values of $\lambda$.}
+\end{figure}
+\newtext{Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$. }
 
-
-\section{Experimental Setup}
-\subsection{Design}
-Factors:
+\subsubsection{Parameters used in Data Generation}
+\newtext{
+These models provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ (directly related to correlation strength) for varying numbers of clusters $K=3, 5$, we can systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in table \ref{tab:parameters}, we can generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. }
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{lll}
@@ -244,11 +275,23 @@ Parameter & Description & Choices\\\hline
 $K$ & \# Clusters & 3, 5 \\
 $N$ & \# Points & $15\cdot K$ \\
 $\sigma_T$ & Scatter around trend line &  .15, .25, .35\\
-$\sigma_C$ & Scatter around cluster centers &  .15, .20, .25, 0.30\\\hline
+\multirow{2}{*}{$\sigma_C$} & \multirow{2}{*}{Scatter around cluster centers} &  .15, .20, .25 ($K=3$)\\
+& & .20, .25, 0.30 ($K=5$)\\\hline
 \end{tabular}
 \end{center}
-\caption{Parameter settings for Data Generation.}
+\caption{Parameter settings for generation of lineup datasets. \label{tab:parameters}}
 \end{table}
+\newtext{
+The parameter values were chosen after examining the full parameter space through simulation; results are provided in appendix \ref{app:parametersimulation}. In accordance with the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to "easy", "medium" and "hard" numerical comparisons between corresponding target data sets and null data sets. 
+}
+
+\newtext{Once the lineup dataset is generated, we can plot the lineups and apply aesthetics which emphasize clusters and/or linear relationships in the generated datasets, experimentally determining how these aesthetics change participants' ability to identify each target plot. The next section describes the aesthetic combinations we will use and their anticipated effect on participant responses. 
+}
+
+\subsection{Plot Aesthetics}
+\newtext{
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions would modify the perception of ambiguous graphs, emphasizing clustered data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset generated as described in the previous section, we will examine the following combinations of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) in order to assess the visual impact of these aesthetics on target identification. 
+}
 
 \begin{table}[h]
 \begin{center}
@@ -263,8 +306,163 @@ Conflict & Color + Trend Line, \\
 & Color + Ellipse + Trend Line + Error band\\\hline\hline
 \end{tabular}
 \end{center}
-\caption{Aesthetics and add-on design choices. }
+\caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
+
+\newtext{
+We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses will increase the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics will decrease the probability of a participant selecting the target plot with data generated from $M_T$, the linear model. 
+}
+
+\newtext{
+Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval will increase the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decrease the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model. 
+}
+
+Specifically, we predict that plot features will emphasize either lines or clusters as follows: 
+
+\begin{itemize}
+\item None (control)
+\item Color (cluster emphasis)
+\item Shape (cluster emphasis)
+\item Color + shape (double cluster emphasis)
+\item Ellipse + color (double cluster emphasis)
+\item Line (trend emphasis)
+\item Line + prediction interval (double trend emphasis)
+\item Color + line (conflict)
+\item Color + ellipse + line + prediction interval (double conflict)
+\end{itemize}
+
+\subsection{Color and Shape Palettes}
+Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
+
+\begin{figure}
+<<color-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth',dependson='setup'>>=
+colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+            "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lineup()
+@
+\caption{Colors in \citet{heer:2014}. This study removed grey from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
+\end{figure}
+
+\newtext{The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software.}
+In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
+
+% Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
+
+\begin{figure}
+<<shape-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth', dependson='setup',message=F, warning=F>>=
+shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
+
+qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lineup()
+@
+\caption{Shapes in \citet{heer:2014}. In order to control for varying point size due to Unicode vs. non-Unicode characters, the last two shapes were removed.\label{fig:shapes}}
+\end{figure}
+
+\newtext{Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} (shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 group datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.}
+
+\subsection{Hypotheses}
+\newtext{
+The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses, will increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, will increase the probability of detecting the linear relationship. 
+}
+
+\newtext{
+A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
+}
+
+\subsection{Experimental Design}
+\newtext{
+The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination. 
+}
+\comment{Need to find some graphic/table which makes this a bit more clear.}
+
+\clearpage
+\subsection{Sample Pictures}
+The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
+<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='hold', fig.keep='all', fig.align='center', warning=FALSE, message=FALSE>>=
+# source("../../Code/MixtureLineups.R")
+# source("../../Code/theme_lineup.R")
+# 
+# # Define colors and shapes
+# colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
+#              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+# shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
+# 
+# colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
+# # colortm[3,4] <- 0
+# # colortm[4,3] <- 0
+# colortm[8,] <- 0
+# colortm[,8] <- 0
+# 
+# shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
+# # shapetm[9:10,] <- 0
+# # shapetm[, 9:10] <- 0
+# shapetm[9,] <- 0
+# shapetm[,9] <- 0
+# shapetm[10,] <- 0
+# shapetm[,10] <- 0
+# 
+# # Lineup Design
+# data.parms <- expand.grid(N=45,
+#                           K=3,
+#                           sd.trend=.25,
+#                           sd.cluster=.2)
+# 
+# plot.parms <- expand.grid(
+#   color = c(0,1),
+#   shape = c(0,1),
+#   reg = c(0,1),
+#   err = c(0,1),
+#   ell = c(0,1)
+# )[c(
+#   1, # control
+#   2, 3, # color, shape
+#   4, 18, # color + shape, color + ellipse
+#   20, # color + shape + ellipse
+#   5, 13, # trend, trend + error
+#   6, # color + trend
+#   30 # color + ellipse + trend + error
+#   ),]
+# 
+# get.aes <- function(r){
+#   c("Color", "Shape")[which(as.logical(r[1:2]))]
+# }
+# 
+# get.stats <- function(r){
+#   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
+# }
+# 
+# data <- data.frame(set=1, gen.data(as.list(data.parms[1,])))
+# data.stats <- ddply(data, .(set, .sample), 
+#                     function(df){
+#                       r2 <- summary(lm(y~x, data=df))
+#                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
+#                       res <- tmp[[1]]$`Mean Sq`
+#                       data.frame(.sample=unique(df$.sample), 
+#                                  LineRSq = r2$r.squared, 
+#                                  Fgroup = round(res[2]/res[3], 2), 
+#                                  lineplot=unique(df$target2), 
+#                                  groupplot=unique(df$target1))
+#                       } )
+# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
+# 
+# save(colors, shapes, colortm, shapetm, data, answers, data.parms, plot.parms, get.aes, get.stats, file="figure/lineupex/data.Rdata")
+load("figure/lineupex/data.Rdata")
+d_ply(data, .(set), function(df){
+  i <- unique(df$set)
+  for(j in 1:nrow(plot.parms)){
+    p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
+    ggsave(plot = p, 
+           filename = sprintf("figure/lineupex/set-%d-plot-%d.pdf", i, j), 
+           width=6, height=6, units="in", dpi=150)
+    print(p)
+  }
+})
+@
+
+\bibliographystyle{asa}
+\bibliography{references}
+
+\section*{Simulation Studies of Parameter Space}
+\subsection{Simulation 1}
 
 
 \newtext{Based on simulations from the null we get a distribution for each of the two quality measures for the targets under each parameter setting. This gives us an objective measure to assess the difficulty of detecting each of the targets. An overview of the results can be seen in the appendix.}
@@ -334,145 +532,7 @@ The lines for the cluster are, relatively, further to the right of the overall d
 \caption{\label{fig:fgroup}Histogram of the distribution of the cluster measure based on \Sexpr{N} data sets from the null model ($K=3, N=45, \sigma_C= $\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in black correspond to the cluster measure from ten sample data sets from the Clustering model $M_C$. }
 \end{figure}
 
-
-
-\subsection*{Design choices}
-\begin{enumerate}
-\item Plain: two targets with data from one of each of the two generative models are included in a set of eighteen panels of null data.
-\item Color: points in each of the panels are colored based on the results of k-means clustering. 
-\item Trend line: a line of the least square fit is drawn through the points.
-% \item Color \& Shape
-\item Color \& trend line: this emphasises both the clustering and the regression - it is not clear, which signal will be stronger.
-% \item Color \& Ellipsoids: around the groups of the same color, ellipsoids are drawn to reflect the 95\% density estimate.
-\end{enumerate}
-
-\subsection{Hypothesis}
-The plot most identified as the ``target" will change based on plot aesthetics which emphasize linear features or cluster features. This effect will be mediated by the signal strength of the line and cluster features. 
-
-\comment{Could you re-phrase these items so they always give an increase in the visual outcome? (or always a decrease, but the emphasis is on the outcome not on increasing the parameters).}
-\begin{itemize}
-\item Increasing $N$ will increase signal strength for both line and clusters
-\item Increasing $K$ will decrease signal strength for clusters (at the same variability, there's less space to spread clusters out resulting in less visual separability)
-\item Increasing $\sigma_T$ will decrease signal strength for lines
-\item Increasing $\sigma_C$ will decrease signal strength for clusters
-\end{itemize}
-
-Plot features will emphasize either lines or clusters as follows: 
-
-\begin{itemize}
-\item None (control)
-\item Color (cluster emphasis)
-\item Shape (cluster emphasis)
-\item Color + shape (double cluster emphasis)
-\item Ellipse + color (double cluster emphasis)
-\item Line
-\item Line + prediction interval (double line emphasis)
-\item Color + line (conflict)
-\item Color + ellipse + line + prediction interval (double conflict)
-\end{itemize}
-
-\comment{The primary purpose of the study is to detect how using visual aesthetics emphasizes one of two features and lead to detection of one feature over another feature.}
-\comment{A secondary purpose of the study is to relate signal strength to detection in a visualization by a human observer.}
-
-\clearpage
-\subsection{Sample Pictures}
-The following plots use $\sigma_T=.4$ and $\sigma_C=.3$. \\
-<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".45\\linewidth", fig.show='hold', fig.keep='all', fig.align='center', warning=FALSE, message=FALSE>>=
-source("../../Code/MixtureLineups.R")
-source("../../Code/theme_lineup.R")
-
-# # Define colors and shapes
-# colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
-#              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
-# shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
-# 
-# colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
-# # colortm[3,4] <- 0
-# # colortm[4,3] <- 0
-# colortm[8,] <- 0
-# colortm[,8] <- 0
-# 
-# shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
-# # shapetm[9:10,] <- 0
-# # shapetm[, 9:10] <- 0
-# shapetm[9,] <- 0
-# shapetm[,9] <- 0
-# shapetm[10,] <- 0
-# shapetm[,10] <- 0
-# 
-# # Lineup Design
-# data.parms <- expand.grid(N=45,
-#                           K=3,
-#                           sd=.4,
-#                           q=.3)
-# 
-# plot.parms <- expand.grid(
-#   color = c(0,1),
-#   shape = c(0,1),
-#   reg = c(0,1),
-#   err = c(0,1),
-#   ell = c(0,1)
-# )[c(
-#   1, # control
-#   2, 3, # color, shape
-#   4, 18, # color + shape, color + ellipse
-#   20, # color + shape + ellipse
-#   5, 13, # trend, trend + error
-#   6, # color + trend
-#   30 # color + ellipse + trend + error
-#   ),]
-# 
-# get.aes <- function(r){
-#   c("Color", "Shape")[which(as.logical(r[1:2]))]
-# }
-# 
-# get.stats <- function(r){
-#   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
-# }
-# 
-# data <- ldply(1:nrow(data.parms), function(i) {data.frame(set=i, gen.data(as.list(data.parms[i,])))})
-# data.stats <- ddply(data, .(set, .sample), 
-#                     function(df){
-#                       r2 <- summary(lm(y~x, data=df))
-#                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
-#                       res <- tmp[[1]]$`Mean Sq`
-#                       data.frame(.sample=unique(df$.sample), 
-#                                  LineRSq = r2$r.squared, 
-#                                  Fgroup = round(res[2]/res[3], 2), 
-#                                  lineplot=unique(df$target2), 
-#                                  groupplot=unique(df$target1))
-#                       } )
-# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
-# 
-# save(colors, shapes, colortm, shapetm, data, answers, data.parms, plot.parms, get.aes, get.stats, file="figure/lineupex/data.Rdata")
-load("figure/lineupex/data.Rdata")
-d_ply(data, .(set), function(df){
-  i <- unique(df$set)
-  for(j in 1:nrow(plot.parms)){
-    p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
-    ggsave(plot = p, 
-           filename = sprintf("figure/lineupex/set-%d-plot-%d.pdf", i, j), 
-           width=6, height=6, units="in", dpi=150)
-    print(p)
-  }
-})
-@
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-1.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-2.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-3.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-4.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-5.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-6.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-7.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-8.pdf}\\
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-9.pdf}\hfill
-% \includegraphics[width=.49\linewidth]{figure/lineupex/set-1-plot-10.pdf}\\
-
-
-\bibliographystyle{asa}
-\bibliography{references}
-
-\section*{Simulation Studies of Parameter Space}
+\subsection{Full Parameter Space Simulation Study}
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
 
 \comment{What we also see from these plots, is that we do have a $\sigma_C \sigma_T$ interaction: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. We might also have a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. I am not sure whether that is an actual three-way interaction or just all three two-way interactions, but it doesn't matter, at this point we are just talking about potentially saving one parameter. What is clear, is that we need to block by parameter setting. We do so, by blocking on each dataset. Each dataset is non-deterministic, though, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. We therefore need repetitions of the data generation to be able to separate the variability coming from within the parameter setting from the additional variability introduced by the subjects' evaluations of the lineups. }
