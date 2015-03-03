@@ -2,8 +2,11 @@ library(stringr)
 library(plyr)
 library(reshape2)
 library(magrittr)
+library(plyr)
 library(dplyr)
 library(ggplot2)
+library(doMC)
+registerDoMC(8)
 
 lineups <- read.csv("./Images/Turk16/data-picture-details.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
@@ -82,3 +85,37 @@ library(lme4)
 line.model <- glmer(line.correct~ plottype + (1|individualID) + (1|dataset), data=modeldata, family = binomial(link="logit"))
 
 group.model <- glmer(group.correct~plottype + (1|individualID) + (1|dataset), data=modeldata, family = binomial(link="logit"))
+
+library(multcomp)
+
+N <- 1000
+
+## Line model - simulations and CIs
+line.model.sim <- simulate(line.model, nsim=N)
+line.res <- llply(line.model.sim, function(x) line.model <- glmer(data=modeldata, line.correct~plottype+(1|individualID)+(1|dataset), family = binomial(link="logit")), .parallel=TRUE)
+
+save(line.res, "./Data/lineModelSim.RData")
+
+line.ranefs <- ldply(line.res, function(x) data.frame(individual.sd=attr(VarCorr(x)$individualID, which="stddev"), dataset.sd=attr(VarCorr(x)$dataset, which="stddev")))
+line.ranef.indivCI <- ldply(line.ranefs[,2], function(x) quantile(x, probs=c(0.025, 0.975)))
+line.ranef.datasetCI <- ldply(line.ranefs[,3], function(x) quantile(x, probs=c(0.025, 0.975)))
+
+line.sigma2 <- ldply(line.res, function(x) sigma(x))
+line.sigmaCI <- quantile(line.sigma2[,2], probs=c(0.025, 0.975))
+
+line.fixefs <- ldply(line.res, fixef)
+
+## Group model - simulations and CIs
+group.model.sim <- simulate(group.model, nsim=N)
+group.res <- llply(group.model.sim, function(x) group.model <- glmer(data=modeldata, group.correct~plottype+(1|individualID)+(1|dataset), family = binomial(link="logit")), .parallel=TRUE)
+
+save(group.res, "./Data/groupModelSim.RData")
+
+group.ranefs <- ldply(group.res, function(x) data.frame(individual.sd=attr(VarCorr(x)$individualID, which="stddev"), dataset.sd=attr(VarCorr(x)$dataset, which="stddev")))
+group.ranef.indivCI <- ldply(group.ranefs[,2], function(x) quantile(x, probs=c(0.025, 0.975)))
+group.ranef.datasetCI <- ldply(group.ranefs[,3], function(x) quantile(x, probs=c(0.025, 0.975)))
+
+group.sigma2 <- ldply(group.res, function(x) sigma(x))
+group.sigmaCI <- quantile(group.sigma2[,2], probs=c(0.025, 0.975))
+
+group.fixefs <- ldply(group.res, fixef)
