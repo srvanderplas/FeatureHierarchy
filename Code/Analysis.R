@@ -79,43 +79,56 @@ modeldata$outcome[modeldata$both.correct==1] <- "both"
 modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
 modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>% str_replace("set-", "") %>% as.numeric)
 modeldata$individualID <- factor(sprintf("%s-%s", modeldata$ip_address, modeldata$nick_name))
+modeldata$k <- factor(modeldata$k, levels=c(3, 5))
+modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_name))
 
 library(lme4)
 
-line.model <- glmer(line.correct~ plottype + (1|individualID) + (1|dataset), data=modeldata, family = binomial(link="logit"))
+line.model <- glmer(line.correct~ plottype + 
+                      k + sd.line + sd.cluster + 
+                      sd.line:sd.cluster + 
+                      (1|individualID) + 
+                      (1|dataset), 
+                    data=modeldata, family = binomial(link="logit"), 
+                    control=glmerControl(optimizer="bobyqa"))
 
 group.model <- glmer(group.correct~plottype + (1|individualID) + (1|dataset), data=modeldata, family = binomial(link="logit"))
 
-library(multcomp)
-
-N <- 1000
-
-## Line model - simulations and CIs
-line.model.sim <- simulate(line.model, nsim=N)
-line.res <- llply(line.model.sim, function(x) line.model <- glmer(data=modeldata, line.correct~plottype+(1|individualID)+(1|dataset), family = binomial(link="logit")), .parallel=TRUE)
-
-save(line.res, "./Data/lineModelSim.RData")
-
-line.ranefs <- ldply(line.res, function(x) data.frame(individual.sd=attr(VarCorr(x)$individualID, which="stddev"), dataset.sd=attr(VarCorr(x)$dataset, which="stddev")))
-line.ranef.indivCI <- ldply(line.ranefs[,2], function(x) quantile(x, probs=c(0.025, 0.975)))
-line.ranef.datasetCI <- ldply(line.ranefs[,3], function(x) quantile(x, probs=c(0.025, 0.975)))
-
-line.sigma2 <- ldply(line.res, function(x) sigma(x))
-line.sigmaCI <- quantile(line.sigma2[,2], probs=c(0.025, 0.975))
-
-line.fixefs <- ldply(line.res, fixef)
-
-## Group model - simulations and CIs
-group.model.sim <- simulate(group.model, nsim=N)
-group.res <- llply(group.model.sim, function(x) group.model <- glmer(data=modeldata, group.correct~plottype+(1|individualID)+(1|dataset), family = binomial(link="logit")), .parallel=TRUE)
-
-save(group.res, "./Data/groupModelSim.RData")
-
-group.ranefs <- ldply(group.res, function(x) data.frame(individual.sd=attr(VarCorr(x)$individualID, which="stddev"), dataset.sd=attr(VarCorr(x)$dataset, which="stddev")))
-group.ranef.indivCI <- ldply(group.ranefs[,2], function(x) quantile(x, probs=c(0.025, 0.975)))
-group.ranef.datasetCI <- ldply(group.ranefs[,3], function(x) quantile(x, probs=c(0.025, 0.975)))
-
-group.sigma2 <- ldply(group.res, function(x) sigma(x))
-group.sigmaCI <- quantile(group.sigma2[,2], probs=c(0.025, 0.975))
-
-group.fixefs <- ldply(group.res, fixef)
+# # Model Simulations
+# library(multcomp)
+# 
+# N <- 500
+# 
+# ## Line model - simulations and CIs
+# line.model.sim <- t(simulate(line.model, nsim=N))
+# line.model.sim <- melt(line.model.sim)
+# names(line.model.sim) <- c("i", "rowID", "line.correct")
+# line.model.sim$i <- as.numeric(gsub("sim_", "", line.model.sim$i))
+# # each iteration takes ~ 1.5 minutes
+# line.res <- dlply(line.model.sim, .(i), function(x) model <- glmer(data=modeldata, x$line.correct[x$rowID]~plottype+(1|individualID)+(1|dataset), family = binomial(link="logit")), .parallel=TRUE)
+# 
+# save(line.res, "./Data/lineModelSim.RData")
+# 
+# line.ranefs <- ldply(line.res, function(x) data.frame(individual.sd=attr(VarCorr(x)$individualID, which="stddev"), dataset.sd=attr(VarCorr(x)$dataset, which="stddev")))
+# line.ranef.indivCI <- ldply(line.ranefs[,2], function(x) quantile(x, probs=c(0.025, 0.975)))
+# line.ranef.datasetCI <- ldply(line.ranefs[,3], function(x) quantile(x, probs=c(0.025, 0.975)))
+# 
+# line.sigma2 <- ldply(line.res, function(x) sigma(x))
+# line.sigmaCI <- quantile(line.sigma2[,2], probs=c(0.025, 0.975))
+# 
+# line.fixefs <- ldply(line.res, fixef)
+# 
+# ## Group model - simulations and CIs
+# group.model.sim <- simulate(group.model, nsim=N)
+# group.res <- llply(group.model.sim, function(x) model <- glmer(data=modeldata, group.correct~plottype+(1|individualID)+(1|dataset), family = binomial(link="logit")), .parallel=TRUE)
+# 
+# save(group.res, "./Data/groupModelSim.RData")
+# 
+# group.ranefs <- ldply(group.res, function(x) data.frame(individual.sd=attr(VarCorr(x)$individualID, which="stddev"), dataset.sd=attr(VarCorr(x)$dataset, which="stddev")))
+# group.ranef.indivCI <- ldply(group.ranefs[,2], function(x) quantile(x, probs=c(0.025, 0.975)))
+# group.ranef.datasetCI <- ldply(group.ranefs[,3], function(x) quantile(x, probs=c(0.025, 0.975)))
+# 
+# group.sigma2 <- ldply(group.res, function(x) sigma(x))
+# group.sigmaCI <- quantile(group.sigma2[,2], probs=c(0.025, 0.975))
+# 
+# group.fixefs <- ldply(group.res, fixef)
