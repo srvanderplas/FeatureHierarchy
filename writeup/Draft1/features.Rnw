@@ -203,7 +203,7 @@ As a measure of clustering we use a  coefficient to assess the amount of variabi
 \comment{some examples? with color?, K = 3 ... 6? maybe two different standard deviations? }  
 
 \begin{figure}[ht]
-<<cluster, fig.width=8, fig.height=5, out.width='\\textwidth', echo=FALSE>>=
+<<cluster, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE>>=
 sd <- c(0.15, 0.2, 0.25, 0.3)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
