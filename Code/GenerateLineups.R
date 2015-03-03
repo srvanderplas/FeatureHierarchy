@@ -39,15 +39,19 @@ get.aes <- function(r){
 get.stats <- function(r){
   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
 }
- 
+
 # #----- Set Up Data Generation (Actual Plots) ----
-# data.parms.full <- expand.grid(sd.trend=round(c(.15, .25, .35), 2),
-#                                sd.cluster=c(.15, .25, .35),
-#                                K=3, 
-#                                N=45)
+# data.parms.full <- expand.grid(sd.trend=round(c(.25, .35, .45), 2),
+#                                sd.cluster=1:3,
+#                                K=c(3, 5))
 # 
-# data.parms.full$l1 <- 0
-# data.parms.full$l2 <- rep(0:8, times=1)
+# data.parms.full$N <- 15*data.parms.full$K
+# data.parms.full$l1 <- rep(1:2, each=9)
+# data.parms.full$l2 <- rep(1:9, times=2)
+# data.parms.full$sd.cluster[data.parms.full$K==5] <- c(.2, .25, .3)[data.parms.full$sd.cluster[data.parms.full$K==5]]
+# data.parms.full$sd.cluster[data.parms.full$K==3] <- c(.25, .3, .35)[data.parms.full$sd.cluster[data.parms.full$K==3]]
+# data.parms.full$sd.cluster <- round(data.parms.full$sd.cluster, 2)
+# 
 # plot.parms <- expand.grid(
 #   color = c(0,1),
 #   shape = c(0,1),
@@ -57,14 +61,14 @@ get.stats <- function(r){
 # )[c(
 #   1, # control
 #   2, # color
-#   # 3, # shape
-#   # 4, # color + shape
-#   # 18, # color + ellipse
-#   # 20, # color + shape + ellipse
+#   3, # shape
+#   4, # color + shape
+#   18, # color + ellipse
+#   20, # color + shape + ellipse
 #   5, # trend
-#   # 13, # trend + error
-#   6#, # color + trend
-#   # 30 # color + ellipse + trend + error
+#   13, # trend + error
+#   6, # color + trend
+#   30 # color + ellipse + trend + error
 # ),]
 # 
 # load("./Data/SimulationResults.Rdata")
@@ -87,7 +91,7 @@ get.stats <- function(r){
 # res <- llply(1:nrow(data.parms.full), function(i){
 #   z <- eval.data.quantiles(i, data.parms.full[i,])
 #   return(z)
-# })
+# }, .parallel=T)
 # 
 # 
 # data <- data.frame()
@@ -108,13 +112,13 @@ get.stats <- function(r){
 # 
 # data.stats <- merge(data.stats, data.parms.full)
 # 
-# save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Images/Turk18/Lineups.Rdata")
+# save(plot.parms, data, data.parms, data.stats, data.subplot.stats, data.quantiles, file="./Data/Lineups.Rdata")
 # 
 # #----- Set Up Data Generation (Trial Plots) ----
 # set.seed(32509803)
 # test.data.parms <- data.frame(K=rep(3, 20),
 #                               type=rep(c("trend", "cluster"), each=10),
-#                               sd.trend=rep(c(.15, .25), each=10),
+#                               sd.trend=rep(c(.2, .25), each=10),
 #                               sd.cluster=rep(c(.25, .15), each=10))
 # test.data.parms$l1 <- rep(1, 20)
 # test.data.parms$l2 <- rep(c(1,2), each=10)
@@ -148,28 +152,28 @@ get.stats <- function(r){
 #   )
 # test.stats$N <- test.stats$K*15
 # 
-# # tmp <- melt(test.stats, id.vars=c(1:3, 6:11), variable.name="sub.type", value.name="significance")
-# # qplot(data=tmp, x=significance, color=sub.type, geom="density") + facet_wrap(~type)
+# tmp <- melt(test.stats, id.vars=c(1:3, 6:11), variable.name="sub.type", value.name="significance")
+# qplot(data=tmp, x=significance, color=sub.type, geom="density") + facet_wrap(~type)
 # 
-# save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Images/Turk18/TestLineups.Rdata")
+# save(test.data.parms, test.data, test.data.subplot.stats, test.stats, file="./Data/TestLineups.Rdata")
 # 
 # 
-# # ----- Plot Generation (Actual Plots) ----
-# load("./Images/Turk18/Lineups.Rdata")
+# #----- Plot Generation (Actual Plots) ----
+# load("./Data/Lineups.Rdata")
 # 
 # plot.names <- c("plain","color", "shape", "colorShape", "colorEllipse", "colorShapeEllipse", "trend", "trendError", "colorTrend", "colorEllipseTrendError")
 # 
-# plot.opts <- data.frame(expand.grid(i=unique(data$set), j=c(1, 2, 7, 9)))
+# plot.opts <- data.frame(expand.grid(i=unique(data$set), j=1:10))
 # 
 # picture.details <- ddply(plot.opts, .(i,j), function(idx){
 #   i <- idx[1,1]
 #   j <- idx[1,2]
 #   save.pics(subset(data, set==i), datastats=data.stats[i,], plotparms=plot.parms[j,], plotname=plot.names[j])
-# })
+# }, .parallel=T)
 # 
-# write.csv(picture.details[,-c(1:2)], "./Images/Turk18/picture-details.csv", row.names=FALSE)
+# write.csv(picture.details[,-c(1:2)], "./Images/Lineups/picture-details.csv", row.names=FALSE)
 # 
-# files <- paste0("Images/Turk18/svgs/", list.files("./Images/Turk18/svgs"))
+# files <- paste0("Images/Lineups/svgs/", list.files("./Images/Lineups/svgs"))
 # del.files <- !(files%in%picture.details$pic_name)
 # file.remove(gsub("svg", "pdf", files)[del.files])
 # file.remove(files[del.files])
@@ -182,10 +186,10 @@ get.stats <- function(r){
 #             plotparms=data.frame(color=0, shape=0, reg=0, err=0, ell=0), plotname="plain", testplot=T)
 # }, .parallel=T)
 # 
-# write.csv(test.picture.details, "./Images/Turk18/picture-details-trial.csv", row.names=FALSE)
+# write.csv(test.picture.details, "./Images/Lineups/picture-details-trial.csv", row.names=FALSE)
 # 
 # #----- Set Up Data Generation (Example Plots) ----
-# ex.pars <- data.frame(K=rep(3, 2), type=c("trend", "cluster"), sd.trend=c(.15, .25), sd.cluster=c(.25, .15))
+# ex.pars <- data.frame(K=rep(3, 2), type=c("trend", "cluster"), sd.trend=c(.2, .25), sd.cluster=c(.25, .15))
 # ex.pars$N <- 15*ex.pars$K
 # 
 # ex.data <- ldply(1:nrow(ex.pars), function(i){ data.frame(set=i, gen.test.data(ex.pars[i,], N=5))}, .parallel=T)
@@ -201,7 +205,7 @@ get.stats <- function(r){
 #   realfname <- sprintf("example-set-%d", i)
 #   fname <- realfname
 #   plotobj <- gen.plot(subset(ex.data, set==i), aes=NULL, stats=NULL)
-#   write.csv(subset(ex.data, set==i), sprintf("./Images/Turk18/Data/example-data-%d.csv", i), row.names=FALSE)
+#   write.csv(subset(ex.data, set==i), sprintf("Images/Lineups/example/data/example-data-%d.csv", i), row.names=FALSE)
 #   interactive_lineup(plotobj,
 #                      fname=fname, 
 #                      script="http://www.hofroe.net/examples/lineup/fhaction.js", 
