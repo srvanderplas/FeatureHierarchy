@@ -302,88 +302,22 @@ $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .15, .20, .25 
 \end{center}
 \caption{Parameter settings for generation of lineup datasets. \label{tab:parameters}}
 \end{table}
-\newtext{
-The parameter values were chosen after examining the full parameter space through simulation; results are provided in appendix \ref{app:parametersimulation}. In accordance with the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to "easy", "medium" and "hard" numerical comparisons between corresponding target data sets and null data sets. 
-}
+\comment{the simulation is so nice, maybe you could include one more sentence on the idea. Niladri did something similar in his Where's Waldo paper. Need to ask Di for a reference.}
+The parameter values were chosen after examining the full parameter space through simulation; results are provided in appendix \ref{app:parametersimulation}. In accordance with the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. 
 
-\newtext{Once the lineup dataset is generated, we can plot the lineups and apply aesthetics which emphasize clusters and/or linear relationships in the generated datasets, experimentally determining how these aesthetics change participants' ability to identify each target plot. The next section describes the aesthetic combinations we will use and their anticipated effect on participant responses. 
-}
+
+Each of the generated datasets is then plotted in lineups, where we apply aesthetics which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change participants' ability to identify each target plot. The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
+
 
 \subsection{Plot Aesthetics}
-\newtext{
-Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions would modify the perception of ambiguous graphs, emphasizing clustered data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset generated as described in the previous section, we will examine the combinations of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics} in order to assess the visual impact of these aesthetics on target identification. Examples of these plot aesthetics are shown in figure \ref{fig:plotExamples}.
-}
-\clearpage
+
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in figure \ref{fig:plotExamples}.
+
+%\clearpage
 
 \begin{figure}[ht]
 <<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".3\\linewidth", fig.show='hold', fig.align='center', warning=FALSE, message=FALSE>>=
-# source("../../Code/MixtureLineups.R")
-# source("../../Code/theme_lineup.R")
-# 
-# # Define colors and shapes
-# colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
-#              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
-# shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
-# 
-# colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
-# # colortm[3,4] <- 0
-# # colortm[4,3] <- 0
-# colortm[8,] <- 0
-# colortm[,8] <- 0
-# 
-# shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
-# # shapetm[9:10,] <- 0
-# # shapetm[, 9:10] <- 0
-# shapetm[9,] <- 0
-# shapetm[,9] <- 0
-# shapetm[10,] <- 0
-# shapetm[,10] <- 0
-# 
-# # Lineup Design
-# data.parms <- expand.grid(N=45,
-#                           K=3,
-#                           sd.trend=.25,
-#                           sd.cluster=.2)
-# 
-# plot.parms <- expand.grid(
-#   color = c(0,1),
-#   shape = c(0,1),
-#   reg = c(0,1),
-#   err = c(0,1),
-#   ell = c(0,1)
-# )[c(
-#   1, # control
-#   2, 3, # color, shape
-#   4, 18, # color + shape, color + ellipse
-#   20, # color + shape + ellipse
-#   5, 13, # trend, trend + error
-#   6, # color + trend
-#   30 # color + ellipse + trend + error
-#   ),]
-# 
-# get.aes <- function(r){
-#   c("Color", "Shape")[which(as.logical(r[1:2]))]
-# }
-# 
-# get.stats <- function(r){
-#   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
-# }
-# 
-# data <- data.frame(set=1, gen.data(as.list(data.parms[1,])))
-# data.stats <- ddply(data, .(set, .sample), 
-#                     function(df){
-#                       r2 <- summary(lm(y~x, data=df))
-#                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
-#                       res <- tmp[[1]]$`Mean Sq`
-#                       data.frame(.sample=unique(df$.sample), 
-#                                  LineRSq = r2$r.squared, 
-#                                  Fgroup = round(res[2]/res[3], 2), 
-#                                  lineplot=unique(df$target2), 
-#                                  groupplot=unique(df$target1))
-#                       } )
-# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
-# 
-# save(colors, shapes, colortm, shapetm, data, answers, data.parms, plot.parms, get.aes, get.stats, file="figure/lineupex/data.Rdata")
+
 load("figure/lineupex/data.Rdata")
 d_ply(data, .(set), function(df){
   i <- unique(df$set)
@@ -400,22 +334,6 @@ d_ply(data, .(set), function(df){
 \end{figure}
 \clearpage
 % 
-% \begin{table}[h]
-% \begin{center}
-% \begin{tabular}{ll}
-% Emphasis & Aesthetics \\\hline\hline
-% Control & -- \\\hline
-% \multirow{3}{*}{Group} & Color, Shape \\
-% & Color + Shape, Color + Ellipse\\
-% & Color + Shape + Ellipse\\\hline
-% \multirow{2}{*}{Trend} & Line \\
-% & Line + Error band\\\hline
-% \multirow{2}{*}{Conflict} & Color + Trend Line, \\
-% & Color + Ellipse + Trend Line + Error band\\\hline\hline
-% \end{tabular}
-% \end{center}
-% \caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
-% \end{table}
 
 \begin{table}[h]
 \centering
@@ -471,18 +389,18 @@ d_ply(data, .(set), function(df){
 \caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
 
-\newtext{
-We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses will increase the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics will decrease the probability of a participant selecting the target plot with data generated from $M_T$, the linear model. 
-}
 
-\newtext{
-Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval will increase the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decrease the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
-}
+We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses  increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the linear model. 
+
+
+
+Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval  increases the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decreases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
+
 
 \subsection{Experimental Design}
-\newtext{
+
 The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination.
-}
+
 \newdo{Need to find some graphic/table which makes this a bit more clear.}
 
 \subsection{Color and Shape Palettes}
@@ -511,16 +429,16 @@ qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lin
 \caption{Shapes in \citet{heer:2014}. In order to control for varying point size due to Unicode vs. non-Unicode characters, the last two shapes were removed.\label{fig:shapes}}
 \end{figure}
 
-\newtext{Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 group datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.}
+Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 group datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
 \subsection{Hypotheses}
-\newtext{
-The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses, will increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, will increase the probability of detecting the linear relationship. 
-}
 
-\newtext{
+The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses, will increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, will increase the probability of detecting the linear relationship. 
+
+
+
 A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
-}
+
 
 \subsection{Participant Recruitment}
 \newdo{describe amazon turk, participant instructions, screening procedures, etc.}
@@ -623,6 +541,7 @@ qplot(data=line.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
   ylab("Odds Ratio + 95% Wald Interval") + 
   xlab("Plot Type") + 
   ggtitle("Effect of Plot Aesthetics on P(Line Target Selected)") + 
+  geom_hline(yintercept=1, colour="grey70") +
   theme_bw()
 
 names(line.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
@@ -687,6 +606,7 @@ qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
   scale_y_continuous("Odds Ratio + 95% Wald Interval", breaks=c(.5, .75, 1, 1.25)) + 
   xlab("Plot Type") + 
   ggtitle("Effect of Plot Aesthetics on P(Group Target Selected)") + 
+  geom_hline(yintercept=1, colour="grey70") +
   theme_bw()
 
 names(group.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
