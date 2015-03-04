@@ -155,27 +155,6 @@ eval.data <- function(df){
     gini = cl$gini)
 }
 
-eval.data2 <- function(df){
-  
-  nulls <- subset(df, .sample!=target1 & .sample!=target2)
-  groups <- subset(df, .sample==target2)
-  lines <- subset(df, .sample==target1)
-  
-  nl <- ddply(nulls, .(.sample), eval.df)
-  
-  cl <- eval.df(groups)
-  ll <- eval.df(lines)
-  
-  c(null.line = max(nl$line), 
-    null.cluster = max(nl$group), 
-    null.gini.max = max(nl$gini),
-    null.gini.min = min(nl$gini),
-    line.gini = ll$gini,
-    line = ll$line, 
-    cluster = cl$group,
-    gini = cl$gini)
-}
-
 gini <- function(y, unbiased = TRUE, na.rm = FALSE){
   if (!is.numeric(y)){
     warning("'y' is not numeric; returning NA")

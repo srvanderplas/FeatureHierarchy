@@ -8,7 +8,7 @@ library(ggplot2)
 library(doMC)
 registerDoMC(8)
 
-lineups <- read.csv("./Images/Turk16/data-picture-details.csv", stringsAsFactors=FALSE)
+lineups <- read.csv("./Images/Turk16/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
 
@@ -26,7 +26,8 @@ correct.ans <- function(x,y){
   answers <- str_trim(unlist(str_split(y, ",")))
   lineplot <- as.numeric(answers[1])
   groupplot <- as.numeric(answers[2])
-  c(line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, n.answers=length(x1), both.correct = lineplot%in%x1 & groupplot%in%x1, neither=!(lineplot%in%x1 | groupplot%in%x1))
+  giniplot <- ifelse(groupplot==as.numeric(answers[3]) | lineplot==as.numeric(answers[3]), NA, as.numeric(answers[3]))
+  c(n.answers=length(x1), line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
 }
 
 useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
@@ -72,8 +73,8 @@ useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_i
 # plain.color <- subset(plot.answers, plottype%in%c("plain", "color"))
 # qplot(data=plain.color, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=c("x", "c"), labels=c("plain", "color"))
 
-modeldata <- useranswers[,c(1, 4, 7:25, 2, 3, 5, 6)]
-modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], c("", "neither")[1+as.numeric(modeldata$neither==1)], sep="")
+modeldata <- useranswers[,c(1, 2, 8:26, 3:7)]
+modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], c("", "neither")[1+as.numeric(modeldata$neither.correct==1)], c("", "gini")[1+as.numeric(modeldata$gini.correct==1)], sep="")
 modeldata$outcome[modeldata$both.correct==1] <- "both"
 
 modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
@@ -85,14 +86,19 @@ modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_nam
 library(lme4)
 
 line.model <- glmer(line.correct~ plottype + 
-                      k + sd.line + sd.cluster + 
-                      sd.line:sd.cluster + 
+#                       k + sd.line + sd.cluster + 
+#                       sd.line:sd.cluster + 
                       (1|individualID) + 
                       (1|dataset), 
                     data=modeldata, family = binomial(link="logit"), 
                     control=glmerControl(optimizer="bobyqa"))
 
-group.model <- glmer(group.correct~plottype + (1|individualID) + (1|dataset), data=modeldata, family = binomial(link="logit"))
+group.model <- glmer(group.correct~plottype + 
+                       (1|individualID) + 
+                       (1|dataset), 
+                     data=modeldata, 
+                     family = binomial(link="logit"), 
+                     control=glmerControl(optimizer="bobyqa"))
 
 # # Model Simulations
 # library(multcomp)

@@ -10,7 +10,7 @@ library(grid)
 
 # Simulation parameters
 data.parms <- expand.grid(K=c(3, 5),
-                          sd.trend=round(seq(.1, .5, by=.05), 2),
+                          sd.trend=round(seq(.2, .5, by=.05), 2),
                           sd.cluster=round(seq(.1, .4, by=.05), 2))
 data.parms$N <- data.parms$K*15
 
