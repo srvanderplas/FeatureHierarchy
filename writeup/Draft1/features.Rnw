@@ -714,7 +714,7 @@ print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects 
 Simulating lineup data sets, we can compare test statistics measuring trend strength, cluster strength, and cluster size inequality for the null plots and target plots. These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). 
 \todo{Add equations for test statistics}
 
-<<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=8, fig.height=4>>=
+<<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=8, fig.height=3>>=
 source("../../Code/MixtureLineups.R")
 sT = 0.25
 sC = 0.20
