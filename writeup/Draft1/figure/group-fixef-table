@@ -1,8 +1,8 @@
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Wed Mar  4 12:48:14 2015
+% Wed Mar  4 13:35:47 2015
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllll}
+\begin{tabular}{rrrrr}
   \hline
 Plot Aesthetic & Log Odds & Std. Error & Z & P value \\ 
   \hline
