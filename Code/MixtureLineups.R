@@ -174,23 +174,6 @@ gini <- function(y, unbiased = TRUE, na.rm = FALSE){
   dsum / (mu * N)
 }
 
-eval.data <- function(df){
-  
-  nulls <- subset(df, .sample!=target1 & .sample!=target2)
-  groups <- subset(df, .sample==target2)
-  lines <- subset(df, .sample==target1)
-  
-  nl <- ddply(nulls, .(.sample), eval.df)
-  
-  cl <- eval.df(groups)
-  ll <- eval.df(lines)
-  
-  c(null.line = max(nl$line), 
-    null.cluster = max(nl$group), 
-    line=ll$line, 
-    cluster=cl$group)
-}
-
 eval.data.quantiles <- function(i, data.set.parms, reps=3){
   tmp.sub <- NULL
   partmp <- data.frame()
