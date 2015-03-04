@@ -832,11 +832,15 @@ The distribution of the cluster statistic values are more easily separated from 
 
 
 \subsection{Full Parameter Space Simulation Study}
-Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
+Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength for null and target plots. 
 
-\comment{What we also see from these plots, is that we do have a $\sigma_C \sigma_T$ interaction: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. We might also have a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. I am not sure whether that is an actual three-way interaction or just all three two-way interactions, but it doesn't matter, at this point we are just talking about potentially saving one parameter. What is clear, is that we need to block by parameter setting. We do so, by blocking on each dataset. Each dataset is non-deterministic, though, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. We therefore need repetitions of the data generation to be able to separate the variability coming from within the parameter setting from the additional variability introduced by the subjects' evaluations of the lineups. }
-<<simulationparameters,echo=F,include=T, fig.width=10, fig.height=6.5, out.width='.8\\linewidth'>>=
-load("../../Data/SimulationDatasetCriteria.Rdata")
+\newdo{Describe statistics}
+
+Figures \ref{fig:simulationLineIntervals} and \ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of line and cluster summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
+
+\newtext{Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. }
+<<simulationparameters,echo=F,include=F, fig.width=10, fig.height=6.5, out.width='.8\\linewidth'>>=
+load("../../Data/SimulationDatasetCriteriaTurk16.Rdata")
 
 dataset.criteria$ParameterSet <- with(dataset.criteria, sprintf("sdT%.2f-sdC%.2f", sd.trend, sd.cluster))
 dataset.criteria$ParameterSet[dataset.criteria$type=="cluster"] <- with(dataset.criteria[dataset.criteria$type=="cluster",], sprintf("sdC%.2f-sdT%.2f", sd.cluster, sd.trend))
@@ -855,7 +859,32 @@ qplot(data=subset(dataset.criteria, type=="cluster"), x=LB, xend=UB, y=sd.trend,
   geom_point(aes(x=UB, y=sd.trend, color=dist)) + 
   facet_grid(lsc~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
   scale_color_brewer("Distribution", palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) \nand target distribution (red) of amount of clustering.") + ylab(expression( "Variability along the trend":sigma[T]))
+
+tmp <- subset(dataset.criteria, type=="gini")
+tmp$dist <- gsub("Max", "Min", tmp$dist)
+qplot(data=tmp, x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segment") +
+  geom_point(aes(x=LB, y=sd.trend, color=dist))  + 
+  geom_point(aes(x=UB, y=sd.trend, color=dist)) + 
+  facet_grid(lsc~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
+  scale_color_brewer("Distribution", palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Min (18) null distribution (blue) \nand target distribution (red) of Gini Impurity.") + ylab(expression( "Variability along the trend":sigma[T]))
 @
+
+\begin{figure}\centering
+\includegraphics[width=.8\linewidth]{figure/simulationparameters-1}
+\caption{Simulated interquartile range of $R^2$ values for target and null data distributions. \label{fig:simulationLineIntervals}}
+\end{figure}
+
+\begin{figure}\centering
+\includegraphics[width=.8\linewidth]{figure/simulationparameters-2}
+\caption{Simulated interquartile range of cluster cohesion statistic values for target and null data distributions. \label{fig:simulationClusterIntervals}}
+\end{figure}
+
+\newtext{Additionally, after the experiment was complete, we examined the distribution of group size (as measured by gini impurity) to establish whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure \ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have significantly lower group size differences than null plots at all parameter combinations. It is therefore possible that some participants will identify extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. Future studies should more tightly control group size in order to reduce this effect. }
+
+\begin{figure}\centering
+\includegraphics[width=.8\linewidth]{figure/simulationparameters-3}
+\caption{Simulated interquartile range of group size inequality statistic values for cluster and null data distributions. \label{fig:simulationGiniIntervals}}
+\end{figure}
 
 \section*{Experimental Design}
 
