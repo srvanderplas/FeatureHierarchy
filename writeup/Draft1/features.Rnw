@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{natbib}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{color}
 \usepackage{multirow}
 \usepackage{rotating}
@@ -22,7 +23,7 @@
 \newcommand{\comment}[2][inline]{\todo[color=SkyBlue, #1]{#2}} % for comments that may not be "to-do"s
 %\newcommand{\mcomment}[1]{\todo[color=SkyBlue]{#1}} % for margin comments
 \newcommand{\newtext}[1]{\todo[inline, color=White]{ \color{OliveGreen}{#1}}} % new text - not necessarily something to be done
-\newcommand{\move}[1]{\todo[inline, color=Lime]{#1}} % new to do item
+\newcommand{\newdo}[1]{\todo[inline, color=Lime]{#1}} % new to do item
 %
 %---------------------------------------------------
 % Define new environment
@@ -36,16 +37,29 @@
 \maketitle
 \begin{abstract}abstract goes here
 \end{abstract}
-<<setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE>>=
+<<setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
 rm(list=ls())
 options(replace.assign=TRUE,width=70)
 require(knitr)
 opts_chunk$set(fig.path='figure/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE)
+
+library(stringr)
 library(reshape2)
-suppressMessages(library(ggplot2))
 library(plyr)
+library(dplyr)
+library(magrittr)
+
+library(ggplot2)
+library(grid)
 suppressMessages(library(gridExtra))
 
+library(nullabor)
+library(digest)
+library(Cairo)
+
+library(lme4)
+
+library(xtable)
 
 source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
@@ -62,8 +76,8 @@ Our understanding of the perception of statistical charts is informed by several
 Research into the preattentive stage of visual perception provides us with some information about the temporal hierarchy of graphical feature processing. Color, line orientation, and shape are processed preattentively; that is, within 200 ms, it is possible to identify a single target in a field of distractors, if the target differs with respect to color or shape \citep{goldstein2009encyclopedia}. 
 \citet{healey1999large} extended this work, demonstrating that certain features of three-dimensional data displays are processed preattentively, but that neither target identification nor three-dimensional data processing always translate into faster or more accurate inference about the data displayed, particularly when participants must integrate several preattentive features to understand the data. 
 
-\comment{add citations and text describing preattentive interference.}
-\comment{add a bit of transition between preattentive stages of perception and gestalt rules.}
+\newdo{add citations and text describing preattentive interference.}
+\newdo{add a bit of transition between preattentive stages of perception and gestalt rules.}
 
 Gestalt rules of perception also impact statistical graphics. These rules describe the way we organize visual input, focusing on the holistic experience rather than the individual perceptual features. For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. The rules of perceptual grouping or organization, as stated in \citet{goldstein2009encyclopedia} are:
 \begin{itemize}
@@ -100,7 +114,7 @@ qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
 \end{figure}
 
 The plots in figure \ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (connectedness, closure, and/or common region). 
-\comment{clarify next sentence}
+\newdo{clarify next sentence}
 The use of physical location, color, and shape to organize graphical units mentally utilizes both preattentive processing and higher-order gestalt schemas, identifying and grouping similar graphical features and simultaneously directing attention to graphical features which stand alone. 
 \newtext{
 Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli; theoretically, subsequent top-down gestalt heuristics can be applied to such stimuli more quickly. 
@@ -139,7 +153,7 @@ In this section, we discuss the generating data models for the two types of sign
 \newtext{
 Lineups require a single ``target" data set (which we are expanding to two competing ``target" data sets), and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through bootstrap sampling, but this introduces some dependencies between target and null plots which complicate the statistical analysis of the results.
 }
-\comment{need citations}
+\newdo{add citations}
 \newtext{
 When possible, it is desireable to generate true null plots, which are generated from the null model and do not depend on the data used in the target plot. 
 This experiment will measure two competing gestalt heuristics, proximity and good continuation, using two data-generating models: $M_C$, which generates data with $K$ clusters, and $M_T$, which generates data with a positive correlation between $x$ and $y$. 
@@ -379,22 +393,76 @@ d_ply(data, .(set), function(df){
 @
 \caption{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=.25$ and $\sigma_C=.2$. \label{fig:plotExamples}}
 \end{figure}
-
 \clearpage
+% 
+% \begin{table}[h]
+% \begin{center}
+% \begin{tabular}{ll}
+% Emphasis & Aesthetics \\\hline\hline
+% Control & -- \\\hline
+% \multirow{3}{*}{Group} & Color, Shape \\
+% & Color + Shape, Color + Ellipse\\
+% & Color + Shape + Ellipse\\\hline
+% \multirow{2}{*}{Trend} & Line \\
+% & Line + Error band\\\hline
+% \multirow{2}{*}{Conflict} & Color + Trend Line, \\
+% & Color + Ellipse + Trend Line + Error band\\\hline\hline
+% \end{tabular}
+% \end{center}
+% \caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
+% \end{table}
+
 \begin{table}[h]
-\begin{center}
-\begin{tabular}{ll}
-Emphasis & Aesthetics \\\hline\hline
-Control & -- \\\hline
-\multirow{3}{*}{Group} & Color, Shape \\
-& Color + Shape, Color + Ellipse\\
-& Color + Shape + Ellipse\\\hline
-\multirow{2}{*}{Trend} & Line \\
-& Line + Error band\\\hline
-\multirow{2}{*}{Conflict} & Color + Trend Line, \\
-& Color + Ellipse + Trend Line + Error band\\\hline\hline
+\centering
+\begin{tabular}{cc|c|c|c|}\cline{3-5}
+ & \multicolumn{1}{c}{} & \multicolumn{3}{|c|}{Line Emphasis}\\\cline{2-5}
+ & \multicolumn{1}{|c|}{Strength} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{2}\\\hline
+ % ----- 
+  \multicolumn{1}{|c|}{\multirow{8}{*}{\parbox[t]{.1\linewidth}{Cluster Emphasis}}} & 
+  \multirow{2}{*}{0} & 
+  \multirow{2}{*}{None} & 
+  \multirow{2}{*}{Line} & 
+  \multirow{2}{*}{Line + Prediction}\\
+ % ----- 
+  \multicolumn{1}{|c|}{} & & & & \\\cline{2-5} 
+ % ----- 
+  \multicolumn{1}{|c|}{} & 
+  \multicolumn{1}{|c|}{\multirow{2}{*}{1}} & 
+  Color & 
+  \multirow{2}{*}{Color + Line} &
+  \\\cline{3-3}
+ % ----- 
+  \multicolumn{1}{|c|}{} & 
+  & 
+  Shape &
+  &
+  \\ \cline{2-5}
+ % ----- 
+  \multicolumn{1}{|c|}{} & 
+  \multicolumn{1}{|c|}{\multirow{2}{*}{2}} & 
+  Color + Shape  & 
+  \multirow{2}{*}{} & 
+  \multirow{2}{*}{\parbox[t][-.2em][c]{.2\linewidth}{Color + Ellipse + Line + Prediction}} 
+  \\ \cline{3-3}
+ % ----- 
+  \multicolumn{1}{|c|}{} & 
+  &
+  Color + Ellipse & 
+  & 
+  \\ \cline{2-5}
+ % ----- 
+  \multicolumn{1}{|c|}{} & 
+  \multicolumn{1}{|c|}{\multirow{2}{*}{3}} & 
+  \multirow{2}{*}{\parbox[t][-.2em][c]{.15\linewidth}{Color + Shape + Ellipse}} &
+  &
+  \\
+ % ----- 
+  \multicolumn{1}{|c|}{} & 
+  & 
+  &
+  &
+  \\ \hline
 \end{tabular}
-\end{center}
 \caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
 
@@ -403,14 +471,14 @@ We expect that relative to a plot with no extra aesthetics or statistical layers
 }
 
 \newtext{
-Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval will increase the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decrease the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model. 
+Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval will increase the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decrease the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
 }
 
 \subsection{Experimental Design}
 \newtext{
-The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination. 
+The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination.
 }
-\comment{Need to find some graphic/table which makes this a bit more clear.}
+\newdo{Need to find some graphic/table which makes this a bit more clear.}
 
 \subsection{Color and Shape Palettes}
 Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
@@ -438,7 +506,7 @@ qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lin
 \caption{Shapes in \citet{heer:2014}. In order to control for varying point size due to Unicode vs. non-Unicode characters, the last two shapes were removed.\label{fig:shapes}}
 \end{figure}
 
-\newtext{Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} (shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 group datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.}
+\newtext{Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 group datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.}
 
 \subsection{Hypotheses}
 \newtext{
@@ -453,8 +521,115 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 \comment{describe amazon turk, etc.}
 
 \section{Results}
-\comment{pretty results here!}
-\subsection{Linear Target Selection}
+<<results-setup,echo=F,include=F>>=
+lineups <- read.csv("../../Images/Turk16/data-picture-details.csv", stringsAsFactors=FALSE)
+lineups$pic_id_old <- lineups$pic_id
+lineups$pic_id <- 1:nrow(lineups)
+
+userdata <- read.csv("../../Data/turk16_results.csv", stringsAsFactors=FALSE)
+userdata$response.id <- 1:nrow(userdata)
+# table(userdata$ip_address, userdata$nick_name)
+
+tmp <- merge(userdata[!is.na(userdata$pic_id),], lineups[,c("pic_id", "sample_size", "test_param", "param_value", "p_value", "obs_plot_location")], all.x=T, all.y=F)
+tmp$k <- as.numeric(substr(tmp$param_value, 3, 3))
+tmp$sd.line <- as.numeric(substr(tmp$param_value, 12, 15))
+tmp$sd.cluster <- as.numeric(substr(tmp$param_value, 25, 28))
+
+correct.ans <- function(x,y){
+  x1 <- as.numeric(str_trim(unlist(str_split(x, ","))))
+  answers <- str_trim(unlist(str_split(y, ",")))
+  lineplot <- as.numeric(answers[1])
+  groupplot <- as.numeric(answers[2])
+  c(line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, n.answers=length(x1), both.correct = lineplot%in%x1 & groupplot%in%x1, neither=!(lineplot%in%x1 | groupplot%in%x1))
+}
+
+useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
+useranswers <- merge(useranswers, tmp)
+useranswers$plottype <- gsub("turk16-", "", useranswers$test_param)
+useranswers$plottype <- factor(useranswers$plottype, levels=c("plain", "trend", "color", "shape", "colorShape", "colorEllipse", "colorTrend",  "trendError", "colorShapeEllipse", "colorEllipseTrendError"))
+useranswers$sd.cluster <- factor(useranswers$sd.cluster)
+useranswers$sd.line <- factor(useranswers$sd.line)
+useranswers$k <- factor(useranswers$k)
+useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
+
+modeldata <- useranswers[,c(1, 4, 7:25, 2, 3, 5, 6)]
+modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], c("", "neither")[1+as.numeric(modeldata$neither==1)], sep="")
+modeldata$outcome[modeldata$both.correct==1] <- "both"
+
+modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
+modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>% str_replace("set-", "") %>% as.numeric)
+modeldata$individualID <- factor(sprintf("%s-%s", modeldata$ip_address, modeldata$nick_name))
+modeldata$k <- factor(modeldata$k, levels=c(3, 5))
+modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_name))
+@
+
+\subsection{General results}
+\comment{demographic information, $N$ people participated, completing on average $M$ plots, etc., overall accuracy rates by individual and plot type}
+
+\newtext{We will first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.}
+\subsection{Linear Target Model}
+\newtext{We will model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
+}
+\begin{align}
+P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
+\theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
+\text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
+\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\nonumber\\
+\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\nonumber\\
+\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2\right)\nonumber
+\end{align}
+\newtext{
+We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
+}
+
+<<line-model, echo=FALSE, include=FALSE, dependson='results-setup', fig.width=8, fig.height=4>>=
+line.model <- glmer(line.correct~ plottype + (1|individualID) + (1|dataset), 
+                    data = modeldata, 
+                    family = binomial(link="logit"), 
+                    control=glmerControl(optimizer="bobyqa"))
+line.fixef <- as.data.frame(summary(line.model)$coefficients)
+line.fixef$LB <- line.fixef[,1] - 1.96*line.fixef[,2]
+line.fixef$UB <- line.fixef[,1] + 1.96*line.fixef[,2]
+line.fixef$OR <- exp(line.fixef[,1])
+line.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(line.fixef)), fixed=T)
+
+line.fixef2 <- line.fixef[2:10,]
+line.fixef2 <- line.fixef2[order(line.fixef2$OR, decreasing = T),]
+line.fixef2$label <- 
+  line.fixef2$label %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("( \\+ )$", "")
+line.fixef2$label <- factor(line.fixef2$label, levels=line.fixef2$label[order(line.fixef2$OR, decreasing = T)], ordered=T)
+line.fixef2$LB <- exp(line.fixef2$LB)
+line.fixef2$UB <- exp(line.fixef2$UB)
+
+qplot(data=line.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") + 
+  coord_flip() + 
+  ylab("Odds Ratio + 95% Wald Interval") + 
+  xlab("Plot Type") + 
+  ggtitle("Effect of Plot Aesthetics on P(Line Target Selected)") + 
+  theme_bw()
+
+names(line.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
+names(line.fixef2)[8] <- "Plot Aesthetiic"
+print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for model \\ref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'l', 'l', 'l', 'l'), digits=c(0, 0, 2, 2, 2, 4)), include.rownames=F, file="figure/linear-fixef-table.txt")
+@
+
+\include{figure/linear-fixef-table.txt}
+
+\begin{figure}\centering
+\includegraphics[width=.75\linewidth]{figure/line-model-1}
+\caption{Odds ratios describing the odds of detecting the linear target plot for each aesthetic, relative to a plain scatterplot. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot. \label{fig:linear.fixef}}
+\end{figure}
+
+\newdo{Commentary goes here... too tired tonight}
+
+\newdo{Discuss variance/covariance and random effects}
+
 \subsection{Group Target Selection}
 \subsection{Signal Strength}
 
@@ -463,78 +638,107 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 \bibliographystyle{asa}
 \bibliography{references}
 
-\clearpage
+\section*{Simulation Studies of Parameter Space}\label{app:parametersimulation}
+\subsection{Distribution of Test Statistics}
 
-\section*{Simulation Studies of Parameter Space}
-\subsection{Simulation 1}
+Simulating lineup data sets, we can compare test statistics measuring trend strength, cluster strength, and cluster size inequality for the null plots and target plots. These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). 
+\todo{Add equations for test statistics}
 
-
-\newtext{Based on simulations from the null we get a distribution for each of the two quality measures for the targets under each parameter setting. This gives us an objective measure to assess the difficulty of detecting each of the targets. An overview of the results can be seen in the appendix.}
-
-\comment{Should we keep these two histograms to explain in more detail how the simulation from the null model works? }
-<<null-distribution, echo=FALSE, include=FALSE, cache=T>>=
+<<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=7, fig.height=2>>=
 source("../../Code/MixtureLineups.R")
-sT = 0.30
-sC = 0.25
-N = 5000
+sT = 0.25
+sC = 0.20
+N = 45
+K = 3
+M = 1000
 
 if (file.exists("./figure/nulldist.Rdata")) {
   load("./figure/nulldist.Rdata")
 } else {
-nulldist<- function(N, sT=0.3, sC=0.3) {
-  nulls <- data.frame(t(replicate(N, {
-    lp <- data.frame(t(replicate(18, {
-      mix = mixture.sim(lambda=0.5, K=3, N=45, sd.cluster=sC, sd.trend=sT)
-      reg <- lm(y~x, data=mix)
-      
-      c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
-    })))
-    c(fline=max(lp$fline), fgroup=max(lp$fgroup))
-  })))
+#   nulldist<- function(N, sT=0.25, sC=0.2) {
+#     nulls <- data.frame(t(replicate(N, {
+#       lp <- data.frame(t(replicate(18, {
+#         mix = mixture.sim(lambda=0.5, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+#         reg <- lm(y~x, data=mix)
+#         
+#   c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
+#   })))
+#     c(fline=max(lp$fline), fgroup=max(lp$fgroup))
+#   })))
+#   
+#   trends <- replicate(10, {
+#     mix = mixture.sim(lambda=0, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+#     reg <- lm(y~x, data=mix)
+#     c(fline=summary(reg)$r.squared)
+#   })
+#   
+#   clusters <- replicate(10, {
+#     mix = mixture.sim(lambda=1, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+#     clust <- lm(y~factor(group) + 0, data=mix)
+#     res <- summary(aov(clust))
+#     c(fgroup=cluster(mix))
+#   })
+#   
+#   list(nulls=nulls, trends=trends, clusters=clusters)
+# }
+# 
+# res <- nulldist(N=N, sC=sC, sT=sT)
+  library(compiler)
+  tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.25) {
+    data.frame(
+      t(
+        replicate(M, 
+                  {
+                    input.pars <- list(N=N, K=K, sd.trend=sT, sd.cluster=sC)
+                    c(unlist(input.pars), eval.data(gen.data(input.pars)))
+                    }
+                  )
+        )
+      )
+    }
+  nulldist <- cmpfun(tmp)
   
-  trends <- replicate(10, {
-    mix = mixture.sim(lambda=0, K=3, N=45, sd.cluster=sC, sd.trend=sT)
-    reg <- lm(y~x, data=mix)
-    c(fline=summary(reg)$r.squared)
-  })
+  res <- nulldist(M=M, N=45, K=3, sT=sT, sC=sC)
   
-  clusters <- replicate(10, {
-    mix = mixture.sim(lambda=1, K=3, N=45, sd.cluster=sC, sd.trend=sT)
-    clust <- lm(y~factor(group) + 0, data=mix)
-    res <- summary(aov(clust))
-    c(fgroup=cluster(mix))
-  })
-  
-  list(nulls=nulls, trends=trends, clusters=clusters)
+  save(res, file="./figure/nulldist.Rdata")
 }
 
-res <- nulldist(N=N, sC=sC, sT=sT)
+# require(ggplot2)
+# qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$trends), color="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
+# ggsave("figure/fline.pdf", width=8, height=4)
+# qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$clusters), color="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
+# ggsave("figure/fgroup.pdf", width=8, height=4)
 
-save(res, file="./figure/nulldist.Rdata")
-}
+longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
+longres$dist <- c("Data", "Max(18 Nulls)")[1+grepl("null", longres$type)]
+longres$type <- gsub("null.", "", longres$type, fixed=T)
+longres$Statistic <- longres$type
+longres$Statistic[longres$type=="cluster"] <- "Cluster Measure"
+longres$Statistic[longres$type=="line"] <- "R^2"
+longres$Statistic[longres$type=="gini"] <- "Gini Coefficient"
+longres$Statistic <- factor(longres$Statistic, levels=c("R^2", "Cluster Measure", "Gini Coefficient"))
 
-require(ggplot2)
-qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$trends), color="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
-ggsave("figure/fline.pdf", width=8, height=4)
-qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$clusters), color="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
-ggsave("figure/fgroup.pdf", width=8, height=4)
+qplot(data=longres, x=value, y=..density.., stat="density", color=dist, fill=dist, geom="area", alpha=I(.5), 
+      main=expression(paste("Simulation Results " , group("(", list(K==3, sigma[T]==.25, sigma[C]==.2), ")"))), 
+      xlab="Simulated Distribution of Test Statistic", 
+      ylab="Density", 
+      position="identity") + 
+  facet_grid(.~Statistic, scales="free", labeller=label_both) + 
+  scale_color_manual("Distribution", values=c("black",  "grey")) + 
+  scale_fill_manual("Distribution", values=c("transparent", "grey")) +  
+  theme_bw()
 @
 
-Figures~\ref{fig:fline} and \ref{fig:fgroup} show histograms of the marginal densities ...
-The red lines show ten samples each from the trend model and the cluster model. 
-The lines for the cluster are, relatively, further to the right of the overall distribution than the red lines for the trend model, indicating that $\sigma_C = 0.25$ is producing target plots that are a bit easier to spot than trend targets with a parameter value of $\sigma_T = 0.30$.
+Figure~\ref{fig:targetsignal} show computed densities of the maximum null distribution measure compared with the measure in the signal plot. There is some overlap in the distribution of $R^2$ for the null plots compared with the target plot displaying data drawn from $M_T$. We have two measures comparing data drawn from $M_C$ and $M_0$; the cluster measure examines the variance in $x$ and $y$ described by the cluster center; the gini coefficient examines the inequality in group sizes. These simulations indicate that it may be possible to differentiate $M_C$ based on two different features in clustered data. In future experiments, it may be beneficial to control cluster size more tightly to remove this additional feature. 
+
+The distribution of the cluster statistic values are more easily separated from the null plots than the distribution of the line statistic, indicating that $\sigma_C = 0.20$ is producing target plots that are a bit easier to spot than trend targets with a parameter value of $\sigma_T = 0.25$, however, the inequality of group sizes may distract participants from the intended target signal of cluster cohesion.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.6\textwidth]{figure/fline.pdf}
-\caption{\label{fig:fline}Histogram of $R^2$ values from \Sexpr{N} data sets of the null model ($K=3, N=45, \sigma_C=$\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in black are $R^2$ values of ten sample data sets from the Trend model $M_T$. }
+\includegraphics[width=.9\textwidth]{figure/null-distribution-1}
+\caption{\label{fig:targetsignal}Density of test statistics measuring trend strength, cluster strength, and cluster inequality for target distributions and null plots. }
 \end{figure}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=.6\textwidth]{figure/fgroup.pdf}
-\caption{\label{fig:fgroup}Histogram of the distribution of the cluster measure based on \Sexpr{N} data sets from the null model ($K=3, N=45, \sigma_C= $\Sexpr{sC}, $\sigma_T= $\Sexpr{sT}). The lines in black correspond to the cluster measure from ten sample data sets from the Clustering model $M_C$. }
-\end{figure}
 
 \subsection{Full Parameter Space Simulation Study}
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength (short description here) for null and target plots. The plot below shows the 25th and 75th percentiles of the distribution of these summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
@@ -564,22 +768,6 @@ qplot(data=subset(dataset.criteria, type=="cluster"), x=LB, xend=UB, y=sd.trend,
 
 \section*{Experimental Design}
 
-In a more organized representation:
-\begin{table}[h]
-\centering
-\begin{tabular}{cc|c|c|c|}\cline{3-5}
- & \multicolumn{1}{c}{} & \multicolumn{3}{|c|}{Line Emphasis}\\\cline{3-5}
- & & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{2}\\\hline
-\multicolumn{1}{|c|}{\multirow{5}{*}{Cluster Emphasis}} & 
-  \multicolumn{1}{|c|}{0} & None & Line & Line + Prediction\\\cline{2-5}
-\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{1} & Color, Shape & Color + Line & \\\cline{2-5}
-\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{\multirow{2}{*}{2}} & Color + Shape  & & Color + Ellipse + Line + Prediction \\
-\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{}& Color + Ellipse & & \\\cline{2-5}
-\multicolumn{1}{|c|}{} & \multicolumn{1}{|c|}{3} & Color + Shape + Ellipse & &\\\hline
-\end{tabular}
-\end{table}
-
-\subsection{Experimental Design}
 Initially, assume a fully factorial, balanced design, with $r$ unique datasets per parameter set (replicates) and $P$ evaluations per $(\text{aesthetic}|\text{dataset})$. The experiment is conducted at three levels: parameter sets (with replication, so EUs are data sets), plot types (i.e. a certain set of aesthetics), and participant evaluations. At the first level, there are three parameters: $K =3$, $\sigma_T \in \{.15, .25, .35\}$, and $\sigma_C \in \{.15, .25, .35\}$. At the second level, there are blocks (by data set), and then 4 aesthetic combinations. 
 
 

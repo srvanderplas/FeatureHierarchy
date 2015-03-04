@@ -1,0 +1,22 @@
+% latex table generated in R 3.1.2 by xtable 1.7-1 package
+% Tue Mar  3 21:33:53 2015
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllll}
+  \hline
+Plot Aesthetiic & Log Odds & Std. Error & Z & P value \\ 
+  \hline
+Trend + Error & 0.61 & 0.10 & 6.09 & 0.0000 \\ 
+  Color + Ellipse + Trend + Error & 0.14 & 0.10 & 1.40 & 0.1603 \\ 
+  Trend & -0.14 & 0.10 & -1.40 & 0.1608 \\ 
+  Shape & -0.24 & 0.10 & -2.31 & 0.0211 \\ 
+  Color + Shape & -0.39 & 0.11 & -3.69 & 0.0002 \\ 
+  Color & -0.45 & 0.11 & -4.29 & 0.0000 \\ 
+  Color + Trend & -0.54 & 0.11 & -5.13 & 0.0000 \\ 
+  Color + Ellipse & -0.89 & 0.11 & -8.03 & 0.0000 \\ 
+  Color + Shape + Ellipse & -0.98 & 0.11 & -8.73 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption[Fixed effects for linear target logistic model]{Fitted values of fixed effects for model \ref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.} 
+\label{tab:line.fixef}
+\end{table}
