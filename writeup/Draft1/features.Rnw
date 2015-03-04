@@ -260,14 +260,14 @@ qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) +
 \newtext{The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). }
 
 \begin{figure}[ht]
-<<lambda, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE>>=
-lambda <- c(.25, .5, .75)
+<<lambda, fig.width=8, fig.height=3.5, out.width='\\textwidth', echo=FALSE>>=
+lambda <- c(0, .25, .5, .75, 1)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 
-res <- ldply(sd, function(x) { data.frame(lambda=x, mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)) })
+res <- ldply(lambda, function(x) { data.frame(lambda=x, mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)) })
 res$K <- 3
-res2 <- ldply(sd, function(x) { data.frame(lambda=x, mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)) })
+res2 <- ldply(lambda, function(x) { data.frame(lambda=x, mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)) })
 res2$K <- 5
 res <- rbind(res, res2)
 res$label <- paste("lambda :",res$lambda)
