@@ -119,11 +119,13 @@ This study is designed to understand the hierarchy of gestalt principles in perc
 
 \newtext{In this study, we modify the lineup protocol by introducing a second target to each lineup. The two targets represent two different, competing signals; the participant's choice then demonstrates empirically which signal is more salient. By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. At this level, signal strength is determined by the data and generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system. }
 
-\newtext{Extending this testing framework, we can apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers may emphasize either target, affecting the overall visual signal of one or the other target plots relative to the null plots. We expect that in a situation similar to the third plot of figure \ref{fig:gestalt}, the addition of two trend lines would emphasize the "good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure would be enhanced if the points in each group were colored differently, as the proximity heuristic would be supplemented by similarity. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may "tip the balance" in favor of recognizing one type of signal.}
+\newtext{Using this testing framework, we can apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of figure \ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure would be enhanced if the points in each group were colored differently, as the proximity heuristic would be supplemented by similarity. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may "tip the balance" in favor of recognizing one type of signal.}
+
 % A further extension of this testing framework are the use of color (in a qualitative color scheme), the use of shapes, and additional density lines - we anticipate that all of these features are going to emphasize the clustering component. 
 % On the other hand, regression lines should emphasize any linear trends in the data.
 \newtext{
 This study is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. %awesome alliteration, right? 
+The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations.
 }
 
 \section{Experimental Design}
@@ -135,7 +137,7 @@ In this section, we discuss the generating data models for the two types of sign
 
 \subsection{Data Generation}
 \newtext{
-Lineups require a single "target" data set (which we are expanding to two competing "target" data sets), and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through bootstrap sampling, but this introduces some dependencies between target and null plots which complicate the statistical analysis of the results.
+Lineups require a single ``target" data set (which we are expanding to two competing ``target" data sets), and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through bootstrap sampling, but this introduces some dependencies between target and null plots which complicate the statistical analysis of the results.
 }
 \comment{need citations}
 \newtext{
@@ -292,6 +294,7 @@ The parameter values were chosen after examining the full parameter space throug
 \newtext{
 Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions would modify the perception of ambiguous graphs, emphasizing clustered data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset generated as described in the previous section, we will examine the combinations of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics} in order to assess the visual impact of these aesthetics on target identification. Examples of these plot aesthetics are shown in figure \ref{fig:plotExamples}.
 }
+\clearpage
 
 \begin{figure}[ht]
 <<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".3\\linewidth", fig.show='hold', fig.align='center', warning=FALSE, message=FALSE>>=
@@ -377,6 +380,7 @@ d_ply(data, .(set), function(df){
 \caption{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=.25$ and $\sigma_C=.2$. \label{fig:plotExamples}}
 \end{figure}
 
+\clearpage
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{ll}
@@ -445,7 +449,16 @@ The primary purpose of this study is to understand how visual aesthetics affect 
 A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
 }
 
-\clearpage
+\subsection{Participant Recruitment}
+\comment{describe amazon turk, etc.}
+
+\section{Results}
+\comment{pretty results here!}
+\subsection{Linear Target Selection}
+\subsection{Group Target Selection}
+\subsection{Signal Strength}
+
+\section{Discussion}
 
 \bibliographystyle{asa}
 \bibliography{references}
