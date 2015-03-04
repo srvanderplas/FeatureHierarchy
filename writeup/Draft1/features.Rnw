@@ -527,7 +527,8 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 
 \section{Results}
 <<results-setup,echo=F,include=F>>=
-lineups <- read.csv("../../Images/Turk16/data-picture-details.csv", stringsAsFactors=FALSE)
+
+lineups <- read.csv("../../Images/Turk16/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
 
@@ -545,7 +546,8 @@ correct.ans <- function(x,y){
   answers <- str_trim(unlist(str_split(y, ",")))
   lineplot <- as.numeric(answers[1])
   groupplot <- as.numeric(answers[2])
-  c(line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, n.answers=length(x1), both.correct = lineplot%in%x1 & groupplot%in%x1, neither=!(lineplot%in%x1 | groupplot%in%x1))
+  giniplot <- ifelse(groupplot==as.numeric(answers[3]) | lineplot==as.numeric(answers[3]), NA, as.numeric(answers[3]))
+  c(n.answers=length(x1), line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
 }
 
 useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
@@ -557,8 +559,12 @@ useranswers$sd.line <- factor(useranswers$sd.line)
 useranswers$k <- factor(useranswers$k)
 useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
 
-modeldata <- useranswers[,c(1, 4, 7:25, 2, 3, 5, 6)]
-modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], c("", "neither")[1+as.numeric(modeldata$neither==1)], sep="")
+modeldata <- useranswers[,c(1, 2, 8:26, 3:7)]
+modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], 
+                           c("", "group")[1+as.numeric(modeldata$group.correct==1)], 
+                           c("", "neither")[1+as.numeric(modeldata$neither.correct==1)], 
+                           c("", "gini")[1+as.numeric(modeldata$gini.correct==1)], 
+                           sep="")
 modeldata$outcome[modeldata$both.correct==1] <- "both"
 
 modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
