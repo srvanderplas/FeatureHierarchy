@@ -149,12 +149,32 @@ eval.data <- function(df){
   
   c(null.line = max(nl$line), 
     null.cluster = max(nl$group), 
-    null.gini = max(nl$gini),
+    null.gini = min(nl$gini),
     line = ll$line, 
     cluster = cl$group,
     gini = cl$gini)
 }
 
+eval.data2 <- function(df){
+  
+  nulls <- subset(df, .sample!=target1 & .sample!=target2)
+  groups <- subset(df, .sample==target2)
+  lines <- subset(df, .sample==target1)
+  
+  nl <- ddply(nulls, .(.sample), eval.df)
+  
+  cl <- eval.df(groups)
+  ll <- eval.df(lines)
+  
+  c(null.line = max(nl$line), 
+    null.cluster = max(nl$group), 
+    null.gini.max = max(nl$gini),
+    null.gini.min = min(nl$gini),
+    line.gini = ll$gini,
+    line = ll$line, 
+    cluster = cl$group,
+    gini = cl$gini)
+}
 
 gini <- function(y, unbiased = TRUE, na.rm = FALSE){
   if (!is.numeric(y)){
@@ -165,13 +185,8 @@ gini <- function(y, unbiased = TRUE, na.rm = FALSE){
     stop("'x' contain NAs")
   if (na.rm)
     y <- y[!na.ind]
-  x <- as.numeric(table(y))
-  n <- length(x)
-  mu <- mean(x)
-  N <- if (unbiased) n * (n - 1) else n * n
-  ox <- x[order(x)]
-  dsum <- drop(crossprod(2 * 1:n - n - 1,  ox))
-  dsum / (mu * N)
+  x <- as.numeric(table(y))/sum(y)
+  1-sum(x^2)
 }
 
 eval.data.quantiles <- function(i, data.set.parms, reps=3){

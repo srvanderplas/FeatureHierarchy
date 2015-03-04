@@ -708,7 +708,7 @@ print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects 
 Simulating lineup data sets, we can compare test statistics measuring trend strength, cluster strength, and cluster size inequality for the null plots and target plots. These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). 
 \todo{Add equations for test statistics}
 
-<<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=7, fig.height=2>>=
+<<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=8, fig.height=4>>=
 source("../../Code/MixtureLineups.R")
 sT = 0.25
 sC = 0.20
@@ -774,13 +774,13 @@ if (file.exists("./figure/nulldist.Rdata")) {
 # ggsave("figure/fgroup.pdf", width=8, height=4)
 
 longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
-longres$dist <- c("Data", "Max(18 Nulls)")[1+grepl("null", longres$type)]
+longres$dist <- c("Data", "Most Extreme of\n18 Null Dists")[1+grepl("null", longres$type)]
 longres$type <- gsub("null.", "", longres$type, fixed=T)
 longres$Statistic <- longres$type
 longres$Statistic[longres$type=="cluster"] <- "Cluster Measure"
 longres$Statistic[longres$type=="line"] <- "R^2"
-longres$Statistic[longres$type=="gini"] <- "Gini Coefficient"
-longres$Statistic <- factor(longres$Statistic, levels=c("R^2", "Cluster Measure", "Gini Coefficient"))
+longres$Statistic[longres$type=="gini"] <- "Gini Impurity"
+longres$Statistic <- factor(longres$Statistic, levels=c("R^2", "Cluster Measure", "Gini Impurity"))
 
 qplot(data=longres, x=value, y=..density.., stat="density", color=dist, fill=dist, geom="area", alpha=I(.5), 
       main=expression(paste("Simulation Results " , group("(", list(K==3, sigma[T]==.25, sigma[C]==.2), ")"))), 
