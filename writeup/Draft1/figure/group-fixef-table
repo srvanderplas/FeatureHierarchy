@@ -1,0 +1,22 @@
+% latex table generated in R 3.1.2 by xtable 1.7-1 package
+% Tue Mar  3 21:55:41 2015
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllll}
+  \hline
+Plot Aesthetic & Log Odds & Std. Error & Z & P value \\ 
+  \hline
+Trend + Error & 0.6081 & 0.0998 & 6.09 & 0.0000 \\ 
+  Color + Ellipse + Trend + Error & 0.1425 & 0.1015 & 1.40 & 0.1603 \\ 
+  Trend & -0.1436 & 0.1024 & -1.40 & 0.1608 \\ 
+  Shape & -0.2387 & 0.1035 & -2.31 & 0.0211 \\ 
+  Color + Shape & -0.3877 & 0.1050 & -3.69 & 0.0002 \\ 
+  Color & -0.4546 & 0.1061 & -4.29 & 0.0000 \\ 
+  Color + Trend & -0.5448 & 0.1062 & -5.13 & 0.0000 \\ 
+  Color + Ellipse & -0.8861 & 0.1104 & -8.03 & 0.0000 \\ 
+  Color + Shape + Ellipse & -0.9763 & 0.1118 & -8.73 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption[Fixed effects for group target logistic model]{Fitted values of fixed effects for the model described in \eqref{eqn:groupModel}.} 
+\label{tab:line.fixef}
+\end{table}

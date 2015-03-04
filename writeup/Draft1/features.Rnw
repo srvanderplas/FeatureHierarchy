@@ -518,7 +518,7 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 }
 
 \subsection{Participant Recruitment}
-\comment{describe amazon turk, etc.}
+\newdo{describe amazon turk, participant instructions, screening procedures, etc.}
 
 \section{Results}
 <<results-setup,echo=F,include=F>>=
@@ -564,7 +564,7 @@ modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_nam
 @
 
 \subsection{General results}
-\comment{demographic information, $N$ people participated, completing on average $M$ plots, etc., overall accuracy rates by individual and plot type}
+\newdo{demographic information, $N$ people participated, completing on average $M$ plots, etc., overall accuracy rates by individual and plot type}
 
 \newtext{We will first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.}
 \subsection{Linear Target Model}
@@ -615,11 +615,11 @@ qplot(data=line.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
   theme_bw()
 
 names(line.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
-names(line.fixef2)[8] <- "Plot Aesthetiic"
-print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for model \\ref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'l', 'l', 'l', 'l'), digits=c(0, 0, 2, 2, 2, 4)), include.rownames=F, file="figure/linear-fixef-table.txt")
+names(line.fixef2)[8] <- "Plot Aesthetic"
+print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'l', 'l', 'l', 'l'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/linear-fixef-table")
 @
 
-\include{figure/linear-fixef-table.txt}
+\input{figure/linear-fixef-table}
 
 \begin{figure}\centering
 \includegraphics[width=.75\linewidth]{figure/line-model-1}
@@ -631,6 +631,65 @@ print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects 
 \newdo{Discuss variance/covariance and random effects}
 
 \subsection{Group Target Selection}
+
+\newtext{We now examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
+}
+\begin{align}
+P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:groupModel}\\
+\theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
+\text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
+\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\nonumber\\
+\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\nonumber\\
+\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2\right)\nonumber
+\end{align}
+\newtext{
+As before, we note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
+}
+
+<<group-model, echo=FALSE, include=FALSE, dependson='results-setup', fig.width=8, fig.height=4>>=
+group.model <- glmer(group.correct~ plottype + (1|individualID) + (1|dataset), 
+                    data = modeldata, 
+                    family = binomial(link="logit"), 
+                    control=glmerControl(optimizer="bobyqa"))
+group.fixef <- as.data.frame(summary(group.model)$coefficients)
+group.fixef$LB <- group.fixef[,1] - 1.96*group.fixef[,2]
+group.fixef$UB <- group.fixef[,1] + 1.96*group.fixef[,2]
+group.fixef$OR <- exp(group.fixef[,1])
+group.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(group.fixef)), fixed=T)
+
+group.fixef2 <- group.fixef[2:10,]
+group.fixef2 <- group.fixef2[order(group.fixef2$OR, decreasing = T),]
+group.fixef2$label <- 
+  group.fixef2$label %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("( \\+ )$", "")
+group.fixef2$label <- factor(group.fixef2$label, levels=group.fixef2$label[order(group.fixef2$OR, decreasing = T)], ordered=T)
+group.fixef2$LB <- exp(group.fixef2$LB)
+group.fixef2$UB <- exp(group.fixef2$UB)
+
+qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") + 
+  coord_flip() + 
+  scale_y_continuous("Odds Ratio + 95% Wald Interval", breaks=c(.5, .75, 1, 1.25)) + 
+  xlab("Plot Type") + 
+  ggtitle("Effect of Plot Aesthetics on P(Group Target Selected)") + 
+  theme_bw()
+
+names(group.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
+names(group.fixef2)[8] <- "Plot Aesthetic"
+print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:groupModel}.", "Fixed effects for group target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'l', 'l', 'l', 'l'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/group-fixef-table")
+@
+
+\input{figure/group-fixef-table}
+
+\begin{figure}\centering
+\includegraphics[width=.75\linewidth]{figure/group-model-1}
+\caption{Odds ratios describing the odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in group size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
+\end{figure}
+
 \subsection{Signal Strength}
 
 \section{Discussion}
