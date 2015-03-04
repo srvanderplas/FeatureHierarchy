@@ -697,7 +697,7 @@ print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects 
 
 
 \subsection{Face-Off: Group versus Line}
-\comment{Just another idea of evaluating this data set: For each data set we only consider those evaluations that correctly identify one of the targets. This reveals that participants overall favored groups to lines at a ratio of about 2:1. We remove this overall effect using an intercept, and model group vs line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different. (Do a test?) Surprisingly(?), the two designs sending mixed signals (color + trend, color+ ellipse+trend) end on opposite ends of the scale.  }
+\comment{Just another idea of evaluating this data set: For each data set we only consider those evaluations that correctly identify one of the targets. This reveals that participants overall favored groups to lines at a ratio of about 2:1. We remove this overall effect using an intercept, and model group vs line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see letter value test, XXX need citation and interpretation). Surprisingly(?), the two designs sending mixed signals (color + trend, color+ ellipse+trend) end on opposite ends of the scale.  }
 \begin{figure}
 \centering
 <<echo=FALSE, fig.width=7.5, fig.height=3.5, out.width='.85\\textwidth'>>=
@@ -707,9 +707,19 @@ designs$perc <- with(designs, group/(group+line))
 m1 <- glmer(cbind(group, line)~plottype+(1|data_name), data=designs, family=binomial())
 cis <- data.frame(confint(m1, method="Wald"))
 cis$estimate <- fixef(m1)
-cis$label <- gsub("plottype", "", names(fixef(m1)))
-qplot(exp(estimate), reorder(label, estimate), data=cis[-1,]) + theme_bw() + geom_vline(xintercept=1, colour="grey70") + 
-  geom_segment(aes(x=exp(X2.5..), xend=exp(X97.5..), y=label, yend=label)) +ggtitle("Odds of Group vs Line given target was identified")
+cis$name <- gsub("plottype", "", names(fixef(m1)))
+
+suppressMessages(require(multcomp))
+type_compare <- glht(m1, mcp(plottype="Tukey"))
+cis$letters <- cld(type_compare)$mcletters$Letters
+
+cis2 <- cis[-1,]
+cis2$name <- with(cis2, reorder(name, estimate))
+qplot(exp(estimate), name, data=cis2) + theme_bw() + geom_vline(xintercept=1, colour="grey70") + 
+  geom_segment(aes(x=exp(X2.5..), xend=exp(X97.5..), y=name, yend=name)) + 
+  geom_text(aes(x=0, y=name, label=letters), data=cis2) +
+  ggtitle("Odds of Group vs Line given one target was identified")
+
 @
 \caption{\label{fig:faceoff} Estimated odds of decision for group versus line target based on evaluations that resulted in the identification of one of these targets.}
 \end{figure}
