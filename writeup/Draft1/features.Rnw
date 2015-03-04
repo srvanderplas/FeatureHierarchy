@@ -11,7 +11,7 @@
 \usepackage{color}
 \usepackage{multirow}
 \usepackage{rotating}
-\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage[dvipsnames,svgnames, table]{xcolor}
 \graphicspath{{figure/}}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -260,6 +260,7 @@ qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) +
 \caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom).}
 \end{figure}
 
+\comment{For the study we used $a=1$, right?}
 \subsubsection{Null Model $M_0$}
 The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
@@ -283,20 +284,20 @@ qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) +
 @
 \caption{\label{fig:lambda} Scatterplots of data generated from $M_0$ using different values of $\lambda$.}
 \end{figure}
-\newtext{Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$. }
+Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$. 
 
 \subsubsection{Parameters used in Data Generation}
-\newtext{
-These models provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ (directly related to correlation strength) for varying numbers of clusters $K=3, 5$, we can systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in table \ref{tab:parameters}, we can generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. }
+These models provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ (directly related to correlation strength) for varying numbers of clusters $K=3, 5$, we can systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in table \ref{tab:parameters}, we  generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. 
 \begin{table}[h]
+  \rowcolors{2}{gray!25}{white}
 \begin{center}
 \begin{tabular}{lll}
-Parameter & Description & Choices\\\hline
+\bf Parameter & \bf Description & \bf Choices\\\hline
 $K$ & \# Clusters & 3, 5 \\
 $N$ & \# Points & $15\cdot K$ \\
 $\sigma_T$ & Scatter around trend line &  .15, .25, .35\\
-\multirow{2}{*}{$\sigma_C$} & \multirow{2}{*}{Scatter around cluster centers} &  .15, .20, .25 ($K=3$)\\
-& & .20, .25, 0.30 ($K=5$)\\\hline
+$\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .15, .20, .25 ($K=3$)\\ .20, .25, .30 ($K=5$) \end{tabular}
+\\\hline
 \end{tabular}
 \end{center}
 \caption{Parameter settings for generation of lineup datasets. \label{tab:parameters}}
@@ -684,7 +685,7 @@ qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
 
 names(group.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
 names(group.fixef2)[8] <- "Plot Aesthetic"
-print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:groupModel}.", "Fixed effects for group target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'l', 'l', 'l', 'l'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/group-fixef-table")
+print(xtable(line.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'l', 'l', 'l', 'l'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/group-fixef-table")
 @
 
 \input{figure/group-fixef-table}
@@ -848,8 +849,8 @@ HH: yes, I would assume that participants get ten plots each, one from each of t
 \begin{table}[h]
 \centering\tiny
 \begin{tabular}{lllll}\hline\hline\\
-Level & Factor & Source & DF & Sum of Squares \\\hline
-\multirow{11}{*}{Dataset}
+\bf Level & \bf Factor & \bf Source & \bf DF & \bf Sum of Squares \\\hline
+\multirow{11}{*}{\bf Dataset}
       & $K$    & $\alpha$  & 1 & 
       $\sum_i (4)(5)(r)(10P)(\overline{y}_{i\cdot\cdot\cdot\cdot\cdot}-
                                \overline{y}_{\cdot\cdot\cdot\cdot\cdot\cdot})^2$ \\

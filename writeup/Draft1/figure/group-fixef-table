@@ -1,5 +1,5 @@
 % latex table generated in R 3.1.1 by xtable 1.7-3 package
-% Wed Mar  4 08:48:41 2015
+% Wed Mar  4 09:51:22 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -18,5 +18,5 @@ Trend + Error & 0.6081 & 0.1014 & 6.00 & 0.0000 \\
    \hline
 \end{tabular}
 \caption[Fixed effects for group target logistic model]{Fitted values of fixed effects for the model described in \eqref{eqn:groupModel}.} 
-\label{tab:line.fixef}
+\label{tab:group.fixef}
 \end{table}
