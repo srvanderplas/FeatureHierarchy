@@ -577,6 +577,11 @@ modeldata$start_time <- ymd_hms(modeldata$start_time)
 modeldata$end_time <- ymd_hms(modeldata$end_time)
 modeldata$trial.time <- with(modeldata, end_time-start_time)
 modeldata <- ddply(modeldata, .(k), transform, trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))])
+modeldata$trend.diff <- factor(modeldata$trend.diff, levels=c("easy", "medium", "hard"))
+modeldata$cluster.diff <- factor(modeldata$cluster.diff, levels=c("easy", "medium", "hard"))
+modeldata$cluster.diff2 <- factor(modeldata$cluster.diff, levels=c("easy", "medium", "hard"), labels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
+modeldata$trend.diff2 <- factor(modeldata$trend.diff, levels=c("easy", "medium", "hard"), labels=c("Trend: Easy", "Trend: Medium", "Trend: Hard"))
+
 
 parameter.design <- unique(modeldata[,c("dataset", "k", "trend.diff", "cluster.diff")])
 
@@ -588,8 +593,6 @@ modeldata.long$answer.type <- gsub(".correct", "", modeldata.long$answer.type)
 modeldata.long <- filter(modeldata.long, answer.type%in%c("cluster", "trend", "neither"))
 modeldata.long$correct <- as.numeric(modeldata.long$correct)
 modeldata.long$answer.type <- factor(modeldata.long$answer.type, levels=c("cluster", "trend", "neither"))
-modeldata.long$cluster.diff2 <- factor(modeldata.long$cluster.diff, levels=c("easy", "medium", "hard"), labels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
-modeldata.long$trend.diff2 <- factor(modeldata.long$trend.diff, levels=c("easy", "medium", "hard"), labels=c("Trend: Easy", "Trend: Medium", "Trend: Hard"))
 modeldata.long$plottype <- 
   modeldata.long$plottype %>%
   str_replace("color", "Color + ") %>% 
@@ -604,12 +607,8 @@ modeldata.long$plottype <-
                   "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
          labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                  "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
+                  "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
 @
-
-\subsection{General results}
-\comment{I don't know where the demographic information for the experiment is stored...}
-
 \newtext{
 Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
 during which time \Sexpr{length(unique(modeldata$individualID))} individuals completed \Sexpr{nrow(modeldata)} unique lineup evaluations (the average individual evaluated 
@@ -620,9 +619,14 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
 Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evaluations identified more than one target plot, and of these multiple identifications, \Sexpr{round(100*(mean(modeldata[modeldata$n.answers>=2,"both.correct"])), 1)}\% identified both targets correctly. 
 }
+\comment{I don't know where the demographic information for the experiment is stored...}
 
-\newtext{Figure \ref{fig:accuracy-parms} shows aggregate }
-<<parameter-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
+\subsection{Graphical Exploration}
+
+\newtext{
+Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating "hard" cluster lineups as "easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.
+}
+<<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='.9\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
 
 parm.accuracy <- modeldata.long %>% 
   group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
@@ -631,28 +635,45 @@ parm.accuracy <- modeldata.long %>%
   group_by(trend.diff2, cluster.diff2, k) %>%
   transform(total.acc = sum(accuracy))
 
-parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("trend", "cluster", "neither"))
-k.3 <- qplot(x=answer.type, y=accuracy, fill=answer.type, 
-             geom="bar", data=subset(parm.accuracy, k==3), position="dodge", stat="identity") +
-  facet_grid(trend.diff2~cluster.diff2) + 
-  scale_fill_brewer(palette="Set1", guide="none") + 
-  theme_bw() + 
-  xlab("Target Identified") + 
-  ylab("Proportion of Trials") + 
-  ggtitle("K=3 Clusters")
-k.5 <- qplot(x=answer.type, y=accuracy, fill=answer.type, 
-             geom="bar", data=subset(parm.accuracy, k==5), position="dodge", stat="identity") +
-  facet_grid(trend.diff2~cluster.diff2) + 
-  scale_fill_brewer(palette="Set1", guide="none") + 
-  theme_bw() + 
-  xlab("Target Identified") + 
-  ylab("Proportion of Trials") + 
-  ggtitle("K=5 Clusters")
+parm.accuracy$k2 <- paste0("K: ", parm.accuracy$k)
+parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
+parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Hard", "Cluster: Medium", "Cluster: Easy"))
 
-grid.arrange(k.3, k.5, nrow=1)
+grid_arrange_shared_legend <- function(...) {
+    plots <- list(...)
+    g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
+    legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+    lheight <- sum(legend$height)
+    grid.arrange(
+        do.call(arrangeGrob, c(lapply(plots, function(x)
+            x + theme(legend.position="none")), nrow=1)),
+        legend,
+        nrow = 2,
+        heights = unit.c(unit(1, "npc") - lheight, lheight))
+}
+
+p1 <- qplot(x=cluster.diff2, y=accuracy, fill=answer.type, 
+            geom="bar", data=parm.accuracy, position="stack", stat="identity") +
+  scale_fill_brewer("Target Identified", palette="Set1") + 
+  facet_grid(k2 ~ trend.diff2) +
+  theme_bw() + 
+  xlab("Cluster Difficulty") + 
+  scale_y_continuous("Proportion of Trials", breaks=c(0, .5, 1)) + 
+  coord_flip()
+p2 <- qplot(x=trend.diff2, y=accuracy, fill=answer.type, 
+      geom="bar", data=parm.accuracy, position="stack", stat="identity") +
+  scale_fill_brewer("Target Identified", palette="Set1", guide="none") + 
+  facet_grid(k2 ~ cluster.diff2) +
+  theme_bw() + 
+  xlab("")  + 
+  scale_y_continuous("Proportion of Trials", breaks=c(0, .5, 1)) + 
+  coord_flip()
+grid_arrange_shared_legend(p1, p2)
 @
-
-<<plot-accuracy-rate, echo=F, fig.width=8, fig.height=4, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
+\newtext{
+Figure \ref{fig:accuracy-plottype} shows aggregate accuracy rates for each plot aesthetic combination. It is again apparent that the cluster targets were overall more likely to be identified than line targets across all aesthetic combinations, however, it is also evident that plot aesthetics influence the identified target.
+}
+<<plot-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
 
 plottype.accuracy <- modeldata.long %>% 
   group_by(plottype, answer.type) %>% 
@@ -660,7 +681,7 @@ plottype.accuracy <- modeldata.long %>%
   ungroup() %>%
   group_by(plottype) %>%
   transform(total.acc = sum(accuracy))
-plottype.accuracy$plottype <- with(plottype.accuracy, factor(plottype, levels=plottype[answer.type=='neither'][order(accuracy[answer.type=='neither'], accuracy[answer.type=="trend"])]))
+plottype.accuracy$plottype <- factor(plottype.accuracy$plottype, levels=c("Trend + Error", "Trend", "Plain", "Shape", "Color", "Color + Shape", "Color + Trend", "Color + Shape + Ellipse", "Color + Ellipse", "Color + Ellipse + Trend + Error"))
 plottype.accuracy$answer.type <- factor(plottype.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
 qplot(x=plottype, y=accuracy, fill=answer.type, 
       geom="bar", data=plottype.accuracy, position="stack", stat="identity") +
@@ -671,31 +692,54 @@ qplot(x=plottype, y=accuracy, fill=answer.type,
   coord_flip()
 @
 
-<<participant-confidence,echo=F, fig.width=5, fig.height=3, out.width='.5\\linewidth', fig.cap="Participant confidence levels compared with trial results. \\label{fig:conflevel}">>=
-ggplot(data=modeldata, 
-       aes(x=factor(conf_level), 
-           group=factor(c("both", "neither", "cluster", "cluster", "trend", "trend", "neither")[as.numeric(factor(outcome))], 
-                        levels=c("both", "cluster", "trend", "neither")), 
-           color=factor(c("both", "neither", "cluster", "cluster", "trend", "trend", "neither")[as.numeric(factor(outcome))], 
-                        levels=c("both", "cluster", "trend", "neither")))) + 
-  geom_line(stat="bin", aes(y=..count..)) + 
-  scale_color_discrete("Target\nIdentified") + 
-  xlab("Participant Confidence") + 
-  ylab("# Trials") + 
+\newtext{
+In addition to participant identification of target plots, we also asked that they rate their confidence in their answer. 
+Figure \ref{fig:conflevel} shows aggregate participant confidence rating as a function of trial outcome. 
+Participants who did not identify either target plot were less likely to be ``extremely confident'' in their answer, while participants who identified either the trend or the cluster target correctly were highly confident that their answer was correct. 
+Overall, though, participants seem to have some degree of confidence in their answer, regardless of whether the answer was correct.
+}
+<<participant-confidence,echo=F, fig.width=6.5, fig.height=4.25, out.width='.5\\linewidth', fig.cap="Participant confidence levels compared with trial results. \\label{fig:conflevel}">>=
+conf.acc <- modeldata %>% 
+  mutate(weight=1/nrow(modeldata), 
+         outcome=factor(gsub("gini", "", outcome), 
+                        levels=c("both", "cluster", "trend", "neither"))
+         ) %>% 
+  group_by(conf_level, outcome) %>% 
+  summarize(pct.accuracy = sum(weight))
+label.lines <- conf.acc %>% 
+  filter(conf_level==5) %>% 
+  transform(conf_level=5.25, 
+            label=paste0("Target:\n",
+                         gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", outcome, perl=TRUE))
+            )
+ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=outcome)) + 
+  geom_line(size=2) + 
+  scale_x_continuous("Participant Confidence", limits=c(-.25, 5.65), breaks=0:5) + 
+  geom_text(data=label.lines, aes(label=label), hjust=.2, vjust=.5, color="black", show_guide=F, size=4) + 
+  scale_color_discrete(guide="none") + 
+  ylab("Proportion of Trials") + 
   ggtitle("Participant Confidence and Trial Outcome") + 
   theme_bw()
+
 @
 
-<<speedaccuracy,echo=F, fig.width=8, fig.height=4, out.width='.8\\linewidth', fig.cap="Accuracy (Identifying either target plot) compared with mean trial time.", dependson='results-setup'>>=
-
+\newtext{
+As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the trial start and end time. 
+Examining differences in average response times across trials provides us with an additional measure of trial difficulty or perceptual complexity. 
+We can also explore whether participants spent more time on certain types of plots and whether that additional time increased accurate target identification. 
+In order to remove the "novelty" effect of an unfamiliar task, we excluded every participant's first trial from this portion of the analysis. 
+Additionally, all trials which took greater than 3 minutes to complete have also been removed; we have no guarantee that a participant was not multitasking during their trials, and 3 minutes is an excessive amount of time for lineup completion (only \Sexpr{round(mean(modeldata$trial.time>180)*100, 1)}\% of trials were more than 3 minutes long).
+Average trial times and accuracy rates for each lineup are shown in figure \ref{fig:speedaccuracyaes} facetted by plot type, and in figure \ref{fig:speedaccuracypars} facetted by parameter difficulty. 
+}
+<<speedaccuracy1,echo=F, fig.width=8, fig.height=4, out.width='.9\\linewidth', fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by plot aesthetic.\\label{fig:speedaccuracyaes}", dependson='results-setup'>>=
 time.accuracy <- modeldata %>% 
   group_by(individualID) %>%
   transform(trial.num=order(start_time)) %>%
-  filter(trial.num>1)  %>%
-  group_by(plottype, dataset) %>% 
+  filter(trial.num>1 & as.numeric(trial.time)<60*3)  %>%
+  group_by(plottype, dataset, k, cluster.diff2, trend.diff2) %>% 
   summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% 
   arrange(mean.trial.time) %>% 
-  melt(id.var=c("plottype", "dataset", "mean.trial.time")) 
+  melt(id.var=c("plottype", "dataset", "k", "cluster.diff2",  "trend.diff2", "mean.trial.time")) 
 time.accuracy$plottype <- time.accuracy$plottype %>%
   str_replace("color", "Color + ") %>% 
   str_replace("[sS]hape", "Shape + ") %>%
