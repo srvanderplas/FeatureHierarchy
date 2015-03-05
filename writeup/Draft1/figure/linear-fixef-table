@@ -1,20 +1,20 @@
 % latex table generated in R 3.1.2 by xtable 1.7-1 package
-% Wed Mar  4 19:07:25 2015
+% Wed Mar  4 23:20:46 2015
 \begin{table}[ht]
 \centering
-\begin{tabular}{rrrrr}
+\begin{tabular}{rrrrrr}
   \hline
-Plot Aesthetic & Log Odds & Std. Error & Z & P value \\ 
+Plot Aesthetic & Log Odds & Std. Error & Z & P value & Tukey Post Hoc Differences \\ 
   \hline
-Trend + Error & 0.6081 & 0.0998 & 6.09 & 0.0000 \\ 
-  Color + Ellipse + Trend + Error & 0.1425 & 0.1015 & 1.40 & 0.1603 \\ 
-  Trend & -0.1436 & 0.1024 & -1.40 & 0.1608 \\ 
-  Shape & -0.2387 & 0.1035 & -2.31 & 0.0211 \\ 
-  Color + Shape & -0.3877 & 0.1050 & -3.69 & 0.0002 \\ 
-  Color & -0.4546 & 0.1061 & -4.29 & 0.0000 \\ 
-  Color + Trend & -0.5448 & 0.1062 & -5.13 & 0.0000 \\ 
-  Color + Ellipse & -0.8861 & 0.1104 & -8.03 & 0.0000 \\ 
-  Color + Shape + Ellipse & -0.9763 & 0.1118 & -8.73 & 0.0000 \\ 
+Trend + Error & 0.6081 & 0.0998 & 6.09 & 0.0000 & g \\ 
+  Color + Ellipse + Trend + Error & 0.1425 & 0.1015 & 1.40 & 0.1603 & f \\ 
+  Trend & -0.1436 & 0.1024 & -1.40 & 0.1608 & df \\ 
+  Shape & -0.2387 & 0.1035 & -2.31 & 0.0211 & cde \\ 
+  Color + Shape & -0.3877 & 0.1050 & -3.69 & 0.0002 & cd \\ 
+  Color & -0.4546 & 0.1061 & -4.29 & 0.0000 & cd \\ 
+  Color + Trend & -0.5448 & 0.1062 & -5.13 & 0.0000 & bc \\ 
+  Color + Ellipse & -0.8861 & 0.1104 & -8.03 & 0.0000 & ab \\ 
+  Color + Shape + Ellipse & -0.9763 & 0.1118 & -8.73 & 0.0000 & a \\ 
    \hline
 \end{tabular}
 \caption[Fixed effects for linear target logistic model]{Fitted values of fixed effects for the model described in \eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.} 
