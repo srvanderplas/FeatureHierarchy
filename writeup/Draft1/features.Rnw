@@ -44,6 +44,8 @@ require(knitr)
 opts_chunk$set(fig.path='figure/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE)
 
 library(stringr)
+library(lubridate)
+
 library(reshape2)
 library(plyr)
 library(dplyr)
@@ -519,7 +521,6 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 
 \section{Results}
 <<results-setup,echo=F,include=F>>=
-
 lineups <- read.csv("../../Images/Turk16/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
@@ -551,6 +552,7 @@ useranswers$sd.line <- factor(useranswers$sd.line)
 useranswers$k <- factor(useranswers$k)
 useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
 
+
 modeldata <- useranswers[,c(1, 2, 8:26, 3:7)]
 modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], 
                            c("", "group")[1+as.numeric(modeldata$group.correct==1)], 
@@ -569,6 +571,28 @@ modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_nam
 \subsection{General results}
 \newdo{demographic information, $N$ people participated, completing on average $M$ plots, etc., overall accuracy rates by individual and plot type}
 \comment{In our last paper we got blasted for includign the table with Z statistics and p-values, and the reviewer wanted to have confidence ratios instead - at that point, there is no real difference to the picture. I'd suggest to move the model tables into the appendix and discuss the results based on the charts...}
+<<speedaccuracy,echo=F, fig.width=8, fig.height=4, out.width='.8\\linewidth', fig.cap="Accuracy (Identifying either target plot) compared with mean trial time.">>=
+
+time.accuracy <- modeldata %>% group_by(plottype, dataset) %>% summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% arrange(mean.trial.time) %>% melt(id.var=c("plottype", "dataset", "mean.trial.time")) 
+time.accuracy$plottype <- time.accuracy$plottype %>%
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("plain", "Plain") %>%
+  str_replace("( \\+ )$", "") %>% 
+  factor(levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                  "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
+         labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                  "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
+
+
+qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype) + geom_smooth(span=1, aes(ymax=pmin(1, ..ymax..))) + xlim(c(20,60)) + xlab("Mean Trial Time (by Plot)") + ylab("Accuracy") + facet_wrap(~plottype, nrow=2) + scale_color_discrete("Plot Aesthetic") + theme_bw()
+@
+
 \newtext{We will first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.}
 \subsection{Linear Target Model}
 \newtext{We will model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
