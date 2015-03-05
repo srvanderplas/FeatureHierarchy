@@ -7,6 +7,7 @@ library(dplyr)
 library(ggplot2)
 library(doMC)
 registerDoMC(8)
+library(lubridate)
 
 lineups <- read.csv("./Images/Turk16/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
@@ -74,14 +75,61 @@ useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_i
 # qplot(data=plain.color, x=line.correct-mean.line.correct, y=group.correct-mean.group.correct, color=factor(param_idx), shape=plottype.fac, geom="point", size=I(10)) + facet_wrap(~param_value) + scale_shape_manual(guide="legend", values=c("x", "c"), labels=c("plain", "color"))
 
 modeldata <- useranswers[,c(1, 2, 8:26, 3:7)]
-modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], c("", "neither")[1+as.numeric(modeldata$neither.correct==1)], c("", "gini")[1+as.numeric(modeldata$gini.correct==1)], sep="")
+modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], sep="")
+modeldata$outcome[modeldata$neither.correct==1] <- "neither"
 modeldata$outcome[modeldata$both.correct==1] <- "both"
+modeldata$outcome[modeldata$outcome==""] <- "gini"
+modeldata$outcome <- factor(modeldata$outcome, levels=c("neither", "gini", "line", "group", "both"))
+
+modeldata$outcome.gini <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], c("", "group")[1+as.numeric(modeldata$group.correct==1)], c("", "gini")[1+as.numeric(modeldata$gini.correct==1)], sep="")
+modeldata$outcome.gini[modeldata$outcome.gini==""] <- "neither"
+
 
 modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
 modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>% str_replace("set-", "") %>% as.numeric)
 modeldata$individualID <- factor(sprintf("%s-%s", modeldata$ip_address, modeldata$nick_name))
 modeldata$k <- factor(modeldata$k, levels=c(3, 5))
 modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_name))
+modeldata$start_time <- ymd_hms(modeldata$start_time)
+modeldata$end_time <- ymd_hms(modeldata$end_time)
+modeldata$trial.time <- with(modeldata, end_time-start_time)
+
+
+ggplot(data=modeldata, 
+       aes(x=factor(conf_level), 
+           group=factor(c("both", "neither", "group", "group", "line", "line", "neither")[as.numeric(factor(outcome))], 
+                        levels=c("both", "group", "line", "neither")), 
+           color=factor(c("both", "neither", "group", "group", "line", "line", "neither")[as.numeric(factor(outcome))], 
+                        levels=c("both", "group", "line", "neither")))) + 
+  geom_line(stat="bin", aes(y=..count..)) + 
+  scale_color_discrete("Target\nIdentified")
+
+ggplot(data=modeldata, aes(x=outcome, y=as.numeric(trial.time), fill=outcome)) + 
+  geom_boxplot() + 
+  scale_y_continuous(limits=c(0, 300)) + 
+  coord_flip() + 
+  scale_fill_discrete(guide="none")
+
+ggplot(data=modeldata, aes(x=factor(conf_level), y=as.numeric(trial.time))) + 
+  geom_jitter(aes(color=factor(conf_level)), shape=1, alpha=.5) + 
+  geom_boxplot(fill='transparent') + 
+  scale_y_continuous("Trial Time (seconds)", limits=c(0, 300)) + 
+  coord_flip() + 
+  scale_color_brewer(guide="none", palette="Set1") + 
+  xlab("Participant Confidence") + 
+  theme_bw()
+
+ggplot(data=modeldata, aes(y=conf_level, x=as.numeric(trial.time)))  + geom_smooth(method="loess") + scale_x_continuous(limits=c(0, 300))
+
+time.accuracy <- modeldata %>% group_by(plottype, dataset) %>% summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% arrange(mean.trial.time) %>% melt(id.var=c("plottype", "dataset", "mean.trial.time")) 
+
+qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype) + geom_smooth()+ xlim(c(20, 60)) + xlab("Mean Trial Time (by Plot)") + ylab("Accuracy") + facet_wrap(~plottype)
+
+
+time.data <- melt(modeldata[,c("conf_level", "k", "sd.line", "sd.cluster", "line.diff", "cluster.diff", "plottype", "line.correct", "group.correct", "both.correct", "neither.correct", "gini.correct", "outcome", "dataset", "individualID", "trial.time")], id.var="trial.time", variable.name="variable", value.name="level")
+
+qplot(data=time.data, x=as.numeric(trial.time), group=level, geom="density") + facet_wrap(~variable, scales="free_y") + scale_x_continuous(limits=c(0, 600))
+
 
 library(lme4)
 
