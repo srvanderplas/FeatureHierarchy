@@ -1005,6 +1005,23 @@ binnedplot(fitted(group.model), resid(group.model))
 
 \subsection{Face-Off: Group versus Line}
 \comment{Just another idea of evaluating this data set: For each data set we only consider those evaluations that correctly identify one of the targets. This reveals that participants overall favored groups to lines at a ratio of about 2:1. We remove this overall effect using an intercept, and model group vs line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend+error plots and ellipse+trend plots are significantly different from all of the other designs. Apart from that, the only significant difference between designs is between color+shape+ellipse plots and trend plots.  Surprisingly(?), the two designs sending mixed signals (color + trend, color+ ellipse+trend) end on opposite ends of the scale.  }
+
+\comment{
+My take on this:
+
+The similarity/proximity effect (as indicated by clustering and color/shape/etc.) dominates the equation, including dominating the color+trend (good continuation) condition.  
+
+The addition of common region (ellipses, error bars) modifies this effect somewhat, reinforcing the clustering and trend when present (as those are at the extreme ends of the plot). 
+
+When (trend + error) are present in the same plot, you get additional gestalt ordering principle(s): common region + good continuation \textbf{+ connectedness + closure}:\\
+since the error band would be perceived as containing the points and connected to the trendline - this does somewhat lessen with the lines for error bands we have shown here, but I think the point still holds. \\
+Plus, you could argue for closure, since you have fairly symmetric lines on either side of a central object. 
+
+(color + ellipse) + clustering = (similarity + common region) + proximity\\ 
+is not as strong as \\
+(trend + error) + correlation = (good continuation (trendline) + common region + connectedness + closure) + good continuation (points)
+}
+
 \begin{figure}
 \centering
 <<group-vs-line, echo=FALSE, fig.width=7.5, fig.height=3.5, out.width='.85\\textwidth'>>=
