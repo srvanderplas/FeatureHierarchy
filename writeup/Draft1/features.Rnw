@@ -913,14 +913,24 @@ binnedplot(fitted(line.model), resid(line.model))
 # this seems like a problem. 
 @
 
-As before, we note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
+
+\comment{I'm a bit concerned about the residuals here... thoughts? I'm also not sure where else to go with this particular discussion... yes, the effects exist. No, the dataset effects don't look all that normal, because there's a bunch of parameters in there. Participant effects are normal-ish, though, so that's something. }
+
+\newdo{Discuss variance/covariance and random effects??}
 
 
-<<group-model, echo=FALSE, include=FALSE, dependson='results-setup', fig.width=8, fig.height=4>>=
+\subsection{Group Target Selection}
+
+\newtext{
+We now examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level).
+The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that success in this model is defined as identification of the cluster target plot. 
+}
+
+<<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
 group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
-                    data = modeldata, 
-                    family = binomial(link="logit"), 
-                    control=glmerControl(optimizer="bobyqa"))
+                     data = modeldata, 
+                     family = binomial(link="logit"), 
+                     control=glmerControl(optimizer="bobyqa"))
 group.fixef <- data.frame(summary(group.model)$coefficients, confint(group.model, method="Wald"))
 names(group.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
 group.fixef$OR <- exp(group.fixef[,1])
@@ -930,6 +940,9 @@ suppressMessages(require(multcomp))
 type_compare <- glht(group.model, mcp(plottype="Tukey"))
 group.fixef$letters <- cld(type_compare)$mcletters$Letters
 
+@
+
+<<group-fixef, echo=FALSE, include=FALSE, dependson='group-model', fig.width=8, fig.height=4>>=
 group.fixef2 <- group.fixef[2:10,]
 group.fixef2 <- group.fixef2[order(group.fixef2$OR, decreasing = T),]
 group.fixef2$label <- 
@@ -965,6 +978,30 @@ print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effe
 \caption{Odds ratios describing the odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in group size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
 \end{figure}
 
+<<group-ranef,echo=FALSE, dependson='group-model', fig.width=4, fig.height=4, fig.keep='all', fig.show='hold', out.width='.45\\linewidth'>>=
+group.ranef.individual <- as.data.frame(ranef(group.model)[[1]])
+names(group.ranef.individual) <- "value"
+group.ranef.individual$id <- rownames(group.ranef.individual)
+group.ranef.individual$type="Participant Effects"
+
+group.ranef.data <- as.data.frame(ranef(group.model)[[2]])
+names(group.ranef.data) <- "value"
+group.ranef.data$id <- rownames(group.ranef.data)
+group.ranef.data$type="Dataset Effects"
+
+group.resid <- data.frame(id=modeldata$response.id, value=resid(group.model), type="Residuals")
+
+group.random.effects <- rbind(group.ranef.data, group.ranef.individual, group.resid)
+
+ggplot(data=group.random.effects) + 
+  geom_density(aes(x=value, fill=type)) + 
+  facet_grid(.~type) + 
+  scale_fill_discrete(guide="none")
+
+library(arm)
+binnedplot(fitted(group.model), resid(group.model))
+# this still seems like a problem. 
+@
 
 \subsection{Face-Off: Group versus Line}
 \comment{Just another idea of evaluating this data set: For each data set we only consider those evaluations that correctly identify one of the targets. This reveals that participants overall favored groups to lines at a ratio of about 2:1. We remove this overall effect using an intercept, and model group vs line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend+error plots and ellipse+trend plots are significantly different from all of the other designs. Apart from that, the only significant difference between designs is between color+shape+ellipse plots and trend plots.  Surprisingly(?), the two designs sending mixed signals (color + trend, color+ ellipse+trend) end on opposite ends of the scale.  }
