@@ -755,20 +755,70 @@ time.accuracy$plottype <- time.accuracy$plottype %>%
                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
                   "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
 
-mean.time <- time.accuracy %>% group_by(plottype) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))))
+mean.time <- time.accuracy %>% group_by(plottype) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
 
 
-qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype) + 
-  geom_smooth(span=1, aes(ymax=pmin(1, ..ymax..))) + 
-  xlim(c(20,60)) + 
+qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=I(1)) + 
+  geom_smooth(span=1.5, aes(ymax=pmin(1, ..ymax..), group=plottype), color="black") + 
   xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
   ylab("Accuracy") + 
-  scale_color_discrete("Plot Aesthetic") + 
-  geom_text(data=mean.time, aes(x=40, y=0, label=trial.time), inherit.aes=F, vjust=0, show_guide=F) + 
+  scale_color_discrete("Plot Aesthetic", guide="none") + 
+  geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, hjust=.25, show_guide=F) + 
   facet_wrap(~plottype, nrow=2) + theme_bw()
 @
 
-\newtext{We will first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.}
+<<speedaccuracy2,echo=F, fig.width=8, fig.height=6, out.width='.75\\linewidth',, fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by parameter settings.\\label{fig:speedaccuracypars}">>=
+
+mean.time <- time.accuracy %>% group_by(trend.diff2, cluster.diff2) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
+
+time.accuracy$plottype <- factor(time.accuracy$plottype,
+                                 levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                                          "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                                          "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"),
+                                 labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                                          "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                                          "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
+
+qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=k) + 
+  geom_smooth(span=1, aes(group=k, linetype=k), se=F, color="black") + 
+  scale_linetype_discrete("# Clusters (K)") + 
+  xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
+  ylab("Accuracy") + 
+  scale_color_discrete("Aesthetic Emphasis") + 
+  scale_shape_manual("# Clusters (K)", values=c(16, 1)) + 
+  geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, show_guide=F) + 
+  facet_grid(trend.diff2~cluster.diff2) + theme_bw()
+@
+
+<<time-model, echo=FALSE, fig.width=6, fig.height=6, out.width='.5\\linewidth'>>=
+timemodel <- lm(as.numeric(trial.time) ~ cluster.diff+trend.diff+k + plottype, data=subset(modeldata, as.numeric(trial.time)<3*60))
+timemodel.ci <- data.frame(Estimate=coef(timemodel), confint(timemodel))
+names(timemodel.ci)[2:3] <- c("LB", "UB")
+timemodel.ci$type <- c("Intercept", rep("Data Parameter", 5), rep("Plot Aesthetics", 9))
+timemodel.ci$label <- 
+  rownames(timemodel.ci)%>% 
+  gsub(pattern="(\\.diff)([mh]{1})", replacement=":\\U\\2", perl=T) %>% 
+  gsub(pattern="(^[ctk])", replacement="\\U\\1", perl=T) %>% 
+  str_replace("plottype", "") %>%  
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend([^:])?", "Trend + \\1") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("( \\+ )$", "")
+qplot(data=timemodel.ci[-c(1:6),], x=factor(label, levels=label), y=Estimate, ymin=LB, ymax=UB, geom="pointrange") + coord_flip() + ylab("Average Additional Time in Seconds To Identify Target Plot") + xlab("Plot Aesthetics") + theme_bw()
+@
+
+\newtext{
+Figure \ref{fig:speedaccuracypars} shows a reasonably clear effect of increasing trial time in response to increasing difficulty in cluster or trend variation parameters. While medium difficulty trend plots seem to be somewhat faster, on average, than easy or hard trend plots, there is a notable increase in time from either easy or medium trend plots to hard trend plots. 
+}
+
+\newtext{
+We will first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.
+}
+
+
+
 \subsection{Linear Target Model}
 \newtext{We will model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
 }
