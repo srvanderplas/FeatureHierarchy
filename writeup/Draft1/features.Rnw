@@ -199,7 +199,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   \begin{enumerate}
     \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ 
     \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5 \cdot 2/(N-1)$
-    \item Generate $y_i$: $y_i = a  x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
+    \item Generate $y_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
     \item Center and scale $x_i$, $y_i$
   \end{enumerate}
 \end{algorithm}
@@ -284,7 +284,7 @@ qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) +
 \caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom).}
 \end{figure}
 
-\comment{For the study we used $a=1$, right?}
+\comment{For the study we used $a=1$, right?\\Susan: Yes, and I thought I'd purged all $a$ from the description accordingly, but I see that I missed one. It's fixed now. }
 \subsubsection{Null Model $M_0$}
 The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
@@ -726,9 +726,9 @@ qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype
 P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
 \theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
 \text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
-\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\nonumber\\
-\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\nonumber\\
-\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2\right)\nonumber
+\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
+\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{, the random effect for participant characteristics}\nonumber\\
+\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, the error associated with a single trial evaluation} \nonumber
 \end{align}
 
 We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
