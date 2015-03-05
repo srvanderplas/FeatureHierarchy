@@ -783,13 +783,6 @@ print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed ef
 line.ranef.individual <- as.data.frame(ranef(line.model)[[1]])
 names(line.ranef.individual) <- "value"
 line.ranef.individual$id <- rownames(line.ranef.individual)
-
-line.ranef <- ldply(ranef(line.model), .%>%as.matrix %>% melt)
-names(line.ranef) <- c("type", "id", "level", "value")
-line.ranef <- merge(line.ranef, parameter.design, all.x=T, all.y=T, by.x="id", by.y="dataset")
-line.ranef$trend.diff <- factor(line.ranef$trend.diff, levels=c("easy", "medium", "hard"))
-line.ranef$cluster.diff <- factor(line.ranef$cluster.diff, levels=c("easy", "medium", "hard"))
-line.ranef$diff <- sprintf("Line: %s, Cluster: %s", line.ranef$trend.diff, line.ranef$cluster.diff)
 # ggplot(data=line.ranef.individual) + 
 #   geom_density(aes(x=value)) 
 @
