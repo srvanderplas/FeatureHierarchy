@@ -571,6 +571,18 @@ modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_nam
 \subsection{General results}
 \newdo{demographic information, $N$ people participated, completing on average $M$ plots, etc., overall accuracy rates by individual and plot type}
 \comment{In our last paper we got blasted for includign the table with Z statistics and p-values, and the reviewer wanted to have confidence ratios instead - at that point, there is no real difference to the picture. I'd suggest to move the model tables into the appendix and discuss the results based on the charts...}
+
+<<participant-confidence,echo=F, fig.width=5, fig.height=4, out.width='.5\\linewidth', fig.cap="Participant confidence levels compared with trial results. \\label{fig:conflevel}">>=
+ggplot(data=modeldata, 
+       aes(x=factor(conf_level), 
+           group=factor(c("both", "neither", "group", "group", "line", "line", "neither")[as.numeric(factor(outcome))], 
+                        levels=c("both", "group", "line", "neither")), 
+           color=factor(c("both", "neither", "group", "group", "line", "line", "neither")[as.numeric(factor(outcome))], 
+                        levels=c("both", "group", "line", "neither")))) + 
+  geom_line(stat="bin", aes(y=..count..)) + 
+  scale_color_discrete("Target\nIdentified")
+@
+
 <<speedaccuracy,echo=F, fig.width=8, fig.height=4, out.width='.8\\linewidth', fig.cap="Accuracy (Identifying either target plot) compared with mean trial time.">>=
 
 time.accuracy <- modeldata %>% group_by(plottype, dataset) %>% summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% arrange(mean.trial.time) %>% melt(id.var=c("plottype", "dataset", "mean.trial.time")) 
