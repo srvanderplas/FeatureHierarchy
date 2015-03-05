@@ -204,20 +204,22 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   \end{enumerate}
 \end{algorithm}
 
-We compute the correlation coefficient for all of the plots to assess the amount of linearity in each panel, computed as 
-\[
-r = 1 - RSS/TSS,
-\]
+We compute the coefficient of determination for all of the plots to assess the amount of linearity in each panel, computed as 
+\begin{equation}\label{eq:linearMeasure}
+R^2 = 1 - RSS/TSS,
+\end{equation}
 where TSS is the total sum of squares, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$, the residual sum of squares.
 The expected correlation coefficient $\rho$ in this scenario is 
 \[
-\rho = \frac{\frac{1}{3}}{\frac{1}{3} + \sigma^2_T},
+E[\rho] = \sqrt{\frac{\frac{1}{3}}{\frac{1}{3} + \sigma^2_T}},
 \]
 because
 $E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E\left[y_i^2\right]$  (as $E[Y] = 0$), where 
 $$
 E\left[y_i^2\right] = E\left[x_i^2 + e_i^2 + 2 x_ie_i\right] = \frac{1}{3} + \sigma^2_T. 
 $$
+The use of $R^2$ to assess the strength of the linear relationship (rather than the correlation, $r$) is indicated because human perception of correlation strength more closely aligns with $R^2$ \citep{bobko1979perception,lewandowsky1989perception}. 
+
 \begin{figure}[ht]
 <<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE>>=
 sd <- c(0.1, 0.2, 0.3, 0.4)
@@ -261,6 +263,10 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 
 
 As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
+
+\newdo{add cluster equation}
+\begin{equation}\label{eq:clusterMeasure}
+\end{equation}
 
 \begin{figure}[ht]
 <<cluster, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE,dependson='setup'>>=
