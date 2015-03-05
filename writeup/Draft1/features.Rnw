@@ -68,37 +68,37 @@ source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
 @
 
-
+\tableofcontents
+\newpage
 \section{Introduction and background}
 \comment{Discussion of pre-attentive visual features \citep{healey2012attention} - with a focus on hierarchy of pre-attentive features: color trumps shape - do we also see this in our results, and if so, by how much?}
 
-\newtext{
+
 Numerical information can be difficult to communicate effectively in raw form, due to limits on attention span, short term memory, and information storage mechanisms within the human brain. 
 Graphics are much more effective for communicating numerical information, as (well-designed) graphics order the numerical information spatially and utilize the higher-bandwidth visual system. 
 Visual data displays serve as a form of external cognition \ref{zhang1997nature,scaife1996external}, ordering and visually summarizing data which would be hopelessly confusing in tabular format. 
 One fantastic example of this phenomenon is the Hertzsprung-Russell (HR) diagram, which was described as ``one of the greatest observational syntheses in astronomy and astrophysics" because it allowed astronomers to clearly relate the absolute magnitude of a star to its' spectral classification; facilitating greater understanding of stellar evolution \citep{spence1993remarkable}. 
 The data it displayed was previously available in several different tables; when plotted on the same chart, information that was invisible in a tabular representation became immediately clear \citep{lewandowsky1989perception}. 
 Graphical displays more efficiently utilize cognitive resources by reducing the burden of storing, ordering, and summarizing raw data; this frees bandwidth for higher levels of information synthesis, allowing observers to note outliers, understand relationships between variables, and form new hypotheses.
-}
 
-\newtext{
+
+
 Graphical displays are powerful because they efficiently and effectively convey numerical information, but we have relatively sparse empirical information about how the human perceptual system processes these displays. Our understanding of the perception of statistical graphics is informed by general psychological and psychophysics research as well as more specific research into the perception of data displays\citep{cleveland:1984}. 
-}
 
-\newtext{
+
+
 One relevant focus of psychological research is pre-attentive perception, that is, perception which occurs automatically in the first 200 ms of exposure to a visual stimulus \citep{treisman1985preattentive}. 
-}
+
 Research into preattentive perception provides us with some information about the temporal hierarchy of graphical feature processing. Color, line orientation, and shape are processed preattentively; that is, within 200 ms, it is possible to identify a single target in a field of distractors, if the target differs with respect to color or shape \citep{goldstein2009encyclopedia}. 
 Research by \citet{healey1999large} extends this work, demonstrating that certain features of three-dimensional data displays are processed preattentively, but that neither target identification nor three-dimensional data processing always translate into faster or more accurate inference about the data displayed, particularly when participants must integrate several preattentive features to understand the data. 
 
-\newtext{
-Feature detection at the attentive stage of perception has also been examined in the context of statistical graphics; researchers have evaluated the perceptual implications of utilizing color, fill, shapes, and letters to denote categorical or stratified data in scatterplots. \citet{cleveland:1984} ranked the optimality of these plot aesthetics based on response accuracy, preferring colors, amount of fill, shapes, and finally letters to indicate category membership. \citet{lewandowsky1989discriminating} examined both accuracy and response time, finding that color is faster and more accurately perceived (except for those with color deficiency). Shape, fill, and discriminable letters (letters which do not share visual features, such as HQX) were identified as less accurate than color, while confusable letters (such as HEF) result in significantly decreased accuracy. 
-}
 
-\newtext{
+Feature detection at the attentive stage of perception has also been examined in the context of statistical graphics; researchers have evaluated the perceptual implications of utilizing color, fill, shapes, and letters to denote categorical or stratified data in scatterplots. \citet{cleveland:1984} ranked the optimality of these plot aesthetics based on response accuracy, preferring colors, amount of fill, shapes, and finally letters to indicate category membership. \citet{lewandowsky1989discriminating} examined both accuracy and response time, finding that color is faster and more accurately perceived (except for those with color deficiency). Shape, fill, and discriminable letters (letters which do not share visual features, such as HQX) were identified as less accurate than color, while confusable letters (such as HEF) result in significantly decreased accuracy. 
+
+
 Another area of psychological research, Gestalt psychology, examine perception as a holistic experience, establishing and evaluating mental heuristics used to transform visual stimuli into useful, coherent information. 
 Gestalt rules of perception can be easily applied to statistical graphics, as they describe the way we organize visual input, focusing on the holistic experience rather than the individual perceptual features. 
-}
+
 For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. The rules of perceptual grouping or organization, as stated in \citet{goldstein2009encyclopedia} are:
 \begin{itemize}
 \item Proximity: two elements which are close together are more likely to belong to a single unit.
@@ -141,33 +141,38 @@ Research on preattentive perception is important because features that are perce
 
 \comment{We should also look at the time to response -- it would be interesting, to see if the conflicting stimuli need more time to come to a decision. It's obviously not milliseconds that we measure, but it might still be informative. (We would need to exclude everybody's first attempt). }
 
+\comment{This study - introduce the fact first, that this paper will include a user study.}
 This study is designed to understand the hierarchy of gestalt principles in perception of statistical graphics. We utilize information from previous studies \citep{heer:2014, robinson:03} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
 
 \comment{might be useful to have a small diagram describing the perceptual process (with preattentive processing way at the top and gestalt heuristic processing in the middle, with "cognitive effort" at the bottom). Not sure if it's necessary, though. HH: good idea, let's see how much space we'll have. }
 
-\newtext{Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their inferences precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display wholistically. Statistical lineups, described in the next section, are an important experimental tool for evaluating the perceptual utility of graphical displays. Lineups fuse commonly used psychological tests (target identification, visual search) with statistical hypothesis tests to facilitate formal experimental evaluation of statistical graphics. 
-}
+Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Statistical lineups, described in the next section, are an important experimental tool for evaluating the perceptual utility of graphical displays. Lineups fuse commonly used psychological tests (target identification, visual search) \newtext{XXX cite the ACM Transact submission here} with statistical hypothesis tests to facilitate formal experimental evaluation of statistical graphics. 
 
-\subsection{Statistical Lineups}
+
+\subsection*{Statistical Lineups}
 
 \todo[inline]{Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}.}
 \comment{Describe the lineup protocol, including basic statistics. Link to the psychological "target and distractors" approach, which can be used to justify the addition of a second target, even with the PITA of the statistical complications. }
 
 
 In this study, we modify the lineup protocol by introducing a second target to each lineup. The two targets represent two different, competing signals; the participant's choice then demonstrates empirically which signal is more salient. 
-\newtext{If both targets exhibit similar signal, participants may identify both targets, removing any forced-choice scenario which might skew results (few participants exercise this option). 
-}
+If both targets exhibit similar signal, participants may identify both targets, removing any forced-choice scenario which might skew results (few participants exercised this option). 
+
 % \comment{We should add that we allow users to select multiple targets, so that we don't get them into the position of having to guess between targets.}
 By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
 
 Using this testing framework, we can apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of figure \ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure would be enhanced if the points in each group were colored differently, as the proximity heuristic would be supplemented by similarity. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal.
 
-\comment{beautiful!!}
 % A further extension of this testing framework are the use of color (in a qualitative color scheme), the use of shapes, and additional density lines - we anticipate that all of these features are going to emphasize the clustering component. 
 % On the other hand, regression lines should emphasize any linear trends in the data.
 
 This study is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. %awesome alliteration, right? HH: :)
+
+\comment{Extend this to a roadmap for the rest of the paper}
 The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations.
+
+
+
 
 
 \section{Experimental Design}
@@ -500,7 +505,7 @@ qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lin
 \caption{Colors in \citet{heer:2014}. This study removed grey from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
 \end{figure}
 
-\newtext{The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software.}
+The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software. \comment{citation for Tableau?}
 In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
 
 % Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
@@ -609,7 +614,11 @@ modeldata.long$plottype <-
                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
                   "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
 @
-\newtext{
+
+
+\subsection{General results}
+\comment{I don't know where the demographic information for the experiment is stored... HH: I'll check with Eric for it - it should go into an appendix, I think}
+
 Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
 during which time \Sexpr{length(unique(modeldata$individualID))} individuals completed \Sexpr{nrow(modeldata)} unique lineup evaluations (the average individual evaluated 
 \Sexpr{sprintf("%.2f", mean(table(modeldata$individualID)))} 
@@ -618,8 +627,7 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 (\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
 Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evaluations identified more than one target plot, and of these multiple identifications, \Sexpr{round(100*(mean(modeldata[modeldata$n.answers>=2,"both.correct"])), 1)}\% identified both targets correctly. 
-}
-\comment{I don't know where the demographic information for the experiment is stored...}
+
 
 \subsection{Graphical Exploration}
 
@@ -767,6 +775,7 @@ qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype
   facet_wrap(~plottype, nrow=2) + theme_bw()
 @
 
+
 <<speedaccuracy2,echo=F, fig.width=8, fig.height=6, out.width='.75\\linewidth',, fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by parameter settings.\\label{fig:speedaccuracypars}">>=
 
 mean.time <- time.accuracy %>% group_by(trend.diff2, cluster.diff2) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
@@ -813,16 +822,19 @@ qplot(data=timemodel.ci[-c(1:6),], x=factor(label, levels=label), y=Estimate, ym
 Figure \ref{fig:speedaccuracypars} shows a reasonably clear effect of increasing trial time in response to increasing difficulty in cluster or trend variation parameters. While medium difficulty trend plots seem to be somewhat faster, on average, than easy or hard trend plots, there is a notable increase in time from either easy or medium trend plots to hard trend plots. 
 }
 
-\newtext{
-We will first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.
-}
+We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.
+
+\comment{The two models (1) and (2) have the exact same shape, so just discuss the structure of the model first, and then report the results for the two different dependent variables in the subsections.}
 
 
 
 \subsection{Linear Target Model}
-\newtext{
+
 We will model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
-}
+
+We  model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
+
+
 \begin{align}
 P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
 \theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
@@ -908,6 +920,7 @@ ggplot(data=line.random.effects) +
   facet_grid(.~type) + 
   scale_fill_discrete(guide="none")
 
+
 library(arm)
 binnedplot(fitted(line.model), resid(line.model))
 # this seems like a problem. 
@@ -915,6 +928,9 @@ binnedplot(fitted(line.model), resid(line.model))
 
 
 \comment{I'm a bit concerned about the residuals here... thoughts? I'm also not sure where else to go with this particular discussion... yes, the effects exist. No, the dataset effects don't look all that normal, because there's a bunch of parameters in there. Participant effects are normal-ish, though, so that's something. }
+
+We  examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
+
 
 \newdo{Discuss variance/covariance and random effects??}
 
@@ -1178,7 +1194,8 @@ Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}
 
 Figures \ref{fig:simulationLineIntervals} and \ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of line and cluster summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
 
-\newtext{Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. }
+Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
+
 <<simulationparameters,echo=F,include=F, fig.width=10, fig.height=6.5, out.width='.8\\linewidth'>>=
 load("../../Data/SimulationDatasetCriteriaTurk16.Rdata")
 
@@ -1219,7 +1236,7 @@ qplot(data=tmp, x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segm
 \caption{Simulated interquartile range of cluster cohesion statistic values for target and null data distributions. \label{fig:simulationClusterIntervals}}
 \end{figure}
 
-\newtext{Additionally, after the experiment was complete, we examined the distribution of group size (as measured by gini impurity) to establish whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure \ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have significantly lower group size differences than null plots at all parameter combinations. It is therefore possible that some participants will identify extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. Future studies should more tightly control group size in order to reduce this effect. }
+Additionally, after the experiment was complete, we examined the distribution of group size (as measured by gini impurity) to establish whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure \ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have significantly lower group size differences than null plots at all parameter combinations. It is therefore possible that some participants will identify extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. Future studies should more tightly control group size in order to reduce this effect. 
 
 \begin{figure}\centering
 \includegraphics[width=.8\linewidth]{figure/simulationparameters-3}
