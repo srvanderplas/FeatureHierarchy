@@ -888,21 +888,30 @@ print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed ef
 \end{figure}
 
 
+<<line-ranef,echo=FALSE, dependson='line-model', fig.width=4, fig.height=4, fig.keep='all', fig.show='hold', out.width='.45\\linewidth'>>=
+line.ranef.individual <- as.data.frame(ranef(line.model)[[1]])
+names(line.ranef.individual) <- "value"
+line.ranef.individual$id <- rownames(line.ranef.individual)
+line.ranef.individual$type="Participant Effects"
 
-\newdo{Discuss variance/covariance and random effects}
+line.ranef.data <- as.data.frame(ranef(line.model)[[2]])
+names(line.ranef.data) <- "value"
+line.ranef.data$id <- rownames(line.ranef.data)
+line.ranef.data$type="Dataset Effects"
 
-\subsection{Group Target Selection}
+line.resid <- data.frame(id=modeldata$response.id, value=resid(line.model), type="Residuals")
 
-\newtext{We now examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
-}
-\begin{align}
-P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:groupModel}\\
-\theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
-\text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
-\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\nonumber\\
-\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\nonumber\\
-\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2\right)\nonumber
-\end{align}
+line.random.effects <- rbind(line.ranef.data, line.ranef.individual, line.resid)
+
+ggplot(data=line.random.effects) + 
+  geom_density(aes(x=value, fill=type)) + 
+  facet_grid(.~type) + 
+  scale_fill_discrete(guide="none")
+
+library(arm)
+binnedplot(fitted(line.model), resid(line.model))
+# this seems like a problem. 
+@
 
 As before, we note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
 
