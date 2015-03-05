@@ -820,7 +820,8 @@ We will first consider the effect of plot aesthetics on target selection for eac
 
 
 \subsection{Linear Target Model}
-\newtext{We will model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
+\newtext{
+We will model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
 }
 \begin{align}
 P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
@@ -834,12 +835,8 @@ P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:l
 We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
 
 
-<<line-model, echo=FALSE, include=FALSE, dependson='results-setup', fig.width=8, fig.height=4>>=
-line.model <- glmer(trend.correct ~ 
-                      # trend.diff*cluster.diff*k + 
-                      plottype + 
-                      (1|individualID) + 
-                      (1|dataset), 
+<<line-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
+line.model <- glmer(trend.correct ~ plottype + (1|individualID) + (1|dataset), 
                     data = modeldata, 
                     family = binomial(link="logit"), 
                     control=glmerControl(optimizer="bobyqa"))
@@ -851,7 +848,9 @@ line.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(line.f
 suppressMessages(require(multcomp))
 type_compare <- glht(line.model, mcp(plottype="Tukey"))
 line.fixef$letters <- cld(type_compare)$mcletters$Letters
+@
 
+<<line-fixef, echo=FALSE, include=FALSE, dependson='line-model', fig.width=8, fig.height=4>>=
 line.fixef.aes <- line.fixef[grepl("(color)|([Ss]hape)|([Tt]rend)|(Ellipse)|(Error)", rownames(line.fixef)),]
 line.fixef.aes <- line.fixef.aes[order(line.fixef.aes$OR, decreasing = T),]
 line.fixef.aes$label <- 
@@ -879,18 +878,12 @@ names(line.fixef.aes)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
 names(line.fixef.aes)[8] <- "Plot Aesthetic"
 names(line.fixef.aes)[9] <- "Tukey Post Hoc Differences"
 print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/linear-fixef-table")
-
-line.ranef.individual <- as.data.frame(ranef(line.model)[[1]])
-names(line.ranef.individual) <- "value"
-line.ranef.individual$id <- rownames(line.ranef.individual)
-# ggplot(data=line.ranef.individual) + 
-#   geom_density(aes(x=value)) 
 @
 
 % \input{figure/linear-fixef-table}
 
 \begin{figure}\centering
-\includegraphics[width=.75\linewidth]{figure/line-model-1}
+\includegraphics[width=.75\linewidth]{figure/line-fixef-1}
 \caption{Odds ratios describing the odds of detecting the linear target plot for each aesthetic, relative to a plain scatterplot. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot. \label{fig:linear.fixef}}
 \end{figure}
 
