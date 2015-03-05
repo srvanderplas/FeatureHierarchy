@@ -41,7 +41,7 @@
 rm(list=ls())
 options(replace.assign=TRUE,width=70)
 require(knitr)
-opts_chunk$set(fig.path='figure/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE)
+opts_chunk$set(fig.path='figure/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, message=F, warning=F)
 
 library(stringr)
 library(lubridate)
@@ -54,6 +54,7 @@ library(magrittr)
 library(ggplot2)
 library(grid)
 suppressMessages(library(gridExtra))
+library(RColorBrewer)
 
 library(nullabor)
 library(digest)
@@ -293,9 +294,9 @@ lambda <- c(0, .25, .5, .75, 1)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 
-res <- ldply(lambda, function(x) { data.frame(lambda=x, mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)) })
+res <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)}) })
 res$K <- 3
-res2 <- ldply(lambda, function(x) { data.frame(lambda=x, mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)) })
+res2 <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)}) })
 res2$K <- 5
 res <- rbind(res, res2)
 res$label <- paste("lambda :",res$lambda)
@@ -422,7 +423,7 @@ d_ply(data, .(set), function(df){
 \centering
 \begin{tabular}{cc|c|c|c|}\cline{3-5}
  & \multicolumn{1}{c}{} & \multicolumn{3}{|c|}{Line Emphasis}\\\cline{2-5}
- & \multicolumn{1}{|c|}{Strength} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{2}\\\hline
+ & \multicolumn{1}{|c|}{Strength} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{1} & \multicolumn{1}{c|}{2}\\\hline
  % ----- 
   \multicolumn{1}{|c|}{\multirow{8}{*}{\parbox[t]{.1\linewidth}{Cluster Emphasis}}} & 
   \multirow{2}{*}{0} & 
@@ -433,7 +434,7 @@ d_ply(data, .(set), function(df){
   \multicolumn{1}{|c|}{} & & & & \\\cline{2-5} 
  % ----- 
   \multicolumn{1}{|c|}{} & 
-  \multicolumn{1}{|c|}{\multirow{2}{*}{1}} & 
+  \multicolumn{1}{c|}{\multirow{2}{*}{1}} & 
   Color & 
   \multirow{2}{*}{Color + Line} &
   \\\cline{3-3}
@@ -445,7 +446,7 @@ d_ply(data, .(set), function(df){
   \\ \cline{2-5}
  % ----- 
   \multicolumn{1}{|c|}{} & 
-  \multicolumn{1}{|c|}{\multirow{2}{*}{2}} & 
+  \multicolumn{1}{c|}{\multirow{2}{*}{2}} & 
   Color + Shape  & 
   \multirow{2}{*}{} & 
   \multirow{2}{*}{\parbox[t][-.2em][c]{.2\linewidth}{Color + Ellipse + Line + Prediction}} 
@@ -458,7 +459,7 @@ d_ply(data, .(set), function(df){
   \\ \cline{2-5}
  % ----- 
   \multicolumn{1}{|c|}{} & 
-  \multicolumn{1}{|c|}{\multirow{2}{*}{3}} & 
+  \multicolumn{1}{c|}{\multirow{2}{*}{3}} & 
   \multirow{2}{*}{\parbox[t][-.2em][c]{.15\linewidth}{Color + Shape + Ellipse}} &
   &
   \\
@@ -540,7 +541,7 @@ correct.ans <- function(x,y){
   lineplot <- as.numeric(answers[1])
   groupplot <- as.numeric(answers[2])
   giniplot <- ifelse(groupplot==as.numeric(answers[3]) | lineplot==as.numeric(answers[3]), NA, as.numeric(answers[3]))
-  c(n.answers=length(x1), line.correct=lineplot%in%x1, group.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
+  c(n.answers=length(x1), trend.correct=lineplot%in%x1, cluster.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1), none.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
 }
 
 useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
@@ -553,9 +554,9 @@ useranswers$k <- factor(useranswers$k)
 useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
 
 
-modeldata <- useranswers[,c(1, 2, 8:26, 3:7)]
-modeldata$outcome <- paste(c("", "line")[1+as.numeric(modeldata$line.correct==1)], 
-                           c("", "group")[1+as.numeric(modeldata$group.correct==1)], 
+modeldata <- useranswers[,c(1, 2, 9:27, 3:8)]
+modeldata$outcome <- paste(c("", "trend")[1+as.numeric(modeldata$trend.correct==1)], 
+                           c("", "cluster")[1+as.numeric(modeldata$cluster.correct==1)], 
                            c("", "neither")[1+as.numeric(modeldata$neither.correct==1)], 
                            c("", "gini")[1+as.numeric(modeldata$gini.correct==1)], 
                            sep="")
@@ -566,28 +567,129 @@ modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>%
 modeldata$individualID <- factor(sprintf("%s-%s", modeldata$ip_address, modeldata$nick_name))
 modeldata$k <- factor(modeldata$k, levels=c(3, 5))
 modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_name))
-modeldata <- ddply(modeldata, .(k), transform, line.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))])
+modeldata$start_time <- ymd_hms(modeldata$start_time)
+modeldata$end_time <- ymd_hms(modeldata$end_time)
+modeldata$trial.time <- with(modeldata, end_time-start_time)
+modeldata <- ddply(modeldata, .(k), transform, trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))])
 
-parameter.design <- unique(modeldata[,c(29, 17, 32, 33)])
+parameter.design <- unique(modeldata[,c("dataset", "k", "trend.diff", "cluster.diff")])
+
+plot.eval.tab <- apply(with(modeldata, table(dataset, plottype)), 1:2, sum)
+
+# long dataset for table-esque plots
+modeldata.long <- melt(modeldata, id.vars=which(!grepl("(correct)|(outcome)", names(modeldata))), value.vars=c("trend.correct", "cluster.correct", "neither.correct"), value.name="correct", variable.name="answer.type")
+modeldata.long$answer.type <- gsub(".correct", "", modeldata.long$answer.type)
+modeldata.long <- filter(modeldata.long, answer.type%in%c("cluster", "trend", "neither"))
+modeldata.long$correct <- as.numeric(modeldata.long$correct)
+modeldata.long$answer.type <- factor(modeldata.long$answer.type, levels=c("cluster", "trend", "neither"))
+modeldata.long$cluster.diff2 <- factor(modeldata.long$cluster.diff, levels=c("easy", "medium", "hard"), labels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
+modeldata.long$trend.diff2 <- factor(modeldata.long$trend.diff, levels=c("easy", "medium", "hard"), labels=c("Trend: Easy", "Trend: Medium", "Trend: Hard"))
+modeldata.long$plottype <- 
+  modeldata.long$plottype %>%
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("plain", "Plain") %>%
+  str_replace("( \\+ )$", "") %>% 
+  factor(levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                  "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
+         labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                  "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
 @
 
 \subsection{General results}
-\newdo{demographic information, $N$ people participated, completing on average $M$ plots, etc., overall accuracy rates by individual and plot type}
+\comment{I don't know where the demographic information for the experiment is stored...}
 
-<<participant-confidence,echo=F, fig.width=5, fig.height=4, out.width='.5\\linewidth', fig.cap="Participant confidence levels compared with trial results. \\label{fig:conflevel}">>=
-ggplot(data=modeldata, 
-       aes(x=factor(conf_level), 
-           group=factor(c("both", "neither", "group", "group", "line", "line", "neither")[as.numeric(factor(outcome))], 
-                        levels=c("both", "group", "line", "neither")), 
-           color=factor(c("both", "neither", "group", "group", "line", "line", "neither")[as.numeric(factor(outcome))], 
-                        levels=c("both", "group", "line", "neither")))) + 
-  geom_line(stat="bin", aes(y=..count..)) + 
-  scale_color_discrete("Target\nIdentified")
+\newtext{
+Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
+during which time \Sexpr{length(unique(modeldata$individualID))} individuals completed \Sexpr{nrow(modeldata)} unique lineup evaluations (the average individual evaluated 
+\Sexpr{sprintf("%.2f", mean(table(modeldata$individualID)))} 
+lineups). 
+Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plot.eval.tab)} individuals 
+(\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
+\Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
+Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evaluations identified more than one target plot, and of these multiple identifications, \Sexpr{round(100*(mean(modeldata[modeldata$n.answers>=2,"both.correct"])), 1)}\% identified both targets correctly. 
+}
+
+\newtext{Figure \ref{fig:accuracy-parms} shows aggregate }
+<<parameter-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
+
+parm.accuracy <- modeldata.long %>% 
+  group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
+  summarize(accuracy=mean(correct)) %>%
+  ungroup() %>%
+  group_by(trend.diff2, cluster.diff2, k) %>%
+  transform(total.acc = sum(accuracy))
+
+parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("trend", "cluster", "neither"))
+k.3 <- qplot(x=answer.type, y=accuracy, fill=answer.type, 
+             geom="bar", data=subset(parm.accuracy, k==3), position="dodge", stat="identity") +
+  facet_grid(trend.diff2~cluster.diff2) + 
+  scale_fill_brewer(palette="Set1", guide="none") + 
+  theme_bw() + 
+  xlab("Target Identified") + 
+  ylab("Proportion of Trials") + 
+  ggtitle("K=3 Clusters")
+k.5 <- qplot(x=answer.type, y=accuracy, fill=answer.type, 
+             geom="bar", data=subset(parm.accuracy, k==5), position="dodge", stat="identity") +
+  facet_grid(trend.diff2~cluster.diff2) + 
+  scale_fill_brewer(palette="Set1", guide="none") + 
+  theme_bw() + 
+  xlab("Target Identified") + 
+  ylab("Proportion of Trials") + 
+  ggtitle("K=5 Clusters")
+
+grid.arrange(k.3, k.5, nrow=1)
 @
 
-<<speedaccuracy,echo=F, fig.width=8, fig.height=4, out.width='.8\\linewidth', fig.cap="Accuracy (Identifying either target plot) compared with mean trial time.">>=
+<<plot-accuracy-rate, echo=F, fig.width=8, fig.height=4, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
 
-time.accuracy <- modeldata %>% group_by(plottype, dataset) %>% summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% arrange(mean.trial.time) %>% melt(id.var=c("plottype", "dataset", "mean.trial.time")) 
+plottype.accuracy <- modeldata.long %>% 
+  group_by(plottype, answer.type) %>% 
+  summarize(accuracy=mean(correct)) %>%
+  ungroup() %>%
+  group_by(plottype) %>%
+  transform(total.acc = sum(accuracy))
+plottype.accuracy$plottype <- with(plottype.accuracy, factor(plottype, levels=plottype[answer.type=='neither'][order(accuracy[answer.type=='neither'], accuracy[answer.type=="trend"])]))
+plottype.accuracy$answer.type <- factor(plottype.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
+qplot(x=plottype, y=accuracy, fill=answer.type, 
+      geom="bar", data=plottype.accuracy, position="stack", stat="identity") +
+  scale_fill_brewer("Target Identified", palette="Set1") + 
+  theme_bw() + 
+  xlab("Plot Aesthetic") + 
+  ylab("Proportion of Trials") + 
+  coord_flip()
+@
+
+<<participant-confidence,echo=F, fig.width=5, fig.height=3, out.width='.5\\linewidth', fig.cap="Participant confidence levels compared with trial results. \\label{fig:conflevel}">>=
+ggplot(data=modeldata, 
+       aes(x=factor(conf_level), 
+           group=factor(c("both", "neither", "cluster", "cluster", "trend", "trend", "neither")[as.numeric(factor(outcome))], 
+                        levels=c("both", "cluster", "trend", "neither")), 
+           color=factor(c("both", "neither", "cluster", "cluster", "trend", "trend", "neither")[as.numeric(factor(outcome))], 
+                        levels=c("both", "cluster", "trend", "neither")))) + 
+  geom_line(stat="bin", aes(y=..count..)) + 
+  scale_color_discrete("Target\nIdentified") + 
+  xlab("Participant Confidence") + 
+  ylab("# Trials") + 
+  ggtitle("Participant Confidence and Trial Outcome") + 
+  theme_bw()
+@
+
+<<speedaccuracy,echo=F, fig.width=8, fig.height=4, out.width='.8\\linewidth', fig.cap="Accuracy (Identifying either target plot) compared with mean trial time.", dependson='results-setup'>>=
+
+time.accuracy <- modeldata %>% 
+  group_by(individualID) %>%
+  transform(trial.num=order(start_time)) %>%
+  filter(trial.num>1)  %>%
+  group_by(plottype, dataset) %>% 
+  summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% 
+  arrange(mean.trial.time) %>% 
+  melt(id.var=c("plottype", "dataset", "mean.trial.time")) 
 time.accuracy$plottype <- time.accuracy$plottype %>%
   str_replace("color", "Color + ") %>% 
   str_replace("[sS]hape", "Shape + ") %>%
@@ -603,8 +705,17 @@ time.accuracy$plottype <- time.accuracy$plottype %>%
                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
                   "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
 
+mean.time <- time.accuracy %>% group_by(plottype) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))))
 
-qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype) + geom_smooth(span=1, aes(ymax=pmin(1, ..ymax..))) + xlim(c(20,60)) + xlab("Mean Trial Time (by Plot)") + ylab("Accuracy") + facet_wrap(~plottype, nrow=2) + scale_color_discrete("Plot Aesthetic") + theme_bw()
+
+qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype) + 
+  geom_smooth(span=1, aes(ymax=pmin(1, ..ymax..))) + 
+  xlim(c(20,60)) + 
+  xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
+  ylab("Accuracy") + 
+  scale_color_discrete("Plot Aesthetic") + 
+  geom_text(data=mean.time, aes(x=40, y=0, label=trial.time), inherit.aes=F, vjust=0, show_guide=F) + 
+  facet_wrap(~plottype, nrow=2) + theme_bw()
 @
 
 \newtext{We will first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.}
@@ -624,8 +735,8 @@ We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is c
 
 
 <<line-model, echo=FALSE, include=FALSE, dependson='results-setup', fig.width=8, fig.height=4>>=
-line.model <- glmer(line.correct ~ 
-                      # line.diff*cluster.diff*k + 
+line.model <- glmer(trend.correct ~ 
+                      # trend.diff*cluster.diff*k + 
                       plottype + 
                       (1|individualID) + 
                       (1|dataset), 
@@ -636,6 +747,10 @@ line.fixef <- data.frame(summary(line.model)$coefficients, confint(line.model, m
 names(line.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
 line.fixef$OR <- exp(line.fixef[,1])
 line.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(line.fixef)), fixed=T)
+
+suppressMessages(require(multcomp))
+type_compare <- glht(line.model, mcp(plottype="Tukey"))
+line.fixef$letters <- cld(type_compare)$mcletters$Letters
 
 line.fixef.aes <- line.fixef[grepl("(color)|([Ss]hape)|([Tt]rend)|(Ellipse)|(Error)", rownames(line.fixef)),]
 line.fixef.aes <- line.fixef.aes[order(line.fixef.aes$OR, decreasing = T),]
@@ -652,16 +767,18 @@ line.fixef.aes$LB <- exp(line.fixef.aes$LB)
 line.fixef.aes$UB <- exp(line.fixef.aes$UB)
 
 qplot(data=line.fixef.aes, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") + 
+  geom_text(aes(x=label, y=0, label=letters)) + 
   coord_flip() + 
   ylab("Odds Ratio + 95% Wald Interval") + 
   xlab("Plot Type") + 
   geom_hline(yintercept=1, colour="grey70") +
-  ggtitle("Effect of Plot Aesthetics on P(Line Target Selected)") + 
+  ggtitle("Odds of Selecting Line Target Plot") + 
   theme_bw()
 
 names(line.fixef.aes)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
 names(line.fixef.aes)[8] <- "Plot Aesthetic"
-print(xtable(line.fixef.aes[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/linear-fixef-table")
+names(line.fixef.aes)[9] <- "Tukey Post Hoc Differences"
+print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/linear-fixef-table")
 
 line.ranef.individual <- as.data.frame(ranef(line.model)[[1]])
 names(line.ranef.individual) <- "value"
@@ -670,12 +787,11 @@ line.ranef.individual$id <- rownames(line.ranef.individual)
 line.ranef <- ldply(ranef(line.model), .%>%as.matrix %>% melt)
 names(line.ranef) <- c("type", "id", "level", "value")
 line.ranef <- merge(line.ranef, parameter.design, all.x=T, all.y=T, by.x="id", by.y="dataset")
-line.ranef$line.diff <- factor(line.ranef$line.diff, levels=c("easy", "medium", "hard"))
+line.ranef$trend.diff <- factor(line.ranef$trend.diff, levels=c("easy", "medium", "hard"))
 line.ranef$cluster.diff <- factor(line.ranef$cluster.diff, levels=c("easy", "medium", "hard"))
-line.ranef$diff <- sprintf("Line: %s, Cluster: %s", line.ranef$line.diff, line.ranef$cluster.diff)
-
-ggplot(data=line.ranef.individual) + 
-  geom_density(aes(x=value)) 
+line.ranef$diff <- sprintf("Line: %s, Cluster: %s", line.ranef$trend.diff, line.ranef$cluster.diff)
+# ggplot(data=line.ranef.individual) + 
+#   geom_density(aes(x=value)) 
 @
 
 % \input{figure/linear-fixef-table}
@@ -685,7 +801,7 @@ ggplot(data=line.ranef.individual) +
 \caption{Odds ratios describing the odds of detecting the linear target plot for each aesthetic, relative to a plain scatterplot. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot. \label{fig:linear.fixef}}
 \end{figure}
 
-\newdo{Commentary goes here... too tired tonight}
+
 
 \newdo{Discuss variance/covariance and random effects}
 
@@ -706,7 +822,7 @@ As before, we note that any variance due to parameters $K$, $\sigma_T$, and $\si
 
 
 <<group-model, echo=FALSE, include=FALSE, dependson='results-setup', fig.width=8, fig.height=4>>=
-group.model <- glmer(group.correct~ plottype + (1|individualID) + (1|dataset), 
+group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
                     data = modeldata, 
                     family = binomial(link="logit"), 
                     control=glmerControl(optimizer="bobyqa"))
@@ -714,6 +830,10 @@ group.fixef <- data.frame(summary(group.model)$coefficients, confint(group.model
 names(group.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
 group.fixef$OR <- exp(group.fixef[,1])
 group.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(group.fixef)), fixed=T)
+
+suppressMessages(require(multcomp))
+type_compare <- glht(group.model, mcp(plottype="Tukey"))
+group.fixef$letters <- cld(type_compare)$mcletters$Letters
 
 group.fixef2 <- group.fixef[2:10,]
 group.fixef2 <- group.fixef2[order(group.fixef2$OR, decreasing = T),]
@@ -734,12 +854,13 @@ qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
   scale_y_continuous("Odds Ratio + 95% Wald Interval", breaks=c(.5, .75, 1, 1.25)) + 
   xlab("Plot Type") + 
   geom_hline(yintercept=1, colour="grey70") +
-  ggtitle("Effect of Plot Aesthetics on P(Group Target Selected)") + 
+  ggtitle("Odds of Selecting Group Target Plot") + 
   theme_bw()
 
 names(group.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
 names(group.fixef2)[8] <- "Plot Aesthetic"
-print(xtable(group.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/group-fixef-table")
+names(group.fixef2)[9] <- "Tukey Post Hoc Differences"
+print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/group-fixef-table")
 @
 
 % \input{figure/group-fixef-table}
@@ -755,7 +876,7 @@ print(xtable(group.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects
 \begin{figure}
 \centering
 <<group-vs-line, echo=FALSE, fig.width=7.5, fig.height=3.5, out.width='.85\\textwidth'>>=
-designs <- ddply(modeldata, .(dataset, plottype), summarise, evals=length(data_name), group=sum(group.correct), line=sum(line.correct))
+designs <- ddply(modeldata, .(dataset, plottype), summarise, evals=length(data_name), group=sum(cluster.correct), line=sum(trend.correct))
 designs$perc <- with(designs, group/(group+line))
 #qplot(plottype, perc, data=designs, geom="boxplot")
 m1 <- glmer(cbind(group, line)~plottype+(1|dataset), data=designs, family=binomial())
@@ -875,7 +996,7 @@ longres$dist <- c("Data", "Most Extreme of\n18 Null Dists")[1+grepl("null", long
 longres$type <- gsub("null.", "", longres$type, fixed=T)
 longres$Statistic <- longres$type
 longres$Statistic[longres$type=="cluster"] <- "Cluster Measure"
-longres$Statistic[longres$type=="line"] <- "R^2"
+longres$Statistic[longres$type=="trend"] <- "R^2"
 longres$Statistic[longres$type=="gini"] <- "Gini Impurity"
 longres$Statistic <- factor(longres$Statistic, levels=c("R^2", "Cluster Measure", "Gini Impurity"))
 
