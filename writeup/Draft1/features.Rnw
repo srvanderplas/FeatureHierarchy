@@ -340,7 +340,9 @@ $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .15, .20, .25 
 
 \comment{the simulation is so nice, maybe you could include one more sentence on the idea. Niladri did something similar in his Where's Waldo paper. Need to ask Di for a reference.}
 
-\newtext{The parameter values were chosen after examining the full parameter space through simulation of 1000 lineup datasets for each combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$; more complete results are provided in appendix \ref{app:parametersimulation}. In accordance with the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to "easy", "medium" and "hard" numerical comparisons between corresponding target data sets and null data sets. It is important to note that the numerical measures we have described in equations \eqref{eq:linearMeasure} and \eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with information on the perceptual discriminability, and it has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.}
+The parameter values were chosen after examining the full parameter space through simulation of 1000 lineup datasets for each combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$; more complete results are provided in appendix \ref{app:parametersimulation}.
+\comment{I want even more details: how did you get the results?}
+In accordance with the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. It is important to note that the numerical measures we have described in equations \eqref{eq:linearMeasure} and \eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with information on the perceptual discriminability, and it has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
 
 Each of the generated datasets is then plotted as a lineup, where we apply aesthetics which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change participants' ability to identify each target plot. The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
 
@@ -631,9 +633,9 @@ Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evalu
 
 \subsection{Graphical Exploration}
 
-\newtext{
-Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating "hard" cluster lineups as "easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.
-}
+
+Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating ``hard" cluster lineups as ``easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.
+
 <<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='.9\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
 
 parm.accuracy <- modeldata.long %>% 
@@ -678,9 +680,9 @@ p2 <- qplot(x=trend.diff2, y=accuracy, fill=answer.type,
   coord_flip()
 grid_arrange_shared_legend(p1, p2)
 @
-\newtext{
+
 Figure \ref{fig:accuracy-plottype} shows aggregate accuracy rates for each plot aesthetic combination. It is again apparent that the cluster targets were overall more likely to be identified than line targets across all aesthetic combinations, however, it is also evident that plot aesthetics influence the identified target.
-}
+
 <<plot-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
 
 plottype.accuracy <- modeldata.long %>% 
@@ -700,12 +702,12 @@ qplot(x=plottype, y=accuracy, fill=answer.type,
   coord_flip()
 @
 
-\newtext{
-In addition to participant identification of target plots, we also asked that they rate their confidence in their answer. 
+
+In addition to participant identification of target plots, we also asked that participants to rate their confidence in their answer. 
 Figure \ref{fig:conflevel} shows aggregate participant confidence rating as a function of trial outcome. 
 Participants who did not identify either target plot were less likely to be ``extremely confident'' in their answer, while participants who identified either the trend or the cluster target correctly were highly confident that their answer was correct. 
 Overall, though, participants seem to have some degree of confidence in their answer, regardless of whether the answer was correct.
-}
+
 <<participant-confidence,echo=F, fig.width=6.5, fig.height=4.25, out.width='.5\\linewidth', fig.cap="Participant confidence levels compared with trial results. \\label{fig:conflevel}">>=
 conf.acc <- modeldata %>% 
   mutate(weight=1/nrow(modeldata), 
@@ -731,14 +733,45 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 
 @
 
-\newtext{
-As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the trial start and end time. 
+
+As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the time between  trial start and end time. \comment{it is not clear, how the `trial' is defined. it might be better to re-phrase this in terms of the time between presenting the lineup to the participant until the participant submits his/her answer. }
 Examining differences in average response times across trials provides us with an additional measure of trial difficulty or perceptual complexity. 
 We can also explore whether participants spent more time on certain types of plots and whether that additional time increased accurate target identification. 
-In order to remove the "novelty" effect of an unfamiliar task, we excluded every participant's first trial from this portion of the analysis. 
+In order to remove the ``novelty" effect of an unfamiliar task, we excluded every participant's first trial from this portion of the analysis. 
+
 Additionally, all trials which took greater than 3 minutes to complete have also been removed; we have no guarantee that a participant was not multitasking during their trials, and 3 minutes is an excessive amount of time for lineup completion (only \Sexpr{round(mean(modeldata$trial.time>180)*100, 1)}\% of trials were more than 3 minutes long).
+\comment{No, don't select based on the value of the dependent variable. Use a log transform instead. Most likely, the time taken by participants is close to a Gamma distribution. This is what we have used in the past to model this kind of data - have a look at Mahbub's paper (the arxiv one on Human Factors). Instead of average trial ties, use a robust approach, such as the median - that will give you almost the same answers, see figure~\ref{fig:timemodel}. There is no indication that the plot type matters for the time taken, even when we take the outcome of that viewing into account. What matters, is whether the lineup is the participants first lineup.  }
 Average trial times and accuracy rates for each lineup are shown in figure \ref{fig:speedaccuracyaes} facetted by plot type, and in figure \ref{fig:speedaccuracypars} facetted by parameter difficulty. 
-}
+
+\begin{figure}
+<<timemodel, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth'>>=
+library(lubridate)
+modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
+modeldata$start <- ymd_hms(modeldata$start_time)
+modeldata <- ddply(modeldata, .(individualID), transform, first = start==min(start))
+modeldata$simple <- modeldata$outcome
+idx <- grep("gini", modeldata$simple)
+modeldata$simple[idx] <- "neither"
+
+time.model <- lmer(log(time_taken)~ simple:plottype +first  + (1|individualID) + (1|data_name), data=modeldata)
+coefs <- data.frame(exp(confint(time.model, method="Wald")))[-(1:2),]
+names(coefs) <- c("low", "high")
+coefs$estimate <- exp(fixef(time.model)[-(1:2)])
+coefs$name <- names(fixef(time.model))[-(1:2)]
+ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
+coefs$outcome <- gsub("simple", "", ll$V1)
+coefs$plottype <- gsub("plottype", "", ll$V2)
+coefs$simple <- coefs$outcome %in% c("both")
+coefs$simple <- factor(coefs$simple)
+levels(coefs$simple) <- c("line, group, neither", "both")
+coefs$plottype <- with(coefs, reorder(plottype, estimate))
+qplot(estimate, plottype, data=coefs, colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
+  scale_colour_brewer(palette="Set1") +
+  geom_segment(aes(x=low, xend=high, y=plottype, yend=plottype)) + facet_wrap(~simple) + xlab("Estimate of the (additional) time taken in seconds for each plot type given outcome") + ylab("")
+@
+\caption{\label{fig:timemodel} XXX figure would need some additional work, in case we want to keep it.}
+\end{figure}
+
 <<speedaccuracy1,echo=F, fig.width=8, fig.height=4, out.width='.9\\linewidth', fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by plot aesthetic.\\label{fig:speedaccuracyaes}", dependson='results-setup'>>=
 time.accuracy <- modeldata %>% 
   group_by(individualID) %>%
