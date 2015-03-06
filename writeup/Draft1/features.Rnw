@@ -202,10 +202,10 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line \\
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
-    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$ 
-    \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, $\eta_i \sim \text{Unif}(-z, z)$, $z = 1/5 \cdot 2/(N-1)$
-    \item Generate $y_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$
-    \item Center and scale $x_i$, $y_i$
+    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$. 
+    \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, where $\eta_i \sim \text{Unif}(-z, z)$, $z = \frac{2}{5(N-1)}$.
+    \item Generate $y_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$.
+    \item Center and scale $x_i$, $y_i$.
   \end{enumerate}
 \end{algorithm}
 
@@ -213,7 +213,7 @@ We compute the coefficient of determination for all of the plots to assess the a
 \begin{equation}\label{eq:linearMeasure}
 R^2 = 1 - \frac{RSS}{TSS},
 \end{equation}
-where TSS is the total sum of squares, $TSS = \sum_{i=1}^N (y_i - \bar{y})^2$ and $RSS = \sum_{i=1}^N e_i^2$, the residual sum of squares.
+where TSS is the total sum of squares, $TSS = \sum_{i=1}^N \left(y_i - \bar{y}\right)^2$ and $RSS = \sum_{i=1}^N e_i^2$, the residual sum of squares.
 The expected value of the coefficient of determination $E[R^2]$ in this scenario is 
 \[
 E[R^2] =  \frac{1}{1 + 3\sigma^2_T},
@@ -245,7 +245,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
     \item Generate cluster centers $(c^x_{i}, c^y_{i})$ for each of the $K$ clusters, $i=1, ..., K$:
       \begin{enumerate}
         \item in form of two vectors $c^{x}$ and $c^y$ of permutations of $\{1, ..., K\}$, such that
-        \item the correlation between cluster centers \text{Cor}$(c^{x}, c^{y})$ falls into a range of $[.25, .75]$.
+        \item the correlation between cluster centers \text{cor}$(c^{x}, c^{y})$ falls into a range of $[.25, .75]$.
       \end{enumerate}
       \item Center and standardize cluster centers $(c^x, c^y)$:  
       \[
@@ -258,16 +258,16 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
     \]
      
     \item Generate points around cluster centers: 
-      \begin{enumerate}
-        \item $x_i = \tilde{c}^x_{g_i} + e^x_i$, where $e^x_i \sim N(0, \sigma^2_C)$
-        \item $y_i = \tilde{c}^y_{g_i} + e^y_i$, where $e^y_i \sim N(0, \sigma^2_C)$
-      \end{enumerate}
-    \item Center and scale $x_i$, $y_i$
+      \begin{eqnarray*}
+        x_i &=& \tilde{c}^x_{g_i} + e^x_i, \text{ where } e^x_i \sim N(0, \sigma^2_C),
+        y_i &=& \tilde{c}^y_{g_i} + e^y_i, \text{ where } e^y_i \sim N(0, \sigma^2_C).
+      \end{eqnarray*}
+    \item Center and scale $x_i$, $y_i$.
   \end{enumerate}
 \end{algorithm} 
 
 
-As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e. we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
+As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
 
 \newdo{add cluster equation}
 \begin{equation}\label{eq:clusterMeasure}
@@ -295,7 +295,7 @@ qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) +
 \caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom).}
 \end{figure}
 
-\comment{For the study we used $a=1$, right?\\Susan: Yes, and I thought I'd purged all $a$ from the description accordingly, but I see that I missed one. It's fixed now. }
+%\comment{For the study we used $a=1$, right?\\Susan: Yes, and I thought I'd purged all $a$ from the description accordingly, but I see that I missed one. It's fixed now. }
 \subsubsection{Null Model $M_0$}
 The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
