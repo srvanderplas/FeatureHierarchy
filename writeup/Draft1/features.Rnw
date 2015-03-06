@@ -1044,29 +1044,26 @@ is not as strong as \\
 designs <- ddply(modeldata, .(dataset, plottype), summarise, evals=length(data_name), group=sum(cluster.correct), line=sum(trend.correct))
 designs$perc <- with(designs, group/(group+line))
 #qplot(plottype, perc, data=designs, geom="boxplot")
-m1 <- glmer(cbind(group, line)~plottype+(1|dataset), data=designs, family=binomial())
-cis <- data.frame(confint(m1, method="Wald"))
-names(cis) <- c("LB", "UB")
-cis$OR <- fixef(m1)
+gvl.model <- glmer(cbind(group, line)~plottype+(1|dataset), data=designs, family=binomial())
+gvl.fixef <- data.frame(confint(gvl.model, method="Wald"))
+names(gvl.fixef) <- c("LB", "UB")
+gvl.fixef$OR <- fixef(gvl.model)
 
 suppressMessages(require(multcomp))
-type_compare <- glht(m1, mcp(plottype="Tukey"))
-cis$letters <- cld(type_compare)$mcletters$Letters
+type_compare <- glht(gvl.model, mcp(plottype="Tukey"))
+gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
 
-cis$label <- gsub("plottype", "", names(fixef(m1)))
-cis$label <- cis$label %>% 
+gvl.fixef$label <- gsub("plottype", "", names(fixef(gvl.model)))
+gvl.fixef$label <- gvl.fixef$label %>% 
   str_replace("color", "Color + ") %>% 
   str_replace("[sS]hape", "Shape + ") %>%
   str_replace("[tT]rend", "Trend + ") %>%
   str_replace("Ellipse", "Ellipse + ") %>%
   str_replace("Error", "Error + ") %>%
   str_replace("( \\+ )$", "") %>% 
-  reorder(cis$OR)
+  reorder(gvl.fixef$OR)
 
-cis2 <- cis[-1,]
-cis2$label <- with(cis2, reorder(label, OR))
-
-ggplot(data=cis[-1,]) + 
+ggplot(data=gvl.fixef[-1,]) + 
   geom_pointrange(aes(x=label, y=exp(OR), ymin=exp(LB), ymax=exp(UB))) + 
   coord_flip() + 
   theme_bw() + 
@@ -1078,6 +1075,26 @@ ggplot(data=cis[-1,]) +
 @
 \caption{\label{fig:faceoff} Estimated odds of decision for group versus line target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different, if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
+
+<<groupVline-ranef,echo=F,out.width='.45\\linewidth', fig.show='hold'>>=
+gvl.ranef.data <- as.data.frame(ranef(gvl.model)[[1]])
+names(gvl.ranef.data) <- "value"
+gvl.ranef.data$id <- rownames(gvl.ranef.data)
+gvl.ranef.data$type="Dataset Effects"
+
+gvl.resid <- data.frame(id=designs$dataset, value=resid(gvl.model), type="Residuals")
+
+gvl.random.effects <- rbind(gvl.ranef.data, gvl.resid)
+
+ggplot(data=gvl.random.effects) + 
+  geom_density(aes(x=value, fill=type)) + 
+  facet_grid(.~type) + 
+  scale_fill_discrete(guide="none")
+
+library(arm)
+binnedplot(fitted(gvl.model), resid(gvl.model))
+@
+
 \subsection{Signal Strength}
 
 \section{Discussion}
