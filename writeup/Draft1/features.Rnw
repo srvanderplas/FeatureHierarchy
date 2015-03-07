@@ -259,7 +259,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
      
     \item Generate points around cluster centers: 
       \begin{eqnarray*}
-        x_i &=& \tilde{c}^x_{g_i} + e^x_i, \text{ where } e^x_i \sim N(0, \sigma^2_C),
+        x_i &=& \tilde{c}^x_{g_i} + e^x_i, \text{ where } e^x_i \sim N(0, \sigma^2_C),\\
         y_i &=& \tilde{c}^y_{g_i} + e^y_i, \text{ where } e^y_i \sim N(0, \sigma^2_C).
       \end{eqnarray*}
     \item Center and scale $x_i$, $y_i$.
@@ -328,9 +328,9 @@ These models provide the foundation for this experiment; by manipulating cluster
 \begin{center}
 \begin{tabular}{lll}
 \bf Parameter & \bf Description & \bf Choices\\\hline
-$K$ & \# Clusters & 3, 5 \\
-$N$ & \# Points & $15\cdot K$ \\
-$\sigma_T$ & Scatter around trend line &  .15, .25, .35\\
+$K$ & \# Clusters &  \begin{tabular}{l}3, 5 \end{tabular} \\
+$N$ & \# Points &  \begin{tabular}{l}$15\cdot K$\end{tabular} \\
+$\sigma_T$ & Scatter around trend line &   \begin{tabular}{l}.15, .25, .35  \end{tabular}\\
 $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .15, .20, .25 ($K=3$)\\ .20, .25, .30 ($K=5$) \end{tabular}
 \\\hline
 \end{tabular}
@@ -352,73 +352,7 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
 
 \begin{figure}[ht]
 <<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".3\\linewidth", fig.show='hold', fig.align='center', warning=FALSE, message=FALSE>>=
-# source("../../Code/MixtureLineups.R")
-# source("../../Code/theme_lineup.R")
-# 
-# # Define colors and shapes
-# colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
-#              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
-# shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
-# 
-# colortm <- read.csv("../../Data/color-perceptual-kernel.csv")
-# # colortm[3,4] <- 0
-# # colortm[4,3] <- 0
-# colortm[8,] <- 0
-# colortm[,8] <- 0
-# 
-# shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
-# # shapetm[9:10,] <- 0
-# # shapetm[, 9:10] <- 0
-# shapetm[9,] <- 0
-# shapetm[,9] <- 0
-# shapetm[10,] <- 0
-# shapetm[,10] <- 0
-# 
-# # Lineup Design
-# data.parms <- expand.grid(N=45,
-#                           K=3,
-#                           sd.trend=.25,
-#                           sd.cluster=.2)
-# 
-# plot.parms <- expand.grid(
-#   color = c(0,1),
-#   shape = c(0,1),
-#   reg = c(0,1),
-#   err = c(0,1),
-#   ell = c(0,1)
-# )[c(
-#   1, # control
-#   2, 3, # color, shape
-#   4, 18, # color + shape, color + ellipse
-#   20, # color + shape + ellipse
-#   5, 13, # trend, trend + error
-#   6, # color + trend
-#   30 # color + ellipse + trend + error
-#   ),]
-# 
-# get.aes <- function(r){
-#   c("Color", "Shape")[which(as.logical(r[1:2]))]
-# }
-# 
-# get.stats <- function(r){
-#   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
-# }
-# 
-# data <- data.frame(set=1, gen.data(as.list(data.parms[1,])))
-# data.stats <- ddply(data, .(set, .sample), 
-#                     function(df){
-#                       r2 <- summary(lm(y~x, data=df))
-#                       tmp <- summary(aov(lm(y~x+factor(group) + 0, data=df)))
-#                       res <- tmp[[1]]$`Mean Sq`
-#                       data.frame(.sample=unique(df$.sample), 
-#                                  LineRSq = r2$r.squared, 
-#                                  Fgroup = round(res[2]/res[3], 2), 
-#                                  lineplot=unique(df$target2), 
-#                                  groupplot=unique(df$target1))
-#                       } )
-# answers <- ddply(data.stats, .(set), summarize, lineplot=unique(lineplot), groupplot=unique(groupplot))
-# 
-# save(colors, shapes, colortm, shapetm, data, answers, data.parms, plot.parms, get.aes, get.stats, file="figure/lineupex/data.Rdata")
+
 load("figure/lineupex/data.Rdata")
 d_ply(data, .(set), function(df){
   i <- unique(df$set)
@@ -428,60 +362,20 @@ d_ply(data, .(set), function(df){
   }
 })
 @
-\caption{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=.25$ and $\sigma_C=.2$. \label{fig:plotExamples}}
+\caption{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
 \clearpage
 
 \begin{table}[h]
 \centering
-\begin{tabular}{cc|c|c|c|}\cline{3-5}
- & \multicolumn{1}{c}{} & \multicolumn{3}{|c|}{Line Emphasis}\\\cline{2-5}
- & \multicolumn{1}{|c|}{Strength} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{1} & \multicolumn{1}{c|}{2}\\\hline
- % ----- 
-  \multicolumn{1}{|c|}{\multirow{8}{*}{\parbox[t]{.1\linewidth}{Cluster Emphasis}}} & 
-  \multirow{2}{*}{0} & 
-  \multirow{2}{*}{None} & 
-  \multirow{2}{*}{Line} & 
-  \multirow{2}{*}{Line + Prediction}\\
- % ----- 
-  \multicolumn{1}{|c|}{} & & & & \\\cline{2-5} 
- % ----- 
-  \multicolumn{1}{|c|}{} & 
-  \multicolumn{1}{c|}{\multirow{2}{*}{1}} & 
-  Color & 
-  \multirow{2}{*}{Color + Line} &
-  \\\cline{3-3}
- % ----- 
-  \multicolumn{1}{|c|}{} & 
-  & 
-  Shape &
-  &
-  \\ \cline{2-5}
- % ----- 
-  \multicolumn{1}{|c|}{} & 
-  \multicolumn{1}{c|}{\multirow{2}{*}{2}} & 
-  Color + Shape  & 
-  \multirow{2}{*}{} & 
-  \multirow{2}{*}{\parbox[t][-.2em][c]{.2\linewidth}{Color + Ellipse + Line + Prediction}} 
-  \\ \cline{3-3}
- % ----- 
-  \multicolumn{1}{|c|}{} & 
-  &
-  Color + Ellipse & 
-  & 
-  \\ \cline{2-5}
- % ----- 
-  \multicolumn{1}{|c|}{} & 
-  \multicolumn{1}{c|}{\multirow{2}{*}{3}} & 
-  \multirow{2}{*}{\parbox[t][-.2em][c]{.15\linewidth}{Color + Shape + Ellipse}} &
-  &
-  \\
- % ----- 
-  \multicolumn{1}{|c|}{} & 
-  & 
-  &
-  &
-  \\ \hline
+\begin{tabular}{ccccc}
+\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Line Emphasis} \\
+& Strength & 0 & 1 & 2 \\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Line &  \cellcolor{gray!25} Line + Prediction \\
+\cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15} Color/Shape & \cellcolor{gray!5} Color + Line \\
+\cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
+Line + Prediction \end{tabular}\\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
 \end{tabular}
 \caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
@@ -504,11 +398,11 @@ colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
             "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lineup()
 @
-\caption{Colors in \citet{heer:2014}. This study removed grey from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
+\caption{Colors in \citet{heer:2014}. This study removed gray from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
 \end{figure}
 
 The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software. \comment{citation for Tableau?}
-In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the grey hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (grey) which is difficult to distinguish for those with color deficiency.  
+In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (gray) which is difficult to distinguish for those with color deficiency.  
 
 % Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
 
@@ -915,7 +809,7 @@ qplot(data=line.fixef.aes, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
   coord_flip() + 
   ylab("Odds Ratio + 95% Wald Interval") + 
   xlab("Plot Type") + 
-  geom_hline(yintercept=1, colour="grey70") +
+  geom_hline(yintercept=1, colour="gray70") +
   ggtitle("Odds of Selecting Line Target Plot") + 
   theme_bw()
 
@@ -1010,7 +904,7 @@ qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
   coord_flip() + 
   scale_y_continuous("Odds Ratio + 95% Wald Interval", breaks=c(.5, .75, 1, 1.25)) + 
   xlab("Plot Type") + 
-  geom_hline(yintercept=1, colour="grey70") +
+  geom_hline(yintercept=1, colour="gray70") +
   ggtitle("Odds of Selecting Group Target Plot") + 
   theme_bw()
 
@@ -1100,7 +994,7 @@ ggplot(data=gvl.fixef[-1,]) +
   geom_pointrange(aes(x=label, y=exp(OR), ymin=exp(LB), ymax=exp(UB))) + 
   coord_flip() + 
   theme_bw() + 
-  geom_hline(yintercept=1, colour="grey70") + 
+  geom_hline(yintercept=1, colour="gray70") + 
   ggtitle("Odds of Selecting Group vs Line Target \n (given one target was identified)") + 
   ylab("Odds Ratio (Group / Line)") + 
   xlab("Plot Type") + 
@@ -1201,9 +1095,9 @@ if (file.exists("./figure/nulldist.Rdata")) {
 }
 
 # require(ggplot2)
-# qplot(fline, data=res$nulls, binwidth=0.02, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$trends), color="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
+# qplot(fline, data=res$nulls, binwidth=0.02, fill=I("gray70"), color=I("gray20")) + geom_vline(aes(xintercept=res$trends), color="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
 # ggsave("figure/fline.pdf", width=8, height=4)
-# qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("grey70"), color=I("grey20")) + geom_vline(aes(xintercept=res$clusters), color="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
+# qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("gray70"), color=I("gray20")) + geom_vline(aes(xintercept=res$clusters), color="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
 # ggsave("figure/fgroup.pdf", width=8, height=4)
 
 longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
@@ -1221,8 +1115,8 @@ qplot(data=longres, x=value, y=..density.., stat="density", color=dist, fill=dis
       ylab="Density", 
       position="identity") + 
   facet_grid(.~Statistic, scales="free", labeller=label_both) + 
-  scale_color_manual("Distribution", values=c("black",  "grey")) + 
-  scale_fill_manual("Distribution", values=c("transparent", "grey")) +  
+  scale_color_manual("Distribution", values=c("black",  "gray")) + 
+  scale_fill_manual("Distribution", values=c("transparent", "gray")) +  
   theme_bw()
 @
 
