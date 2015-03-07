@@ -514,7 +514,14 @@ modeldata.long$plottype <-
 
 
 \subsection{General results}
-\comment{I don't know where the demographic information for the experiment is stored... HH: I'll check with Eric for it - it should go into an appendix, I think}
+\comment{I don't know where the demographic information for the experiment is stored... HH: it's on turk16 now.}
+
+\comment{We need to clean out a couple of these answers. Our study was built around haveing people evaluate ten lineups. That is what I'd like the data to be cut to - kick out all individuals with fewer than ten lineups and only take the first ten evaluations from participants. Keep track at each step of how many evaluations that is costing us ... }
+
+\comment{It would also be interesting to see, if individuals picked mostly lines or mostly groups or whether there was a mix of both. }
+
+
+
 
 Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
 during which time \Sexpr{length(unique(modeldata$individualID))} individuals completed \Sexpr{nrow(modeldata)} unique lineup evaluations (the average individual evaluated 
