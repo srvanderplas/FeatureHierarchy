@@ -270,11 +270,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
 
 \newdo{add cluster equation}
-\newtext{For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} as follows:
-for each level of $g$, find  mean $\bar{x}_j$ and  $\bar{y}_j$ for $j = 1, ... K$.
-
-where $j(i)$ is the }
-
+\newtext{For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: }
 
 \begin{eqnarray}\label{eq:clusterMeasure}
 \gamma^2 &=& 1 - \frac{CSS}{TSS},\\
