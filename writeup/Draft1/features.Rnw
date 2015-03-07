@@ -531,51 +531,7 @@ Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evalu
 
 Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating ``hard" cluster lineups as ``easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.
 
-% <<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
-% 
-% parm.accuracy <- modeldata.long %>% 
-%   group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
-%   summarize(accuracy=mean(correct)) %>%
-%   ungroup() %>%
-%   group_by(trend.diff2, cluster.diff2, k) %>%
-%   transform(total.acc = sum(accuracy))
-% 
-% parm.accuracy$k2 <- paste0("K: ", parm.accuracy$k)
-% parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
-% parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
-% 
-% grid_arrange_shared_legend <- function(...) {
-%     plots <- list(...)
-%     g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
-%     legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-%     lheight <- sum(legend$height)
-%     grid.arrange(
-%         do.call(arrangeGrob, c(lapply(plots, function(x)
-%             x + theme(legend.position="none")), nrow=1)),
-%         legend,
-%         nrow = 2,
-%         heights = unit.c(unit(1, "npc") - lheight, lheight))
-% }
-% 
-% p1 <- qplot(cluster.diff2, accuracy, data=parm.accuracy, facets=k2~trend.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
-%   theme_bw() + xlab("") + 
-%   geom_line(aes(group=answer.type)) + 
-%   scale_colour_brewer("Target Identified", palette="Set1") + 
-%   scale_shape_discrete("Target Identified") + 
-%   theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
-%   
-% p2 <- qplot(trend.diff2, accuracy, data=parm.accuracy, facets=k2~cluster.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
-%   theme_bw() + xlab("") + 
-%   geom_line(aes(group=answer.type)) + 
-%   scale_colour_brewer("Target Identified", palette="Set1") + 
-%   scale_shape_discrete("Target Identified") + 
-%   theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
-% 
-% 
-% grid_arrange_shared_legend(p1, p2)
-% @
-
-<<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='.9\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
+<<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
 
 parm.accuracy <- modeldata.long %>% 
   group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
@@ -586,7 +542,7 @@ parm.accuracy <- modeldata.long %>%
 
 parm.accuracy$k2 <- paste0("K: ", parm.accuracy$k)
 parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
-parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Hard", "Cluster: Medium", "Cluster: Easy"))
+parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
 
 grid_arrange_shared_legend <- function(...) {
     plots <- list(...)
@@ -601,24 +557,68 @@ grid_arrange_shared_legend <- function(...) {
         heights = unit.c(unit(1, "npc") - lheight, lheight))
 }
 
-p1 <- qplot(x=cluster.diff2, y=accuracy, fill=answer.type, 
-            geom="bar", data=parm.accuracy, position="stack", stat="identity") +
-  scale_fill_brewer("Target Identified", palette="Set1") + 
-  facet_grid(k2 ~ trend.diff2) +
-  theme_bw() + 
-  xlab("Cluster Difficulty") + 
-  scale_y_continuous("Proportion of Trials", breaks=c(0, .5, 1)) + 
-  coord_flip()
-p2 <- qplot(x=trend.diff2, y=accuracy, fill=answer.type, 
-      geom="bar", data=parm.accuracy, position="stack", stat="identity") +
-  scale_fill_brewer("Target Identified", palette="Set1", guide="none") + 
-  facet_grid(k2 ~ cluster.diff2) +
-  theme_bw() + 
-  xlab("")  + 
-  scale_y_continuous("Proportion of Trials", breaks=c(0, .5, 1)) + 
-  coord_flip()
+p1 <- qplot(cluster.diff2, accuracy, data=parm.accuracy, facets=k2~trend.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
+  theme_bw() + xlab("") + 
+  geom_line(aes(group=answer.type)) + 
+  scale_colour_brewer("Target Identified", palette="Set1") + 
+  scale_shape_discrete("Target Identified") + 
+  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+  
+p2 <- qplot(trend.diff2, accuracy, data=parm.accuracy, facets=k2~cluster.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
+  theme_bw() + xlab("") + 
+  geom_line(aes(group=answer.type)) + 
+  scale_colour_brewer("Target Identified", palette="Set1") + 
+  scale_shape_discrete("Target Identified") + 
+  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+
+
 grid_arrange_shared_legend(p1, p2)
 @
+
+% <<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='.9\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
+% 
+% parm.accuracy <- modeldata.long %>% 
+%   group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
+%   summarize(accuracy=mean(correct)) %>%
+%   ungroup() %>%
+%   group_by(trend.diff2, cluster.diff2, k) %>%
+%   transform(total.acc = sum(accuracy))
+% 
+% parm.accuracy$k2 <- paste0("K: ", parm.accuracy$k)
+% parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
+% parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Hard", "Cluster: Medium", "Cluster: Easy"))
+% 
+% grid_arrange_shared_legend <- function(...) {
+%     plots <- list(...)
+%     g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
+%     legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+%     lheight <- sum(legend$height)
+%     grid.arrange(
+%         do.call(arrangeGrob, c(lapply(plots, function(x)
+%             x + theme(legend.position="none")), nrow=1)),
+%         legend,
+%         nrow = 2,
+%         heights = unit.c(unit(1, "npc") - lheight, lheight))
+% }
+% 
+% p1 <- qplot(x=cluster.diff2, y=accuracy, fill=answer.type, 
+%             geom="bar", data=parm.accuracy, position="stack", stat="identity") +
+%   scale_fill_brewer("Target Identified", palette="Set1") + 
+%   facet_grid(k2 ~ trend.diff2) +
+%   theme_bw() + 
+%   xlab("Cluster Difficulty") + 
+%   scale_y_continuous("Proportion of Trials", breaks=c(0, .5, 1)) + 
+%   coord_flip()
+% p2 <- qplot(x=trend.diff2, y=accuracy, fill=answer.type, 
+%       geom="bar", data=parm.accuracy, position="stack", stat="identity") +
+%   scale_fill_brewer("Target Identified", palette="Set1", guide="none") + 
+%   facet_grid(k2 ~ cluster.diff2) +
+%   theme_bw() + 
+%   xlab("")  + 
+%   scale_y_continuous("Proportion of Trials", breaks=c(0, .5, 1)) + 
+%   coord_flip()
+% grid_arrange_shared_legend(p1, p2)
+% @
 
 Figure \ref{fig:accuracy-plottype} shows aggregate accuracy rates for each plot aesthetic combination. It is again apparent that the cluster targets were overall more likely to be identified than line targets across all aesthetic combinations, however, it is also evident that plot aesthetics influence the identified target.
 
