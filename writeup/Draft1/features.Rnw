@@ -270,8 +270,19 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
 
 \newdo{add cluster equation}
-\begin{equation}\label{eq:clusterMeasure}
-\end{equation}
+\newtext{For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} as follows:
+for each level of $g$, find  mean $\bar{x}_j$ and  $\bar{y}_j$ for $j = 1, ... K$.
+
+where $j(i)$ is the }
+
+
+\begin{eqnarray}\label{eq:clusterMeasure}
+\gamma^2 &=& 1 - \frac{CSS}{TSS},\\
+CSS &=& \sum_{i=1}^n \left(x_{j(i)} - \overline{x}_{j(i)}\right)^2 + \left(y_{j(i)} - \overline{y}_{j(i)} \right)^2, \\
+TSS &=& \sum_{i=1}^n \left(x_i - \bar{x}\right)^2 + \left(y_i - \bar{y}\right)^2.
+\end{eqnarray}
+
+
 
 \begin{figure}[ht]
 <<cluster, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE,dependson='setup'>>=
