@@ -535,10 +535,11 @@ Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evalu
 
 \subsection{Graphical Exploration}
 
+\comment{The graphical exploration is very much not straightforward - let's move it to the back and get the results from the models. Accuracy first: line, group, faceoff. Time and Confidence level second. }
 
-Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating ``hard" cluster lineups as ``easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.
+Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate \comment{? I don't see that - the percentages of neither are higher for $K=5$.} when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating ``hard" cluster lineups as ``easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.  
 
-<<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
+<<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=6.5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
 
 parm.accuracy <- modeldata.long %>% 
   group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
@@ -564,19 +565,21 @@ grid_arrange_shared_legend <- function(...) {
         heights = unit.c(unit(1, "npc") - lheight, lheight))
 }
 
-p1 <- qplot(cluster.diff2, accuracy, data=parm.accuracy, facets=k2~trend.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
+p1 <- qplot(cluster.diff2, accuracy, data=parm.accuracy, facets=k2~trend.diff2, size=answer.type, colour=answer.type, shape=answer.type) + 
   theme_bw() + xlab("") + 
-  geom_line(aes(group=answer.type)) + 
+  geom_line(aes(group=answer.type), size=1) + 
   scale_colour_brewer("Target Identified", palette="Set1") + 
-  scale_shape_discrete("Target Identified") + 
-  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+  scale_shape_manual("Target Identified", values=c(1,4, 19)) + 
+  scale_size_manual("Target Identified", values=c(1, 6, 3)) +
+  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5)) 
   
-p2 <- qplot(trend.diff2, accuracy, data=parm.accuracy, facets=k2~cluster.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
+p2 <- qplot(trend.diff2, accuracy, data=parm.accuracy, facets=k2~cluster.diff2, size=answer.type, colour=answer.type, shape=answer.type) + 
   theme_bw() + xlab("") + 
-  geom_line(aes(group=answer.type)) + 
+  geom_line(aes(group=answer.type), size=1) + 
   scale_colour_brewer("Target Identified", palette="Set1") + 
-  scale_shape_discrete("Target Identified") + 
-  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+  scale_shape_manual("Target Identified", values=c(1,4, 19)) + 
+  scale_size_manual("Target Identified", values=c(1, 6, 3)) +
+  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5)) 
 
 
 grid_arrange_shared_legend(p1, p2)
@@ -800,6 +803,7 @@ qplot(data=timemodel.ci[-c(1:6),], x=factor(label, levels=label), y=Estimate, ym
 \newtext{
 Figure \ref{fig:speedaccuracypars} shows a reasonably clear effect of increasing trial time in response to increasing difficulty in cluster or trend variation parameters. While medium difficulty trend plots seem to be somewhat faster, on average, than easy or hard trend plots, there is a notable increase in time from either easy or medium trend plots to hard trend plots. 
 }
+\comment{Nice finding! }
 
 We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.
 
@@ -913,7 +917,7 @@ HH: there's no reason to be concerned. your dependent variable is 0/1, that's wh
 We  examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
 
 
-\newdo{Discuss variance/covariance and random effects??}
+\newdo{Discuss variance/covariance and random effects?? HH: Other than we need them? No, I don't think that will be necessary}
 
 
 \subsection{Group Target Selection}
@@ -1004,7 +1008,7 @@ binnedplot(fitted(group.model), resid(group.model))
 \comment{Just another idea of evaluating this data set: For each data set we only consider those evaluations that correctly identify one of the targets. This reveals that participants overall favored groups to lines at a ratio of about 2:1. We remove this overall effect using an intercept, and model group vs line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend+error plots and ellipse+trend plots are significantly different from all of the other designs. Apart from that, the only significant difference between designs is between color+shape+ellipse plots and trend plots.  Surprisingly(?), the two designs sending mixed signals (color + trend, color+ ellipse+trend) end on opposite ends of the scale.  }
 
 \comment{
-My take on this:
+My take on this: HH: I like it, let's keep this!
 
 The similarity/proximity effect (as indicated by clustering and color/shape/etc.) dominates the equation, including dominating the color+trend (good continuation) condition.  
 
@@ -1082,8 +1086,9 @@ binnedplot(fitted(gvl.model), resid(gvl.model))
 
 \bibliographystyle{asa}
 \bibliography{references}
-
-\section*{Simulation Studies of Parameter Space}\label{app:parametersimulation}
+\newpage
+\begin{appendix}
+\section{Simulation Studies of Parameter Space}\label{app:parametersimulation}
 \subsection{Distribution of Test Statistics}
 
 Simulating lineup data sets, we can compare test statistics measuring trend strength, cluster strength, and cluster size inequality for the null plots and target plots. These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). 
@@ -1188,6 +1193,7 @@ The distribution of the cluster statistic values are more easily separated from 
 \subsection{Full Parameter Space Simulation Study}
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength for null and target plots. 
 
+\comment{The setup for this simulation is similar to what Niladri is doing in \citet{niladri:2014}.}
 \newdo{Describe statistics}
 
 Figures \ref{fig:simulationLineIntervals} and \ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of line and cluster summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
@@ -1452,8 +1458,10 @@ Level & Factor & Source & DF & Sum of Squares \\\hline
 \end{tabular}
 \end{table}
 
-\section*{Model Results}
+\section{Model Results}
 
 \input{figure/linear-fixef-table}
 \input{figure/group-fixef-table}
+
+\end{appendix}
 \end{document}
