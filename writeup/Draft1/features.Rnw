@@ -214,9 +214,9 @@ We compute the coefficient of determination for all of the plots to assess the a
 R^2 = 1 - \frac{RSS}{TSS},
 \end{equation}
 where TSS is the total sum of squares, $TSS = \sum_{i=1}^N \left(y_i - \bar{y}\right)^2$ and $RSS = \sum_{i=1}^N e_i^2$, the residual sum of squares.
-The expected value of the coefficient of determination $E[R^2]$ in this scenario is 
+The expected value of the coefficient of determination $E\left[R^2\right]$ in this scenario is 
 \[
-E[R^2] =  \frac{1}{1 + 3\sigma^2_T},
+E\left[R^2\right] =  \frac{1}{1 + 3\sigma^2_T},
 \]
 because
 $E[RSS] = N\sigma^2_T$ and $E[TSS] = \sum_{i=1}^N E\left[y_i^2\right]$  (as $E[Y] = 0$), where 
@@ -254,7 +254,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
       where $\overline{c} = (K+1)/2$ and $s_c^2 = \frac{K(K+1)}{12}$ for all $i = 1, ..., K$.
     \item For the $K$ clusters, we want to have nearly equal sized groups, but allow some variability. Group sizes are therefore determined as a draw from a multinomial distribution: determine group sizes $g = (g_1, ..., g_K)$, with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ as a random draw 
     \[
-    g \sim \text{Multinomial}(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N(\frac{1}{K}, \frac{1}{2 K^2}).
+    g \sim \text{Multinomial}(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N \left(\frac{1}{K}, \frac{1}{2 K^2} \right).
     \]
      
     \item Generate points around cluster centers: 
@@ -292,7 +292,8 @@ qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) +
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
   scale_color_manual(values=colors) + theme(aspect.ratio=1)
 @
-\caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom).}
+\caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom). 
+\comment{Could you include the same colors and shapes as in our lineups?}}
 \end{figure}
 
 %\comment{For the study we used $a=1$, right?\\Susan: Yes, and I thought I'd purged all $a$ from the description accordingly, but I see that I missed one. It's fixed now. }
@@ -529,6 +530,50 @@ Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evalu
 
 
 Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating ``hard" cluster lineups as ``easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.
+
+% <<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
+% 
+% parm.accuracy <- modeldata.long %>% 
+%   group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
+%   summarize(accuracy=mean(correct)) %>%
+%   ungroup() %>%
+%   group_by(trend.diff2, cluster.diff2, k) %>%
+%   transform(total.acc = sum(accuracy))
+% 
+% parm.accuracy$k2 <- paste0("K: ", parm.accuracy$k)
+% parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
+% parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
+% 
+% grid_arrange_shared_legend <- function(...) {
+%     plots <- list(...)
+%     g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
+%     legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+%     lheight <- sum(legend$height)
+%     grid.arrange(
+%         do.call(arrangeGrob, c(lapply(plots, function(x)
+%             x + theme(legend.position="none")), nrow=1)),
+%         legend,
+%         nrow = 2,
+%         heights = unit.c(unit(1, "npc") - lheight, lheight))
+% }
+% 
+% p1 <- qplot(cluster.diff2, accuracy, data=parm.accuracy, facets=k2~trend.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
+%   theme_bw() + xlab("") + 
+%   geom_line(aes(group=answer.type)) + 
+%   scale_colour_brewer("Target Identified", palette="Set1") + 
+%   scale_shape_discrete("Target Identified") + 
+%   theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+%   
+% p2 <- qplot(trend.diff2, accuracy, data=parm.accuracy, facets=k2~cluster.diff2, size=I(3), colour=answer.type, shape=answer.type) + 
+%   theme_bw() + xlab("") + 
+%   geom_line(aes(group=answer.type)) + 
+%   scale_colour_brewer("Target Identified", palette="Set1") + 
+%   scale_shape_discrete("Target Identified") + 
+%   theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+% 
+% 
+% grid_arrange_shared_legend(p1, p2)
+% @
 
 <<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=5, out.width='.9\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
 
@@ -854,7 +899,9 @@ binnedplot(fitted(line.model), resid(line.model))
 @
 
 
-\comment{I'm a bit concerned about the residuals here... thoughts? I'm also not sure where else to go with this particular discussion... yes, the effects exist. No, the dataset effects don't look all that normal, because there's a bunch of parameters in there. Participant effects are normal-ish, though, so that's something. }
+\comment{I'm a bit concerned about the residuals here... thoughts? I'm also not sure where else to go with this particular discussion... yes, the effects exist. No, the dataset effects don't look all that normal, because there's a bunch of parameters in there. Participant effects are normal-ish, though, so that's something. 
+
+HH: there's no reason to be concerned. your dependent variable is 0/1, that's why the residuals don't look normal. The random effects are not normal because theory tells us that they are only asymptotically normal, and there's too much grouping here for things to actually look normal. Just get rid of these residual plots, things are fine. We'll stick to interpreting the estimates.}
 
 We  examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
 
