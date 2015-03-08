@@ -1284,7 +1284,8 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 @
 
 
-As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the time between  trial start and end time. \comment{it is not clear, how the `trial' is defined. it might be better to re-phrase this in terms of the time between presenting the lineup to the participant until the participant submits his/her answer. }
+As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the time between initial lineup presentation (trial start) and answer submission (trial end). 
+% \comment{it is not clear, how the `trial' is defined. it might be better to re-phrase this in terms of the time between presenting the lineup to the participant until the participant submits his/her answer. }
 Examining differences in average response times across trials provides us with an additional measure of trial difficulty or perceptual complexity. 
 We can also explore whether participants spent more time on certain types of plots and whether that additional time increased accurate target identification. 
 In order to remove the ``novelty" effect of an unfamiliar task, we excluded every participant's first trial from this portion of the analysis. 
