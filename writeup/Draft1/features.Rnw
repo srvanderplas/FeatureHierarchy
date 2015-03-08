@@ -436,7 +436,12 @@ Participants were recruited using Amazon's Mechanical Turk service, which connec
 
 Participants were asked to complete an example task similar to the task in the experiment before deciding whether or not to complete the HIT. The lineups used as examples contained only one target (5 trend and 5 cluster trials were provided), and participants had to correctly identify target plots in at least two lineups before being allowed into  the HIT and proceeding to the experimental phase. The webpage used to collect data from Amazon Turk participants is available at \url{http://www.mlcape.com:8080/mahbub/turk16/index.html}. No data was recorded from the example task because participants had not yet provided informed consent. 
 
-Once participants completed the example task and provided informed consent, they could accept the HIT through Amazon and were directed to the main experimental task. Participants were asked to complete 10 lineups, answering ``Which plot is the most different from the others?". Participants were also asked to provide a short summary of their reasoning, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 1 (least confident) to 5 (most confident). After the first question, participants were asked to provide basic demographic information: age range, gender, and highest level of education. Upon completion of 10 lineups, participants were provided with a text code to enter into Amazon Turk in order to receive the advertised payment of \$1.00. Participants took (on average) 8 minutes to complete the HIT (not including the required example task).
+Once participants completed the example task and provided informed consent, they could accept the HIT through Amazon and were directed to the main experimental task. 
+Participants were required to complete 10 lineups, answering ``Which plot is the most different from the others?". Participants were asked to provide a short reason for their choice, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 1 (least confident) to 5 (most confident). 
+After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
+
+%Upon completion of 10 lineups, participants were provided with a text code to enter into Amazon Turk in order to receive the advertised payment of \$1.00. Participants took (on average) 8 minutes to complete the HIT (not including the required example task).
+
 
 
 \section{Results}\label{sec:Results}
@@ -557,27 +562,36 @@ totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time 
 
 Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
 during which time \Sexpr{length(unique(userdata$nick_name))} individuals completed \Sexpr{nrow(userdata)} unique lineup evaluations. Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{incomplete.participant.data} evaluations), and lineup evaluations in excess of 10 for each participant were also removed from the study (\Sexpr{extra.participant.data} evaluations). 
-\newtext{
-After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} trials completed by \Sexpr{length(unique(modeldata$nick_name))} participants. 
-}
-\comment{$12010 \neq 1200 \times 10$ something went wrong.}
+After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} trials completed by \Sexpr{length(unique(modeldata$individualID))} participants. 
 
-\newtext{
-Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, and 
-\Sexpr{
-round(mean(users$age%in%c("18-25", "26-30"))*100)
-}
-\% were between 18 and 30 years of age. 
-}
-\newtext{
-Participants were fairly well-educated: 
-\Sexpr{
-round(mean(users$education%in%levels(users$education)[3:4])*100)
-}\% had at least some undergraduate education, and 
-\Sexpr{
-round(mean(users$education%in%levels(users$education)[5:6])*100)
-}\% had at least some graduate education. 
-}
+Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see figure~\ref{fig:demographics}).
+
+\begin{figure}[ht]
+<<echo=FALSE, fig.width=7.5, fig.height=5, fig.keep='all', fig.show='hold', out.width='.5\\textwidth'>>=
+# cage <- read.csv("../../data/census-age.csv")
+# cage$order <- 1:nrow(cage)
+# cage$Census.age <- reorder(cage$Census.age, cage$order)
+# cage2 <- cage[-(1:3),]
+# levels(cage2$Census.age) <- gsub("   .","", levels(cage2$Census.age))
+# cage2$perc <- cage2$Number/sum(cage2$Number) * nrow(users)
+# qplot(Census.age, weight=perc, data=cage2)
+qplot(age, data=users) + theme_bw() + xlab("Age of participants")
+
+qplot(education, data=users) + theme_bw() + xlab("(self-reported) Highest level of participants' education")
+@
+\caption{\label{fig:demographics}Basic demographics of participants.}
+\end{figure}
+%and 
+%\Sexpr{round(mean(users$age%in%c("18-25", "26-30"))*100)}
+%\% were between 18 and 30 years of age. 
+
+
+%\newtext{
+%Participants were fairly well-educated: 
+%\Sexpr{round(mean(users$education%in%levels(users$education)[3:4])*100)}\% had at least some undergraduate education, and 
+%\Sexpr{round(mean(users$education%in%levels(users$education)[5:6])*100)}\% had at least some graduate education. 
+
+
 
 Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plot.eval.tab)} individuals 
 (\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
