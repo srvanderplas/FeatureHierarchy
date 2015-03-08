@@ -1078,28 +1078,49 @@ Average trial times and accuracy rates for each lineup are shown in figure \ref{
 \begin{figure}
 <<timemodel, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth'>>=
 library(lubridate)
-modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
-modeldata$start <- ymd_hms(modeldata$start_time)
-modeldata <- ddply(modeldata, .(individualID), transform, first = start==min(start))
-modeldata$simple <- modeldata$outcome
-idx <- grep("gini", modeldata$simple)
-modeldata$simple[idx] <- "neither"
 
-time.model <- lmer(log(time_taken)~ simple:plottype +first  + (1|individualID) + (1|data_name), data=modeldata)
-coefs <- data.frame(exp(confint(time.model, method="Wald")))[-(1:2),]
+# modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
+modeldata$first.trial <- modeldata$trial.no == 1
+modeldata$simple <- gsub("gini", "", modeldata$outcome)
+modeldata$simple <- factor(modeldata$simple, levels=c("neither", "cluster", "trend","both"))
+time.model <- lmer(log(as.numeric(trial.time))~ plottype + simple:plottype + first.trial  + (1|individualID) + (1|data_name), data=modeldata)
+
+
+coefs <- data.frame(exp(confint(time.model, method="Wald")))[-(1:11),]
 names(coefs) <- c("low", "high")
-coefs$estimate <- exp(fixef(time.model)[-(1:2)])
-coefs$name <- names(fixef(time.model))[-(1:2)]
+coefs$estimate <- exp(fixef(time.model)[-(1:11)])
+coefs$name <- names(fixef(time.model))[-(1:11)]
 ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
-coefs$outcome <- gsub("simple", "", ll$V1)
-coefs$plottype <- gsub("plottype", "", ll$V2)
+coefs$outcome <- gsub("simple", "", ll$V2)
+coefs$plottype <- gsub("plottype", "", ll$V1)
 coefs$simple <- coefs$outcome %in% c("both")
 coefs$simple <- factor(coefs$simple)
 levels(coefs$simple) <- c("line, group, neither", "both")
+
+coefs2 <- data.frame(exp(confint(time.model, method="Wald")))[2:10,]
+names(coefs2) <- c("low", "high")
+coefs2$estimate <- exp(fixef(time.model)[2:10])
+coefs2$name <- names(fixef(time.model))[2:10]
+coefs2$outcome <-  "neither"
+coefs2$plottype <- gsub("plottype", "", gsub("\\(Intercept\\)", "plain", coefs2$name))
+coefs2$simple <- coefs2$outcome %in% c("both")
+coefs2$simple <- factor(coefs2$simple)
+levels(coefs2$simple) <- c("line, group, neither", "both")
+
+coefs <- rbind(coefs, coefs2)
+coefs$outcome <- factor(coefs$outcome, levels=c("neither", "trend", "cluster", "both"))
+coefs$pos <- as.numeric(factor(coefs$plottype)) + (as.numeric(factor(coefs$outcome))-2.5)/6
+
+
 coefs$plottype <- with(coefs, reorder(plottype, estimate))
-qplot(estimate, plottype, data=coefs, colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
-  scale_colour_brewer(palette="Set1") +
-  geom_segment(aes(x=low, xend=high, y=plottype, yend=plottype)) + facet_wrap(~simple) + xlab("Estimate of the (additional) time taken in seconds for each plot type given outcome") + ylab("")
+ggplot(data=coefs, aes(x=pos, y=estimate, ymin=low, ymax=high, colour=outcome)) + 
+  geom_pointrange() + 
+  scale_colour_brewer(palette="Set1", "Targets\nIdentified") +
+  coord_flip() + 
+  scale_x_continuous("", breaks=1:10, labels=levels(coefs$plottype)) + 
+  annotate(geom="segment", x=0:10+0.5, xend=0:10+0.5, y=-Inf, yend=Inf, color="grey50") + 
+  theme_bw() + 
+  ylab("Estimate of the (additional) time taken in seconds for each plot type given outcome")
 @
 \caption{\label{fig:timemodel} XXX figure would need some additional work, in case we want to keep it.}
 \end{figure}
