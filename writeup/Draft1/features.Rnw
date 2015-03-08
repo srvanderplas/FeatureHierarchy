@@ -433,7 +433,7 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 
 
 \subsection{Participant Recruitment}
-\newdo{describe amazon turk, participant instructions, screening procedures, etc.}
+% \newdo{describe amazon turk, participant instructions, screening procedures, etc.}
 \newtext{
 Participants were recruited using Amazon's Mechanical Turk service, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks which cannot be easily automated. Workers were able to complete the task if they had previously attempted at least 100 HITs with a 95\% successful completion rate. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system. 
 }
