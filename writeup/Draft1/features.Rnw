@@ -584,21 +584,15 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
 Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evaluations identified more than one target plot, and of these multiple identifications, \Sexpr{round(100*(mean(modeldata[modeldata$n.answers>=2,"both.correct"])), 1)}\% identified both targets correctly. 
 
-We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then we will analyze the effect of parameter values on participant performance.
+\newtext{
+We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
-\comment{The two models (1) and (2) have the exact same shape, so just discuss the structure of the model first, and then report the results for the two different dependent variables in the subsections.}
+}
 
-
-
-\subsection{Linear Target Model}
-
-We will model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
-
-We  model the probability of selecting the linear target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
-
+We will model the probability of selecting the relevant target plot as a function of plot aesthetics, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
 
 \begin{align}
-P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
+P(\text{target plot selected}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
 \theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
 \text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
 \hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
@@ -608,6 +602,7 @@ P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:l
 
 We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
 
+\subsubsection{Linear Target Model}
 
 <<line-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
 line.model <- glmer(trend.correct ~ plottype + (1|individualID) + (1|dataset), 
@@ -661,7 +656,9 @@ print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed ef
 \caption{Odds ratios describing the odds of detecting the linear target plot for each aesthetic, relative to a plain scatterplot. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot. \label{fig:linear.fixef}}
 \end{figure}
 
-We  examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
+\newtext{
+Figure \ref{fig:linear.fixef} shows the fixed effects of the linear target model fitted according to equation \ref{eqn:linearModel}. Aesthetic combinations which would be expected to emphasize similarity under gestalt principles significantly decrease the probability of selecting the target plot generated under $M_T$, the trend data model. Only the dual continuity emphasis of Trend + Error bars significantly increases the probability that participants will identify the target plot generated under $M_T$. 
+}
 
 \subsection{Group Target Selection}
 
