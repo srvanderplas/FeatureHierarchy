@@ -1,20 +1,20 @@
-% latex table generated in R 3.1.2 by xtable 1.7-1 package
-% Sun Mar  8 13:39:33 2015
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Sun Mar  8 17:39:17 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrr}
   \hline
 Plot Aesthetic & Log Odds & Std. Error & Z & P value & Tukey Post Hoc Differences \\ 
   \hline
-Shape & 0.1727 & 0.0961 & 1.80 & 0.0724 & d \\ 
-  Color + Shape & 0.0274 & 0.0959 & 0.29 & 0.7752 & d \\ 
-  Color + Trend & 0.0054 & 0.0955 & 0.06 & 0.9546 & d \\ 
-  Trend & -0.0445 & 0.0953 & -0.47 & 0.6401 & cd \\ 
-  Color & -0.0595 & 0.0958 & -0.62 & 0.5345 & cd \\ 
-  Color + Shape + Ellipse & -0.3065 & 0.0950 & -3.23 & 0.0013 & bc \\ 
-  Color + Ellipse & -0.4023 & 0.0945 & -4.26 & 0.0000 & b \\ 
-  Trend + Error & -0.4766 & 0.0947 & -5.03 & 0.0000 & b \\ 
-  Color + Ellipse + Trend + Error & -0.7867 & 0.0947 & -8.31 & 0.0000 & a \\ 
+Shape & 0.1727 & 0.0977 & 1.77 & 0.0771 & d \\ 
+  Color + Shape & 0.0274 & 0.0975 & 0.28 & 0.7788 & d \\ 
+  Color + Trend & 0.0054 & 0.0971 & 0.06 & 0.9554 & d \\ 
+  Trend & -0.0445 & 0.0969 & -0.46 & 0.6458 & cd \\ 
+  Color & -0.0595 & 0.0974 & -0.61 & 0.5413 & cd \\ 
+  Color + Shape + Ellipse & -0.3065 & 0.0967 & -3.17 & 0.0015 & bc \\ 
+  Color + Ellipse & -0.4023 & 0.0963 & -4.18 & 0.0000 & b \\ 
+  Trend + Error & -0.4766 & 0.0965 & -4.94 & 0.0000 & b \\ 
+  Color + Ellipse + Trend + Error & -0.7867 & 0.0966 & -8.15 & 0.0000 & a \\ 
    \hline
 \end{tabular}
 \caption[Fixed effects for group target logistic model]{Fitted values of fixed effects for the model described in \eqref{eqn:groupModel}.} 

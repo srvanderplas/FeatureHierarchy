@@ -267,7 +267,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 
 As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
 
-\newtext{For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: }
+For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
 
 \begin{eqnarray}\label{eq:clusterMeasure}
 \gamma^2 &=& 1 - \frac{CSS}{TSS},\\
@@ -663,7 +663,7 @@ line.fixef.aes$UB <- exp(line.fixef.aes$UB)
 qplot(data=line.fixef.aes, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") + 
   geom_text(aes(x=label, y=0, label=letters)) + 
   coord_flip() + 
-  ylab("Odds Ratio + 95% Wald Interval") + 
+  ylab("Odds + 95% Wald Interval") + 
   xlab("Plot Type") + 
   geom_hline(yintercept=1, colour="gray70") +
   ggtitle("Odds of Selecting Line Target Plot") + 
@@ -679,9 +679,10 @@ print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed ef
 
 \begin{figure}\centering
 \includegraphics[width=.75\linewidth]{figure/line-fixef-1}
-\caption{Odds ratios describing the odds of detecting the linear target plot for each aesthetic, relative to a plain scatterplot. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot. \label{fig:linear.fixef}}
+\caption{Odds of detecting the linear target plot for each aesthetic. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot (plain scatterplot). \label{fig:linear.fixef}}
 \end{figure}
 
+\comment{Be careful with using `odds' versus `odds ratio'. they are not the same. In the model we discuss odds not odds ratios.}
 \newtext{
 Figure \ref{fig:linear.fixef} shows the fixed effects of the linear target model fitted according to equation \ref{eqn:linearModel}. Aesthetic combinations which would be expected to emphasize similarity under gestalt principles significantly decrease the probability of selecting the target plot generated under $M_T$, the trend data model. Only the dual continuity emphasis of Trend + Error bars significantly increases the probability that participants will identify the target plot generated under $M_T$. 
 }
@@ -724,8 +725,9 @@ group.fixef2$LB <- exp(group.fixef2$LB)
 group.fixef2$UB <- exp(group.fixef2$UB)
 
 qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") + 
+  geom_text(aes(x=label, y=0, label=letters)) + 
   coord_flip() + 
-  scale_y_continuous("Odds Ratio + 95% Wald Interval", breaks=c(.5, .75, 1, 1.25)) + 
+  scale_y_continuous("Odds + 95% Wald Interval", breaks=c(.5, .75, 1, 1.25)) + 
   xlab("Plot Type") + 
   geom_hline(yintercept=1, colour="gray70") +
   ggtitle("Odds of Selecting Group Target Plot") + 
@@ -741,11 +743,11 @@ print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effe
 
 \begin{figure}\centering
 \includegraphics[width=.75\linewidth]{figure/group-model-1}
-\caption{Odds ratios describing the odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in group size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
+\caption{Odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in group size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
 \end{figure}
 
 \newtext{
-Figure \ref{fig:group.fixef} contains odds ratios and intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
+Figure \ref{fig:group.fixef} contains odds and intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
 According to the model results, no plot aesthetics significantly increase the likelihood of selecting the group target plot; however, several aesthetic combinations decrease this likelihood. Consistent with our hypothesis,  Color + Ellipse + Trend + Error and Trend + Error plot aesthetic combinations significantly decrease the detection of the group target plot. 
 }
 \newtext{
@@ -763,6 +765,8 @@ This effect actually provides some additional information as to the hierarchy of
 The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not in the way the authors originally intended). 
 In future experiments, it will be advantageous to control the variability in group size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. 
 }
+
+\comment{Here, we could add some discussion of the gini index.}
 
 \subsection{Face-Off: Group versus Line}
 \comment{Just another idea of evaluating this data set: For each data set we only consider those evaluations that correctly identify one of the targets. This reveals that participants overall favored groups to lines at a ratio of about 2:1. We remove this overall effect using an intercept, and model group vs line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend+error plots and ellipse+trend plots are significantly different from all of the other designs. Apart from that, the only significant difference between designs is between color+shape+ellipse plots and trend plots.  Surprisingly(?), the two designs sending mixed signals (color + trend, color+ ellipse+trend) end on opposite ends of the scale.  }
