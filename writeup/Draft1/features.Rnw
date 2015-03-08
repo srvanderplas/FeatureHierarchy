@@ -562,8 +562,8 @@ totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time 
 \subsection{General results}
 \comment{We need to clean out a couple of these answers. Our study was built around haveing people evaluate ten lineups. That is what I'd like the data to be cut to - kick out all individuals with fewer than ten lineups and only take the first ten evaluations from participants. Keep track at each step of how many evaluations that is costing us ... 
 
-1060 trials (participant completed <10 trials total)\\
-422 trials (participant completed >10 trials)}
+1060 trials (participant completed $<10$ trials total)\\
+422 trials (participant completed $>10$ trials)}
 
 \comment{It would also be interesting to see, if individuals picked mostly lines or mostly groups or whether there was a mix of both. }
 
