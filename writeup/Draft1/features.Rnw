@@ -567,7 +567,7 @@ After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} t
 Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see figure~\ref{fig:demographics}).
 
 \begin{figure}[ht]
-<<echo=FALSE, fig.width=7.5, fig.height=5, fig.keep='all', fig.show='hold', out.width='.49\\textwidth'>>=
+<<demographics, echo=FALSE, fig.width=7.5, fig.height=5, fig.keep='all', fig.show='hold', out.width='.48\\textwidth'>>=
 # cage <- read.csv("../../data/census-age.csv")
 # cage$order <- 1:nrow(cage)
 # cage$Census.age <- reorder(cage$Census.age, cage$order)
@@ -575,9 +575,9 @@ Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(m
 # levels(cage2$Census.age) <- gsub("   .","", levels(cage2$Census.age))
 # cage2$perc <- cage2$Number/sum(cage2$Number) * nrow(users)
 # qplot(Census.age, weight=perc, data=cage2)
-qplot(age, data=users) + theme_bw() + xlab("Age of participants")
+qplot(age, data=users) + theme_bw() + xlab("Age of participants") + ylab("# Participants") + ggtitle("Participant Age Distribution")
 
-qplot(education, data=users) + theme_bw() + xlab("(self-reported) Highest level of participants' education")
+qplot(education, data=users) + theme_bw() + xlab("(self-reported) Highest level of participants' education") + ylab("# Participants") + ggtitle("Participant Education Levels")
 @
 \caption{\label{fig:demographics}Basic demographics of participants.}
 \end{figure}
@@ -603,22 +603,12 @@ Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evalu
 \newtext{
 We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
-<<<<<<< HEAD
-}
-
-We will model the probability of selecting the relevant target plot as a function of plot aesthetics, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
-
-\begin{align}
-P(\text{target plot selected}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
-\theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
-=======
 We  model the probability of selecting the linear target plot as a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
 
 For plot type $i$, displaying dataset $j=1, ..., 54$ and participant $k=1, ..., P$, we model
-
+}
 \begin{align}
 \text{logit }P(\text{success}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:linearModel}\\
->>>>>>> a756f4447f88df83264450ea9189dcbbad5fa234
 \text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
 \hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
 \hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{, the random effect for participant characteristics}\nonumber\\
