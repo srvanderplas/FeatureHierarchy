@@ -568,18 +568,28 @@ totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time 
 \comment{It would also be interesting to see, if individuals picked mostly lines or mostly groups or whether there was a mix of both. }
 
 Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
-during which time \Sexpr{length(unique(modeldata$individualID))} individuals completed \Sexpr{nrow(modeldata)} unique lineup evaluations. Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{length(incomplete.participant.data)} evaluations), and lineup evaluations in excess of 10 were also removed from the study (\Sexpr{length(extra.participant.data)} evaluations). 
+during which time \Sexpr{length(unique(userdata$nick_name))} individuals completed \Sexpr{nrow(userdata)} unique lineup evaluations. Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{incomplete.participant.data} evaluations), and lineup evaluations in excess of 10 for each participant were also removed from the study (\Sexpr{extra.participant.data} evaluations). 
+\newtext{
+After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} trials completed by \Sexpr{length(unique(modeldata$nick_name))} participants. 
+}
 
 \newtext{
 Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, and 
 \Sexpr{
-round(mean(users$age%in%c("18-25", "26-30")))
+round(mean(users$age%in%c("18-25", "26-30"))*100)
 }
 \% were between 18 and 30 years of age. 
 }
 \newtext{
-Participants were fairly well-educated: \Sexpr{round(mean(users$education%in%levels(users$education)[3:4])*100)}\% had at least some undergraduate education, and \Sexpr{round(mean(users$education%in%levels(users$education)[5:6])*100)}\% had at least some graduate education. 
+Participants were fairly well-educated: 
+\Sexpr{
+round(mean(users$education%in%levels(users$education)[3:4])*100)
+}\% had at least some undergraduate education, and 
+\Sexpr{
+round(mean(users$education%in%levels(users$education)[5:6])*100)
+}\% had at least some graduate education. 
 }
+
 Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plot.eval.tab)} individuals 
 (\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
