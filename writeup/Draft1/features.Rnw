@@ -453,6 +453,12 @@ lineups <- read.csv("../../Images/Turk16/data-picture-details-gini.csv", strings
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
 
+users <- read.csv("../../Images/Turk16/turk16_users.csv", stringsAsFactors=F, header=F)
+names(users) <- c("nick_name", "age", "gender", "education", "ip_address")
+users$age <- factor(users$age, levels=0:10, labels=c("NA", "<18", "18-25", "26-30", "31-35", "36-40", "41-45", "45-50", "51-55", "56-60", "61+"))
+users$gender <- factor(users$gender, levels=0:2, labels=c("NA", "Male", "Female"))
+users$education <- factor(users$education, levels=0:5, labels=c("NA", "High School or less", "Some college", "Bachelor's degree", "Some graduate school", "Graduate degree"))
+
 userdata <- read.csv("../../Data/turk16_results.csv", stringsAsFactors=FALSE)
 userdata$response.id <- 1:nrow(userdata)
 # table(userdata$ip_address, userdata$nick_name)
@@ -483,15 +489,24 @@ useranswers$end_time <- ymd_hms(useranswers$end_time)
 useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
 useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = order(start_time, decreasing=F))
 
+# Remove data from <18 participants
+useranswers <- filter(useranswers, !nick_name%in%users$nick_name[users$age=="<18"])
+users <- filter(users, age!="<18")
 
 modeldata <- useranswers[,c(1, 2, 9:29, 3:8)]
+
+# Remove data from participants who did not complete 10 trials
 incomplete.participants <- unique(modeldata$nick_name[modeldata$ntrials<10])
 incomplete.participant.data <- sum(modeldata$ntrials<10)
 message(paste0(sum(modeldata$ntrials<10), " trials removed because participant completed <10 trials total."))
+# Remove data from participants who completed > 10 trials
 modeldata <- filter(modeldata, ntrials>=10)
 extra.participant.data <- sum(modeldata$trial.no>10)
 message(paste0(sum(modeldata$trial.no>10), " trials removed because participant >10 trials."))
 modeldata <- filter(modeldata, trial.no<=10)
+# Remove users from database who didn't complete any trials
+message(paste0(sum(!users$nick_name%in%modeldata$nick_name), " users removed from user database - no trials found."))
+users <- users %>% filter(nick_name%in%modeldata$nick_name)
 
 modeldata$outcome <- paste(c("", "trend")[1+as.numeric(modeldata$trend.correct==1)], 
                            c("", "cluster")[1+as.numeric(modeldata$cluster.correct==1)], 
@@ -542,14 +557,6 @@ modeldata.long$plottype <-
 
 
 totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time = max(end_time)-min(start_time))
-
-users <- read.csv("../../Images/Turk16/turk16_users.csv", stringsAsFactors=F, header=F)
-names(users) <- c("nick_name", "age", "gender", "education", "ip_address")
-users$age <- factor(users$age, levels=0:10, labels=c("NA", "<18", "18-25", "26-30", "31-35", "36-40", "41-45", "45-50", "51-55", "56-60", "61+"))
-users$gender <- factor(users$gender, levels=0:2, labels=c("NA", "Male", "Female"))
-users$education <- factor(users$education, levels=0:5, labels=c("NA", "High School or less", "Some college", "Bachelor's degree", "Some graduate school", "Graduate degree"))
-message(paste0(sum(!users$nick_name%in%modeldata$nick_name), " users removed from user database - no trials found."))
-users <- users %>% filter(nick_name%in%modeldata$nick_name)
 @
 
 \subsection{General results}
@@ -561,7 +568,18 @@ users <- users %>% filter(nick_name%in%modeldata$nick_name)
 \comment{It would also be interesting to see, if individuals picked mostly lines or mostly groups or whether there was a mix of both. }
 
 Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
-during which time \Sexpr{length(unique(modeldata$individualID))} individuals completed \Sexpr{nrow(modeldata)} unique lineup evaluations. Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{incomplete.participants} participants, \Sexpr{incomplete.participant.data} evaluations), and trials in excess of 10 trials were also removed from the study (\Sexpr{extra.participant.data} evaluations). 
+during which time \Sexpr{length(unique(modeldata$individualID))} individuals completed \Sexpr{nrow(modeldata)} unique lineup evaluations. Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{length(incomplete.participant.data)} evaluations), and lineup evaluations in excess of 10 were also removed from the study (\Sexpr{length(extra.participant.data)} evaluations). 
+
+\newtext{
+Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, and 
+\Sexpr{
+round(mean(users$age%in%c("18-25", "26-30")))
+}
+\% were between 18 and 30 years of age. 
+}
+\newtext{
+Participants were fairly well-educated: \Sexpr{round(mean(users$education%in%levels(users$education)[3:4])*100)}\% had at least some undergraduate education, and \Sexpr{round(mean(users$education%in%levels(users$education)[5:6])*100)}\% had at least some graduate education. 
+}
 Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plot.eval.tab)} individuals 
 (\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
