@@ -12,6 +12,7 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage[dvipsnames,svgnames, table]{xcolor}
+\usepackage{hyperref}
 \graphicspath{{figure/}}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -438,6 +439,18 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 
 \subsection{Participant Recruitment}
 \newdo{describe amazon turk, participant instructions, screening procedures, etc.}
+\newtext{
+Participants were recruited using Amazon's Mechanical Turk service, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks which cannot be easily automated. Workers were able to complete the task if they had previously attempted at least 100 HITs with a 95\% successful completion rate. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system. 
+}
+
+\newtext{
+Participants were asked to complete an example task similar to the task in the experiment before deciding whether or not to complete the HIT. The lineups used as examples contained only one target (5 trend and 5 cluster trials were provided), and we asked that participants correctly identify target plots in at least two lineups before accepting the HIT and proceeding to the experimental phase. The webpage used to collect data from Amazon Turk participants is avilable at \url{http://www.mlcape.com:8080/mahbub/turk16/index.html}. No data was recorded from the example task because participants had not yet provided informed consent. 
+}
+
+\newtext{
+Once participants completed the example task and provided informed consent, they could accept the HIT through Amazon and were directed to the main experimental task. Participants were asked to complete 10 lineups, answering ``Which plot is the most different from the others?". Participants were also asked to provide a short summary of their reasoning, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 1 (least confident) to 5 (most confident). After the first question, participants were asked to provide basic demographic information: age range, gender, and highest level of education. Upon completion of 10 lineups, participants were provided with a text code to enter into Amazon Turk in order to receive the advertised payment of \$1.00. Participants took (on average) 8 minutes to complete the HIT (not including the required example task).
+}
+
 
 \section{Results}
 <<results-setup,echo=F,include=F>>=
