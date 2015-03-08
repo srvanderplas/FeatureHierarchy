@@ -173,7 +173,7 @@ This study is designed to inform our understanding of the perceptual implication
 We will discuss the experimental design, model considerations, and graphical features compared experimentally in section \ref{sec:ExperimentalDesign}. 
 The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. Experimental results are presented in section \ref{sec:Results}, and implications and conclusions are discussed in section \ref{sec:Conclusion}. 
 
-\section{Experimental Design} \label{sec:ExperimentalDesign}
+\section{Experimental Setup and Design} \label{sec:ExperimentalDesign}
 
 In this section, we discuss the generating data models for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
 
@@ -202,7 +202,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   \begin{enumerate}
     \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$. 
     \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, where $\eta_i \sim \text{Unif}(-z, z)$, $z = \frac{2}{5(N-1)}$.
-    \item Generate $y_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$.
+    \item Generate $y_i$ as a linear regressand of $x_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$.
     \item Center and scale $x_i$, $y_i$.
   \end{enumerate}
 \end{algorithm}
@@ -250,12 +250,12 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
         \tilde{c}^x_{i} = \frac{c^x_{i} - \bar{c}}{s_c} \ \ \text{ and } \ \ \tilde{c}^y_{i} = \frac{c^y_{i} - \bar{c}}{s_c},
       \]
       where $\overline{c} = (K+1)/2$ and $s_c^2 = \frac{K(K+1)}{12}$ for all $i = 1, ..., K$.
-    \item For the $K$ clusters, we want to have nearly equal sized groups, but allow some variability. Group sizes are therefore determined as a draw from a multinomial distribution: determine group sizes $g = (g_1, ..., g_K)$, with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ as a random draw 
+    \item For the $K$ clusters, we want to have nearly equal sized groups, but allow some variability. Group sizes  $g = (g_1, ..., g_K)$ with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ are therefore determined as a draw from a multinomial distribution: 
     \[
-    g \sim \text{Multinomial}(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N \left(\frac{1}{K}, \frac{1}{2 K^2} \right).
+    g \sim \text{Multinomial }(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N \left(\frac{1}{K}, \frac{1}{2 K^2} \right).
     \]
      
-    \item Generate points around cluster centers: 
+    \item Generate points around cluster centers by adding small normal perturbations: 
       \begin{eqnarray*}
         x_i &=& \tilde{c}^x_{g_i} + e^x_i, \text{ where } e^x_i \sim N(0, \sigma^2_C),\\
         y_i &=& \tilde{c}^y_{g_i} + e^y_i, \text{ where } e^y_i \sim N(0, \sigma^2_C).
@@ -267,7 +267,6 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 
 As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
 
-\newdo{add cluster equation}
 \newtext{For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: }
 
 \begin{eqnarray}\label{eq:clusterMeasure}
@@ -344,18 +343,17 @@ $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .15, .20, .25 
 \caption{Parameter settings for generation of lineup datasets. \label{tab:parameters}}
 \end{table}
 
-\comment{the simulation is so nice, maybe you could include one more sentence on the idea. Niladri did something similar in his Where's Waldo paper. Need to ask Di for a reference.}
+The parameter values were chosen after examining the full parameter space through simulation of 1000 lineup datasets for each combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$; 
+for each data set generated, the previously described statistics for  trend  and cluster strength were computed. We compared the statistics for the relevant target plot to the most extreme value for the 18 null plots. % - for instance, the trend target plot $R^2$ value was compared to the maximum $R^2$ value in the 18 null plots. 
+These evaluations provide an estimate of the difficulty of identifying the target plot numerically; a target plot with $R^2=0.95$ would be very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ would make the target a lot more difficult. Graphical summaries of simulation results are provided in appendix \ref{app:parametersimulation}.
 
-The parameter values were chosen after examining the full parameter space through simulation of 1000 lineup datasets for each combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$; \newtext{
-for each data set generated, statistics describing the trend strength and cluster strength were computed. We compared statistics for the relevant target plot to the most extreme value for the 18 null plots - for instance, the trend target plot $R^2$ value was compared to the maximum $R^2$ value in the 18 null plots. These evaluations provide an estimate of the difficulty of identifying the target plot numerically; a target plot with $R^2=0.95$ would be very easy to identify when surrounded by null plots with $R^2=0.5$. Graphical summaries of simulation results are provided in appendix \ref{app:parametersimulation}.
-}
 % \comment{I want even more details: how did you get the results?}
 Using information from the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. It is important to note that the numerical measures we have described in equations \eqref{eq:linearMeasure} and \eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with information on the perceptual discriminability, and it has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
 
 Each of the generated datasets is then plotted as a lineup, where we apply aesthetics which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change participants' ability to identify each target plot. The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
 
-
-\subsection{Plot Aesthetics}
+\subsection{Lineup Rendering}
+\subsubsection{Plot Aesthetics}
 Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in figure \ref{fig:plotExamples}.
 
 \begin{figure}[ht]
@@ -392,12 +390,12 @@ We expect that relative to a plot with no extra aesthetics or statistical layers
 
 Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval  increases the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decreases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
 
-\subsection{Experimental Design}
+\subsubsection{Experimental Design}
 The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination.
 
 \newdo{Need to find some graphic/table which makes this a bit more clear.}
 
-\subsection{Color and Shape Palettes}
+\subsubsection{Color and Shape Palettes}
 Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
 
 \begin{figure}
@@ -434,17 +432,11 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 
 \subsection{Participant Recruitment}
 % \newdo{describe amazon turk, participant instructions, screening procedures, etc.}
-\newtext{
-Participants were recruited using Amazon's Mechanical Turk service, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks which cannot be easily automated. Workers were able to complete the task if they had previously attempted at least 100 HITs with a 95\% successful completion rate. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system. 
-}
+Participants were recruited using Amazon's Mechanical Turk service, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks which cannot be easily automated. Only workers with at least 100 previous HITs at a 95\% successful completion rate were allowed to sign up for completing the task. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system. 
 
-\newtext{
-Participants were asked to complete an example task similar to the task in the experiment before deciding whether or not to complete the HIT. The lineups used as examples contained only one target (5 trend and 5 cluster trials were provided), and we asked that participants correctly identify target plots in at least two lineups before accepting the HIT and proceeding to the experimental phase. The webpage used to collect data from Amazon Turk participants is avilable at \url{http://www.mlcape.com:8080/mahbub/turk16/index.html}. No data was recorded from the example task because participants had not yet provided informed consent. 
-}
+Participants were asked to complete an example task similar to the task in the experiment before deciding whether or not to complete the HIT. The lineups used as examples contained only one target (5 trend and 5 cluster trials were provided), and participants had to correctly identify target plots in at least two lineups before being allowed into  the HIT and proceeding to the experimental phase. The webpage used to collect data from Amazon Turk participants is available at \url{http://www.mlcape.com:8080/mahbub/turk16/index.html}. No data was recorded from the example task because participants had not yet provided informed consent. 
 
-\newtext{
 Once participants completed the example task and provided informed consent, they could accept the HIT through Amazon and were directed to the main experimental task. Participants were asked to complete 10 lineups, answering ``Which plot is the most different from the others?". Participants were also asked to provide a short summary of their reasoning, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 1 (least confident) to 5 (most confident). After the first question, participants were asked to provide basic demographic information: age range, gender, and highest level of education. Upon completion of 10 lineups, participants were provided with a text code to enter into Amazon Turk in order to receive the advertised payment of \$1.00. Participants took (on average) 8 minutes to complete the HIT (not including the required example task).
-}
 
 
 \section{Results}\label{sec:Results}
@@ -560,10 +552,6 @@ totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time 
 @
 
 \subsection{General results}
-\comment{We need to clean out a couple of these answers. Our study was built around haveing people evaluate ten lineups. That is what I'd like the data to be cut to - kick out all individuals with fewer than ten lineups and only take the first ten evaluations from participants. Keep track at each step of how many evaluations that is costing us ... 
-
-1060 trials (participant completed $<10$ trials total)\\
-422 trials (participant completed $>10$ trials)}
 
 \comment{It would also be interesting to see, if individuals picked mostly lines or mostly groups or whether there was a mix of both. }
 
@@ -572,6 +560,7 @@ during which time \Sexpr{length(unique(userdata$nick_name))} individuals complet
 \newtext{
 After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} trials completed by \Sexpr{length(unique(modeldata$nick_name))} participants. 
 }
+\comment{$12010 \neq 1200 \times 10$ something went wrong.}
 
 \newtext{
 Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, and 
