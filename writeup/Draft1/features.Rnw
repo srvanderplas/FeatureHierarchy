@@ -637,10 +637,6 @@ print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed ef
 
 We  examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). For plot type $i = 1, ..., 10$ displaying dataset $j=1, ..., 54$ by participant $k=1, ..., P$, 
 
-
-\newdo{Discuss variance/covariance and random effects?? HH: Other than we need them? No, I don't think that will be necessary}
-
-
 \subsection{Group Target Selection}
 
 \newtext{
@@ -700,31 +696,6 @@ print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effe
 \caption{Odds ratios describing the odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in group size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
 \end{figure}
 
-<<group-ranef,echo=FALSE, dependson='group-model', fig.width=4, fig.height=4, fig.keep='all', fig.show='hold', out.width='.45\\linewidth'>>=
-group.ranef.individual <- as.data.frame(ranef(group.model)[[1]])
-names(group.ranef.individual) <- "value"
-group.ranef.individual$id <- rownames(group.ranef.individual)
-group.ranef.individual$type="Participant Effects"
-
-group.ranef.data <- as.data.frame(ranef(group.model)[[2]])
-names(group.ranef.data) <- "value"
-group.ranef.data$id <- rownames(group.ranef.data)
-group.ranef.data$type="Dataset Effects"
-
-group.resid <- data.frame(id=modeldata$response.id, value=resid(group.model), type="Residuals")
-
-group.random.effects <- rbind(group.ranef.data, group.ranef.individual, group.resid)
-
-ggplot(data=group.random.effects) + 
-  geom_density(aes(x=value, fill=type)) + 
-  facet_grid(.~type) + 
-  scale_fill_discrete(guide="none")
-
-library(arm)
-binnedplot(fitted(group.model), resid(group.model))
-# this still seems like a problem. 
-@
-
 \subsection{Face-Off: Group versus Line}
 \comment{Just another idea of evaluating this data set: For each data set we only consider those evaluations that correctly identify one of the targets. This reveals that participants overall favored groups to lines at a ratio of about 2:1. We remove this overall effect using an intercept, and model group vs line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend+error plots and ellipse+trend plots are significantly different from all of the other designs. Apart from that, the only significant difference between designs is between color+shape+ellipse plots and trend plots.  Surprisingly(?), the two designs sending mixed signals (color + trend, color+ ellipse+trend) end on opposite ends of the scale.  }
 
@@ -781,25 +752,6 @@ ggplot(data=gvl.fixef[-1,]) +
 @
 \caption{\label{fig:faceoff} Estimated odds of decision for group versus line target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different, if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
-
-<<groupVline-ranef,echo=F,out.width='.45\\linewidth', fig.show='hold'>>=
-gvl.ranef.data <- as.data.frame(ranef(gvl.model)[[1]])
-names(gvl.ranef.data) <- "value"
-gvl.ranef.data$id <- rownames(gvl.ranef.data)
-gvl.ranef.data$type="Dataset Effects"
-
-gvl.resid <- data.frame(id=designs$dataset, value=resid(gvl.model), type="Residuals")
-
-gvl.random.effects <- rbind(gvl.ranef.data, gvl.resid)
-
-ggplot(data=gvl.random.effects) + 
-  geom_density(aes(x=value, fill=type)) + 
-  facet_grid(.~type) + 
-  scale_fill_discrete(guide="none")
-
-library(arm)
-binnedplot(fitted(gvl.model), resid(gvl.model))
-@
 
 \subsection{Signal Strength}
 
