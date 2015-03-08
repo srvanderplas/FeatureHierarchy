@@ -1215,8 +1215,6 @@ Level & Factor & Source & DF & Sum of Squares \\\hline
 
 \section{Graphical Exploration}
 
-\subsection{Graphical Exploration}
-
 \comment{The graphical exploration is very much not straightforward - let's move it to the back and get the results from the models. Accuracy first: line, group, faceoff. Time and Confidence level second. }
 
 Figure \ref{fig:accuracy-parms} shows aggregate parameter-level accuracy rates. Participants appear to be less accurate \comment{? I don't see that - the percentages of neither are higher for $K=5$.} when evaluating plots with $K=3$ clusters,  and appear to be at least as successful at evaluating ``hard" cluster lineups as ``easy" cluster lineups, conditional on trend difficulty. There also appears to be an interaction between number of clusters, $K$, and trend difficulty that may merit further evaluation.  
