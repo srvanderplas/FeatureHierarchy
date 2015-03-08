@@ -746,25 +746,22 @@ print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effe
 \caption{Odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in group size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
 \end{figure}
 
-\newtext{
+
 Figure \ref{fig:group.fixef} contains odds and intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
 According to the model results, no plot aesthetics significantly increase the likelihood of selecting the group target plot; however, several aesthetic combinations decrease this likelihood. Consistent with our hypothesis,  Color + Ellipse + Trend + Error and Trend + Error plot aesthetic combinations significantly decrease the detection of the group target plot. 
-}
-\newtext{
+
 However, Color + Ellipse and Color + Shape + Ellipse also decrease group target detection is not consistent with our hypotheses. Examination of participants' reasons for selecting specific target plots provides at least some explanation; participants cited reasons such as 
 ``There is no circle highlighting the yellow symbols in this plot" %line 13515 
 and 
 ``Lack of a circle around the red symbols".  %line 13516
-}
 
-\newtext{
 This suggests that our group allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of groups and the presence of the additional similarity cue. 
 Numerically, these null data sets had uneven group allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. 
 Visually, the conspicuous absence of an ellipse would lead participants to select null plots with that feature.
 This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with group size $<3$), participants were more likely to identify the group target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
 The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not in the way the authors originally intended). 
 In future experiments, it will be advantageous to control the variability in group size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. 
-}
+
 
 \comment{Here, we could add some discussion of the gini index.}
 
@@ -818,7 +815,7 @@ ggplot(data=gvl.fixef[-1,]) +
   theme_bw() + 
   geom_hline(yintercept=1, colour="gray70") + 
   ggtitle("Odds of Selecting Group vs Line Target \n (given one target was identified)") + 
-  ylab("Odds Ratio (Group / Line)") + 
+  ylab("Odds (Group vs Line) and 95% Wald Intervals") + 
   xlab("Plot Type") + 
   geom_text(aes(y=0, x=label, label=letters))
 @
