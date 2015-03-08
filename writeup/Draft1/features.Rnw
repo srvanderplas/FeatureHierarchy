@@ -169,14 +169,11 @@ Using this testing framework, we  apply different aesthetics, such as color and 
 
 This study is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. %awesome alliteration, right? HH: :)
 
-\comment{Extend this to a roadmap for the rest of the paper}
-The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations.
+% \comment{Extend this to a roadmap for the rest of the paper}
+We will discuss the experimental design, model considerations, and graphical features compared experimentally in section \ref{sec:ExperimentalDesign}. 
+The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. Experimental results are presented in section \ref{sec:Results}, and implications and conclusions are discussed in section \ref{sec:Conclusion}. 
 
-
-
-
-
-\section{Experimental Design}
+\section{Experimental Design} \label{sec:ExperimentalDesign}
 
 In this section, we discuss the generating data models for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
 
@@ -448,7 +445,7 @@ Once participants completed the example task and provided informed consent, they
 }
 
 
-\section{Results}
+\section{Results}\label{sec:Results}
 <<results-setup,echo=F,include=F>>=
 lineups <- read.csv("../../Images/Turk16/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
@@ -1117,7 +1114,7 @@ binnedplot(fitted(gvl.model), resid(gvl.model))
 
 \subsection{Signal Strength}
 
-\section{Discussion}
+\section{Discussion}\label{sec:Conclusion}
 
 \bibliographystyle{asa}
 \bibliography{references}
