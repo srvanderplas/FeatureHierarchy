@@ -819,61 +819,6 @@ When trend and error are present in the same plot, additional Gestalt ordering p
 This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend+error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
 
-
-\subsection{Numerical Signal Strength}
-\comment{I feel like this should be in here, but it's not that clear what the significance is...? Any model is just going to be really confusing, in my opinion. }
-
-\comment{OK, I agree, that we should be talking about the parameters at some place, but in terms of accuracy we are not going to get anywhere, because the results are, as you say, pretty confusing. So let's leave this for later and only include the parameter analysis for the speed and confidence analysis. }
-
-<<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=6.5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
-
-parm.accuracy <- modeldata.long %>% 
-  group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
-  summarize(accuracy=mean(correct)) %>%
-  ungroup() %>%
-  group_by(trend.diff2, cluster.diff2, k) %>%
-  transform(total.acc = sum(accuracy))
-
-parm.accuracy$k2 <- paste0("K: ", parm.accuracy$k)
-parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
-parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
-
-grid_arrange_shared_legend <- function(...) {
-    plots <- list(...)
-    g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
-    legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-    lheight <- sum(legend$height)
-    grid.arrange(
-        do.call(arrangeGrob, c(lapply(plots, function(x)
-            x + theme(legend.position="none")), nrow=1)),
-        legend,
-        nrow = 2,
-        heights = unit.c(unit(1, "npc") - lheight, lheight))
-}
-
-p1 <- qplot(cluster.diff2, accuracy, data=parm.accuracy, facets=k2~trend.diff2, colour=answer.type, linetype=answer.type) + 
-  theme_bw() + xlab("") + 
-  geom_line(aes(group=answer.type), size=1) + 
-  scale_y_continuous("Accuracy", limits=c(0,1)) + 
-  scale_colour_brewer("Target Identified", palette="Set1") + 
-  scale_linetype_manual("Target Identified", values=c(1,3, 4)) + 
-  # scale_size_manual("Target Identified", values=c(1, 6, 3)) +
-  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5)) 
-  
-p2 <- qplot(trend.diff2, accuracy, data=parm.accuracy, facets=k2~cluster.diff2, colour=answer.type, linetype=answer.type) + 
-  theme_bw() + xlab("") + 
-  geom_line(aes(group=answer.type), size=1) + 
-  scale_y_continuous("Accuracy", limits=c(0,1)) + 
-  scale_colour_brewer("Target Identified", palette="Set1") + 
-  scale_linetype_manual("Target Identified", values=c(1,3, 4)) + 
-  # scale_size_manual("Target Identified", values=c(1, 6, 3)) +
-  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5)) 
-
-
-grid_arrange_shared_legend(p1, p2)
-@
-
-
 \subsection{Response Time}
 
 
@@ -1257,6 +1202,111 @@ qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype
 %' qplot(data=timemodel.ci[-c(1:6),], x=label, y=Estimate, ymin=LB, ymax=UB, geom="pointrange") + coord_flip() + ylab("Average Additional Time in Seconds To Identify Target Plot") + xlab("") + theme_bw()
 %' @
 %' 
+
+
+\comment{I feel like this should be in here, but it's not that clear what the significance is...? Any model is just going to be really confusing, in my opinion. }
+
+\comment{OK, I agree, that we should be talking about the parameters at some place, but in terms of accuracy we are not going to get anywhere, because the results are, as you say, pretty confusing. So let's leave this for later and only include the parameter analysis for the speed and confidence analysis. }
+
+<<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=6.5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
+
+parm.accuracy <- modeldata.long %>% 
+  group_by(trend.diff2, cluster.diff2, k, answer.type) %>% 
+  summarize(accuracy=mean(correct)) %>%
+  ungroup() %>%
+  group_by(trend.diff2, cluster.diff2, k) %>%
+  transform(total.acc = sum(accuracy))
+
+parm.accuracy$k2 <- paste0("K: ", parm.accuracy$k)
+parm.accuracy$answer.type <- factor(parm.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
+parm.accuracy$cluster.diff2 <- factor(parm.accuracy$cluster.diff2, levels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
+
+grid_arrange_shared_legend <- function(...) {
+    plots <- list(...)
+    g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
+    legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+    lheight <- sum(legend$height)
+    grid.arrange(
+        do.call(arrangeGrob, c(lapply(plots, function(x)
+            x + theme(legend.position="none")), nrow=1)),
+        legend,
+        nrow = 2,
+        heights = unit.c(unit(1, "npc") - lheight, lheight))
+}
+
+p1 <- qplot(cluster.diff2, accuracy, data=parm.accuracy, facets=k2~trend.diff2, colour=answer.type, linetype=answer.type) + 
+  theme_bw() + xlab("") + 
+  geom_line(aes(group=answer.type), size=1) + 
+  scale_y_continuous("Accuracy", limits=c(0,1)) + 
+  scale_colour_brewer("Target Identified", palette="Set1") + 
+  scale_linetype_manual("Target Identified", values=c(1,3, 4)) + 
+  # scale_size_manual("Target Identified", values=c(1, 6, 3)) +
+  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5)) 
+  
+p2 <- qplot(trend.diff2, accuracy, data=parm.accuracy, facets=k2~cluster.diff2, colour=answer.type, linetype=answer.type) + 
+  theme_bw() + xlab("") + 
+  geom_line(aes(group=answer.type), size=1) + 
+  scale_y_continuous("Accuracy", limits=c(0,1)) + 
+  scale_colour_brewer("Target Identified", palette="Set1") + 
+  scale_linetype_manual("Target Identified", values=c(1,3, 4)) + 
+  # scale_size_manual("Target Identified", values=c(1, 6, 3)) +
+  theme(legend.position="bottom", axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5)) 
+
+
+grid_arrange_shared_legend(p1, p2)
+@
+
+
+<<parameters-time,echo=FALSE, fig.cap="There is no evidence that parameter settings significantly impacted time to completion. \\label{fig:parameterTime}", fig.width=8, fig.height=4, out.width='.75\\linewidth'>>=
+par.time <- lmer(log(as.numeric(trial.time)) ~ trend.diff*cluster.diff*k + (1|individualID) + (1|dataset), data=modeldata)
+
+par.time.fixef <- data.frame(estimate=fixef(par.time), confint(par.time, method="Wald"))
+names(par.time.fixef)[2:3] <- c("LB", "UB")
+par.time.fixef$label <- rownames(par.time.fixef) %>%
+  str_replace_all(fixed(":"), " x ") %>%
+  str_replace_all(fixed("trend.diff"), "Trend:") %>% 
+  str_replace_all(fixed("cluster.diff"), "Cluster:") %>%
+  str_replace_all("k", "K:") %>%
+  str_replace_all("medium", "Medium") %>% 
+  str_replace_all("hard", "Hard")
+par.time.fixef$label <- factor(par.time.fixef$label, levels=par.time.fixef$label)
+
+ggplot(data=par.time.fixef[-1,]) + 
+  geom_vline(aes(xintercept=1), color="grey") + 
+  geom_segment(aes(x=exp(LB), xend=exp(UB), y=label, yend=label)) + 
+  geom_point(aes(x=exp(estimate), y=label)) + 
+  theme_bw() + 
+  xlab("Additional estimated time (in seconds) to evaluate lineups\n based on parameter settings") + 
+  ylab("") + 
+  ggtitle("Lineup evaluation time and parameter settings")
+@
+
+\comment{I know that confidence level is discrete, but as a quick-and-dirty approach, here's a linear model describing confidence level as a function of parameter settings.}
+<<parameter-conf, echo=FALSE, fig.cap="There is no evidence that parameter settings significantly impacted participant confidence. \\label{fig:parameterTime}", fig.width=8, fig.height=4, out.width='.75\\linewidth'>>=
+conf.model <- lmer(conf_level ~ trend.diff*cluster.diff*k + (1|individualID) + (1|dataset), data=modeldata)
+
+conf.model.fixef <- data.frame(estimate=fixef(conf.model), confint(conf.model, method="Wald"))
+names(conf.model.fixef)[2:3] <- c("LB", "UB")
+conf.model.fixef$label <- rownames(conf.model.fixef) %>%
+  str_replace_all(fixed(":"), " x ") %>%
+  str_replace_all(fixed("trend.diff"), "Trend:") %>% 
+  str_replace_all(fixed("cluster.diff"), "Cluster:") %>%
+  str_replace_all("k", "K:") %>%
+  str_replace_all("medium", "Medium") %>% 
+  str_replace_all("hard", "Hard")
+conf.model.fixef$label <- factor(conf.model.fixef$label, levels=conf.model.fixef$label)
+
+ggplot(data=conf.model.fixef[-1,]) + 
+  geom_vline(aes(xintercept=0), color="grey") + 
+  geom_segment(aes(x=LB, xend=UB, y=label, yend=label)) + 
+  geom_point(aes(x=estimate, y=label)) + 
+  theme_bw() + 
+  xlab("Additional estimated confidence in lineup evaluation\n based on parameter settings") + 
+  ylab("") + 
+  ggtitle("Participant confidence and parameter settings")
+@
+
+
 
 \section{Model Results}
 
