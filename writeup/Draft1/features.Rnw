@@ -511,6 +511,9 @@ modeldata$outcome <- paste(c("", "trend")[1+as.numeric(modeldata$trend.correct==
                            c("", "gini")[1+as.numeric(modeldata$gini.correct==1)], 
                            sep="")
 modeldata$outcome[modeldata$both.correct==1] <- "both"
+modeldata$first.trial <- modeldata$trial.no == 1
+modeldata$simpleoutcome <- gsub("gini", "", modeldata$outcome)
+modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("neither", "cluster", "trend","both"))
 
 modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
 modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>% str_replace("set-", "") %>% as.numeric)
@@ -891,14 +894,11 @@ It really only looks impressive if we do cut out the trials more than 3 minutes 
 }
 
 \begin{figure}
-<<timemodel, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth'>>=
+<<timemodel, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth', dependson='results-setup'>>=
 library(lubridate)
 
 # modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
-modeldata$first.trial <- modeldata$trial.no == 1
-modeldata$simple <- gsub("gini", "", modeldata$outcome)
-modeldata$simple <- factor(modeldata$simple, levels=c("neither", "cluster", "trend","both"))
-time.model <- lmer(log(as.numeric(trial.time))~ simple + simple:plottype + first.trial  + (1|individualID) + (1|data_name), data=modeldata)
+time.model <- lmer(log(as.numeric(trial.time))~ simpleoutcome + simpleoutcome:plottype + first.trial  + (1|individualID) + (1|dataset), data=modeldata)
 
 
 coefs <- data.frame(exp(confint(time.model, method="Wald")))[-(1:5),]
@@ -906,7 +906,7 @@ names(coefs) <- c("low", "high")
 coefs$estimate <- exp(fixef(time.model)[-(1:5)])
 coefs$name <- names(fixef(time.model))[-(1:5)]
 ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
-coefs$outcome <- gsub("simple", "", ll$V1)
+coefs$outcome <- gsub("simpleoutcome", "", ll$V1)
 coefs$plottype <- gsub("plottype", "", ll$V2)
 coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
 coefs$simple <- factor(coefs$simple)
