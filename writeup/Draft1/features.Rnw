@@ -514,7 +514,7 @@ useranswers$k <- factor(useranswers$k)
 useranswers$start_time <- ymd_hms(useranswers$start_time)
 useranswers$end_time <- ymd_hms(useranswers$end_time)
 useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
-useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = order(start_time, decreasing=F))
+useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = rank(start_time))
 
 # Remove data from <18 participants
 useranswers <- filter(useranswers, !nick_name%in%users$nick_name[users$age=="<18"])
