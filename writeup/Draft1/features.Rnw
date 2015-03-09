@@ -898,7 +898,6 @@ coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
 coefs$simple <- factor(coefs$simple)
 levels(coefs$simple) <- c("Neither", "Cluster, Trend", "Both")
 
-coefs$plottype <- with(coefs, reorder(plottype, estimate))
 coefs$plottype <- coefs$plottype %>% 
   str_replace("color", "Color + ") %>% 
   str_replace("[sS]hape", "Shape + ") %>%
@@ -906,13 +905,17 @@ coefs$plottype <- coefs$plottype %>%
   str_replace("Ellipse", "Ellipse + ") %>%
   str_replace("Error", "Error + ") %>%
   str_replace("( \\+ )$", "")
+coefs$plottype <- factor(coefs$plottype)
+
+coefs$plottype <- with(coefs, reorder(plottype, estimate))
+
 coefs$pos <- as.numeric(factor(coefs$plottype)) + (coefs$outcome!="neither")*(coefs$outcome!="both")*(as.numeric(factor(coefs$outcome))-3)/6
 
 qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
   scale_colour_brewer(palette="Set1") +
   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
   facet_wrap(~simple, scales="free_x") + 
-  scale_y_continuous("", breaks=1:9, labels=levels(coefs$plottype)) + 
+  scale_y_continuous(breaks=1:9, labels=levels(coefs$plottype)) + 
   xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("")
 @
 \caption{\label{fig:timemodel} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
