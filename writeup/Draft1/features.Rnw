@@ -1299,7 +1299,7 @@ grid_arrange_shared_legend(p1, p2)
 
 
 <<parameters-time,echo=FALSE, fig.cap="There is no evidence that parameter settings significantly impacted time to completion. \\label{fig:parameterTime}", fig.width=8, fig.height=4, out.width='.75\\linewidth'>>=
-par.time <- lmer(log(as.numeric(trial.time)) ~ trend.diff*cluster.diff*k + (1|individualID) + (1|dataset), data=modeldata)
+par.time <- lmer(log(as.numeric(trial.time)) ~ trend.diff*cluster.diff*k + (1|individualID), data=modeldata)
 
 par.time.fixef <- data.frame(estimate=fixef(par.time), confint(par.time, method="Wald"))
 names(par.time.fixef)[2:3] <- c("LB", "UB")
