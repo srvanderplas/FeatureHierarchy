@@ -874,29 +874,30 @@ Examining differences in average response times across trials provides us with a
 We can also explore whether participants spent more time on certain types of plots and whether that additional time increased accurate target identification. 
 
 \newtext{
-First, we will model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed. A random effect for participant and dataset will also be included to account for the experimental design. Figure \ref{fig:timemodel} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
+First, we will model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed. A random effect for participant and dataset will also be included to account for the experimental design. Figure \ref{fig:timemodel-aes} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
 }
 
 
 \begin{figure}
-<<timemodel, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth', dependson='results-setup'>>=
+<<timemodel-plottype, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth', dependson='results-setup'>>=
 library(lubridate)
 
 # modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
-time.model <- lmer(log(as.numeric(trial.time))~ simpleoutcome + simpleoutcome:plottype + first.trial  + (1|individualID) + (1|dataset), data=modeldata)
+time.model <- lmer(log(as.numeric(trial.time))~ simpleoutcome:plottype + first.trial  + (1|individualID) + (1|dataset), data=modeldata)
 
-time.model2 <- lmer(log(as.numeric(trial.time))~ simpleoutcome + simpleoutcome:plottype + first.trial  + trend.diff + cluster.diff  + (1|individualID) , data=modeldata)
+time.model2 <- lmer(log(as.numeric(trial.time))~ simpleoutcome:plottype + first.trial  + trend.diff:cluster.diff:k  + (1|individualID) , data=modeldata)
 
-coefs <- data.frame(exp(confint(time.model, method="Wald")))[-(1:5),]
+coefs <- data.frame(exp(confint(time.model, method="Wald")))[-c(1:2),]
 names(coefs) <- c("low", "high")
-coefs$estimate <- exp(fixef(time.model)[-(1:5)])
-coefs$name <- names(fixef(time.model))[-(1:5)]
+coefs$estimate <- exp(fixef(time.model)[-c(1:2)])
+coefs$name <- names(fixef(time.model))[-c(1:2)]
 ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
 coefs$outcome <- gsub("simpleoutcome", "", ll$V1)
 coefs$plottype <- gsub("plottype", "", ll$V2)
 coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
 coefs$simple <- factor(coefs$simple)
 levels(coefs$simple) <- c("Neither", "Cluster, Trend", "Both")
+coefs$outcome <- factor(coefs$outcome, levels=c("neither", "cluster", "trend", "both"))
 
 coefs$plottype <- coefs$plottype %>% 
   str_replace("color", "Color + ") %>% 
@@ -904,6 +905,7 @@ coefs$plottype <- coefs$plottype %>%
   str_replace("[tT]rend", "Trend + ") %>%
   str_replace("Ellipse", "Ellipse + ") %>%
   str_replace("Error", "Error + ") %>%
+  str_replace("plain", "Plain") %>%
   str_replace("( \\+ )$", "")
 coefs$plottype <- factor(coefs$plottype)
 
@@ -915,12 +917,53 @@ qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + the
   scale_colour_brewer(palette="Set1") +
   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
   facet_wrap(~simple, scales="free_x") + 
-  scale_y_continuous(breaks=1:9, labels=levels(coefs$plottype)) + 
+  scale_y_continuous(breaks=1:10, labels=levels(coefs$plottype)) + 
   xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("")
 @
-\caption{\label{fig:timemodel} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
+\caption{\label{fig:timemodel-aes} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
 \end{figure}
 
+<<timemodel-pars,echo=F, fig.width=8, fig.height=6, out.width='.8\\textwidth', dependson='results-setup'>>=
+
+time.model2 <- lmer(log(as.numeric(trial.time))~ first.trial  + simpleoutcome:trend.diff:cluster.diff:k  + (1|individualID) , data=modeldata)
+
+coefs <- data.frame(exp(confint(time.model2, method="Wald")))[-c(1:2),]
+names(coefs) <- c("low", "high")
+coefs$estimate <- exp(fixef(time.model2)[-c(1:2)])
+coefs$name <- names(fixef(time.model2))[-c(1:2)]
+ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
+coefs$outcome <- gsub("simpleoutcome", "", ll$V1)
+coefs$trend.diff <- gsub("trend\\.diff", "", ll$V2)
+coefs$cluster.diff <- gsub("cluster\\.diff", "", ll$V3)
+coefs$k <- gsub("k", "", ll$V4)
+coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
+coefs$simple <- factor(coefs$simple)
+levels(coefs$simple) <- c("Neither", "Cluster, Trend", "Both")
+# 
+# coefs$plottype <- coefs$plottype %>% 
+#   str_replace("color", "Color + ") %>% 
+#   str_replace("[sS]hape", "Shape + ") %>%
+#   str_replace("[tT]rend", "Trend + ") %>%
+#   str_replace("Ellipse", "Ellipse + ") %>%
+#   str_replace("Error", "Error + ") %>%
+#   str_replace("plain", "Plain") %>%
+#   str_replace("( \\+ )$", "")
+# coefs$plottype <- factor(coefs$plottype)
+
+# coefs$trend.diff <- with(coefs, reorder(trend.diff, estimate))
+
+coefs$outcome <- factor(coefs$outcome, levels=c("neither", "cluster", "trend", "both"))
+coefs$pos <- as.numeric(factor(coefs$k)) + (as.numeric(factor(coefs$outcome))-2.5)/5
+
+qplot(estimate, pos, data=subset(coefs, outcome!="both"), colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
+  scale_colour_brewer(palette="Set1") +
+  geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
+  facet_grid(trend.diff~cluster.diff, scales="free_x") + 
+  scale_y_continuous(breaks=1:2, labels=unique(coefs$k)) + 
+  xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("K")
+@
+
+\comment{I removed "both" because it was distracting and missing a couple of CI's, but I'm not sure I'm happy with this now either. }
 \subsection{Participant Confidence}
 
 In addition to participant identification of target plots, we also asked that participants to rate their confidence in their answer. 
