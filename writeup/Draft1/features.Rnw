@@ -826,17 +826,11 @@ As data collection was conducted entirely online, we cannot measure responses in
 % \comment{it is not clear, how the `trial' is defined. it might be better to re-phrase this in terms of the time between presenting the lineup to the participant until the participant submits his/her answer. }
 Examining differences in average response times across trials provides us with an additional measure of trial difficulty or perceptual complexity. 
 We can also explore whether participants spent more time on certain types of plots and whether that additional time increased accurate target identification. 
-In order to remove the ``novelty" effect of an unfamiliar task, we excluded every participant's first trial from this portion of the analysis. 
-
-Additionally, all trials which took greater than 3 minutes to complete have also been removed; we have no guarantee that a participant was not multitasking during their trials, and 3 minutes is an excessive amount of time for lineup completion (only \Sexpr{round(mean(modeldata$trial.time>180)*100, 1)}\% of trials were more than 3 minutes long, and the median time to complete the entire experiment was \Sexpr{round(as.numeric(median(totaltime$total.experiment.time)))} minutes).
-\comment{No, don't select based on the value of the dependent variable. Use a log transform instead. Most likely, the time taken by participants is close to a Gamma distribution. This is what we have used in the past to model this kind of data - have a look at Mahbub's paper (the arxiv one on Human Factors). Instead of average trial ties, use a robust approach, such as the median - that will give you almost the same answers, see figure~\ref{fig:timemodel}. There is no indication that the plot type matters for the time taken, even when we take the outcome of that viewing into account. What matters, is whether the lineup is the participants first lineup.  }
 
 \newtext{
-Figure \ref{fig:speedaccuracypars} shows a reasonably clear effect of increasing trial time in response to increasing difficulty in cluster or trend variation parameters. While medium difficulty trend plots seem to be somewhat faster, on average, than easy or hard trend plots, there is a notable increase in time from either easy or medium trend plots to hard trend plots. 
+First, we will model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed. A random effect for participant and dataset will also be included to account for the experimental design. Figure \ref{fig:timemodel} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
 }
-\comment{Nice finding! \\
-It really only looks impressive if we do cut out the trials more than 3 minutes long. Given that average time to complete the entire study was 8 minutes, that seems reasonable to me, but I understand where it gets dicey. 
-}
+
 
 \begin{figure}
 <<timemodel, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth', dependson='results-setup'>>=
@@ -856,32 +850,15 @@ coefs$plottype <- gsub("plottype", "", ll$V2)
 coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
 coefs$simple <- factor(coefs$simple)
 levels(coefs$simple) <- c("Neither", "Cluster, Trend", "Both")
-# 
-# coefs2 <- data.frame(exp(confint(time.model, method="Wald")))[2:10,]
-# names(coefs2) <- c("low", "high")
-# coefs2$estimate <- exp(fixef(time.model)[2:10])
-# coefs2$name <- names(fixef(time.model))[2:10]
-# coefs2$outcome <-  "neither"
-# coefs2$plottype <- gsub("plottype", "", gsub("\\(Intercept\\)", "plain", coefs2$name))
-# coefs2$simple <- coefs2$outcome %in% c("both")
-# coefs2$simple <- factor(coefs2$simple)
-# levels(coefs2$simple) <- c("line, group, neither", "both")
-# 
-# coefs <- rbind(coefs, coefs2)
-# coefs$outcome <- factor(coefs$outcome, levels=c("neither", "trend", "cluster", "both"))
-# # coefs$pos <- as.numeric(factor(coefs$plottype)) + (as.numeric(factor(coefs$outcome))-2.5)/6
-# coefs$pos <- as.numeric(factor(coefs$plottype)) + (as.numeric(factor(coefs$simple))-2)/4
-
-# ggplot(data=coefs, aes(x=pos, y=estimate, ymin=low, ymax=high, colour=simple)) + 
-#   geom_pointrange() + 
-#   scale_colour_brewer(palette="Set1", "Targets\nIdentified") +
-#   coord_flip() + 
-#   scale_x_continuous("", breaks=1:10, labels=levels(coefs$plottype)) + 
-#   annotate(geom="segment", x=0:10+0.5, xend=0:10+0.5, y=-Inf, yend=Inf, color="grey50") + 
-#   theme_bw() + 
-#   ylab("Estimate of the (additional) time taken in seconds for each plot type given outcome")
 
 coefs$plottype <- with(coefs, reorder(plottype, estimate))
+coefs$plottype <- coefs$plottype %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("( \\+ )$", "")
 coefs$pos <- as.numeric(factor(coefs$plottype)) + (coefs$outcome!="neither")*(coefs$outcome!="both")*(as.numeric(factor(coefs$outcome))-3)/6
 
 qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
@@ -889,9 +866,9 @@ qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + the
   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
   facet_wrap(~simple, scales="free_x") + 
   scale_y_continuous("", breaks=1:9, labels=levels(coefs$plottype)) + 
-  xlab("Estimate of the (additional) time taken in seconds for each plot type given outcome") + ylab("")
+  xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("")
 @
-\caption{\label{fig:timemodel} XXX figure would need some additional work, in case we want to keep it.}
+\caption{\label{fig:timemodel} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
 \end{figure}
 
 \subsection{Participant Confidence}
