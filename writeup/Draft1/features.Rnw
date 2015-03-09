@@ -631,6 +631,7 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 
 Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evaluations identified more than one target plot, and of these multiple identifications, \Sexpr{round(100*(mean(modeldata[modeldata$n.answers>=2,"both.correct"])), 1)}\% identified both targets correctly. 
 
+From Figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target over another target, but generally pick both targets over the course of ten lineups.
 \begin{figure}
 \centering
 <<targets, fig.width=7.5, fig.height=5, out.width='0.6\\textwidth', echo=FALSE>>=
@@ -884,6 +885,7 @@ library(lubridate)
 # modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
 time.model <- lmer(log(as.numeric(trial.time))~ simpleoutcome + simpleoutcome:plottype + first.trial  + (1|individualID) + (1|dataset), data=modeldata)
 
+time.model2 <- lmer(log(as.numeric(trial.time))~ simpleoutcome + simpleoutcome:plottype + first.trial  + trend.diff + cluster.diff  + (1|individualID) , data=modeldata)
 
 coefs <- data.frame(exp(confint(time.model, method="Wald")))[-(1:5),]
 names(coefs) <- c("low", "high")
