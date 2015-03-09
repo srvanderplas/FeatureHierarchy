@@ -282,22 +282,47 @@ For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{
 sd <- c(0.15, 0.2, 0.25, 0.3)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
 
-res <- ldply(sd, function(x) { data.frame(sd.cluster=x, sim.clusters(K=3, N=45, sd.cluster=x)) })
+colortm <- read.csv("../..//Data/color-perceptual-kernel.csv")
+# colortm[3,4] <- 0
+# colortm[4,3] <- 0
+colortm[8,] <- 0
+colortm[,8] <- 0
+
+shapetm <- read.csv("../../Data/shape-perceptual-kernel.csv")
+# shapetm[9:10,] <- 0
+# shapetm[, 9:10] <- 0
+shapetm[9,] <- 0
+shapetm[,9] <- 0
+shapetm[10,] <- 0
+shapetm[,10] <- 0
+
+color3pal <- best.combo(3, colors, colortm)
+color5pal <- best.combo(5, colors, colortm)
+shape3pal <- best.combo(3, shapes, shapetm)
+shape5pal <- best.combo(5, shapes, shapetm)
+
+res <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=3, N=45, sd.cluster=x)) })
 res$K <- 3
-res2 <- ldply(sd, function(x) { data.frame(sd.cluster=x, sim.clusters(K=5, N=75, sd.cluster=x)) })
+res$color <- color3pal[res$group]
+res$shape <- shape3pal[res$group]
+res2 <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=5, N=75, sd.cluster=x)) })
 res2$K <- 5
+res2$color <- color5pal[res2$group]
+res2$shape <- shape5pal[res2$group]
 res <- rbind(res, res2)
 suppressMessages(library(ggplot2))
 res$label <- paste("sigma[C] :",res$sd.cluster)
 res$Klabel <- paste("K :",res$K)
-qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) + 
+ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) + 
+  geom_point() + 
   facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
-  scale_color_manual(values=colors) + theme(aspect.ratio=1)
+  scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1)
 @
-\caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom). 
-\comment{Could you include the same colors and shapes as in our lineups?}}
+\caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. The colors and shapes shown are those used in the lineups for $K=3$ and $K=5$.}
+% \comment{Could you include the same colors and shapes as in our lineups?}}
 \end{figure}
 
 %\comment{For the study we used $a=1$, right?\\Susan: Yes, and I thought I'd purged all $a$ from the description accordingly, but I see that I missed one. It's fixed now. }
@@ -312,17 +337,22 @@ colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
 
 res <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)}) })
 res$K <- 3
+res$color <- color3pal[res$group]
+res$shape <- shape3pal[res$group]
 res2 <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)}) })
 res2$K <- 5
+res2$color <- color5pal[res2$group]
+res2$shape <- shape5pal[res2$group]
 res <- rbind(res, res2)
 res$label <- paste("lambda :",res$lambda)
 res$Klabel <- paste("K :",res$K)
-qplot(x,y, data=res, pch=I(1), color=factor(group), shape=factor(group)) + 
+ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) + 
+  geom_point() + 
   facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
-  scale_color_manual(values=colors) + theme(aspect.ratio=1)
+  scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1)
 @
-\caption{\label{fig:lambda} Scatterplots of data generated from $M_0$ using different values of $\lambda$.}
+\caption{\label{fig:lambda} Scatterplots of data generated from $M_0$ using different values of $\lambda$, generated using the same random seed at each $\lambda$ value.}
 \end{figure}
 Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$. 
 
