@@ -940,7 +940,29 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 \subsection{Distribution of Test Statistics}
 
 Simulating lineup data sets, we can compare test statistics measuring trend strength, cluster strength, and cluster size inequality for the null plots and target plots. These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). 
-\todo{Add equations for test statistics}
+\newtext{This approach is similar to that taken in \citet{niladri:2014}}
+
+\newtext{
+The trend strength is assessed numerically using the coefficient of determination, $R^2$, which is calculated as 
+}
+
+\begin{align}
+R^2 & = & \left(\sum_{1 \leq i \leq N} (\hat{y}_i-\overline{y}_i)^2\right)/\left(\sum_{1\leq i\leq N} (y_i - \overline{y}_i)^2\right)
+\end{align}
+
+\newtext{
+The cluster strength, $C^2$ is assessed by comparing the percent of variation in x and y accounted for by the clusters to the total variation. For points $(x_i, y_i)$ define $z_i = \{1, ..., K\}$ to index cluster membership. 
+}
+
+
+\begin{align}
+C^2 & = & 
+\left(\sum_{1\leq i \leq N} 
+\left[(x_i - \overline{x}_{z_i} )^2 + (y_i - \overline{y}_{z_i})^2\right]
+\right)/\left(\sum_{1\leq i \leq N} 
+\left[(\overline{x}_{i} - \overline{x})^2 + (\overline{y}_{i} - \overline{y})^2
+\right]\right)
+\end{align}
 
 <<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=8, fig.height=3>>=
 source("../../Code/MixtureLineups.R")
@@ -1041,10 +1063,7 @@ The distribution of the cluster statistic values are more easily separated from 
 \subsection{Full Parameter Space Simulation Study}
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength for null and target plots. 
 
-\comment{The setup for this simulation is similar to what Niladri is doing in \citet{niladri:2014}.}
-\newdo{Describe statistics}
-
-Figures \ref{fig:simulationLineIntervals} and \ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of line and cluster summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
+Figures \ref{fig:simulationLineIntervals} and \ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and $C^2$ summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
 
 Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
 
