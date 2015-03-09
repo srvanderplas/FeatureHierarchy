@@ -820,16 +820,7 @@ This interaction effect explains the different outcomes seen by the two conditio
 \subsection{Numerical Signal Strength}
 \comment{I feel like this should be in here, but it's not that clear what the significance is...? Any model is just going to be really confusing, in my opinion. }
 
-<<model-parameters>>=
-modeldata$correct <- with(modeldata, both.correct | cluster.correct | trend.correct)
-modeldata$sd.line <- factor(modeldata$sd.line)
-modeldata$sd.cluster <- factor(modeldata$sd.cluster)
-modeldata$k <- factor(modeldata$k)
-
-model.param2 <- glmer(correct ~ k+ sd.line*k + sd.cluster*k + (1|individualID) + (1|data_name), data=modeldata, family=binomial(),  control=glmerControl(optimizer="bobyqa"))
-
-@
-
+\comment{OK, I agree, that we should be talking about the parameters at some place, but in terms of accuracy we are not going to get anywhere, because the results are, as you say, pretty confusing. So let's leave this for later and only include the parameter analysis for the speed and confidence analysis. }
 
 <<parameter-accuracy-rate, echo=F, fig.width=12, fig.height=6.5, out.width='\\linewidth', fig.cap="Identified targets for each level of parameter settings (across plot types).  \\label{fig:accuracy-parms}", dependson='results-setup'>>=
 
