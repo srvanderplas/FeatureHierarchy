@@ -637,7 +637,7 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 
 Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evaluations identified more than one target plot, and of these multiple identifications, \Sexpr{round(100*(mean(modeldata[modeldata$n.answers>=2,"both.correct"])), 1)}\% identified both targets correctly. 
 
-From Figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target over another target, but generally pick both targets over the course of ten lineups.
+From figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target type over another target type, but generally pick both types over the course of ten lineups.
 \begin{figure}
 \centering
 <<targets, fig.width=7.5, fig.height=5, out.width='0.6\\textwidth', echo=FALSE>>=
