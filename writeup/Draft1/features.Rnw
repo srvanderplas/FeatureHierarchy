@@ -1007,10 +1007,10 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 @
 
 
-\subsection{Participant Reasoning}
-\comment{Short lexical analysis to see if group/line was mentioned in reasoning?}
+% \subsection{Participant Reasoning}
+% \comment{Short lexical analysis to see if group/line was mentioned in reasoning?}
 
-\section{Discussion}\label{sec:Conclusion}
+\section{Discussion and Conclusions}\label{sec:Conclusion}
 
 \bibliographystyle{asa}
 \bibliography{references}
