@@ -648,7 +648,7 @@ user.data <- modeldata %>% group_by(individualID) %>%
 clusters <- as.data.frame(table(user.data$cluster))
 trends <- as.data.frame(table(user.data$trend))
 names(clusters) <- c("x", "Cluster")
-clusters$Trend <- trends$Freq
+clusters$Trend <- trends$Freq 
 clm <- melt(clusters, measure.var=2:3)
 
 ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, data=clm) + theme_bw() + scale_colour_brewer("Target", palette="Set1") + scale_shape_discrete("Target") + theme(legend.position="bottom") + ylab("Number of participants") + xlab("Number of target identifications (out of ten)") + geom_line(aes(x, value, colour=variable, group=variable), data=clm) 
@@ -1007,8 +1007,66 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 @
 
 
-% \subsection{Participant Reasoning}
-% \comment{Short lexical analysis to see if group/line was mentioned in reasoning?}
+\subsection{Participant Reasoning}
+\newtext{Participants were also given the opportunity to provide a short justification of their plot choice. Responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variaiblity present in the chosen plot. }
+
+\begin{figure}
+<<lexical-analysis, echo=FALSE, fig.width=8, fig.height=6, out.width='.8\\linewidth'>>=
+lexicaldata <- modeldata
+lexicaldata$choice_reason <- tolower(lexicaldata$choice_reason)
+
+get.reason <- function(x){
+  negs <- "non|not|less|weak|least|no|lack|but|divergent"
+  groups <- "group|cluster|spot|region|separat|clump|space|sets|gap|bunch|apart|connected|segregat|split|overlap|touch|area|tight|intersection|divided"
+  linear <- "line|linear|correlation|trend|slant|angle|straight|slope"
+  variability <- "outlier|spread|diffuse|random|scatter"
+    reasons = data.frame(
+      linear = str_detect(x, linear) & 
+        !str_detect(x, negs) &
+        !str_detect(x, groups),
+      group = str_detect(x, groups) & 
+        !str_detect(x, linear),
+      nonlinear = str_detect(x, linear) & 
+        str_detect(x, negs) & 
+        !str_detect(x, groups),
+      both = str_detect(x, groups) & 
+        str_detect(x, linear) & 
+        !str_detect(x, negs),
+      outliers = str_detect(x, variability) & !str_detect(x, linear) & !str_detect(x, groups)
+      )
+    res <- rep("", length(x))
+    res[rowSums(reasons)==0] <- "other"
+    if(sum(rowSums(reasons)>1)>1){
+      warning("Reasons are not mutually exclusive")
+    }
+    res[reasons$linear] <- "linear"
+    res[reasons$nonlinear] <- "nonlinear"
+    res[reasons$group] <- "group"
+    res[reasons$both] <- "linear & group"
+    res[reasons$outlier] <- "outlier"
+    if(length(res)==1) return(unlist(res))
+    return(res)
+}
+
+lexicaldata <- lexicaldata %>% 
+  mutate(reason = get.reason(choice_reason))
+
+lexicaldata$outcome <- factor(lexicaldata$outcome, levels=c("neither", "trend", "cluster", "both"), labels=c("Neither", "Trend", "Cluster", "Both"))
+lexicaldata$reason <- factor(lexicaldata$reason, levels=c("group", "nonlinear", "outlier", "linear & group", "linear", "other"), labels=c("Group sentiment", "Non-linear sentiment", "Variability/Outlier sentiment", "Linear + Group sentiment", "Linear sentiment", "Other"))
+
+qplot(data=lexicaldata, x=outcome, fill=reason, geom="histogram", position="dodge") + facet_wrap(~reason) + 
+  scale_fill_brewer(guide="none", palette="Set1") + 
+  ylab("# Responses") + 
+  xlab("Outcome") + 
+  ggtitle("Sentiment Expressed in Participant Explanations, by Trial Outcome") + 
+  theme_bw()
+
+@
+\caption[Lexical analysis of participant reasoning]{Lexical analysis of participants' justification of plot selection. Group sentiment in the reasoning is highly associated with selection of the cluster target plot; linear sentiment is highly associated with selection of the trend target plot.}\label{fig:lexicalanalysis}
+\end{figure}
+
+\newtext{The results of this analysis, shown in figure \ref{fig:lexicalanalysis}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size, which were present in only a few responses. }
+
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
 
@@ -1174,93 +1232,93 @@ Additionally, after the experiment was complete, we examined the distribution of
 \includegraphics[width=.8\linewidth]{figure/simulationparameters-3}
 \caption{Simulated interquartile range of group size inequality statistic values for cluster and null data distributions. \label{fig:simulationGiniIntervals}}
 \end{figure}
-
-\section{Graphical Exploration}
-
-% \comment{The graphical exploration is very much not straightforward - let's move it to the back and get the results from the models. Accuracy first: line, group, faceoff. Time and Confidence level second. }
-
-Figure \ref{fig:accuracy-plottype} shows aggregate accuracy rates for each plot aesthetic combination. It is again apparent that the cluster targets were overall more likely to be identified than line targets across all aesthetic combinations, however, it is also evident that plot aesthetics influence the identified target.
-
-<<plot-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
-
-plottype.accuracy <- modeldata.long %>% 
-  group_by(plottype, answer.type) %>% 
-  summarize(accuracy=mean(correct)) %>%
-  ungroup() %>%
-  group_by(plottype) %>%
-  transform(total.acc = sum(accuracy))
-plottype.accuracy$plottype <- factor(plottype.accuracy$plottype, levels=c("Trend + Error", "Trend", "Plain", "Shape", "Color", "Color + Shape", "Color + Trend", "Color + Shape + Ellipse", "Color + Ellipse", "Color + Ellipse + Trend + Error"))
-plottype.accuracy$answer.type <- factor(plottype.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
-qplot(x=plottype, y=accuracy, fill=answer.type, 
-      geom="bar", data=plottype.accuracy, position="stack", stat="identity") +
-  scale_fill_brewer("Target Identified", palette="Set1") + 
-  theme_bw() + 
-  xlab("Plot Aesthetic") + 
-  ylab("Proportion of Trials") + 
-  coord_flip()
-@
-
-
-
-<<speedaccuracy1,echo=F, fig.width=8, fig.height=4, out.width='.9\\linewidth', fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by plot aesthetic.\\label{fig:speedaccuracyaes}", dependson='results-setup'>>=
-time.accuracy <- modeldata %>% 
-  group_by(individualID) %>%
-  transform(trial.num=order(start_time)) %>%
-  filter(trial.num>1 & as.numeric(trial.time)<60*3)  %>%
-  group_by(plottype, dataset, k, cluster.diff2, trend.diff2) %>% 
-  summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% 
-  arrange(mean.trial.time) %>% 
-  melt(id.var=c("plottype", "dataset", "k", "cluster.diff2",  "trend.diff2", "mean.trial.time")) 
-time.accuracy$plottype <- time.accuracy$plottype %>%
-  str_replace("color", "Color + ") %>% 
-  str_replace("[sS]hape", "Shape + ") %>%
-  str_replace("[tT]rend", "Trend + ") %>%
-  str_replace("Ellipse", "Ellipse + ") %>%
-  str_replace("Error", "Error + ") %>%
-  str_replace("plain", "Plain") %>%
-  str_replace("( \\+ )$", "") %>% 
-  factor(levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                  "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
-         labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                  "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
-
-mean.time <- time.accuracy %>% group_by(plottype) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
-
-
-qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=I(1)) + 
-  geom_smooth(span=1.5, aes(ymax=pmin(1, ..ymax..), group=plottype), color="black") + 
-  xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
-  ylab("Accuracy") + 
-  scale_color_discrete("Plot Aesthetic", guide="none") + 
-  geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, hjust=.25, show_guide=F) + 
-  facet_wrap(~plottype, nrow=2) + theme_bw()
-@
-
-
-<<speedaccuracy2,echo=F, fig.width=8, fig.height=6, out.width='.75\\linewidth',, fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by parameter settings.\\label{fig:speedaccuracypars}">>=
-
-mean.time <- time.accuracy %>% group_by(trend.diff2, cluster.diff2) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
-
-time.accuracy$plottype <- factor(time.accuracy$plottype,
-                                 levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                                          "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                                          "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"),
-                                 labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                                          "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                                          "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
-
-qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=k) + 
-  geom_smooth(span=1, aes(group=k, linetype=k), se=F, color="black") + 
-  scale_linetype_discrete("# Clusters (K)") + 
-  xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
-  ylab("Accuracy") + 
-  scale_color_discrete("Aesthetic Emphasis") + 
-  scale_shape_manual("# Clusters (K)", values=c(16, 1)) + 
-  geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, show_guide=F) + 
-  facet_grid(trend.diff2~cluster.diff2) + theme_bw()
-@
+% 
+% \section{Graphical Exploration}
+% 
+% % \comment{The graphical exploration is very much not straightforward - let's move it to the back and get the results from the models. Accuracy first: line, group, faceoff. Time and Confidence level second. }
+% 
+% Figure \ref{fig:accuracy-plottype} shows aggregate accuracy rates for each plot aesthetic combination. It is again apparent that the cluster targets were overall more likely to be identified than line targets across all aesthetic combinations, however, it is also evident that plot aesthetics influence the identified target.
+% 
+% <<plot-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
+% 
+% plottype.accuracy <- modeldata.long %>% 
+%   group_by(plottype, answer.type) %>% 
+%   summarize(accuracy=mean(correct)) %>%
+%   ungroup() %>%
+%   group_by(plottype) %>%
+%   transform(total.acc = sum(accuracy))
+% plottype.accuracy$plottype <- factor(plottype.accuracy$plottype, levels=c("Trend + Error", "Trend", "Plain", "Shape", "Color", "Color + Shape", "Color + Trend", "Color + Shape + Ellipse", "Color + Ellipse", "Color + Ellipse + Trend + Error"))
+% plottype.accuracy$answer.type <- factor(plottype.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
+% qplot(x=plottype, y=accuracy, fill=answer.type, 
+%       geom="bar", data=plottype.accuracy, position="stack", stat="identity") +
+%   scale_fill_brewer("Target Identified", palette="Set1") + 
+%   theme_bw() + 
+%   xlab("Plot Aesthetic") + 
+%   ylab("Proportion of Trials") + 
+%   coord_flip()
+% @
+% 
+% 
+% 
+% <<speedaccuracy1,echo=F, fig.width=8, fig.height=4, out.width='.9\\linewidth', fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by plot aesthetic.\\label{fig:speedaccuracyaes}", dependson='results-setup'>>=
+% time.accuracy <- modeldata %>% 
+%   group_by(individualID) %>%
+%   transform(trial.num=order(start_time)) %>%
+%   filter(trial.num>1 & as.numeric(trial.time)<60*3)  %>%
+%   group_by(plottype, dataset, k, cluster.diff2, trend.diff2) %>% 
+%   summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% 
+%   arrange(mean.trial.time) %>% 
+%   melt(id.var=c("plottype", "dataset", "k", "cluster.diff2",  "trend.diff2", "mean.trial.time")) 
+% time.accuracy$plottype <- time.accuracy$plottype %>%
+%   str_replace("color", "Color + ") %>% 
+%   str_replace("[sS]hape", "Shape + ") %>%
+%   str_replace("[tT]rend", "Trend + ") %>%
+%   str_replace("Ellipse", "Ellipse + ") %>%
+%   str_replace("Error", "Error + ") %>%
+%   str_replace("plain", "Plain") %>%
+%   str_replace("( \\+ )$", "") %>% 
+%   factor(levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%                   "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
+%          labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%                   "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
+% 
+% mean.time <- time.accuracy %>% group_by(plottype) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
+% 
+% 
+% qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=I(1)) + 
+%   geom_smooth(span=1.5, aes(ymax=pmin(1, ..ymax..), group=plottype), color="black") + 
+%   xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
+%   ylab("Accuracy") + 
+%   scale_color_discrete("Plot Aesthetic", guide="none") + 
+%   geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, hjust=.25, show_guide=F) + 
+%   facet_wrap(~plottype, nrow=2) + theme_bw()
+% @
+% 
+% 
+% <<speedaccuracy2,echo=F, fig.width=8, fig.height=6, out.width='.75\\linewidth',, fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by parameter settings.\\label{fig:speedaccuracypars}">>=
+% 
+% mean.time <- time.accuracy %>% group_by(trend.diff2, cluster.diff2) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
+% 
+% time.accuracy$plottype <- factor(time.accuracy$plottype,
+%                                  levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%                                           "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%                                           "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"),
+%                                  labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%                                           "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%                                           "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
+% 
+% qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=k) + 
+%   geom_smooth(span=1, aes(group=k, linetype=k), se=F, color="black") + 
+%   scale_linetype_discrete("# Clusters (K)") + 
+%   xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
+%   ylab("Accuracy") + 
+%   scale_color_discrete("Aesthetic Emphasis") + 
+%   scale_shape_manual("# Clusters (K)", values=c(16, 1)) + 
+%   geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, show_guide=F) + 
+%   facet_grid(trend.diff2~cluster.diff2) + theme_bw()
+% @
 
 \section{Model Results}
 
