@@ -39,6 +39,10 @@ write.csv(userdata[,-which(names(userdata)%in%c("ip_address2", "nick_name2"))], 
 write.csv(users[,-which(names(users)%in%c("ip_address2", "nick_name2"))], "./Data/turk16_users_anon.csv", row.names=F)
 
 
+userdata <- read.csv("./Data/turk16_results.csv", stringsAsFactors=FALSE)
+
+users <- read.csv("./Images/Turk16/turk16_users.csv", stringsAsFactors=F, header=F)
+names(users) <- c("nick_name", "age", "gender", "education", "ip_address")
 userdata$response.id <- 1:nrow(userdata)
 
 users$age <- factor(users$age, levels=0:10, labels=c("NA", "<18", "18-25", "26-30", "31-35", "36-40", "41-45", "45-50", "51-55", "56-60", "61+"))
