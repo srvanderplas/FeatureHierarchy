@@ -1019,31 +1019,15 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 \section{Simulation Studies of Parameter Space}\label{app:parametersimulation}
 \subsection{Distribution of Test Statistics}
 
-Simulating lineup data sets, we can compare test statistics measuring trend strength, cluster strength, and cluster size inequality for the null plots and target plots. These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). 
-\newtext{This approach is similar to that taken in \citet{niladri:2014}}
+Simulating lineup data sets, we can compare test statistics measuring trend strength, cluster strength, and cluster size inequality for the null plots and target plots. These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). This approach is similar to that taken in \citet{niladri:2014}.
 
-\newtext{
-The trend strength is assessed numerically using the coefficient of determination, $R^2$, which is calculated as 
-}
+The trend strength is assessed numerically using the coefficient of determination, $R^2$, which is calculated as in equation \ref{eq:linearMeasure}. 
 
-\begin{align}
-R^2 & = & \left(\sum_{1 \leq i \leq N} (\hat{y}_i-\overline{y}_i)^2\right)/\left(\sum_{1\leq i\leq N} (y_i - \overline{y}_i)^2\right)
-\end{align}
-
-\newtext{
-The cluster strength, $C^2$ is assessed by comparing the percent of variation in x and y accounted for by the clusters to the total variation. For points $(x_i, y_i)$ define $z_i = \{1, ..., K\}$ to index cluster membership. 
-}
+The cluster strength is assessed by comparing the percent of variation in x and y accounted for by the clusters to the total variation, as in equation \ref{eq:clusterMeasure}.
 
 
-\begin{align}
-C^2 & = & 
-\left(\sum_{1\leq i \leq N} 
-\left[(x_i - \overline{x}_{z_i} )^2 + (y_i - \overline{y}_{z_i})^2\right]
-\right)/\left(\sum_{1\leq i \leq N} 
-\left[(\overline{x}_{i} - \overline{x})^2 + (\overline{y}_{i} - \overline{y})^2
-\right]\right)
-\end{align}
-
+\begin{figure}[h]
+\centering
 <<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=8, fig.height=3>>=
 source("../../Code/MixtureLineups.R")
 sT = 0.25
@@ -1128,16 +1112,12 @@ qplot(data=longres, x=value, y=..density.., stat="density", color=dist, fill=dis
   scale_fill_manual("Distribution", values=c("transparent", "gray")) +  
   theme_bw()
 @
+\caption{\label{fig:targetsignal}Density of test statistics measuring trend strength, cluster strength, and cluster inequality for target distributions and null plots. }
+\end{figure}
 
 Figure~\ref{fig:targetsignal} show computed densities of the maximum null distribution measure compared with the measure in the signal plot. There is some overlap in the distribution of $R^2$ for the null plots compared with the target plot displaying data drawn from $M_T$. We have two measures comparing data drawn from $M_C$ and $M_0$; the cluster measure examines the variance in $x$ and $y$ described by the cluster center; the gini coefficient examines the inequality in group sizes. These simulations indicate that it may be possible to differentiate $M_C$ based on two different features in clustered data. In future experiments, it may be beneficial to control cluster size more tightly to remove this additional feature. 
 
 The distribution of the cluster statistic values are more easily separated from the null plots than the distribution of the line statistic, indicating that $\sigma_C = 0.20$ is producing target plots that are a bit easier to spot than trend targets with a parameter value of $\sigma_T = 0.25$, however, the inequality of group sizes may distract participants from the intended target signal of cluster cohesion.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=.9\textwidth]{figure/null-distribution-1}
-\caption{\label{fig:targetsignal}Density of test statistics measuring trend strength, cluster strength, and cluster inequality for target distributions and null plots. }
-\end{figure}
 
 
 \subsection{Full Parameter Space Simulation Study}
