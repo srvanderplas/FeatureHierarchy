@@ -1028,7 +1028,7 @@ The cluster strength is assessed by comparing the percent of variation in x and 
 
 \begin{figure}[h]
 \centering
-<<null-distribution, echo=FALSE, include=FALSE, cache=T, fig.width=8, fig.height=3>>=
+<<null-distribution, echo=FALSE, cache=T, fig.width=8, fig.height=3>>=
 source("../../Code/MixtureLineups.R")
 sT = 0.25
 sC = 0.20
