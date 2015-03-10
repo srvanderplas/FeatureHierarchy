@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 % latex table generated in R 3.1.2 by xtable 1.7-3 package
 % Tue Mar 10 15:23:44 2015
+=======
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Tue Mar 10 13:56:25 2015
+>>>>>>> b758979198a006394bb944b85ce5997828008bfc
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrr}

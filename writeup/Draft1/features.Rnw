@@ -4,6 +4,8 @@
 %\geometry{landscape}                % Activate for for rotated page geometry
 %\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{afterpage}
 \usepackage{amssymb}
 \usepackage{natbib}
 \usepackage{amsmath}
@@ -26,6 +28,10 @@
 \newcommand{\newtext}[1]{\todo[inline, color=White]{ \color{OliveGreen}{#1}}} % new text - not necessarily something to be done
 \newcommand{\newdo}[1]{\todo[inline, color=Lime]{#1}} % new to do item
 %
+%---------------------------------------------------
+%                 Placing Figures
+
+
 %---------------------------------------------------
 % Define new environment
 \newtheorem{theorem}{Theorem}[section]
@@ -154,17 +160,17 @@ Statistical graphics can be difficult to examine experimentally; qualitative stu
 % 
 % \todo[inline]{Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}.}
 % \comment{Describe the lineup protocol, including basic statistics. Link to the psychological "target and distractors" approach, which can be used to justify the addition of a second target, even with the PITA of the statistical complications. }
-\newdo{Add basic statistics?}
-\newtext{
-Lineups are an experimental tool designed to serve as a visual hypothesis test, separating ``significant" visual effects from those that would be expected under a null hypothesis\citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
+%\newdo{Add basic statistics?}
+
+Lineups are an experimental tool designed to serve as a visual hypothesis test, separating ``significant" visual effects from those that would be expected under a null hypothesis \citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
 A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in figure \ref{fig:plotExamples}). 
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
 If participants can identify the target plot from the field of distractors, then the visual display is deemed significant in the same sense that a numerical test with $p<0.05$ is significant. 
-}
 
-\newtext{
+
+
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
-}
+
 
 In this study, we modify the lineup protocol by introducing a second target to each lineup. The two targets represent two different, competing signals; the participant's choice then demonstrates empirically which signal is more salient. 
 If both targets exhibit similar signal, participants may identify both targets, removing any forced-choice scenario which might skew results (few participants exercised this option). 
@@ -241,7 +247,7 @@ qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_pars
 \caption{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for parameter values of  $\sigma_T \in \{0.1, 0.2, 0.3, 0.4\}$.}
 \end{figure}
 
-\subsubsection{Cluster Model $M_C$}
+\subsubsection{Cluster Model $M_C$} 
 We begin by generating $K$ cluster centers on a $K \times K$ grid, then we generate points around selected cluster centers. 
 \begin{algorithm}\hfill\newline
   Input Parameters:  $N$ points, $K$ clusters, $\sigma_C$ cluster standard deviation \\
@@ -380,7 +386,105 @@ $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .15, .20, .25 
 
 The parameter values were chosen after examining the full parameter space through simulation of 1000 lineup datasets for each combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$; 
 for each data set generated, the previously described statistics for  trend  and cluster strength were computed. We compared the statistics for the relevant target plot to the most extreme value for the 18 null plots. % - for instance, the trend target plot $R^2$ value was compared to the maximum $R^2$ value in the 18 null plots. 
-These evaluations provide an estimate of the difficulty of identifying the target plot numerically; a target plot with $R^2=0.95$ is very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ make the target plot more difficult to identify. Graphical summaries of simulation results are provided in appendix \ref{app:parametersimulation}.
+
+These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). This approach is similar to that taken in \citet{niladri:2014}.
+
+Figure~\ref{fig:targetsignal-0} shows  densities of each measure computed from the  maximum of 18 null plots compared to  the measure in the signal plot.
+There is some overlap in the distribution of $R^2$ for the null plots compared to the target plot displaying data drawn from $M_T$. 
+
+The distribution of the cluster statistic values are more easily separated from the null plots than the distribution of the line statistic, indicating that $\sigma_C = 0.20$ is producing target plots that are a bit easier to spot than trend targets with a parameter value of $\sigma_T = 0.25$.
+
+
+\begin{figure}[h]
+\centering
+<<null-distribution-1, echo=FALSE, cache=T, fig.width=8, fig.height=3>>=
+source("../../Code/MixtureLineups.R")
+sT = 0.25
+sC = 0.20
+N = 45
+K = 3
+M = 1000
+
+if (file.exists("./figure/nulldist.Rdata")) {
+  load("./figure/nulldist.Rdata")
+} else {
+#   nulldist<- function(N, sT=0.25, sC=0.2) {
+#     nulls <- data.frame(t(replicate(N, {
+#       lp <- data.frame(t(replicate(18, {
+#         mix = mixture.sim(lambda=0.5, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+#         reg <- lm(y~x, data=mix)
+#         
+#   c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
+#   })))
+#     c(fline=max(lp$fline), fgroup=max(lp$fgroup))
+#   })))
+#   
+#   trends <- replicate(10, {
+#     mix = mixture.sim(lambda=0, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+#     reg <- lm(y~x, data=mix)
+#     c(fline=summary(reg)$r.squared)
+#   })
+#   
+#   clusters <- replicate(10, {
+#     mix = mixture.sim(lambda=1, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+#     clust <- lm(y~factor(group) + 0, data=mix)
+#     res <- summary(aov(clust))
+#     c(fgroup=cluster(mix))
+#   })
+#   
+#   list(nulls=nulls, trends=trends, clusters=clusters)
+# }
+# 
+# res <- nulldist(N=N, sC=sC, sT=sT)
+  library(compiler)
+  tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.25) {
+    data.frame(
+      t(
+        replicate(M, 
+                  {
+                    input.pars <- list(N=N, K=K, sd.trend=sT, sd.cluster=sC)
+                    c(unlist(input.pars), eval.data(gen.data(input.pars)))
+                    }
+                  )
+        )
+      )
+    }
+  nulldist <- cmpfun(tmp)
+  
+  res <- nulldist(M=M, N=45, K=3, sT=sT, sC=sC)
+  
+  save(res, file="./figure/nulldist.Rdata")
+}
+
+# require(ggplot2)
+# qplot(fline, data=res$nulls, binwidth=0.02, fill=I("gray70"), color=I("gray20")) + geom_vline(aes(xintercept=res$trends), color="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
+# ggsave("figure/fline.pdf", width=8, height=4)
+# qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("gray70"), color=I("gray20")) + geom_vline(aes(xintercept=res$clusters), color="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
+# ggsave("figure/fgroup.pdf", width=8, height=4)
+
+longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
+longres$dist <- c("Data", "Most Extreme of\n18 Null Dists")[1+grepl("null", longres$type)]
+longres$type <- gsub("null.", "", longres$type, fixed=T)
+longres$Statistic <- longres$type
+longres$Statistic[longres$type=="cluster"] <- "Cluster Measure"
+longres$Statistic[longres$type=="line"] <- "R squared"
+longres$Statistic[longres$type=="gini"] <- "Gini Impurity"
+longres$Statistic <- factor(longres$Statistic, levels=c("R squared", "Cluster Measure", "Gini Impurity"))
+
+qplot(data=subset(longres, Statistic != "Gini Impurity"), x=value, y=..density.., stat="density", color=dist, fill=dist, geom="area", alpha=I(.5), 
+    #  main=expression(paste("Simulation Results " , group("(", list(K==3, sigma[T]==.25, sigma[C]==.2), ")"))), 
+      xlab="Simulated Distribution of Test Statistic", 
+      ylab="Density", 
+      position="identity") + 
+  facet_grid(.~Statistic, scales="free", labeller=label_both) + 
+  scale_color_manual("Distribution", values=c("black",  "gray")) + 
+  scale_fill_manual("Distribution", values=c("transparent", "gray")) +  
+  theme_bw()
+@
+\caption{\label{fig:targetsignal-0}Density of test statistics measuring trend strength and cluster strength for target distributions and null plots based on 1,000 draws of lineup data with $\sigma_T= 0.25, \sigma_C=0.20$ and $K=3$. }
+\end{figure}
+\afterpage{\clearpage}
+These evaluations provide an estimate of the difficulty of identifying the target plot numerically; a target plot with $R^2=0.95$ is very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ make the target plot more difficult to identify. Graphical summaries of simulation results for a whole range of values for $\sigma_C$ and $\sigma_T$ are provided in appendix \ref{app:parametersimulation}.
 
 % \comment{I want even more details: how did you get the results?}
 Using information from the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. It is important to note that the numerical measures we have described in equations \eqref{eq:linearMeasure} and \eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with information on the perceptual discriminability, and it has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
@@ -392,20 +496,63 @@ Each of the generated datasets is then plotted as a lineup, where we apply aesth
 Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in figure \ref{fig:plotExamples}.
 
 \begin{figure}[ht]
-<<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".3\\linewidth", fig.show='hold', fig.align='center', warning=FALSE, message=FALSE>>=
+% <<samplepics, eval=T, echo=F, fig.width=6, fig.height=6, out.width=".3\\linewidth", fig.show='hold', fig.align='center', warning=FALSE, message=FALSE, results='hide'>>=
+% 
+% load("figure/lineupex/data.Rdata")
+% d_ply(data, .(set), function(df){
+%   i <- unique(df$set)
+%   for(j in 1:nrow(plot.parms)){
+%     p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
+%      p <- p + theme(plot.margin=unit(c(0,0,0,0), "cm"))
+%     print(p)
+%   }
+% })
+% @
 
-load("figure/lineupex/data.Rdata")
-d_ply(data, .(set), function(df){
-  i <- unique(df$set)
-  for(j in 1:nrow(plot.parms)){
-    p = gen.plot(df, get.aes(plot.parms[j,]), get.stats(plot.parms[j,]))
-    print(p)
-  }
-})
-@
+\centering
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Plain}
+  \includegraphics[width=\textwidth]{figure/samplepics-1}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Color}
+  \includegraphics[width=\textwidth]{figure/samplepics-2}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Shape}
+  \includegraphics[width=\textwidth]{figure/samplepics-3}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Shape + Color}
+  \includegraphics[width=\textwidth]{figure/samplepics-4}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Color + Ellipse}
+  \includegraphics[width=\textwidth]{figure/samplepics-5}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Shape + Ellipse}
+  \includegraphics[width=\textwidth]{figure/samplepics-6}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Trend}
+  \includegraphics[width=\textwidth]{figure/samplepics-7}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Trend + Error }
+  \includegraphics[width=\textwidth]{figure/samplepics-8}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Trend + Color}
+  \includegraphics[width=\textwidth]{figure/samplepics-9}
+\end{subfigure}
+\begin{subfigure}[t]{0.28\textwidth}
+  \caption{Trend + Color + Ellipse}
+  \includegraphics[width=\textwidth]{figure/samplepics-10}
+\end{subfigure}
 \caption{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
-\clearpage
+
 
 \begin{table}[h]
 \centering
@@ -421,6 +568,8 @@ Line + Prediction \end{tabular}\\
 \caption{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
 
+\afterpage{\clearpage}
+
 We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses  increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the linear model. 
 
 Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval  increases the probability of a participant selecting the target plot with data generated from $M_T$, the linear model, and decreases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
@@ -428,7 +577,7 @@ Similarly, we expect that relative to a plot with no extra aesthetics or statist
 \subsubsection{Experimental Design}
 The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination.
 
-\newdo{Need to find some graphic/table which makes this a bit more clear.}
+%\newdo{Need to find some graphic/table which makes this a bit more clear.}
 
 \subsubsection{Color and Shape Palettes}
 Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
@@ -726,12 +875,12 @@ print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed ef
 \caption{Odds of detecting the linear target plot for each aesthetic. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot (plain scatterplot). \label{fig:linear.fixef}}
 \end{figure}
 
-\comment{Be careful with using `odds' versus `odds ratio'. they are not the same. In the model we discuss odds not odds ratios.}
+%\comment{Be careful with using `odds' versus `odds ratio'. they are not the same. In the model we discuss odds not odds ratios.}
 
 Figure \ref{fig:linear.fixef} shows the fixed effects of the linear target model fitted according to equation \ref{eqn:linearModel}. Aesthetic combinations which would be expected to emphasize similarity under gestalt principles significantly decrease the probability of selecting the target plot generated under $M_T$, the trend data model. Only the dual continuity emphasis of Trend + Error bars significantly increases the probability that participants will identify the target plot generated under $M_T$. 
 
 
-\subsubsection{Group Target Selection}
+\subsubsection{Group Target Selection}\label{sec:groupModel}
 
 We now examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that success in this model is defined as identification of the cluster target plot. 
 
@@ -779,7 +928,7 @@ qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
 names(group.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
 names(group.fixef2)[8] <- "Plot Aesthetic"
 names(group.fixef2)[9] <- "Tukey Post Hoc Differences"
-print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/group-fixef-table")
+print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in section~\ref{sec:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/group-fixef-table")
 @
 
 \begin{figure}\centering
@@ -861,15 +1010,10 @@ This interaction effect explains the different outcomes seen by the two conditio
 As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the time between initial lineup presentation (trial start) and answer submission (trial end). 
 % \comment{it is not clear, how the `trial' is defined. it might be better to re-phrase this in terms of the time between presenting the lineup to the participant until the participant submits his/her answer. }
 Examining differences in average response times across trials provides us with an additional measure of trial difficulty or perceptual complexity. 
-We can also explore whether participants spent more time on certain types of plots and whether that additional time increased accurate target identification. 
-
-\newtext{
-First, we will model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed. A random effect for participant and dataset will also be included to account for the experimental design. Figure \ref{fig:timemodel-aes} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
-}
-
+We can also explore whether participants spent more time on certain types of plots and how additional time is realted to accurate target identification. 
 
 \begin{figure}
-<<timemodel-plottype, echo=FALSE, fig.width=10, fig.height=5, out.width='\\textwidth', dependson='results-setup'>>=
+<<timemodel-plottype, echo=FALSE, fig.width=10, fig.height=6, out.width='\\textwidth', dependson='results-setup'>>=
 library(lubridate)
 
 # modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
@@ -899,33 +1043,34 @@ coefs$plottype <- factor(coefs$plottype)
 
 coefs$plottype <- with(coefs, reorder(plottype, estimate))
 
-coefs$pos <- as.numeric(factor(coefs$plottype)) + (coefs$outcome!="neither")*(coefs$outcome!="both")*(as.numeric(factor(coefs$outcome))-3)/6
+#coefs$pos <- as.numeric(factor(coefs$plottype)) +  (coefs$outcome!="neither")*(coefs$outcome!="both")*(as.numeric(factor(coefs$outcome))-3)/6
+coefs$pos <- as.numeric(factor(coefs$plottype)) + as.numeric(coefs$outcome)/6 - 1/3
 
 qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
-  scale_colour_brewer(palette="Set1") +
+  scale_colour_brewer("Target identified", palette="Set1") +
+  scale_shape_discrete("Target identified") +
   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
-  facet_wrap(~simple, scales="free_x") + 
+#  facet_wrap(~simple, scales="free_x") + 
   scale_y_continuous(breaks=1:10, labels=levels(coefs$plottype)) + 
-  xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("")
+  xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("") + 
+  theme(legend.position="bottom")
 @
 \caption{\label{fig:timemodel-aes} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
 \end{figure}
 
-\newtext{
-Next, we model log response time a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure \ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
-% The increased variance for "Both" outcomes is a result of the relatively few trials in which participants identified multiple target plots (missing intervals are a result of this issue as well). 
-The time to evaluate each plot increases slightly with trend difficulty and cluster difficulty (across trials), conditional on outcome, but the "medium" difficulty trials seem to be somewhat discordant in many cases; in some cases, time to evaluate increases and in others, it decreases. This may be due to a conflict between the trend and cluster target plots: when there is no clear signal numerically, evaluation time increases while participants waver between potential targets. 
-}
+We model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed \citep{Majumder:2014up}. A random effect for participant and dataset is included to account for the experimental design. Figure \ref{fig:timemodel-aes} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
+
+
 
 \begin{figure}
 <<timemodel-pars,echo=F, fig.width=8, fig.height=6, out.width='.8\\textwidth', dependson='results-setup'>>=
 
 time.model2 <- lmer(log(as.numeric(trial.time))~ first.trial + plottype + simpleoutcome:trend.diff:cluster.diff:k  + (1|individualID) , data=modeldata)
 
-coefs <- data.frame(exp(confint(time.model2, method="Wald")))[-c(1:11),]
+coefs <- data.frame(exp(confint(time.model2, method="Wald")))[-(1:11),]
 names(coefs) <- c("low", "high")
-coefs$estimate <- exp(fixef(time.model2)[-c(1:11)])
-coefs$name <- names(fixef(time.model2))[-c(1:11)]
+coefs$estimate <- exp(fixef(time.model2)[-(1:11)])
+coefs$name <- names(fixef(time.model2))[-(1:11)]
 ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
 coefs$outcome <- gsub("simpleoutcome", "", ll$V1)
 coefs$trend.diff <- gsub("trend\\.diff", "", ll$V2)
@@ -941,12 +1086,12 @@ coefs$outcome <- factor(coefs$outcome, levels=c("neither", "cluster", "trend", "
 coefs$pos <- as.numeric(factor(coefs$k)) + (as.numeric(factor(coefs$trend.diff))-2)/4
 
 qplot(estimate, pos, data=subset(coefs, outcome!="Both Identified"), colour=trend.diff, size=I(4), shape=trend.diff) + theme_bw() + 
-  geom_vline(xintercept=1, color="grey") + 
+#  geom_vline(xintercept=1, color="grey") + 
   scale_colour_manual("Trend", values=c("#7bccc4", "#2b8cbe", "#084081")) +
   scale_shape_discrete("Trend") + 
   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
   facet_grid(cluster.diff~outcome) + 
-  scale_y_continuous(breaks=1:2, labels=unique(coefs$k)) + 
+  scale_y_continuous(breaks=1:2, labels=unique(coefs$k), limits=c(0.5,2.5)) + 
   xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("K")
 
 coefs2 <- data.frame(exp(confint(time.model2, method="Wald")))[c(1:11),]
@@ -973,10 +1118,16 @@ print(xtable(coefs2[,c(4, 3, 5)], caption=c("Fitted values of plot type and firs
 \end{figure}
 \input{figure/timemodel-pars-fixef-table}
 
-\comment{I removed "both" because it was distracting and missing a couple of CI's, but I'm not sure I'm happy with this now either. }
+
+
+In a second model, we fit log response time as a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure \ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
+% The increased variance for "Both" outcomes is a result of the relatively few trials in which participants identified multiple target plots (missing intervals are a result of this issue as well). 
+The time to evaluate each plot increases slightly with trend difficulty and cluster difficulty (across trials), conditional on outcome, but the "medium" difficulty trials seem to be somewhat discordant in many cases; in some cases, time to evaluate increases and in others, it decreases. This may be due to a conflict between the trend and cluster target plots: when there is no clear signal numerically, evaluation time increases while participants waver between potential targets. 
+
+%\comment{I removed "both" because it was distracting and missing a couple of CI's, but I'm not sure I'm happy with this now either. }
 \subsection{Participant Confidence}
 
-In addition to participant identification of target plots, we also asked that participants to rate their confidence in their answer. 
+In addition to participant identification of target plots, we also asked participants to rate their confidence in their answer. 
 Figure \ref{fig:conflevel} shows aggregate participant confidence rating as a function of trial outcome. 
 Participants who did not identify either target plot were less likely to be ``extremely confident'' in their answer, while participants who identified either the trend or the cluster target correctly were highly confident that their answer was correct. 
 Overall, though, participants seem to have some degree of confidence in their answer, regardless of whether the answer was correct.
@@ -999,7 +1150,7 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
   geom_line(size=2) + 
   scale_x_continuous("Participant Confidence", limits=c(-.25, 5.65), breaks=0:5) + 
   geom_text(data=label.lines, aes(label=label), hjust=.2, vjust=.5, color="black", show_guide=F, size=4) + 
-  scale_color_discrete(guide="none") + 
+  scale_color_brewer(guide="none", palette="Set1") + 
   ylab("Proportion of Trials") + 
   ggtitle("Participant Confidence and Trial Outcome") + 
   theme_bw()
@@ -1156,7 +1307,7 @@ longres$dist <- c("Data", "Most Extreme of\n18 Null Dists")[1+grepl("null", long
 longres$type <- gsub("null.", "", longres$type, fixed=T)
 longres$Statistic <- longres$type
 longres$Statistic[longres$type=="cluster"] <- "Cluster Measure"
-longres$Statistic[longres$type=="trend"] <- "R^2"
+longres$Statistic[longres$type=="line"] <- "R^2"
 longres$Statistic[longres$type=="gini"] <- "Gini Impurity"
 longres$Statistic <- factor(longres$Statistic, levels=c("R^2", "Cluster Measure", "Gini Impurity"))
 
