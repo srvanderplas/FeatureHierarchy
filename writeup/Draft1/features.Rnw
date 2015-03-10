@@ -1325,93 +1325,93 @@ Additionally, after the experiment was complete, we examined the distribution of
 \includegraphics[width=.8\linewidth]{figure/simulationparameters-3}
 \caption{Simulated interquartile range of group size inequality statistic values for cluster and null data distributions. \label{fig:simulationGiniIntervals}}
 \end{figure}
-
-\section{Graphical Exploration}
-
-% \comment{The graphical exploration is very much not straightforward - let's move it to the back and get the results from the models. Accuracy first: line, group, faceoff. Time and Confidence level second. }
-
-Figure \ref{fig:accuracy-plottype} shows aggregate accuracy rates for each plot aesthetic combination. It is again apparent that the cluster targets were overall more likely to be identified than line targets across all aesthetic combinations, however, it is also evident that plot aesthetics influence the identified target.
-
-<<plot-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
-
-plottype.accuracy <- modeldata.long %>% 
-  group_by(plottype, answer.type) %>% 
-  summarize(accuracy=mean(correct)) %>%
-  ungroup() %>%
-  group_by(plottype) %>%
-  transform(total.acc = sum(accuracy))
-plottype.accuracy$plottype <- factor(plottype.accuracy$plottype, levels=c("Trend + Error", "Trend", "Plain", "Shape", "Color", "Color + Shape", "Color + Trend", "Color + Shape + Ellipse", "Color + Ellipse", "Color + Ellipse + Trend + Error"))
-plottype.accuracy$answer.type <- factor(plottype.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
-qplot(x=plottype, y=accuracy, fill=answer.type, 
-      geom="bar", data=plottype.accuracy, position="stack", stat="identity") +
-  scale_fill_brewer("Target Identified", palette="Set1") + 
-  theme_bw() + 
-  xlab("Plot Aesthetic") + 
-  ylab("Proportion of Trials") + 
-  coord_flip()
-@
-
-
-
-<<speedaccuracy1,echo=F, fig.width=8, fig.height=4, out.width='.9\\linewidth', fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by plot aesthetic.\\label{fig:speedaccuracyaes}", dependson='results-setup'>>=
-time.accuracy <- modeldata %>% 
-  group_by(individualID) %>%
-  transform(trial.num=order(start_time)) %>%
-  filter(trial.num>1 & as.numeric(trial.time)<60*3)  %>%
-  group_by(plottype, dataset, k, cluster.diff2, trend.diff2) %>% 
-  summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% 
-  arrange(mean.trial.time) %>% 
-  melt(id.var=c("plottype", "dataset", "k", "cluster.diff2",  "trend.diff2", "mean.trial.time")) 
-time.accuracy$plottype <- time.accuracy$plottype %>%
-  str_replace("color", "Color + ") %>% 
-  str_replace("[sS]hape", "Shape + ") %>%
-  str_replace("[tT]rend", "Trend + ") %>%
-  str_replace("Ellipse", "Ellipse + ") %>%
-  str_replace("Error", "Error + ") %>%
-  str_replace("plain", "Plain") %>%
-  str_replace("( \\+ )$", "") %>% 
-  factor(levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                  "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
-         labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                  "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
-
-mean.time <- time.accuracy %>% group_by(plottype) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
-
-
-qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=I(1)) + 
-  geom_smooth(span=1.5, aes(ymax=pmin(1, ..ymax..), group=plottype), color="black") + 
-  xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
-  ylab("Accuracy") + 
-  scale_color_discrete("Plot Aesthetic", guide="none") + 
-  geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, hjust=.25, show_guide=F) + 
-  facet_wrap(~plottype, nrow=2) + theme_bw()
-@
-
-
-<<speedaccuracy2,echo=F, fig.width=8, fig.height=6, out.width='.75\\linewidth',, fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by parameter settings.\\label{fig:speedaccuracypars}">>=
-
-mean.time <- time.accuracy %>% group_by(trend.diff2, cluster.diff2) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
-
-time.accuracy$plottype <- factor(time.accuracy$plottype,
-                                 levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                                          "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                                          "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"),
-                                 labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
-                                          "Color + Shape", "Color + Ellipse", "Color + Trend", 
-                                          "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
-
-qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=k) + 
-  geom_smooth(span=1, aes(group=k, linetype=k), se=F, color="black") + 
-  scale_linetype_discrete("# Clusters (K)") + 
-  xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
-  ylab("Accuracy") + 
-  scale_color_discrete("Aesthetic Emphasis") + 
-  scale_shape_manual("# Clusters (K)", values=c(16, 1)) + 
-  geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, show_guide=F) + 
-  facet_grid(trend.diff2~cluster.diff2) + theme_bw()
-@
+%' 
+%' \section{Graphical Exploration}
+%' 
+%' % \comment{The graphical exploration is very much not straightforward - let's move it to the back and get the results from the models. Accuracy first: line, group, faceoff. Time and Confidence level second. }
+%' 
+%' Figure \ref{fig:accuracy-plottype} shows aggregate accuracy rates for each plot aesthetic combination. It is again apparent that the cluster targets were overall more likely to be identified than line targets across all aesthetic combinations, however, it is also evident that plot aesthetics influence the identified target.
+%' 
+%' <<plot-accuracy-rate, echo=F, fig.width=10, fig.height=5, out.width='.8\\linewidth', fig.cap="Proportion of trials identifying each target for each plot type (across parameter settings).\\label{fig:accuracy-plottype}", dependson='results-setup'>>=
+%' 
+%' plottype.accuracy <- modeldata.long %>% 
+%'   group_by(plottype, answer.type) %>% 
+%'   summarize(accuracy=mean(correct)) %>%
+%'   ungroup() %>%
+%'   group_by(plottype) %>%
+%'   transform(total.acc = sum(accuracy))
+%' plottype.accuracy$plottype <- factor(plottype.accuracy$plottype, levels=c("Trend + Error", "Trend", "Plain", "Shape", "Color", "Color + Shape", "Color + Trend", "Color + Shape + Ellipse", "Color + Ellipse", "Color + Ellipse + Trend + Error"))
+%' plottype.accuracy$answer.type <- factor(plottype.accuracy$answer.type, levels=c("neither", "trend", "cluster"))
+%' qplot(x=plottype, y=accuracy, fill=answer.type, 
+%'       geom="bar", data=plottype.accuracy, position="stack", stat="identity") +
+%'   scale_fill_brewer("Target Identified", palette="Set1") + 
+%'   theme_bw() + 
+%'   xlab("Plot Aesthetic") + 
+%'   ylab("Proportion of Trials") + 
+%'   coord_flip()
+%' @
+%' 
+%' 
+%' 
+%' <<speedaccuracy1,echo=F, fig.width=8, fig.height=4, out.width='.9\\linewidth', fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by plot aesthetic.\\label{fig:speedaccuracyaes}", dependson='results-setup'>>=
+%' time.accuracy <- modeldata %>% 
+%'   group_by(individualID) %>%
+%'   transform(trial.num=order(start_time)) %>%
+%'   filter(trial.num>1 & as.numeric(trial.time)<60*3)  %>%
+%'   group_by(plottype, dataset, k, cluster.diff2, trend.diff2) %>% 
+%'   summarise(mean.trial.time = mean(trial.time), accuracy = 1-mean(neither.correct)) %>% 
+%'   arrange(mean.trial.time) %>% 
+%'   melt(id.var=c("plottype", "dataset", "k", "cluster.diff2",  "trend.diff2", "mean.trial.time")) 
+%' time.accuracy$plottype <- time.accuracy$plottype %>%
+%'   str_replace("color", "Color + ") %>% 
+%'   str_replace("[sS]hape", "Shape + ") %>%
+%'   str_replace("[tT]rend", "Trend + ") %>%
+%'   str_replace("Ellipse", "Ellipse + ") %>%
+%'   str_replace("Error", "Error + ") %>%
+%'   str_replace("plain", "Plain") %>%
+%'   str_replace("( \\+ )$", "") %>% 
+%'   factor(levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%'                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%'                   "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
+%'          labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%'                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%'                   "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"))
+%' 
+%' mean.time <- time.accuracy %>% group_by(plottype) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
+%' 
+%' 
+%' qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=I(1)) + 
+%'   geom_smooth(span=1.5, aes(ymax=pmin(1, ..ymax..), group=plottype), color="black") + 
+%'   xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
+%'   ylab("Accuracy") + 
+%'   scale_color_discrete("Plot Aesthetic", guide="none") + 
+%'   geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, hjust=.25, show_guide=F) + 
+%'   facet_wrap(~plottype, nrow=2) + theme_bw()
+%' @
+%' 
+%' 
+%' <<speedaccuracy2,echo=F, fig.width=8, fig.height=6, out.width='.75\\linewidth',, fig.cap="Accuracy (identifying either target plot) compared with mean trial time, by parameter settings.\\label{fig:speedaccuracypars}">>=
+%' 
+%' mean.time <- time.accuracy %>% group_by(trend.diff2, cluster.diff2) %>% summarise(trial.time=sprintf("Avg. Time:\n%.1f s", as.numeric(mean(mean.trial.time))), mean.trial.time=as.numeric(mean(mean.trial.time)))
+%' 
+%' time.accuracy$plottype <- factor(time.accuracy$plottype,
+%'                                  levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%'                                           "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%'                                           "Color + Shape\n + Ellipse", "Color + Ellipse\n + Trend + Error"),
+%'                                  labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+%'                                           "Color + Shape", "Color + Ellipse", "Color + Trend", 
+%'                                           "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
+%' 
+%' qplot(data=time.accuracy, x=as.numeric(mean.trial.time), y=value, color=plottype, shape=k) + 
+%'   geom_smooth(span=1, aes(group=k, linetype=k), se=F, color="black") + 
+%'   scale_linetype_discrete("# Clusters (K)") + 
+%'   xlab("Mean Time to Trial Completion by Plot\n(excluding each participant's 1st trial)") + 
+%'   ylab("Accuracy") + 
+%'   scale_color_discrete("Aesthetic Emphasis") + 
+%'   scale_shape_manual("# Clusters (K)", values=c(16, 1)) + 
+%'   geom_text(data=mean.time, aes(x=mean.trial.time, y=0, label=trial.time), inherit.aes=F, vjust=0, show_guide=F) + 
+%'   facet_grid(trend.diff2~cluster.diff2) + theme_bw()
+%' @
 
 \section{Model Results}
 
