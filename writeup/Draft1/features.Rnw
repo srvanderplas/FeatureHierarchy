@@ -519,13 +519,13 @@ useranswers$k <- factor(useranswers$k)
 useranswers$start_time <- ymd_hms(useranswers$start_time)
 useranswers$end_time <- ymd_hms(useranswers$end_time)
 useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
-useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = rank(start_time))
+useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = rank(start_time), trial.num=order(start_time))
 
 # Remove data from <18 participants
 useranswers <- filter(useranswers, !nick_name%in%users$nick_name[users$age=="<18"])
 users <- filter(users, age!="<18")
 
-modeldata <- useranswers[,c(1, 2, 9:29, 3:8)]
+modeldata <- useranswers[,c(1, 2, 9:30, 3:8)]
 
 # Remove data from participants who did not complete 10 trials
 incomplete.participants <- unique(modeldata$nick_name[modeldata$ntrials<10])
@@ -533,12 +533,13 @@ incomplete.participant.data <- sum(modeldata$ntrials<10)
 message(paste0(sum(modeldata$ntrials<10), " trials removed because participant completed <10 trials total."))
 # Remove data from participants who completed > 10 trials
 modeldata <- filter(modeldata, ntrials>=10)
-extra.participant.data <- sum(modeldata$trial.no>10)
-message(paste0(sum(modeldata$trial.no>10), " trials removed because participant >10 trials."))
-modeldata <- filter(modeldata, trial.no<=10)
+extra.participant.data <- sum(modeldata$trial.num>10)
+message(paste0(sum(modeldata$trial.num>10), " trials removed because participant >10 trials."))
+modeldata <- filter(modeldata, trial.num<=10)
 # Remove users from database who didn't complete any trials
 message(paste0(sum(!users$nick_name%in%modeldata$nick_name), " users removed from user database - no trials found."))
 users <- users %>% filter(nick_name%in%modeldata$nick_name)
+modeldata <- modeldata[,-30]
 
 modeldata$outcome <- paste(c("", "trend")[1+as.numeric(modeldata$trend.correct==1)], 
                            c("", "cluster")[1+as.numeric(modeldata$cluster.correct==1)], 
