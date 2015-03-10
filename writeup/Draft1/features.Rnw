@@ -721,8 +721,6 @@ names(line.fixef.aes)[9] <- "Tukey Post Hoc Differences"
 print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/linear-fixef-table")
 @
 
-% \input{figure/linear-fixef-table}
-
 \begin{figure}\centering
 \includegraphics[width=.75\linewidth]{figure/line-fixef-1}
 \caption{Odds of detecting the linear target plot for each aesthetic. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot (plain scatterplot). \label{fig:linear.fixef}}
@@ -783,8 +781,6 @@ names(group.fixef2)[8] <- "Plot Aesthetic"
 names(group.fixef2)[9] <- "Tukey Post Hoc Differences"
 print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/group-fixef-table")
 @
-
-% \input{figure/group-fixef-table}
 
 \begin{figure}\centering
 \includegraphics[width=.75\linewidth]{figure/group-fixef-1}
