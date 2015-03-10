@@ -672,15 +672,6 @@ For plot type $i$, displaying dataset $j=1, ..., 54$ and participant $k=1, ..., 
 \text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, the error associated with a single trial evaluation} \nonumber
 \end{align}
 
-% \begin{align}
-% P(\text{success}) & =  \left(e^\theta\right)/\left(1+e^\theta\right)\label{eqn:linearModel}\\
-% \theta & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon \tag{a}\\
-% \text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
-% \hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
-% \hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{, the random effect for participant characteristics}\nonumber\\
-% \text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, the error associated with a single trial evaluation} \nonumber
-% \end{align}
-
 We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
 
 \subsubsection{Linear Target Model}
