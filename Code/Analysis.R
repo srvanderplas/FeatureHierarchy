@@ -8,14 +8,45 @@ library(ggplot2)
 library(doMC)
 registerDoMC(8)
 library(lubridate)
+library(digest)
 
 lineups <- read.csv("./Images/Turk16/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
 
+
+
 userdata <- read.csv("./Data/turk16_results.csv", stringsAsFactors=FALSE)
-userdata$response.id <- 1:nrow(userdata)
+
+users <- read.csv("./Images/Turk16/turk16_users.csv", stringsAsFactors=F, header=F)
+names(users) <- c("nick_name", "age", "gender", "education", "ip_address")
+
+userlist <- unique(c(userdata$nick_name, users$nick_name))
+iplist <- unique(c(userdata$ip_address, users$ip_address))
+
 # table(userdata$ip_address, userdata$nick_name)
+userdata$nick_name2 <- userdata$nick_name
+userdata$ip_address2 <- userdata$ip_address
+userdata$ip_address <- as.numeric(factor(userdata$ip_address2, levels=iplist))
+userdata$nick_name <- as.numeric(factor(userdata$nick_name2, levels=userlist))
+
+users$nick_name2 <- users$nick_name
+users$ip_address2 <- users$ip_address
+users$nick_name <- as.numeric(factor(users$nick_name2, levels=userlist))
+users$ip_address <- as.numeric(factor(users$ip_address2, levels=iplist))
+
+write.csv(userdata[,-which(names(userdata)%in%c("ip_address2", "nick_name2"))], "./Data/turk16_results_anon.csv", row.names=F)
+write.csv(users[,-which(names(users)%in%c("ip_address2", "nick_name2"))], "./Data/turk16_users_anon.csv", row.names=F)
+
+
+userdata$response.id <- 1:nrow(userdata)
+
+users$age <- factor(users$age, levels=0:10, labels=c("NA", "<18", "18-25", "26-30", "31-35", "36-40", "41-45", "45-50", "51-55", "56-60", "61+"))
+users$gender <- factor(users$gender, levels=0:2, labels=c("NA", "Male", "Female"))
+users$education <- factor(users$education, levels=0:5, labels=c("NA", "High School or less", "Some college", "Bachelor's degree", "Some graduate school", "Graduate degree"))
+
+
+
 
 tmp <- merge(userdata[!is.na(userdata$pic_id),], lineups[,c("pic_id", "sample_size", "test_param", "param_value", "p_value", "obs_plot_location")], all.x=T, all.y=F)
 tmp$k <- as.numeric(substr(tmp$param_value, 3, 3))
