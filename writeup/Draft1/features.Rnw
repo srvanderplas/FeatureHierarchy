@@ -911,45 +911,67 @@ qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + the
 \caption{\label{fig:timemodel-aes} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
 \end{figure}
 
+\newtext{
+Next, we model log response time a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure \ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
+% The increased variance for "Both" outcomes is a result of the relatively few trials in which participants identified multiple target plots (missing intervals are a result of this issue as well). 
+The time to evaluate each plot increases slightly with trend difficulty and cluster difficulty (across trials), conditional on outcome, but the "medium" difficulty trials seem to be somewhat discordant in many cases; in some cases, time to evaluate increases and in others, it decreases. This may be due to a conflict between the trend and cluster target plots: when there is no clear signal numerically, evaluation time increases while participants waver between potential targets. 
+}
+
+\begin{figure}
 <<timemodel-pars,echo=F, fig.width=8, fig.height=6, out.width='.8\\textwidth', dependson='results-setup'>>=
 
-time.model2 <- lmer(log(as.numeric(trial.time))~ first.trial  + simpleoutcome:trend.diff:cluster.diff:k  + (1|individualID) , data=modeldata)
+time.model2 <- lmer(log(as.numeric(trial.time))~ first.trial + plottype + simpleoutcome:trend.diff:cluster.diff:k  + (1|individualID) , data=modeldata)
 
-coefs <- data.frame(exp(confint(time.model2, method="Wald")))[-c(1:2),]
+coefs <- data.frame(exp(confint(time.model2, method="Wald")))[-c(1:11),]
 names(coefs) <- c("low", "high")
-coefs$estimate <- exp(fixef(time.model2)[-c(1:2)])
-coefs$name <- names(fixef(time.model2))[-c(1:2)]
+coefs$estimate <- exp(fixef(time.model2)[-c(1:11)])
+coefs$name <- names(fixef(time.model2))[-c(1:11)]
 ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
 coefs$outcome <- gsub("simpleoutcome", "", ll$V1)
 coefs$trend.diff <- gsub("trend\\.diff", "", ll$V2)
+coefs$trend.diff <- factor(coefs$trend.diff, levels=c("easy", "medium", "hard"), labels=paste0("Trend:", c("Easy", "Medium", "Hard")))
 coefs$cluster.diff <- gsub("cluster\\.diff", "", ll$V3)
+coefs$cluster.diff <- factor(coefs$cluster.diff, levels=c("easy", "medium", "hard"), labels=paste0("Cluster:", c("Easy", "Medium", "Hard")))
 coefs$k <- gsub("k", "", ll$V4)
 coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
 coefs$simple <- factor(coefs$simple)
 levels(coefs$simple) <- c("Neither", "Cluster, Trend", "Both")
-# 
-# coefs$plottype <- coefs$plottype %>% 
-#   str_replace("color", "Color + ") %>% 
-#   str_replace("[sS]hape", "Shape + ") %>%
-#   str_replace("[tT]rend", "Trend + ") %>%
-#   str_replace("Ellipse", "Ellipse + ") %>%
-#   str_replace("Error", "Error + ") %>%
-#   str_replace("plain", "Plain") %>%
-#   str_replace("( \\+ )$", "")
-# coefs$plottype <- factor(coefs$plottype)
 
-# coefs$trend.diff <- with(coefs, reorder(trend.diff, estimate))
+coefs$outcome <- factor(coefs$outcome, levels=c("neither", "cluster", "trend", "both"), labels=c("Neither Identified", "Cluster Identified", "Trend Identified", "Both Identified"))
+coefs$pos <- as.numeric(factor(coefs$k)) + (as.numeric(factor(coefs$trend.diff))-2)/4
 
-coefs$outcome <- factor(coefs$outcome, levels=c("neither", "cluster", "trend", "both"))
-coefs$pos <- as.numeric(factor(coefs$k)) + (as.numeric(factor(coefs$outcome))-2.5)/5
-
-qplot(estimate, pos, data=subset(coefs, outcome!="both"), colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
-  scale_colour_brewer(palette="Set1") +
+qplot(estimate, pos, data=subset(coefs, outcome!="Both Identified"), colour=trend.diff, size=I(4), shape=trend.diff) + theme_bw() + 
+  geom_vline(xintercept=1, color="grey") + 
+  scale_colour_manual("Trend", values=c("#7bccc4", "#2b8cbe", "#084081")) +
+  scale_shape_discrete("Trend") + 
   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
-  facet_grid(trend.diff~cluster.diff, scales="free_x") + 
+  facet_grid(cluster.diff~outcome) + 
   scale_y_continuous(breaks=1:2, labels=unique(coefs$k)) + 
   xlab("Estimate of the (additional) time to evaluate each plot type (in seconds) given outcome") + ylab("K")
+
+coefs2 <- data.frame(exp(confint(time.model2, method="Wald")))[c(1:11),]
+names(coefs2) <- c("low", "high")
+coefs2$estimate <- exp(fixef(time.model2)[c(1:11)])
+coefs2$name <- names(fixef(time.model2))[c(1:11)]
+coefs2$name <- coefs2$name %>% 
+  str_replace("first\\.trialTRUE", "First Trial") %>%
+  str_replace("plottype", "Plot Type: ") %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("plain", "Plain") %>%
+  str_replace("( \\+ )$", "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+coefs2$Interval <- sprintf("(%.2f, %.2f)", coefs2$low, coefs2$high)
+names(coefs2)[3:5] <- c("Estimate", "Effect", "95\% Confidence Interval")
+
+print(xtable(coefs2[,c(4, 3, 5)], caption=c("Fitted values of plot type and first trial effects for a model describing log evaluation time as a function of plot type, first trial, and data generation parameters, with a random effect for participant. Additional parameters and intervals are shown in figure \ref{fig:timemodel-pars}", "Fixed effects for trial time model including data parameters."), label="tab:timemodel-pars", align=c('r', 'r', 'r', 'r'), digits=c(0, 0, 3, 0)), include.rownames=F, file="figure/timemodel-pars-fixef-table")
 @
+\caption{\label{fig:timemodel-pars} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
+\end{figure}
+\input{figure/timemodel-pars-fixef-table}
 
 \comment{I removed "both" because it was distracting and missing a couple of CI's, but I'm not sure I'm happy with this now either. }
 \subsection{Participant Confidence}
