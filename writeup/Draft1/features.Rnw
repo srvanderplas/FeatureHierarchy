@@ -141,36 +141,27 @@ qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
 \end{figure}
 
 The plots in figure \ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (connectedness, closure, and/or common region). 
-\newdo{clarify next sentence}
-The use of physical location, color, and shape to organize graphical units mentally utilizes both preattentive processing and higher-order gestalt schemas, identifying and grouping similar graphical features and simultaneously directing attention to graphical features which stand alone. 
 
-Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli; theoretically, subsequent top-down gestalt heuristics can be applied to such stimuli more quickly. 
+\newtext{
+The processing of visual stimuli utilizes low-level feature detection, which occurs automatically in the preattentive perceptual phase, and higher-level mental heuristics which are informed by experience. Both types of mental processes utilize physical location, color, and shape in order to organize our perception and direct attention to graphical features which stand alone. 
+}
 
-% \comment{We should also look at the time to response -- it would be interesting, to see if the conflicting stimuli need more time to come to a decision. It's obviously not milliseconds that we measure, but it might still be informative. (We would need to exclude everybody's first attempt). }
+\newtext{
+Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli; subsequent top-down gestalt heuristics can be applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
+}
 
-% \comment{This study - introduce the fact first, that this paper will include a user study.}
 This paper describes the results of a user study designed to explore the hierarchy of gestalt principles in perception of statistical graphics. We utilize information from previous studies \citep{heer:2014, robinson:03} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
-
-%\comment{might be useful to have a small diagram describing the perceptual process (with preattentive processing way at the top and gestalt heuristic processing in the middle, with "cognitive effort" at the bottom). Not sure if it's necessary, though. HH: good idea, let's see how much space we'll have. }
 
 Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Statistical lineups, described in the next section, are an important experimental tool for evaluating the perceptual utility of graphical displays. Lineups fuse commonly used psychological tests (target identification, visual search) \newtext{XXX cite the ACM Transact submission here} with statistical hypothesis tests to facilitate formal experimental evaluation of statistical graphics. 
 
 
 \subsection*{Statistical Lineups}
-% 
-% \todo[inline]{Intro to lineups \citep{Buja:2009hp, mahbub:2013, wickham:2010, Hofmann:2012ts}.}
-% \comment{Describe the lineup protocol, including basic statistics. Link to the psychological "target and distractors" approach, which can be used to justify the addition of a second target, even with the PITA of the statistical complications. }
-%\newdo{Add basic statistics?}
-
 Lineups are an experimental tool designed to serve as a visual hypothesis test, separating ``significant" visual effects from those that would be expected under a null hypothesis \citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
 A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in figure \ref{fig:plotExamples}). 
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
 If participants can identify the target plot from the field of distractors, then the visual display is deemed significant in the same sense that a numerical test with $p<0.05$ is significant. 
 
-
-
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
-
 
 In this study, we modify the lineup protocol by introducing a second target to each lineup. The two targets represent two different, competing signals; the participant's choice then demonstrates empirically which signal is more salient. 
 If both targets exhibit similar signal, participants may identify both targets, removing any forced-choice scenario which might skew results (few participants exercised this option). 
@@ -179,25 +170,15 @@ By tracking the proportion of observers choosing either target plot (a measure o
 
 Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of figure \ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure would be enhanced if the points in each group were colored differently, as the proximity heuristic would be supplemented by similarity. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal.
 
-% A further extension of this testing framework are the use of color (in a qualitative color scheme), the use of shapes, and additional density lines - we anticipate that all of these features are going to emphasize the clustering component. 
-% On the other hand, regression lines should emphasize any linear trends in the data.
-
-This study is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. %awesome alliteration, right? HH: :)
+This study is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. 
 
 The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. Experimental results are presented in section \ref{sec:Results}, and implications and conclusions are discussed in section \ref{sec:Conclusion}. 
 
 \section{Experimental Setup and Design} \label{sec:ExperimentalDesign}
-
 In this section, we discuss the generating data models for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
 
-
-%\comment{I know this will have to be rearranged, expanded, and transitions between sections will need to be added, but I want to get the paragraphs out.}
-
 \subsection{Data Generation}
-
-Lineups require a single ``target" data set (which we are expanding to two competing ``target" data sets), and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through permutations. % bootstrap sampling, but this introduces some dependencies between target and null plots which complicate the statistical analysis of the results.
-
-%\newdo{add citations}
+Lineups require a single ``target" data set (which we are expanding to two competing ``target" data sets), and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through permutations.
 
 Here, it is possible to generate true null plots, which are generated from the null model and do not depend on the data used in the target plot. 
 This experiment will measure two competing gestalt heuristics, proximity and good continuation, using two data-generating models: $M_C$, which generates data with $K$ clusters, and $M_T$, which generates data with a positive correlation between $x$ and $y$. 
@@ -206,7 +187,6 @@ Additionally, $M_C$ generates clustered data with linear correlations that are w
 
 
 \subsubsection{Regression Model $M_T$}
-
 This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. It generates $N$ points $(x_i, y_i), i=1, ..., N$ where $x$ and $y$ have a positive linear relationship. The data generation mechanism is as follows: 
 
 \begin{algorithm}\hfill\newline
