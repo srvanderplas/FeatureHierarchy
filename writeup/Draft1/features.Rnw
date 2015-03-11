@@ -710,12 +710,12 @@ totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time 
 @
 
 \subsection{General results}
-
-Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, % how cool is that... 25 hours and voila: data!
-during which time \Sexpr{length(unique(userdata$nick_name))} individuals completed \Sexpr{nrow(userdata)} unique lineup evaluations. Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{incomplete.participant.data} evaluations), and lineup evaluations in excess of 10 for each participant were also removed from the study (\Sexpr{extra.participant.data} evaluations). 
+Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, 
+during which time \Sexpr{length(unique(userdata$nick_name))} individuals completed \Sexpr{nrow(userdata)} unique lineup evaluations. 
+Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{incomplete.participant.data} evaluations), and lineup evaluations in excess of 10 for each participant were also removed from the study (\Sexpr{extra.participant.data} evaluations). 
 After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} trials completed by \Sexpr{length(unique(modeldata$individualID))} participants. 
 
-Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see figure~\ref{fig:demographics}).
+Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see figure~\ref{fig:demographics}). 
 
 \begin{figure}[ht]
 <<demographics, echo=FALSE, fig.width=7.5, fig.height=5, fig.keep='all', fig.show='hold', out.width='.48\\textwidth'>>=
@@ -732,17 +732,6 @@ qplot(education, data=users) + theme_bw() + xlab("(self-reported) Highest level 
 @
 \caption{\label{fig:demographics}Basic demographics of participants.}
 \end{figure}
-%and 
-%\Sexpr{round(mean(users$age%in%c("18-25", "26-30"))*100)}
-%\% were between 18 and 30 years of age. 
-
-
-%\newtext{
-%Participants were fairly well-educated: 
-%\Sexpr{round(mean(users$education%in%levels(users$education)[3:4])*100)}\% had at least some undergraduate education, and 
-%\Sexpr{round(mean(users$education%in%levels(users$education)[5:6])*100)}\% had at least some graduate education. 
-
-
 
 Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plot.eval.tab)} individuals 
 (\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
@@ -752,6 +741,7 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 Only \Sexpr{round(100*(mean(modeldata$n.answers>=2)), 1)}\% of participant evaluations identified more than one target plot, and of these multiple identifications, \Sexpr{round(100*(mean(modeldata[modeldata$n.answers>=2,"both.correct"])), 1)}\% identified both targets correctly. 
 
 From figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target type over another target type, but generally pick both types over the course of ten lineups.
+
 \begin{figure}
 \centering
 <<targets, fig.width=7.5, fig.height=5, out.width='0.6\\textwidth', echo=FALSE>>=
