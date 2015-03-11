@@ -764,10 +764,10 @@ We  first consider the effect of plot aesthetics on target selection for each ta
 
 \subsection{Single Target Plot Models}
 
-We  model the probability of selecting the linear target plot as a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
+We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
 
 For plot type $i$, displaying dataset $j=1, ..., 54$ and participant $k=1, ..., P$, we model
-%
+
 \begin{align}
 \text{logit }P(\text{success}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:linearModel}\\
 \text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
