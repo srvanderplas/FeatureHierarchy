@@ -940,12 +940,11 @@ ggplot(data=gvl.fixef[-1,]) +
 \caption{\label{fig:faceoff} Estimated odds of decision for group versus line target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different, if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
 
+Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color+trend (good continuation) condition. 
 
-Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color+trend (good continuation) condition.  
+When trend and error are present in the same plot, additional Gestalt ordering principles are present: common region and possibly closure (due to the enclosed space between the two error lines), in addition to the good continuation heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these three heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot (and increasing the probability that the trend target will be selected). 
 
-When trend and error are present in the same plot, additional Gestalt ordering principles are present: common region and closure (due to the enclosed space between the two error lines), in addition to the good continuation heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these three heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot (and increasing the probability that the trend target will be selected). 
-
-This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend+error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
+This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
 
 \subsection{Response Time}
