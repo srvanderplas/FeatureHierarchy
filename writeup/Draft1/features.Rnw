@@ -1114,31 +1114,31 @@ As part of each trial, participants were asked to provide a short justification 
 For a more succinct analysis, responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
 
 \begin{figure}
-% <<sentiment, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\textwidth', fig.show='hold'>>=
-% lexicaldata <- modeldata
-% lexicaldata$choice_reason <- tolower(lexicaldata$choice_reason)
-% lexicaldata$choice_reason <- gsub("^_", "", lexicaldata$choice_reason)
-% 
-% words <- lexicaldata %>% group_by(plottype, simpleoutcome) %>% 
-%   summarize(list = paste(choice_reason, collapse=" ")) %>% filter(simpleoutcome != "both", plottype %in% c("plain", "color", "trend", "colorEllipse"))
-% 
-% library(wordcloud)
-% library(tm)
-% for (i in 1:nrow(words)) {
-% words.corpus <- Corpus(DataframeSource(data.frame(words$list[i])))
-% words.corpus <- tm_map(words.corpus, removePunctuation)
-% 
-% tdm <- TermDocumentMatrix(words.corpus)
-% m <- as.matrix(tdm)
-% v <- sort(rowSums(m),decreasing=TRUE)
-% d <- data.frame(word = names(v),freq=v)
-% pal <- brewer.pal(9, "BuGn")
-% pal <- pal[-(1:2)]
-% #png(sprintf("wordcloud/wordcloud-%s-%s.png",words$plottype[i], words$simpleoutcome[i]), width=960,height=600)
-% wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T, rot.per=.15, colors="black", vfont=c("sans serif","plain"))
-% #dev.off()
-% }
-% @
+<<sentiment, eval=FALSE, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\linewidth', fig.show='hold'>>=
+lexicaldata <- modeldata
+lexicaldata$choice_reason <- tolower(lexicaldata$choice_reason)
+lexicaldata$choice_reason <- gsub("^_", "", lexicaldata$choice_reason)
+
+words <- lexicaldata %>% group_by(plottype, simpleoutcome) %>% 
+  summarize(list = paste(choice_reason, collapse=" ")) %>% filter(simpleoutcome != "both", plottype %in% c("plain", "color", "trend", "colorEllipse"))
+
+library(wordcloud)
+library(tm)
+for (i in 1:nrow(words)) {
+words.corpus <- Corpus(DataframeSource(data.frame(words$list[i])))
+words.corpus <- tm_map(words.corpus, removePunctuation)
+
+tdm <- TermDocumentMatrix(words.corpus)
+m <- as.matrix(tdm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+pal <- brewer.pal(9, "BuGn")
+pal <- pal[-(1:2)]
+#png(sprintf("wordcloud/wordcloud-%s-%s.png",words$plottype[i], words$simpleoutcome[i]), width=960,height=600)
+wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T, rot.per=.15, colors="black", vfont=c("sans serif","plain"))
+#dev.off()
+}
+@
 
 \centering
 \begin{subfigure}[t]{0.25\linewidth}
@@ -1192,7 +1192,7 @@ For a more succinct analysis, responses were categorized based on keywords such 
   \caption{Color + Ellipse, trend target}
   \includegraphics[width=\linewidth]{figure/sentiment-12}
 \end{subfigure}
-\caption{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Ellipse + Color plot, participants were distracted from either target by an imbalance in the group/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
+\caption{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the group/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
 
 \begin{figure}
@@ -1250,7 +1250,7 @@ qplot(data=lexicaldata, x=outcome, fill=reason, geom="histogram", position="dodg
 \caption[Lexical analysis of participant reasoning]{Lexical analysis of participants' justification of plot selection. Group sentiment in the reasoning is highly associated with selection of the cluster target plot; linear sentiment is highly associated with selection of the trend target plot.}\label{fig:lexicalanalysis}
 \end{figure}
 
-The results of this analysis, shown in figure \ref{fig:lexicalanalysis}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size, which were present in only a few responses. 
+The results of this analysis, shown in figure \ref{fig:lexicalanalysis} and supported by figure \ref{fig:wordles}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size. In future studies, however, group size should be more tightly controlled to reduce the presence of distractor aesthetics in null plots. 
 
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
