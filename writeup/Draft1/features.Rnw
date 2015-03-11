@@ -1088,8 +1088,7 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
-As part of each trial, participants were asked to provide a short justification of their plot choice. \newtext{Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly(?) similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/group distribution. }
-For a more succinct analysis, responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
+As part of each trial, participants were asked to provide a short justification of their plot choice. \newtext{Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/group distribution. }
 
 \begin{figure}[ht]\centering
 <<sentiment, eval=FALSE, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\linewidth', fig.show='hold'>>=
@@ -1172,7 +1171,7 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 \end{subfigure}
 \caption{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the group/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
-
+For a more quantitative analysis, responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
 \begin{figure}[ht]\centering
 <<lexical-analysis, echo=FALSE, fig.width=8, fig.height=6, out.width='.8\\linewidth'>>=
 lexicaldata <- modeldata
