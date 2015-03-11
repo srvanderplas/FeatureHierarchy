@@ -313,10 +313,8 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
   scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1)
 @
 \caption{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. The colors and shapes shown are those used in the lineups for $K=3$ and $K=5$.}
-% \comment{Could you include the same colors and shapes as in our lineups?}}
 \end{figure}
 
-%\comment{For the study we used $a=1$, right?\\Susan: Yes, and I thought I'd purged all $a$ from the description accordingly, but I see that I missed one. It's fixed now. }
 \subsubsection{Null Model $M_0$}
 The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
