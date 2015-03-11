@@ -109,7 +109,7 @@ For example, rather than perceiving four legs, a tail, two eyes, two ears, and a
 \end{itemize}
 
 \begin{figure}\centering
-<<gestalt1, echo =FALSE, out.width='0.32\\textwidth', fig.width=3, fig.height=3, fig.show='hold'>>=
+<<gestalt1, echo =FALSE, out.width='0.32\\linewidth', fig.width=3, fig.height=3, fig.show='hold'>>=
 x1 <- rnorm(25, mean=4, sd=0.5)
 x2 <- rnorm(25, mean=0, sd=0.5)
 y1 <- rnorm(25, mean=1, sd=0.5)
@@ -207,7 +207,7 @@ $$
 The use of $R^2$ to assess the strength of the linear relationship (rather than the correlation) is indicated because human perception of correlation strength more closely aligns with $R^2$ \citep{bobko1979perception,lewandowsky1989perception}. 
 
 \begin{figure}[ht]
-<<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE>>=
+<<trends, fig.width=8, fig.height=3, out.width='\\linewidth', echo=FALSE>>=
 sd <- c(0.1, 0.2, 0.3, 0.4)
 res <- ldply(sd, function(x) { data.frame(sd.trend=x, sim.line(N=45, sd.trend=x)) })
 res$label <- paste("sigma[T] :",res$sd.trend)
@@ -259,7 +259,7 @@ For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{
 \end{eqnarray}
 
 \begin{figure}[ht]
-<<cluster, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE,dependson='setup'>>=
+<<cluster, fig.width=8, fig.height=4.5, out.width='\\linewidth', echo=FALSE,dependson='setup'>>=
 sd <- c(0.15, 0.2, 0.25, 0.3)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -309,7 +309,7 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
 The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[ht]
-<<lambda, fig.width=8, fig.height=3.5, out.width='\\textwidth', echo=FALSE>>=
+<<lambda, fig.width=8, fig.height=3.5, out.width='\\linewidth', echo=FALSE>>=
 lambda <- c(0, .25, .5, .75, 1)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -474,45 +474,45 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
 % @
 
 \centering
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Plain}
-  \includegraphics[width=\textwidth]{figure/samplepics-1}
+  \includegraphics[width=\linewidth]{figure/samplepics-1}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Color}
-  \includegraphics[width=\textwidth]{figure/samplepics-2}
+  \includegraphics[width=\linewidth]{figure/samplepics-2}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Shape}
-  \includegraphics[width=\textwidth]{figure/samplepics-3}
+  \includegraphics[width=\linewidth]{figure/samplepics-3}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Shape + Color}
-  \includegraphics[width=\textwidth]{figure/samplepics-4}
+  \includegraphics[width=\linewidth]{figure/samplepics-4}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Color + Ellipse}
-  \includegraphics[width=\textwidth]{figure/samplepics-5}
+  \includegraphics[width=\linewidth]{figure/samplepics-5}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Shape + Ellipse}
-  \includegraphics[width=\textwidth]{figure/samplepics-6}
+  \includegraphics[width=\linewidth]{figure/samplepics-6}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend}
-  \includegraphics[width=\textwidth]{figure/samplepics-7}
+  \includegraphics[width=\linewidth]{figure/samplepics-7}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend + Error }
-  \includegraphics[width=\textwidth]{figure/samplepics-8}
+  \includegraphics[width=\linewidth]{figure/samplepics-8}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend + Color}
-  \includegraphics[width=\textwidth]{figure/samplepics-9}
+  \includegraphics[width=\linewidth]{figure/samplepics-9}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\textwidth}
+\begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend + Color + Ellipse}
-  \includegraphics[width=\textwidth]{figure/samplepics-10}
+  \includegraphics[width=\linewidth]{figure/samplepics-10}
 \end{subfigure}
 \caption{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
@@ -708,7 +708,7 @@ After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} t
 Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see figure~\ref{fig:demographics}). 
 
 \begin{figure}[ht]
-<<demographics, echo=FALSE, fig.width=7.5, fig.height=5, fig.keep='all', fig.show='hold', out.width='.48\\textwidth'>>=
+<<demographics, echo=FALSE, fig.width=7.5, fig.height=5, fig.keep='all', fig.show='hold', out.width='.48\\linewidth'>>=
 # cage <- read.csv("../../data/census-age.csv")
 # cage$order <- 1:nrow(cage)
 # cage$Census.age <- reorder(cage$Census.age, cage$order)
@@ -734,7 +734,7 @@ From figure~\ref{fig:targets} we see that users identified more cluster targets 
 
 \begin{figure}
 \centering
-<<targets, fig.width=7.5, fig.height=5, out.width='0.6\\textwidth', echo=FALSE>>=
+<<targets, fig.width=7.5, fig.height=5, out.width='0.6\\linewidth', echo=FALSE>>=
 user.data <- modeldata %>% group_by(individualID) %>% 
   summarize(answers=length(individualID),
             cluster=sum(cluster.correct),
@@ -912,7 +912,7 @@ Next, we consider only the subset of trials in which participants identified one
 
 \begin{figure}
 \centering
-<<group-vs-line, echo=FALSE, fig.width=8, fig.height=4, out.width='.85\\textwidth'>>=
+<<group-vs-line, echo=FALSE, fig.width=8, fig.height=4, out.width='.85\\linewidth'>>=
 designs <- ddply(modeldata, .(dataset, plottype), summarise, evals=length(data_name), group=sum(cluster.correct), line=sum(trend.correct))
 designs$perc <- with(designs, group/(group+line))
 #qplot(plottype, perc, data=designs, geom="boxplot")
@@ -965,7 +965,7 @@ Examining differences in average response times across trials provides us with a
 We can also explore whether participants spent more time on certain types of plots and how additional time is realted to accurate target identification. 
 
 \begin{figure}
-<<timemodel-plottype, echo=FALSE, fig.width=8, fig.height=6, out.width='\\textwidth', dependson='results-setup'>>=
+<<timemodel-plottype, echo=FALSE, fig.width=8, fig.height=6, out.width='\\linewidth', dependson='results-setup'>>=
 library(lubridate)
 
 # modeldata$time_taken <- as.numeric(ymd_hms(modeldata$end_time) - ymd_hms(modeldata$start_time))
@@ -1015,8 +1015,7 @@ We model log-transformed reaction time as a function of evaluation outcome (neit
 
 
 \begin{figure}
-<<timemodel-pars,echo=F, fig.width=8, fig.height=6, out.width='.8\\textwidth', dependson='results-setup'>>=
-
+<<timemodel-pars,echo=F, fig.width=8, fig.height=6, out.width='.8\\linewidth', dependson='results-setup'>>=
 time.model2 <- lmer(log(as.numeric(trial.time))~ first.trial + plottype + simpleoutcome:trend.diff:cluster.diff:k  + (1|individualID) , data=modeldata)
 
 coefs <- data.frame(exp(confint(time.model2, method="Wald")))[-(1:11),]
@@ -1142,56 +1141,56 @@ For a more succinct analysis, responses were categorized based on keywords such 
 % @
 
 \centering
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Plain, neither target}
-  \includegraphics[width=\textwidth]{figure/sentiment-1}
+  \includegraphics[width=\linewidth]{figure/sentiment-1}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Plain, cluster target}
-  \includegraphics[width=\textwidth]{figure/sentiment-2}
+  \includegraphics[width=\linewidth]{figure/sentiment-2}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Plain, trend target}
-  \includegraphics[width=\textwidth]{figure/sentiment-3}
+  \includegraphics[width=\linewidth]{figure/sentiment-3}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend, neither target}
-  \includegraphics[width=\textwidth]{figure/sentiment-4}
+  \includegraphics[width=\linewidth]{figure/sentiment-4}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend, cluster target}
-  \includegraphics[width=\textwidth]{figure/sentiment-5}
+  \includegraphics[width=\linewidth]{figure/sentiment-5}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend, trend target}
-  \includegraphics[width=\textwidth]{figure/sentiment-6}
+  \includegraphics[width=\linewidth]{figure/sentiment-6}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color, neither target}
-  \includegraphics[width=\textwidth]{figure/sentiment-7}
+  \includegraphics[width=\linewidth]{figure/sentiment-7}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color, cluster target}
-  \includegraphics[width=\textwidth]{figure/sentiment-8}
+  \includegraphics[width=\linewidth]{figure/sentiment-8}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color, trend target}
-  \includegraphics[width=\textwidth]{figure/sentiment-9}
+  \includegraphics[width=\linewidth]{figure/sentiment-9}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color + Ellipse, neither target}
-  \includegraphics[width=\textwidth]{figure/sentiment-10}
+  \includegraphics[width=\linewidth]{figure/sentiment-10}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color + Ellipse, cluster target}
-  \includegraphics[width=\textwidth]{figure/sentiment-11}
+  \includegraphics[width=\linewidth]{figure/sentiment-11}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color + Ellipse, trend target}
-  \includegraphics[width=\textwidth]{figure/sentiment-12}
+  \includegraphics[width=\linewidth]{figure/sentiment-12}
 \end{subfigure}
 \caption{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Ellipse + Color plot, participants were distracted from either target by an imbalance in the group/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
