@@ -1162,7 +1162,8 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
-As part of each trial, participants were asked to provide a short justification of their plot choice. Responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
+As part of each trial, participants were asked to provide a short justification of their plot choice. \newtext{Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly(?) similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/group distribution. }
+For a more succinct analysis, responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
 
 \begin{figure}
 % <<sentiment, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\textwidth', fig.show='hold'>>=
@@ -1301,17 +1302,17 @@ qplot(data=lexicaldata, x=outcome, fill=reason, geom="histogram", position="dodg
 \caption[Lexical analysis of participant reasoning]{Lexical analysis of participants' justification of plot selection. Group sentiment in the reasoning is highly associated with selection of the cluster target plot; linear sentiment is highly associated with selection of the trend target plot.}\label{fig:lexicalanalysis}
 \end{figure}
 
-\newtext{The results of this analysis, shown in figure \ref{fig:lexicalanalysis}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size, which were present in only a few responses. }
+The results of this analysis, shown in figure \ref{fig:lexicalanalysis}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size, which were present in only a few responses. 
 
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
-\newtext{
+
 Taken together, the results presented suggest that plot aesthetics influence the perception of the dominant effect in the displayed data. This effect is not simply additive (otherwise, the two conflicting aesthetic conditions would result in similarly neutral effects); rather, the effect is consistent with layering of gestalt perceptual heuristics. Plot layers which add additional heuristics show larger effects than plot layers which duplicate heuristics which are already in play. For example, adding ellipses to a plot which has color aesthetics increases group recognition by recruiting the closure heuristic in addition to the point similarity heuristic recruited by color; adding shape to a plot which has color aesthetics may increases group recognition slightly, but does not add additional gestalt heuristics (though point similarity is emphasized through two different mechanisms). 
 
 In order to explicitly rank aesthetics given this nonadditive mechanism, it would be necessary to test ellipse and error band aesthetics alone; in this study, we have only examined those aesthetics in combination with color and regression line plot layers, as the bounding aesthetics are seldom seen alone. 
 
 While further exploration of these effects is necessary to control for the effects of group size as well as to explore the gestalt heuristics applicable to other types of plots, these results demonstrate the importance of carefully constructing graphs in order to consistently convey the most important aspects of the displayed data. 
-}
+
 \bibliographystyle{asa}
 \bibliography{references}
 \newpage
