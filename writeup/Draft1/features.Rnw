@@ -550,7 +550,7 @@ qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lin
 \caption{Colors in \citet{heer:2014}. This study removed gray from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
 \end{figure}
 
-The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software. \comment{citation for Tableau?}
+The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software\citep{tableau}. 
 In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (gray) which is difficult to distinguish for those with color deficiency.  
 
 % Beyond that, we modified some color pairings observed in the general population to reflect individual's abilities: the red-green color pair is one of the pairs of the most distinct color pairings in the general population (XXX exact value?), but obviously is a poor choice for the approximately XXX\% of population with a red-green color vision deficiency.
