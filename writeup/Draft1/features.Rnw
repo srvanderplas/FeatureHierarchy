@@ -867,7 +867,8 @@ qplot(data=line.fixef.aes, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
 names(line.fixef.aes)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
 names(line.fixef.aes)[8] <- "Plot Aesthetic"
 names(line.fixef.aes)[9] <- "Tukey Post Hoc Differences"
-print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/linear-fixef-table")
+#print(xtable(line.fixef.aes[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/linear-fixef-table")
+print(xtable(line.fixef.aes[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/linear-fixef-table")
 @
 
 \begin{figure}\centering
@@ -928,7 +929,9 @@ qplot(data=group.fixef2, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") +
 names(group.fixef2)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
 names(group.fixef2)[8] <- "Plot Aesthetic"
 names(group.fixef2)[9] <- "Tukey Post Hoc Differences"
-print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in section~\ref{sec:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/group-fixef-table")
+#print(xtable(group.fixef2[,c(8, 1:4, 9)], caption=c("Fitted values of fixed effects for the model described in section~\ref{sec:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4, 0)), include.rownames=F, file="figure/group-fixef-table")
+print(xtable(group.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in section~\ref{sec:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/group-fixef-table")
+
 @
 
 \begin{figure}\centering
@@ -947,13 +950,13 @@ and
 
 This suggests that our group allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of groups and the presence of the additional similarity cue. 
 Numerically, these null data sets had uneven group allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. 
-Visually, the conspicuous absence of an ellipse would lead participants to select null plots with that feature.
+Visually, the conspicuous absence of an ellipse will lead participants to select null plots with that feature \newtext{(see section~\ref{sec:sentiment} for a more detailed look at participants' responses)}.
 This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with group size $<3$), participants were more likely to identify the group target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
 The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not in the way the authors originally intended). 
 In future experiments, it will be advantageous to control the variability in group size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. 
 
 
-\comment{Here, we could add some discussion of the gini index.}
+
 
 \subsection{Face-Off: Trend versus Cluster}
 Next, we consider only the subset of trials in which participants identified one of the two target plots. For these trials, we compare the probability of selecting the cluster target generated by $M_C$ compared with the probability of selecting the trend target generated by $M_T$. Overall, participants favored clusters to trends at a ratio of about 2:1. We remove this effect using an intercept, and model group vs. line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests   on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend+error plots and ellipse+trend plots are significantly different from all of the other designs. Apart from that, the only significant difference between designs is between color+shape+ellipse plots and trend plots.
@@ -1158,8 +1161,90 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 @
 
 
-\subsection{Participant Reasoning}
-\newtext{Participants were also given the opportunity to provide a short justification of their plot choice. Responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variaiblity present in the chosen plot. }
+\subsection{Participant Reasoning}\label{sec:sentiment}
+As part of each trial, participants were asked to provide a short justification of their plot choice. Responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
+
+\begin{figure}
+% <<sentiment, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\textwidth', fig.show='hold'>>=
+% lexicaldata <- modeldata
+% lexicaldata$choice_reason <- tolower(lexicaldata$choice_reason)
+% lexicaldata$choice_reason <- gsub("^_", "", lexicaldata$choice_reason)
+% 
+% words <- lexicaldata %>% group_by(plottype, simpleoutcome) %>% 
+%   summarize(list = paste(choice_reason, collapse=" ")) %>% filter(simpleoutcome != "both", plottype %in% c("plain", "color", "trend", "colorEllipse"))
+% 
+% library(wordcloud)
+% library(tm)
+% for (i in 1:nrow(words)) {
+% words.corpus <- Corpus(DataframeSource(data.frame(words$list[i])))
+% words.corpus <- tm_map(words.corpus, removePunctuation)
+% 
+% tdm <- TermDocumentMatrix(words.corpus)
+% m <- as.matrix(tdm)
+% v <- sort(rowSums(m),decreasing=TRUE)
+% d <- data.frame(word = names(v),freq=v)
+% pal <- brewer.pal(9, "BuGn")
+% pal <- pal[-(1:2)]
+% #png(sprintf("wordcloud/wordcloud-%s-%s.png",words$plottype[i], words$simpleoutcome[i]), width=960,height=600)
+% wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T, rot.per=.15, colors="black", vfont=c("sans serif","plain"))
+% #dev.off()
+% }
+% @
+
+\centering
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Plain, neither target}
+  \includegraphics[width=\textwidth]{figure/sentiment-1}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Plain, cluster target}
+  \includegraphics[width=\textwidth]{figure/sentiment-2}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Plain, trend target}
+  \includegraphics[width=\textwidth]{figure/sentiment-3}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Trend, neither target}
+  \includegraphics[width=\textwidth]{figure/sentiment-4}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Trend, cluster target}
+  \includegraphics[width=\textwidth]{figure/sentiment-5}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Trend, trend target}
+  \includegraphics[width=\textwidth]{figure/sentiment-6}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Color, neither target}
+  \includegraphics[width=\textwidth]{figure/sentiment-7}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Color, cluster target}
+  \includegraphics[width=\textwidth]{figure/sentiment-8}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Color, trend target}
+  \includegraphics[width=\textwidth]{figure/sentiment-9}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Color + Ellipse, neither target}
+  \includegraphics[width=\textwidth]{figure/sentiment-10}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Color + Ellipse, cluster target}
+  \includegraphics[width=\textwidth]{figure/sentiment-11}
+\end{subfigure}
+\begin{subfigure}[t]{0.25\textwidth}
+  \caption{Color + Ellipse, trend target}
+  \includegraphics[width=\textwidth]{figure/sentiment-12}
+\end{subfigure}
+\caption{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Ellipse + Color plot, participants were distracted from either target by an imbalance in the group/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
+\end{figure}
 
 \begin{figure}
 <<lexical-analysis, echo=FALSE, fig.width=8, fig.height=6, out.width='.8\\linewidth'>>=
