@@ -1048,7 +1048,7 @@ names(coefs2)[3:5] <- c("Estimate", "Effect", "95% Confidence Interval")
 
 print(xtable(coefs2[,c(4, 3, 5)], caption=c("Fitted values of plot type and first trial effects for a model describing log evaluation time as a function of plot type, first trial, and data generation parameters, with a random effect for participant. Additional parameters and intervals are shown in figure \\ref{fig:timemodel-pars}.", "Fixed effects for trial time model including data parameters."), label="tab:timemodel-pars", align=c('r', 'r', 'r', 'r'), digits=c(0, 0, 3, 0)), include.rownames=F, file="figure/timemodel-pars-fixef-table")
 @
-\caption{\label{fig:timemodel-pars} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
+\caption{\label{fig:timemodel-pars} Results of a model describing log evaluation time by evaluation outcome, plot type, data-generation parameters, and participant experience. }
 \end{figure}
 \input{figure/timemodel-pars-fixef-table}
 
