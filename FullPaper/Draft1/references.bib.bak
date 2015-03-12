@@ -1,0 +1,708 @@
+% This file was created with JabRef 2.10b2.
+% Encoding: UTF-8
+
+
+@Misc{amazon,
+  Title                    = {Mechanical {T}urk},
+
+  Author                   = {Amazon},
+  HowPublished             = {\url{https://www.mturk.com/mturk/welcome}},
+  Year                     = {2010}
+}
+
+@Article{bobko1979perception,
+  Title                    = {The perception of Pearson product moment correlations from bivariate scatterplots},
+  Author                   = {Bobko, Philip and Karren, Ronald},
+  Journal                  = {Personnel Psychology},
+  Year                     = {1979},
+  Number                   = {2},
+  Pages                    = {313--325},
+  Volume                   = {32},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{buja2009statistical,
+  Title                    = {Statistical inference for exploratory data analysis and model diagnostics},
+  Author                   = {Buja, Andreas and Cook, Dianne and Hofmann, Heike and Lawrence, Michael and Lee, Eun-Kyung and Swayne, Deborah F and Wickham, Hadley},
+  Journal                  = {Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences},
+  Year                     = {2009},
+  Number                   = {1906},
+  Pages                    = {4361--4383},
+  Volume                   = {367},
+
+  Owner                    = {susan},
+  Publisher                = {The Royal Society},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{carpenter1998model,
+  Title                    = {A model of the perceptual and conceptual processes in graph comprehension.},
+  Author                   = {Carpenter, Patricia A and Shah, Priti},
+  Journal                  = {Journal of Experimental Psychology: Applied},
+  Year                     = {1998},
+  Number                   = {2},
+  Pages                    = {75},
+  Volume                   = {4},
+
+  Owner                    = {susan},
+  Publisher                = {American Psychological Association},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{carswell1987information,
+  Title                    = {Information integration and the object display an interaction of task demands and display superiority},
+  Author                   = {Carswell, Melody C and Wickens, Christopher D},
+  Journal                  = {Ergonomics},
+  Year                     = {1987},
+  Number                   = {3},
+  Pages                    = {511--527},
+  Volume                   = {30},
+
+  Owner                    = {susan},
+  Publisher                = {Taylor \& Francis},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{cleveland:85,
+  Title                    = {The Elements of Graphing Data},
+  Author                   = {William S. Cleveland},
+  Publisher                = {Hobart Press},
+  Year                     = {1994},
+  Edition                  = {1}
+}
+
+@Article{cleveland:1985,
+  Title                    = {Graphical Perception and Graphical Methods for Analyzing Scientific Data},
+  Author                   = {W. S. Cleveland and R. McGill},
+  Journal                  = {Science},
+  Year                     = {1985},
+  Number                   = {4716},
+  Pages                    = {828--833},
+  Volume                   = {229},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{cleveland:1984,
+  Title                    = {Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods},
+  Author                   = {Cleveland, William S. and McGill, Robert},
+  Journal                  = {Journal of the American Statistical Association},
+  Year                     = {1984},
+  Number                   = {387},
+  Pages                    = {pp. 531-554},
+  Volume                   = {79},
+
+  Abstract                 = {The subject of graphical methods for data analysis and for data presentation needs a scientific foundation. In this article we take a few steps in the direction of establishing such a foundation. Our approach is based on graphical perception-the visual decoding of information encoded on graphs-and it includes both theory and experimentation to test the theory. The theory deals with a small but important piece of the whole process of graphical perception. The first part is an identification of a set of elementary perceptual tasks that are carried out when people extract quantitative information from graphs. The second part is an ordering of the tasks on the basis of how accurately people perform them. Elements of the theory are tested by experimentation in which subjects record their judgments of the quantitative information on graphs. The experiments validate these elements but also suggest that the set of elementary tasks should be expanded. The theory provides a guideline for graph construction: Graphs should employ elementary tasks as high in the ordering as possible. This principle is applied to a variety of graphs, including bar charts, divided bar charts, pie charts, and statistical maps with shading. The conclusion is that radical surgery on these popular graphs is needed, and as replacements we offer alternative graphical forms-dot charts, dot charts with grouping, and framed-rectangle charts.},
+  Bdsk-url-1               = {http://www.jstor.org/stable/2288400},
+  Copyright                = {Copyright {\copyright} 1984 American Statistical Association},
+  ISSN                     = {01621459},
+  Jstor_articletype        = {research-article},
+  Jstor_formatteddate      = {Sep., 1984},
+  Language                 = {English},
+  Owner                    = {susan},
+  Publisher                = {American Statistical Association},
+  Timestamp                = {2015.03.04},
+  Url                      = {http://www.jstor.org/stable/2288400}
+}
+
+@Article{heer:2014,
+  Title                    = {Learning Perceptual Kernels for Visualization Design},
+  Author                   = {\c{C}a\u{g}atay Demiralp AND Michael Bernstein AND Jeffrey Heer},
+  Journal                  = {IEEE Trans. Visualization \& Comp. Graphics (Proc. InfoVis)},
+  Year                     = {2014},
+
+  Url                      = {http://idl.cs.washington.edu/papers/perceptual-kernels}
+}
+
+@Book{few,
+  Title                    = {Now You See It: Simple Visualization Techniques for Quantitative Analysis},
+  Author                   = {Stephen Few},
+  Publisher                = {Analytics Press},
+  Year                     = {2009},
+
+  Address                  = {Burlingame, CA},
+  Edition                  = {1}
+}
+
+@Book{colorvision,
+  Title                    = {Color vision: From genes to perception},
+  Author                   = {Gegenfurtner, Karl R and Sharpe, Lindsay T},
+  Publisher                = {Cambridge University Press},
+  Year                     = {2001}
+}
+
+@Book{goldstein2009encyclopedia,
+  Title                    = {Encyclopedia of perception},
+  Author                   = {Goldstein, E Bruce},
+  Publisher                = {Sage Publications},
+  Year                     = {2009}
+}
+
+@Article{healey2012attention,
+  Title                    = {Attention and visual memory in visualization and computer graphics},
+  Author                   = {Healey, Christopher G and Enns, James T},
+  Journal                  = {Visualization and Computer Graphics, IEEE Transactions on},
+  Year                     = {2012},
+  Number                   = {7},
+  Pages                    = {1170--1188},
+  Volume                   = {18},
+
+  Owner                    = {susan},
+  Publisher                = {IEEE},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{healey1999large,
+  Title                    = {Large datasets at a glance: Combining textures and colors in scientific visualization},
+  Author                   = {Healey, Christopher G and Enns, James T},
+  Journal                  = {Visualization and Computer Graphics, IEEE Transactions on},
+  Year                     = {1999},
+  Number                   = {2},
+  Pages                    = {145--167},
+  Volume                   = {5},
+
+  Owner                    = {susan},
+  Publisher                = {IEEE},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{hofmann2012graphical,
+  Title                    = {Graphical Tests for Power Comparison of Competing Designs},
+  Author                   = {Hofmann, Heike and Follett, Lendie and Majumder, Mahbubul and Cook, Dianne},
+  Journal                  = {IEEE Transactions on Visualization and Computer Graphics},
+  Year                     = {2012},
+  Number                   = {12},
+  Pages                    = {2441--2448},
+  Volume                   = {18},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{just1985cognitive,
+  Title                    = {Cognitive coordinate systems: accounts of mental rotation and individual differences in spatial ability.},
+  Author                   = {Just, Marcel A and Carpenter, Patricia A},
+  Journal                  = {Psychological review},
+  Year                     = {1985},
+  Number                   = {2},
+  Pages                    = {137},
+  Volume                   = {92},
+
+  Owner                    = {susan},
+  Publisher                = {American Psychological Association},
+  Timestamp                = {2015.03.04}
+}
+
+@InProceedings{kosara2010mechanical,
+  Title                    = {Do Mechanical Turks dream of square pie charts?},
+  Author                   = {Kosara, Robert and Ziemkiewicz, Caroline},
+  Booktitle                = {Proceedings of the 3rd BELIV'10 Workshop: BEyond time and errors: novel evaLuation methods for Information Visualization},
+  Year                     = {2010},
+  Organization             = {ACM},
+  Pages                    = {63--70},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{kosslyn1994,
+  Title                    = {Elements of Graph Design},
+  Author                   = {Kosslyn, S. M.},
+  Publisher                = {W.H. Freeman and Company},
+  Year                     = {1994},
+
+  Owner                    = {susan},
+  Timestamp                = {2014.04.28}
+}
+
+@Article{larkin1987diagram,
+  Title                    = {Why a diagram is (sometimes) worth ten thousand words},
+  Author                   = {Larkin, Jill H and Simon, Herbert A},
+  Journal                  = {Cognitive science},
+  Year                     = {1987},
+  Number                   = {1},
+  Pages                    = {65--100},
+  Volume                   = {11},
+
+  Owner                    = {susan},
+  Publisher                = {Wiley Online Library},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{lewandowsky1989discriminating,
+  Title                    = {Discriminating strata in scatterplots},
+  Author                   = {Lewandowsky, Stephan and Spence, Ian},
+  Journal                  = {Journal of the American Statistical Association},
+  Year                     = {1989},
+  Number                   = {407},
+  Pages                    = {682--688},
+  Volume                   = {84},
+
+  Publisher                = {Taylor \& Francis}
+}
+
+@Article{lewandowsky1989perception,
+  Title                    = {The perception of statistical graphs},
+  Author                   = {Lewandowsky, Stephan and Spence, Ian},
+  Journal                  = {Sociological Methods \& Research},
+  Year                     = {1989},
+  Number                   = {2-3},
+  Pages                    = {200--242},
+  Volume                   = {18},
+
+  Publisher                = {Sage Publications}
+}
+
+@Article{light2004end,
+  Title                    = {The end of the rainbow? Color schemes for improved data graphics},
+  Author                   = {Light, Adam and Bartlein, Patrick J},
+  Journal                  = {Eos, Transactions American Geophysical Union},
+  Year                     = {2004},
+  Number                   = {40},
+  Pages                    = {385--391},
+  Volume                   = {85},
+
+  Owner                    = {susan},
+  Publisher                = {Wiley Online Library},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{Majumder:2014up,
+  Title                    = {Human Factors Influencing Visual Statistical Inference},
+  Author                   = {Majumder, Mahbubul and Hofmann, Heike and Cook, Dianne},
+  Journal                  = {arXiv.org},
+  Year                     = {2014},
+
+  Month                    = aug,
+
+  Eprint                   = {1408.1974v1},
+  Eprintclass              = {stat.AP},
+  Eprinttype               = {arxiv}
+}
+
+@Article{majumder2013validation,
+  Title                    = {Validation of visual statistical inference, applied to linear models},
+  Author                   = {Majumder, Mahbubul and Hofmann, Heike and Cook, Dianne},
+  Journal                  = {Journal of the American Statistical Association},
+  Year                     = {2013},
+  Number                   = {503},
+  Pages                    = {942--956},
+  Volume                   = {108},
+
+  Keywords                 = {Lineups},
+  Owner                    = {susan},
+  Publisher                = {Taylor \& Francis},
+  Timestamp                = {2014.11.17}
+}
+
+@Book{cognition,
+  Title                    = {Cognition},
+  Author                   = {Matlin, Margaret W},
+  Publisher                = {Wiley},
+  Year                     = {2005},
+  Edition                  = {6th},
+
+  ISBN                     = {0471450073},
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{miller1956magical,
+  Title                    = {The magical number seven, plus or minus two: some limits on our capacity for processing information.},
+  Author                   = {Miller, George A},
+  Journal                  = {Psychological review},
+  Year                     = {1956},
+  Number                   = {2},
+  Pages                    = {81},
+  Volume                   = {63},
+
+  Owner                    = {susan},
+  Publisher                = {American Psychological Association},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{mosteller1981eye,
+  Title                    = {Eye fitting straight lines},
+  Author                   = {Mosteller, Frederick and Siegel, Andrew F and Trapido, Edward and Youtz, Cleo},
+  Journal                  = {The American Statistician},
+  Year                     = {1981},
+  Number                   = {3},
+  Pages                    = {150--152},
+  Volume                   = {35},
+
+  Publisher                = {Taylor \& Francis Group}
+}
+
+@Article{piepho:04,
+  Title                    = {An algorithm for a letter-based representation of all-pairwise comparisons},
+  Author                   = {Piepho, Hans-Peter},
+  Journal                  = {Journal of Computational and Graphical Statistics},
+  Year                     = {2004},
+  Number                   = {2},
+  Pages                    = {456--466},
+  Volume                   = {13},
+
+  Publisher                = {Taylor \& Francis}
+}
+
+@Book{playfair,
+  Title                    = {Commercial and Political Atlas},
+  Author                   = {William Playfair},
+  Editor                   = {Howard Wainer and Ian Spence},
+  Publisher                = {Cambridge},
+  Year                     = {1786},
+
+  Address                  = {London},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{playfair2,
+  Title                    = {Playfair's Commercial and Political Atlas and Statistical Breviary},
+  Author                   = {William Playfair and Howard Wainer and Ian Spence},
+  Publisher                = {Cambridge University Press},
+  Year                     = {2005},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Manual{R,
+  Title                    = {R: A Language and Environment for Statistical Computing},
+
+  Address                  = {Vienna, Austria},
+  Author                   = {{R Core Team}},
+  Organization             = {R Foundation for Statistical Computing},
+  Year                     = {2014},
+
+  Url                      = {http://www.R-project.org/}
+}
+
+@Article{ratwani2008thinking,
+  Title                    = {Thinking graphically: Connecting vision and cognition during graph comprehension.},
+  Author                   = {Ratwani, Raj M and Trafton, J Gregory and Boehm-Davis, Deborah A},
+  Journal                  = {Journal of Experimental Psychology: Applied},
+  Year                     = {2008},
+  Number                   = {1},
+  Pages                    = {36},
+  Volume                   = {14},
+
+  Owner                    = {susan},
+  Publisher                = {American Psychological Association},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{robinson:03,
+  Title                    = {Usability of Scatter Plot Symbols},
+  Author                   = {Heman Robinson},
+  Journal                  = {ASA Statistical Computing \& Graphics Newsletter},
+  Year                     = {2003},
+  Number                   = {1},
+  Pages                    = {9--14},
+  Volume                   = {14}
+}
+
+@Article{chowdhury:2014,
+  Title                    = {Using visual statistical inference to better understand random class separations in high dimension, low sample size data},
+  Author                   = {{Roy Chowdhury}, Niladri and Cook, Dianne and Hofmann, Heike and Majumder, Mahbubul and Lee, Eun-Kyung and Toth, Amy L.},
+  Journal                  = {Computational Statistics},
+  Year                     = {2014},
+  Pages                    = {1-24},
+
+  Doi                      = {10.1007/s00180-014-0534-x},
+  ISSN                     = {0943-4062},
+  Keywords                 = {Statistical graphics; Lineup; Visualization; Projection pursuit; Data mining},
+  Language                 = {English},
+  Owner                    = {susan},
+  Publisher                = {Springer Berlin Heidelberg},
+  Timestamp                = {2015.03.04},
+  Url                      = {http://dx.doi.org/10.1007/s00180-014-0534-x}
+}
+
+@Article{niladri:2014,
+  Title                    = {Utilizing Distance Metrics on Lineups to Examine What People Read From Data Plots},
+  Author                   = {Niladri {Roy Chowdhury} and Dianne Cook and Heike Hofmann and Mahbubul Majumder and Yifan Zhao},
+  Journal                  = {arXiv.org},
+  Year                     = {2014},
+
+  Month                    = aug,
+
+  Eprint                   = {arXiv:1408.1889},
+  Eprintclass              = {stat.AP},
+  Eprinttype               = {arxiv}
+}
+
+@TechReport{chowdhury2012waldo,
+  Title                    = {Where’s Waldo: Looking closely at a lineup},
+  Author                   = {{Roy Chowdhury}, Niladri and Cook, Dianne and Hofmann, Heike and Majumder, Mahbubul and Zhao, Yifan},
+  Institution              = {Technical Report 2, Iowa State University, Department of Statistics},
+  Year                     = {2012},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{scaife1996external,
+  Title                    = {External cognition: how do graphical representations work?},
+  Author                   = {Scaife, Mike and Rogers, Yvonne},
+  Journal                  = {International journal of human-computer studies},
+  Year                     = {1996},
+  Number                   = {2},
+  Pages                    = {185--213},
+  Volume                   = {45},
+
+  Owner                    = {susan},
+  Publisher                = {Elsevier},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{shah1999graphs,
+  Title                    = {Graphs as aids to knowledge construction: Signaling techniques for guiding the process of graph comprehension.},
+  Author                   = {Shah, Priti and Mayer, Richard E and Hegarty, Mary},
+  Journal                  = {Journal of Educational Psychology},
+  Year                     = {1999},
+  Number                   = {4},
+  Pages                    = {690},
+  Volume                   = {91},
+
+  Owner                    = {susan},
+  Publisher                = {American Psychological Association},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{shah2005cambridge,
+  Title                    = {The Cambridge handbook of visuospatial thinking},
+  Author                   = {Shah, Priti and Miyake, Akira},
+  Publisher                = {Cambridge University Press},
+  Year                     = {2005},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{silva2011using,
+  Title                    = {Using color in visualization: A survey},
+  Author                   = {Silva, Samuel and Sousa Santos, Beatriz and Madeira, Joaquim},
+  Journal                  = {Computers \& Graphics},
+  Year                     = {2011},
+  Number                   = {2},
+  Pages                    = {320--333},
+  Volume                   = {35},
+
+  Owner                    = {susan},
+  Publisher                = {Elsevier},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{simkin1987information,
+  Title                    = {An information-processing analysis of graph perception},
+  Author                   = {Simkin, David and Hastie, Reid},
+  Journal                  = {Journal of the American Statistical Association},
+  Year                     = {1987},
+  Number                   = {398},
+  Pages                    = {454--465},
+  Volume                   = {82},
+
+  Owner                    = {susan},
+  Publisher                = {Taylor \& Francis Group},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{spence:1990,
+  Title                    = {Visual Psychophysics of Simple Graphical Elements},
+  Author                   = {Spence, Ian},
+  Journal                  = {Journal of Experimental Psychology: Human Perception and Performance},
+  Year                     = {1990},
+  Number                   = {4},
+  Pages                    = {683--692},
+  Volume                   = {16},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{spence1993remarkable,
+  Title                    = {A remarkable scatterplot},
+  Author                   = {Spence, Ian and Garrison, Robert F},
+  Journal                  = {The American Statistician},
+  Year                     = {1993},
+  Number                   = {1},
+  Pages                    = {12--19},
+  Volume                   = {47},
+
+  Publisher                = {Taylor \& Francis Group}
+}
+
+@Article{treisman1985preattentive,
+  Title                    = {Preattentive processing in vision },
+  Author                   = {Anne Treisman},
+  Journal                  = {Computer Vision, Graphics, and Image Processing},
+  Year                     = {1985},
+  Number                   = {2},
+  Pages                    = {156 - 177},
+  Volume                   = {31},
+
+  Doi                      = {http://dx.doi.org/10.1016/S0734-189X(85)80004-9},
+  ISSN                     = {0734-189X},
+  Owner                    = {susan},
+  Timestamp                = {2014.04.23},
+  Url                      = {http://www.sciencedirect.com/science/article/pii/S0734189X85800049}
+}
+
+@Article{treisman1980feature,
+  Title                    = {A feature-integration theory of attention},
+  Author                   = {Treisman, Anne M and Gelade, Garry},
+  Journal                  = {Cognitive psychology},
+  Year                     = {1980},
+  Number                   = {1},
+  Pages                    = {97--136},
+  Volume                   = {12},
+
+  Owner                    = {susan},
+  Publisher                = {Elsevier},
+  Timestamp                = {2015.03.10}
+}
+
+@InCollection{trickett2006toward,
+  Title                    = {Toward a comprehensive model of graph comprehension: Making the case for spatial cognition},
+  Author                   = {Trickett, Susan Bell and Trafton, J Gregory},
+  Booktitle                = {Diagrammatic representation and inference},
+  Publisher                = {Springer},
+  Year                     = {2006},
+  Pages                    = {286--300},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{tufte,
+  Title                    = {{The Visual Display of Quantitative Information}},
+  Author                   = {Edward Tufte},
+  Publisher                = {Graphics Press},
+  Year                     = {1991},
+
+  Address                  = {USA},
+  Edition                  = {2},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{tukey,
+  Title                    = {Exploratory Data Analysis},
+  Author                   = {J. W. Tukey},
+  Publisher                = {Addison Wesley},
+  Year                     = {1977},
+
+  Address                  = {Lebanon, IN},
+
+  ISBN                     = {0201076160}
+}
+
+@Article{visualreasoning,
+  Title                    = {Spatial Reasoning and Data Displays},
+  Author                   = {Vanderplas, S. and Hofmann, H.},
+  Journal                  = {IEEE Transactions on Visualization and Computer Graphics},
+  Year                     = {in press},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.11}
+}
+
+@Article{varshney2013we,
+  Title                    = {Why do we perceive logarithmically?},
+  Author                   = {Varshney, Lav R and Sun, John Z},
+  Journal                  = {Significance},
+  Year                     = {2013},
+  Number                   = {1},
+  Pages                    = {28--31},
+  Volume                   = {10},
+
+  Owner                    = {susan},
+  Publisher                = {Wiley Online Library},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{wickham2010layered,
+  Title                    = {A layered grammar of graphics},
+  Author                   = {Wickham, Hadley},
+  Journal                  = {Journal of Computational and Graphical Statistics},
+  Year                     = {2010},
+  Number                   = {1},
+  Pages                    = {3--28},
+  Volume                   = {19},
+
+  Owner                    = {susan},
+  Publisher                = {Taylor \& Francis},
+  Timestamp                = {2015.03.04}
+}
+
+@Article{wickham2010graphical,
+  Title                    = {Graphical inference for infovis},
+  Author                   = {Wickham, Hadley and Cook, Dianne and Hofmann, Heike and Buja, Andreas},
+  Journal                  = {Visualization and Computer Graphics, IEEE Transactions on},
+  Year                     = {2010},
+  Number                   = {6},
+  Pages                    = {973--979},
+  Volume                   = {16},
+
+  Owner                    = {susan},
+  Publisher                = {IEEE},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{wilkinson2006grammar,
+  Title                    = {The grammar of graphics},
+  Author                   = {Wilkinson, Leland and Wills, D and Rope, D and Norton, A and Dubbs, R},
+  Publisher                = {Springer},
+  Year                     = {2006},
+
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04}
+}
+
+@Book{wolfe2012sensation,
+  Title                    = {{Sensation and Perception}},
+  Author                   = {Wolfe, J.M. and Kluender, K.R. and Levi, D.M.},
+  Publisher                = {Sinauer Associates, Incorporated},
+  Year                     = {2012},
+  Edition                  = {3},
+
+  ISBN                     = {9780878935727},
+  Lccn                     = {2011036497},
+  Owner                    = {susan},
+  Timestamp                = {2015.03.04},
+  Url                      = {http://books.google.com/books?id=sec4XwAACAAJ}
+}
+
+@Article{zhang1997nature,
+  Title                    = {The nature of external representations in problem solving},
+  Author                   = {Zhang, Jiajie},
+  Journal                  = {Cognitive science},
+  Year                     = {1997},
+  Number                   = {2},
+  Pages                    = {179--217},
+  Volume                   = {21},
+
+  Owner                    = {susan},
+  Publisher                = {Elsevier},
+  Timestamp                = {2014.10.20}
+}
+
+@Article{zhang1994representations,
+  Title                    = {Representations in distributed cognitive tasks},
+  Author                   = {Zhang, Jiaje and Norman, Donald A},
+  Journal                  = {Cognitive science},
+  Year                     = {1994},
+  Number                   = {1},
+  Pages                    = {87--122},
+  Volume                   = {18},
+
+  Owner                    = {susan},
+  Publisher                = {Wiley Online Library},
+  Timestamp                = {2015.03.04}
+}
+
