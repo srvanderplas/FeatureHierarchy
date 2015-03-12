@@ -75,8 +75,6 @@ source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
 @
 
-\tableofcontents
-\newpage
 \section{Introduction and background}
 Numerical information can be difficult to communicate effectively in raw form, due to limits on attention span, short term memory, and information storage mechanisms within the human brain. 
 Graphics are much more effective for communicating numerical information, as (well-designed) graphics order the numerical information spatially and utilize the higher-bandwidth visual system. 
@@ -1230,6 +1228,7 @@ qplot(data=lexicaldata, x=outcome, fill=reason, geom="histogram", position="dodg
 \caption[Lexical analysis of participant reasoning]{Lexical analysis of participants' justification of plot selection. Group sentiment in the reasoning is highly associated with selection of the cluster target plot; linear sentiment is highly associated with selection of the trend target plot.}\label{fig:lexicalanalysis}
 \end{figure}
 
+\afterpage{\clearpage}
 The results of this analysis, shown in figure \ref{fig:lexicalanalysis} and supported by figure \ref{fig:wordles}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size. In future studies, however, group size should be more tightly controlled to reduce the presence of distractor aesthetics in null plots. 
 
 

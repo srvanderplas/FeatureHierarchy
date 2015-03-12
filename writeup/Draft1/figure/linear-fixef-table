@@ -1,5 +1,5 @@
-% latex table generated in R 3.1.2 by xtable 1.7-1 package
-% Wed Mar 11 10:41:05 2015
+% latex table generated in R 3.1.1 by xtable 1.7-3 package
+% Wed Mar 11 11:56:16 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrr}
@@ -8,12 +8,12 @@ Plot Aesthetic & Log Odds & Std. Error & Z & P value \\
   \hline
 Trend + Error & 0.5738 & 0.1072 & 5.35 & 0.0000 \\ 
   Color + Ellipse + Trend + Error & 0.1386 & 0.1086 & 1.28 & 0.2020 \\ 
-  Trend & -0.1746 & 0.1096 & -1.59 & 0.1111 \\ 
+  Trend & -0.1746 & 0.1096 & -1.59 & 0.1110 \\ 
   Shape & -0.2658 & 0.1111 & -2.39 & 0.0167 \\ 
   Color + Shape & -0.4050 & 0.1122 & -3.61 & 0.0003 \\ 
   Color & -0.4186 & 0.1126 & -3.72 & 0.0002 \\ 
   Color + Trend & -0.5715 & 0.1131 & -5.05 & 0.0000 \\ 
-  Color + Ellipse & -0.9401 & 0.1176 & -7.99 & 0.0000 \\ 
+  Color + Ellipse & -0.9401 & 0.1176 & -8.00 & 0.0000 \\ 
   Color + Shape + Ellipse & -0.9975 & 0.1185 & -8.42 & 0.0000 \\ 
    \hline
 \end{tabular}
