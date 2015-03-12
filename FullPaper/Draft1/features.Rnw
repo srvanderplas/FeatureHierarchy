@@ -369,8 +369,8 @@ N = 45
 K = 3
 M = 1000
 
-if (file.exists("./figure/nulldist.Rdata")) {
-  load("./figure/nulldist.Rdata")
+if (file.exists("../../Data/SmallSimulation.Rdata")) {
+  load("../../Data/SmallSimulation.Rdata")
 } else {
 #   nulldist<- function(N, sT=0.25, sC=0.2) {
 #     nulls <- data.frame(t(replicate(N, {
