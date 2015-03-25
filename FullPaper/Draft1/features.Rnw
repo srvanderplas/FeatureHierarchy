@@ -38,11 +38,15 @@
 \newtheorem{algorithm}[theorem]{Algorithm}
 %---------------------------------------------------
 
-\title{Group beats Trend!? \\Testing feature hierarchy in statistical graphics}
+\title{Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
 \author{Susan VanderPlas, Heike Hofmann\thanks{Department of Statistics and Statistical Laboratory, Iowa State University}}
 \begin{document}
 \maketitle
-\begin{abstract}abstract goes here
+
+\begin{abstract}
+
+Graphics are very effective for communicating numerical information quickly and efficiently, but many of the design choices we make are based on subjective measures, such as personal taste or conventions of the discipline rather than objective criteria. I will briefly introduce perceptual principles such as preattentive features and gestalt heuristics, and then discuss the design and results of a factorial experiment designed to examine the effect of plot aesthetics such as color and trend lines on participants' assessment of ambiguous data displays. The quantitative and qualitative experimental results strongly suggest that plot aesthetics have a significant impact on the perception of important features in data displays. 
+
 \end{abstract}
 <<setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
 rm(list=ls())
@@ -231,7 +235,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
         \tilde{c}^x_{i} = \frac{c^x_{i} - \bar{c}}{s_c} \ \ \text{ and } \ \ \tilde{c}^y_{i} = \frac{c^y_{i} - \bar{c}}{s_c},
       \]
       where $\overline{c} = (K+1)/2$ and $s_c^2 = \frac{K(K+1)}{12}$ for all $i = 1, ..., K$.
-    \item For the $K$ clusters, we want to have nearly equal sized groups, but allow some variability. Group sizes  $g = (g_1, ..., g_K)$ with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ are therefore determined as a draw from a multinomial distribution: 
+    \item For the $K$ clusters, we want to have nearly equal sized groups, but allow some variability. Cluster sizes  $g = (g_1, ..., g_K)$ with $N = \sum_{i=1}^K g_i$, for clusters $1, ..., K$ are therefore determined as a draw from a multinomial distribution: 
     \[
     g \sim \text{Multinomial }(K, p) \text{ where } p = \tilde{p}/\sum_{i=1}^K \tilde{p}_i, \text{ for } \tilde{p} \sim N \left(\frac{1}{K}, \frac{1}{2 K^2} \right).
     \]
@@ -246,12 +250,12 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 \end{algorithm} 
 
 
-As a measure of clustering we use a coefficient to assess the amount of variability within groups, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
+As a measure of cluster cohesion we use a coefficient to assess the amount of variability within each cluster, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
 
-For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
+For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
 
 \begin{eqnarray}\label{eq:clusterMeasure}
-\gamma^2 &=& 1 - \frac{CSS}{TSS},\\
+C^2 &=& \frac{CSS}{TSS},\\
 \nonumber CSS &=& \sum_{i=1}^n \left(x_{j(i)} - \overline{x}_{j(i)}\right)^2 + \left(y_{j(i)} - \overline{y}_{j(i)} \right)^2, \\
 \nonumber TSS &=& \sum_{i=1}^n \left(x_i - \bar{x}\right)^2 + \left(y_i - \bar{y}\right)^2.
 \end{eqnarray}
@@ -304,7 +308,7 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
 \end{figure}
 
 \subsubsection{Null Model $M_0$}
-The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned groups using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
+The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned to specific clusters using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[ht]
 <<lambda, fig.width=8, fig.height=3.5, out.width='\\linewidth', echo=FALSE>>=
@@ -819,7 +823,7 @@ print(xtable(line.fixef.aes[,c(8, 1:4)], caption=c("Fitted values of fixed effec
 Once error bands are added to the plot, many other heuristics may be applied: closure, common region, and connectedness (depending on the style of the error bands). For the 95\% intervals in the stimuli plots, closure and common region are the most likely heuristics recruited with the addition of error bands. The results are consistent with this idea: only the dual continuity emphasis of trend + error bands significantly increases the probability that participants will identify the target plot generated under $M_T$. 
 }
 
-\subsubsection{Group Target Selection}\label{sec:groupModel}
+\subsubsection{Cluster Target Selection}\label{sec:groupModel}
 <<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
 group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
                      data = modeldata, 
@@ -835,7 +839,7 @@ type_compare <- glht(group.model, mcp(plottype="Tukey"))
 group.fixef$letters <- cld(type_compare)$mcletters$Letters
 @
 
-We now examine the probability of selecting the group target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that success in this model is defined as identification of the cluster target plot. 
+We now examine the probability of selecting the cluster target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that success in this model is defined as identification of the cluster target plot. 
 
 \begin{figure}[ht]\centering
 <<group-fixef, echo=FALSE, dependson='group-model', fig.width=8, fig.height=4, out.width='.75\\linewidth'>>=
@@ -869,7 +873,7 @@ names(group.fixef2)[9] <- "Tukey Post Hoc Differences"
 print(xtable(group.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in section~\ref{sec:groupModel}.", "Fixed effects for group target logistic model"), label="tab:group.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/group-fixef-table")
 
 @
-\caption{Odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in group size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
+\caption{Odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in cluster size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
 \end{figure}
 
 Figure \ref{fig:group.fixef} contains odds and 95\% Wald intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
@@ -880,23 +884,34 @@ However, the implication that Color + Ellipse and Color + Shape + Ellipse also d
 and 
 ``Lack of a circle around the red symbols".  %line 13516
 
-This suggests that our group allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of groups and the presence of the additional similarity cue. 
-Numerically, these null data sets had uneven group allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. 
+This suggests that our cluster allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
+Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. 
 Visually, the conspicuous absence of an ellipse will lead participants to select null plots with that feature (see section~\ref{sec:sentiment} for a more detailed look at participants' responses).
 
-This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with group size $<3$), participants were more likely to identify the group target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
+This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with cluster size $<3$), participants were more likely to identify the cluster target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
 The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not in the way the authors originally intended). 
-In future experiments, it will be advantageous to control the variability in group size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. 
+In future experiments, it will be advantageous to control the variability in cluster size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. 
 
 \subsection{Face-Off: Trend versus Cluster}
-Next, we consider only the subset of trials in which participants identified one of the two target plots (\Sexpr{sum(1-modeldata$neither)} trials). For these trials, we compare the probability of selecting the cluster target generated by $M_C$ compared with the probability of selecting the trend target generated by $M_T$. Overall, participants favored clusters to trends at a ratio of about 2:1. We remove this effect using an intercept, and model group vs. line decisions using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data. The estimated odds of a decision in favor of group over line target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the group target  over the line target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests   on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
+Next, we consider only the subset of trials in which participants identified one of the two target plots (\Sexpr{sum(1-modeldata$neither)} trials). For these trials, we compare the probability of selecting the cluster target generated by $M_C$ compared with the probability of selecting the trend target generated by $M_T$. 
+Define $C_{ijk}$ to be the event $$\{\text{Participant }k\text{ selects the cluster target for dataset }j\text{ with aesthetic set }i\}$$
+and $T_{ijk}$ to be the analogous selection of the trend target.
+We model the cluster vs. trend decision using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data, and a random effect for participant to account for skill level, as shown in equation \ref{eqn:faceoffModel}. 
+
+\begin{align}
+\text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}\\
+\text{where } \beta_i & \hphantom{\sim} \text{describe plot types}\nonumber\\
+\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{dataset}}\nonumber\right)\\
+\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\nonumber\right)\\
+\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\nonumber
+\end{align}
+As in equation \ref{eqn:linearModel}, the random effects for dataset and participant are orthogonal. 
+
+The estimated odds of a decision in favor of cluster over trend target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
 
 \begin{figure}[ht]\centering
 <<group-vs-line, echo=FALSE, fig.width=8, fig.height=4, out.width='.85\\linewidth'>>=
-designs <- ddply(modeldata, .(dataset, plottype), summarise, evals=length(data_name), group=sum(cluster.correct), line=sum(trend.correct))
-designs$perc <- with(designs, group/(group+line))
-#qplot(plottype, perc, data=designs, geom="boxplot")
-gvl.model <- glmer(cbind(group, line)~plottype+(1|dataset), data=designs, family=binomial())
+gvl.model <-  glmer(cluster.correct~plottype + (1|data_name) + (1|individualID), data=subset(modeldata, trend.correct | cluster.correct), family=binomial(), control=glmerControl(optimizer="bobyqa"))
 gvl.fixef <- data.frame(confint(gvl.model, method="Wald"))
 names(gvl.fixef) <- c("LB", "UB")
 gvl.fixef$OR <- fixef(gvl.model)
@@ -920,17 +935,18 @@ ggplot(data=gvl.fixef[-1,]) +
   coord_flip() + 
   theme_bw() + 
   geom_hline(yintercept=1, colour="gray70") + 
-  ggtitle("Odds of Selecting Group vs Line Target \n (given one target was identified)") + 
-  ylab("Odds (Group vs Line) and 95% Wald Intervals") + 
+  ggtitle("Odds of Selecting Cluster vs Trend Target \n (given one target was identified)") + 
   xlab("Plot Type") + 
-  geom_text(aes(y=0.4, x=label, label=letters))
+  geom_text(aes(y=0.25, x=label, label=letters)) + 
+  scale_y_continuous("Odds (Cluster vs Trend) and 95% Wald Intervals\n(Reference level: Plain plot)", 
+                     breaks=c(0.2, 0.5, 1.0, 1.5, 2.0, 2.4), labels=c("<--Trend\n  Target", "0.5", "1.0", "1.5", "2.0", "Cluster-->\nTarget  "), limits=c(0.2, 2.4))
 @
-\caption{\label{fig:faceoff} Estimated odds of decision for group versus line target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different, if they do not share a letter as given on the left hand side of the plot.}
+\caption[Estimated odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
 
-Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color+trend (good continuation) condition. 
+Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color + trend (similarity vs. continuity) condition. 
 
-When trend and error are present in the same plot, additional Gestalt ordering principles are present: common region and possibly closure (due to the enclosed space between the two error lines), in addition to the good continuation heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these three heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot (and increasing the probability that the trend target will be selected). 
+When trend line and error are present in the same plot, additional Gestalt ordering principles are present: common region and possibly closure (due to the enclosed space between the two error lines), in addition to the continuity heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these three heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot (and increasing the probability that the trend target will be selected). 
 
 This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
@@ -1078,7 +1094,7 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
-As part of each trial, participants were asked to provide a short justification of their plot choice. \newtext{Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/group distribution. }
+As part of each trial, participants were asked to provide a short justification of their plot choice. \newtext{Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. }
 
 \begin{figure}[ht]\centering
 <<sentiment, eval=FALSE, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\linewidth', fig.show='hold'>>=
@@ -1157,7 +1173,7 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
   \caption{Color + Ellipse, trend target}
   \includegraphics[width=\linewidth]{figure/sentiment-12}
 \end{subfigure}
-\caption{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the group/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
+\caption[Wordclouds of participant responses for selected plot types]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
 For a more quantitative analysis, responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
 \begin{figure}[ht]\centering
@@ -1225,7 +1241,8 @@ Taken together, the results presented suggest that plot aesthetics influence the
 
 In order to explicitly rank aesthetics given this nonadditive mechanism, it would be necessary to test ellipse and error band aesthetics alone; in this study, we have only examined those aesthetics in combination with color and regression line plot layers, as the bounding aesthetics are seldom seen alone. 
 
-While further exploration of these effects is necessary to control for the effects of group size as well as to explore the gestalt heuristics applicable to other types of plots, these results demonstrate the importance of carefully constructing graphs in order to consistently convey the most important aspects of the displayed data. 
+While further studies are necessary to control for the effects of cluster size as well as to explore the gestalt heuristics applicable to other types of plots, these results demonstrate the importance of carefully constructing graphs in order to consistently convey the most important aspects of the displayed data. 
+
 
 \bibliographystyle{asa}
 \bibliography{references}
