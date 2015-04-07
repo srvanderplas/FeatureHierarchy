@@ -1107,7 +1107,7 @@ words <- lexicaldata %>% group_by(plottype, simpleoutcome) %>%
 
 library(wordcloud)
 library(tm)
-quantities <-  <- c("all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only" )
+quantities <- c("all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only" )
 stops <- setdiff(stopwords("english"), quantities)
 
 for (i in 1:nrow(words)) {
@@ -1115,8 +1115,18 @@ words.corpus <- Corpus(DataframeSource(data.frame(words$list[i])))
 words.corpus <- tm_map(words.corpus, removePunctuation)
 words.corpus <- tm_map(words.corpus, function(x) removeWords(x, stops))
 
+corpus.temp <- tm_map(words.corpus, stemDocument, language = "english")  
+# stemCompletion doesn't seem to work, I am essentially following along that function
+stems <- unlist(strsplit(corpus.temp[[1]]$content, split=" "))
+complete <- unlist(strsplit(words.corpus[[1]]$content, split=" "))
+dframe <- data.frame(stems, complete)
+dframe <- dframe %>% group_by(stems) %>% mutate(mode=names(sort(table(complete), decreasing=TRUE))[1])
+corpus.final <- corpus.temp
+corpus.final[[1]]$content <- paste(dframe$mode, collapse=" ")
 
-tdm <- TermDocumentMatrix(words.corpus)
+
+
+tdm <- TermDocumentMatrix(corpus.final)
 m <- as.matrix(tdm)
 v <- sort(rowSums(m),decreasing=TRUE)
 d <- data.frame(word = names(v),freq=v)
