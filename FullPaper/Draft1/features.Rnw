@@ -591,6 +591,9 @@ Participants were required to complete 10 lineups, answering ``Which plot is the
 After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
 
 \section{Results}\label{sec:Results}
+\newdo{I think we need to straighten out the analysis: after the overview of the demographics, the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started), and then do the face-off. 
+We might be able to move the single models into a separate paper... so don't delete any of it, I'm just trying to get the flow right at the moment.
+}
 <<results-setup,echo=F,include=F>>=
 lineups <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
@@ -749,6 +752,7 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 
 We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
+
 \subsection{Single Target Plot Models}
 
 We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
@@ -824,9 +828,9 @@ print(xtable(line.fixef.aes[,c(8, 1:4)], caption=c("Fitted values of fixed effec
 \end{figure}
 \afterpage{\clearpage}
 
-\newtext{
+\newdo{at the moment I can not imagine an error band that would involve connectedness. I don't think you ever mentioned connectedness in the talks ... could we leave this out to clean the argument up?}
 Once error bands are added to the plot, many other heuristics may be applied: closure, common region, and connectedness (depending on the style of the error bands). For the 95\% intervals in the stimuli plots, closure and common region are the most likely heuristics recruited with the addition of error bands. The results are consistent with this idea: only the dual continuity emphasis of trend + error bands significantly increases the probability that participants will identify the target plot generated under $M_T$. 
-}
+
 
 \subsubsection{Cluster Target Selection}\label{sec:groupModel}
 <<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
@@ -844,7 +848,7 @@ type_compare <- glht(group.model, mcp(plottype="Tukey"))
 group.fixef$letters <- cld(type_compare)$mcletters$Letters
 @
 
-We now examine the probability of selecting the cluster target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that success in this model is defined as identification of the cluster target plot. 
+We now examine the probability of selecting the cluster target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that the dependent variable in this model is defined as the successful identification of the cluster target plot. 
 
 \begin{figure}[ht]\centering
 <<group-fixef, echo=FALSE, dependson='group-model', fig.width=8, fig.height=4, out.width='.75\\linewidth'>>=
@@ -883,20 +887,25 @@ print(xtable(group.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects
 
 
 Figure \ref{fig:group.fixef} contains odds and 95\% Wald intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
-According to the model results, no plot aesthetics significantly increase the likelihood of selecting the group target plot; however, several aesthetic combinations decrease this likelihood. Consistent with our hypothesis,  Color + Ellipse + Trend + Error and Trend + Error plot aesthetic combinations significantly decrease the detection of the group target plot. 
+According to the model results, no plot aesthetics significantly increase the odds of selecting the group target plot compared to the plain design; however, several aesthetic combinations decrease the odds. Consistent with our hypothesis,  Color + Ellipse + Trend + Error and Trend + Error plot aesthetic combinations significantly decrease the detection of the group target plot. 
 
 However, the implication that Color + Ellipse and Color + Shape + Ellipse also decrease group target detection is not consistent with our hypotheses. Examination of participants' reasons for selecting specific target plots provides at least some explanation; participants cited reasons such as 
 ``There is no circle highlighting the yellow symbols in this plot" %line 13515 
 and 
 ``Lack of a circle around the red symbols".  %line 13516
 
-This suggests that our cluster allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
-Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. 
+This suggests that our cluster allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
+Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than three points and in these cases, ellipses were not drawn. 
 Visually, the conspicuous absence of an ellipse will lead participants to select null plots with that feature (see section~\ref{sec:sentiment} for a more detailed look at participants' responses).
 
-This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with cluster size $<3$), participants were more likely to identify the cluster target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
+\newdo{Counting and estimation is one of the pre-attentive tasks (besides target detection, boundary detection, and region tracking) that studies have identified, for an overview see \url{http://www.csc.ncsu.edu/faculty/healey/download/tvcg.11.pdf} (Healey's TVCG paper corresponding to his website on the overview of pre-attentiveness). }
+
+This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with cluster size of fewer than three points), participants were more likely to identify the cluster target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
 The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not in the way the authors originally intended). 
 In future experiments, it will be advantageous to control the variability in cluster size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. 
+
+
+
 
 \subsection{Face-Off: Trend versus Cluster}
 Next, we consider only the subset of trials in which participants identified one of the two target plots (\Sexpr{sum(1-modeldata$neither)} trials). For these trials, we compare the probability of selecting the cluster target generated by $M_C$ compared with the probability of selecting the trend target generated by $M_T$. 
