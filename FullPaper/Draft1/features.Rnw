@@ -137,7 +137,7 @@ qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
 
 The plots in figure \ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (connectedness, closure, and/or common region). 
 
-The processing of visual stimuli utilizes low-level feature detection, which occurs automatically in the preattentive perceptual phase, and higher-level mental heuristics which are informed by experience. Both types of mental processes utilize physical location, color, and shape  to organize perceptual stimuli and direct attention to graphical features which stand alone. \newdo{stand alone in the sense that they stand out?}
+The processing of visual stimuli utilizes low-level feature detection, which occurs automatically in the preattentive perceptual phase, and higher-level mental heuristics which are informed by experience. Both types of mental processes utilize physical location, color, and shape  to organize perceptual stimuli and direct attention to graphical features which stand out. 
 
 Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli; subsequent top-down gestalt heuristics can be applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
 
@@ -352,7 +352,7 @@ Models $M_C$, $M_T$, and $M_0$ provide the foundation for this experiment; by ma
 $K$ & \# Clusters &  \begin{tabular}{l}3, 5 \end{tabular} \\
 $N$ & \# Points &  \begin{tabular}{l}$15\cdot K$\end{tabular} \\
 $\sigma_T$ & Scatter around trend line &   \begin{tabular}{l}.15, .25, .35  \end{tabular}\\
-$\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .15, .20, .25 ($K=3$)\\ .20, .25, .30 ($K=5$) \end{tabular}
+$\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .25, .30, .35 ($K=3$)\\ .20, .25, .30 ($K=5$) \end{tabular}
 \\\hline
 \end{tabular}
 \end{center}
