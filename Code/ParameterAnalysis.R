@@ -1,7 +1,7 @@
 # Stats-analysis
 # Compare statistics for each lineup data set
 
-
+setwd("./Code")
 source("MixtureLineups.R")
 source("theme_lineup.R")
 
