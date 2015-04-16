@@ -87,5 +87,20 @@ ggplot(data=res) +
   facet_grid(target ~ k+sd.group)
 
 ggplot(data=res) + 
+  geom_point(aes(x=line, y=factor(set), color=target, size=target)) + 
+  facet_grid(k   + sd.group + sd.line~., space="free", scale="free", labeller="label_both") +
+  scale_colour_manual(values=c("darkred", "grey50", "darkblue")) +
+  scale_size_manual(values=c(4,3,4)) + 
+  theme_bw()
+
+ggplot(data=res) + 
   geom_jitter(aes(x=group, y=sd.group, color=target)) + 
   facet_grid(target ~ k+sd.line)
+
+
+ggplot(data=res) + 
+  geom_point(aes(x=group, y=factor(set), color=target, size=target)) + 
+  facet_grid(k   + sd.line + sd.group~., space="free", scale="free", labeller="label_both") +
+  scale_colour_manual(values=c("darkred", "grey50", "darkblue")) +
+  scale_size_manual(values=c(4,3,4)) + 
+  theme_bw()
