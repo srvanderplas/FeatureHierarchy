@@ -752,7 +752,20 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 
 We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
+\subsection{Is difficulty of Lineups matching with parameter settings?}
 
+\newdo{We should look at the percentages and match them with the actual numeric values of the indices in the data }
+\begin{figure}
+\centering
+<<echo=FALSE, out.width='0.5\\textwidth'>>=
+modeldata$one.correct <- with(modeldata, trend.correct | cluster.correct)
+mframe <- ddply(modeldata, .(dataset, plottype, k, trend.diff2, cluster.diff2), summarise,
+                n = length(dataset),
+                correct = sum(one.correct))
+qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~cluster.diff2) + geom_smooth(aes(group=1),  method="lm") + theme_bw()
+@
+\caption{\label{cluster-trend} Overall, the percentages of correct data identifications match variability (i.e.\ they decrease as variability increases). }
+\end{figure}
 \subsection{Single Target Plot Models}
 
 We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
