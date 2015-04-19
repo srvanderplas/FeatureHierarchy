@@ -104,3 +104,34 @@ ggplot(data=res) +
   scale_colour_manual(values=c("red", "grey50", "blue")) +
   scale_size_manual(values=c(4,3,4)) + 
   theme_bw()
+
+
+# summarise for each lineup:
+stats <- ddply(res, .(data_name, target), summarize, 
+               line=max(line),
+               group=max(group))
+stats.line <- dcast(stats, data_name~target, value.var="line")
+names(stats.line)[3] <- "decoy.trend"
+stats.group <- dcast(stats, data_name~target, value.var="group")
+names(stats.group)[3] <- "decoy.cluster"
+dstats <- merge(stats.line[,c("data_name", "trend", "decoy.trend")], 
+                stats.group[,c("data_name", "cluster", "decoy.cluster")], by="data_name")
+# get values from modeldata to match
+dmodel <- ddply(modeldata, .(data_name, plottype), summarize,
+                cluster.correct=sum(cluster.correct), trend.correct=sum(trend.correct),
+                evals=length(data_name))
+
+dstats <- merge(dstats, subset(dmodel, plottype=="plain"), by="data_name")
+qplot(trend-decoy.trend,trend.correct/evals, data=dstats) + theme_bw() + geom_smooth()
+qplot(cluster-decoy.cluster,cluster.correct/evals, data=dstats) + theme_bw() + geom_smooth()
+
+dstats$cd <- dstats$cluster - dstats$decoy.cluster
+cl.glm <- glm(cbind(cluster.correct, evals-cluster.correct)~cd, data=dstats, family=binomial(link="cloglog"))
+summary(cl.glm)
+
+grid <- data.frame(expand.grid(
+  cd = seq(-0.015, 0.1, by=0.005)
+))
+grid$pred <- stats::predict(cl.glm, newdata=grid, type="response")
+
+qplot(cluster-decoy.cluster,cluster.correct/evals, data=dstats) + theme_bw() + geom_line(aes(x=cd, y=pred), colour="red", data=grid)
