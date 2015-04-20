@@ -44,6 +44,7 @@ get.aes <- function(r){
 get.stats <- function(r){
   c("Reg. Line", "Error Bands", "Ellipses")[which(as.logical(r[3:5]))]
 }
+
 # answers <- read.csv("picture-details.csv")
 # # answers$pic_name <- gsub("Images/Lineups/", "", gsub("svg", "pdf", answers$pic_name))
 # answers2 <- answers
@@ -82,28 +83,73 @@ res$k <- str_extract(res$data_name, pattern="k-\\d") %>% str_replace(pattern="k-
 res$sd.line <- str_extract(res$data_name, pattern="sdline-0.\\d{1,2}") %>% str_replace(pattern="sdline-", "") %>% as.numeric()
 res$sd.group <- str_extract(res$data_name, pattern="sdgroup-0.\\d{1,2}") %>% str_replace(pattern="sdgroup-", "") %>% as.numeric()
 
+res <- ddply(res, .(k, sd.line, sd.group), transform, rep = set-min(set)+1)
+res$sdLine <- paste("sigma[T] :",res$sd.line)
+res$sdGroup <- paste("sigma[C] :", res$sd.group)
+res$K <- paste("K: ", res$k)
+
 ggplot(data=res) + 
   geom_jitter(aes(x=line, y=sd.line, color=target)) + 
-  facet_grid(target ~ k+sd.group)
+  facet_grid(target ~ K+sdGroup, labeller=label_parsed)
 
 ggplot(data=res) + 
   geom_point(aes(x=line, y=factor(set), color=target, size=target), shape=1) + 
-  facet_grid(k   + sd.group + sd.line~., space="free", scale="free", labeller="label_both") +
+  facet_grid(K + sdGroup + sdLine~., space="free", scale="free", labeller=label_parsed) +
   scale_colour_manual(values=c("red", "grey50", "blue")) +
   scale_size_manual(values=c(4,3,4)) + 
   theme_bw()
 
 ggplot(data=res) + 
   geom_jitter(aes(x=group, y=sd.group, color=target)) + 
-  facet_grid(target ~ k+sd.line)
+  facet_grid(target ~ K+sdLine, labeller=label_parsed)
 
 
 ggplot(data=res) + 
   geom_point(aes(x=group, y=factor(set), color=target, size=target), shape=1) + 
-  facet_grid(k   + sd.line + sd.group~., space="free", scale="free", labeller="label_both") +
+  facet_grid(K+sdLine+sdGroup~., space="free", scale="free", labeller=label_parsed) +
   scale_colour_manual(values=c("red", "grey50", "blue")) +
   scale_size_manual(values=c(4,3,4)) + 
   theme_bw()
+
+
+
+
+ggplot(data=res) + 
+  geom_segment(aes(x=group, y=rep-.3, xend=group, yend=rep+.3, color=target, size=target)) + 
+  facet_grid(sdGroup+sdLine~K, space="free", scale="free", labeller=label_parsed) +
+  scale_size_manual(values=c(1.5, 1, 1.5)) + 
+  scale_colour_manual(values=c("red", "grey50", "blue")) +
+  theme_bw() + 
+  scale_y_continuous(breaks=c(1, 2, 3))
+
+ggplot(data=res) + 
+  geom_segment(aes(x=line, y=rep-.3, xend=line, yend=rep+.3, color=target, size=target)) + 
+  facet_grid(sdLine+sdGroup~K, space="free", scale="free", labeller=label_parsed) +
+  scale_size_manual(values=c(1.5, 1, 1.5)) + 
+  scale_colour_manual(values=c("red", "grey50", "blue")) +
+  theme_bw() + 
+  scale_y_continuous(breaks=c(1, 2, 3))
+
+ggplot(data=res) + 
+  geom_segment(aes(x=group, y=rep-.3, xend=group, yend=rep+.3, color=target, size=target), alpha=.5) + 
+  facet_grid(sdGroup~K+sdLine, labeller=label_parsed) +
+  scale_size_manual(values=c(1.5, 1, 1.5)) + 
+  scale_colour_manual(values=c("red", "grey50", "blue")) +
+  theme_bw() + 
+  scale_y_continuous(breaks=c(1, 2, 3))
+
+# When sigma_C is much lower than sigma_T (i.e. .15 - .2 more) the cluster result begins to merge with the rest of the decoys...
+
+ggplot(data=res) + 
+  geom_segment(aes(x=line, y=rep-.3, xend=line, yend=rep+.3, color=target, size=target), alpha=.5) + 
+  facet_grid(sdLine~K+sdGroup, labeller=label_parsed) +
+  scale_size_manual(values=c(1.5, 1, 1.5)) + 
+  scale_colour_manual(values=c("red", "grey50", "blue")) +
+  theme_bw() + 
+  scale_y_continuous(breaks=c(1, 2, 3))
+
+# When sigma_T and sigma_C are close to 0.3 for K=3, there is little separation. 
+# This occurs at sigma_T = 0.25, sigma_C=0.2, 0.25, 0.3 for K=5
 
 
 # summarise for each lineup:
@@ -116,6 +162,8 @@ stats.group <- dcast(stats, data_name~target, value.var="group")
 names(stats.group)[3] <- "decoy.cluster"
 dstats <- merge(stats.line[,c("data_name", "trend", "decoy.trend")], 
                 stats.group[,c("data_name", "cluster", "decoy.cluster")], by="data_name")
+
+load("../../Data/modeldata.Rdata")
 # get values from modeldata to match
 dmodel <- ddply(modeldata, .(data_name, plottype), summarize,
                 cluster.correct=sum(cluster.correct), trend.correct=sum(trend.correct),
@@ -135,3 +183,5 @@ grid <- data.frame(expand.grid(
 grid$pred <- stats::predict(cl.glm, newdata=grid, type="response")
 
 qplot(cluster-decoy.cluster,cluster.correct/evals, data=dstats) + theme_bw() + geom_line(aes(x=cd, y=pred), colour="red", data=grid)
+
+
