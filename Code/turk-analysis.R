@@ -21,13 +21,13 @@ turkall$cl_target <- as.numeric(targets$V2)
 responses <- strsplit(as.character(turkall$response_no), split=",")
 turkall$feedback <- ldply(1:length(responses), 
                           function(i) {
-  resp <- intersect(as.numeric(unlist(responses[i])), c(turkall$tr_target[i], turkall$cl_target[i]))
-  if (length(resp) == 2) return("both")
-  if (length(resp) == 0) return("none")
-  if (all(resp == turkall$tr_target[i])) return("trend")
-  if (all(resp == turkall$tr_cluster[i])) return("cluster")
-  return("shouldn't happen")
-})$V1
+                            resp <- intersect(as.numeric(unlist(responses[i])), c(turkall$tr_target[i], turkall$cl_target[i]))
+                            if (length(resp) == 2) return("both")
+                            if (length(resp) == 0) return("none")
+                            if (all(resp == turkall$tr_target[i])) return("trend")
+                            if (all(resp == turkall$tr_cluster[i])) return("cluster")
+                            return("shouldn't happen")
+                          })$V1
 
 summary(factor(turkall$feedback))
 xtabs(~test_param + factor(feedback), data=subset(turkall, param_value==" k-3-sdline-0.25-sdgroup-0.25"))
