@@ -705,6 +705,7 @@ modeldata.long$plottype <-
                   "Color + Shape", "Color + Ellipse", "Color + Trend", 
                   "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
 
+save(modeldata, file="../../Data/modeldata.Rdata")
 
 totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time = max(end_time)-min(start_time))
 @
