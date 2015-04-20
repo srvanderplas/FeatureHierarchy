@@ -262,7 +262,7 @@ C^2 &=& \frac{CSS}{TSS},\\
 \end{eqnarray}
 
 \begin{figure}[ht]
-<<cluster, fig.width=8, fig.height=4.5, out.width='\\linewidth', echo=FALSE,dependson='setup'>>=
+<<cluster, fig.width=8, fig.height=4.5, out.width='\\linewidth', echo=FALSE>>=
 sd <- c(0.15, 0.2, 0.25, 0.3)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -549,7 +549,7 @@ Similarly, we expect that relative to a plot with no extra aesthetics or statist
 Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
 
 \begin{figure}[ht]\centering
-<<color-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth',dependson='setup'>>=
+<<color-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth'>>=
 colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
             "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lineup()
