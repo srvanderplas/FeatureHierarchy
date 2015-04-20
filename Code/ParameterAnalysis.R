@@ -185,3 +185,44 @@ grid$pred <- stats::predict(cl.glm, newdata=grid, type="response")
 qplot(cluster-decoy.cluster,cluster.correct/evals, data=dstats) + theme_bw() + geom_line(aes(x=cd, y=pred), colour="red", data=grid)
 
 
+# Simulation-redo
+# Copied from TestLineupDistributions.R, with modified parameters.
+source("Code/MixtureLineups.R")
+library(nullabor)
+library(compiler)
+library(doMC)
+registerDoMC(2)
+library(plyr)
+library(reshape2)
+library(ggplot2)
+library(grid)
+
+# Simulation parameters
+data.parms <- expand.grid(sd.trend=round(c(.25, .35, .45), 2),
+                               sd.cluster=1:3,
+                               K=c(3, 5))
+
+data.parms$sd.cluster[data.parms$K==5] <- c(.2, .25, .3)[data.parms$sd.cluster[data.parms$K==5]]
+data.parms$sd.cluster[data.parms$K==3] <- c(.25, .3, .35)[data.parms$sd.cluster[data.parms$K==3]]
+data.parms$sd.cluster <- round(data.parms$sd.cluster, 2)
+data.parms$N <- data.parms$K*15
+
+
+tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.3) {
+  do.call("rbind", lapply(1:M, function(i) {
+    input.pars <- list(N=N, K=K, sd.trend=sT, sd.cluster=sC)
+    dat <- gen.data(input.pars)
+    res <- ddply(dat, .(.sample), eval.df)
+    res$trend.target <- unique(dat$target1)
+    res$cluster.target <- unique(dat$target2)
+    res$rep <- i
+    data.frame(res, input.pars)
+  }))
+}
+nulldist<- cmpfun(tmp)
+
+simulation.results <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=500, N=N, K=K, sT=sd.trend, sC=sd.cluster)), .parallel=T)
+names(simulation.results) <- c("sample", "R2", "C2", "Gini", "trend.target", "cluster.target", "rep", "N", "K", "sd.trend", "sd.cluster")
+simulation.results$sd.trend <- round(simulation.results$sd.trend, 2)
+simulation.results$sd.cluster <- round(simulation.results$sd.cluster, 2)
+save(simulation.results, file = "./Data/Turk16ParameterSimulation.Rdata")
