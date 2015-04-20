@@ -593,6 +593,7 @@ After the first question, basic demographic information was collected: age range
 \newdo{I think we need to straighten out the analysis: after the overview of the demographics, the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started), and then do the face-off. 
 We might be able to move the single models into a separate paper... so don't delete any of it, I'm just trying to get the flow right at the moment.
 }
+
 <<results-setup,echo=F,include=F>>=
 lineups <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
@@ -754,7 +755,10 @@ We  first consider the effect of plot aesthetics on target selection for each ta
 
 \subsection{Is difficulty of Lineups matching with parameter settings?}
 
-\newdo{We should look at the percentages and match them with the actual numeric values of the indices in the data }
+\newdo{We should look at the percentages and match them with the actual numeric values of the indices in the data.}
+
+\newdo{Figure~\ref{cluster-trend} shows the percentages of correct data identification in plain plots facetted by trend/cluster parameter. For $K=5$ the identification is negatively impacted by a higher variability, as it should be. 
+What we still need to include is the actual cluster/trend index for each of the data sets, and compare that to the percentages. (This is done in ParameterAnalysis.R and should be copied in here.) }
 \begin{figure}
 \centering
 <<echo=FALSE, out.width='0.5\\textwidth'>>=
@@ -766,6 +770,10 @@ qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~c
 @
 \caption{\label{cluster-trend} Overall, the percentages of correct data identifications match variability (i.e.\ they decrease as variability increases). }
 \end{figure}
+
+
+
+
 \subsection{Single Target Plot Models}
 
 We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
