@@ -759,17 +759,23 @@ We  first consider the effect of plot aesthetics on target selection for each ta
 
 \newdo{Figure~\ref{cluster-trend} shows the percentages of correct data identification in plain plots facetted by trend/cluster parameter. For $K=5$ the identification is negatively impacted by a higher variability, as it should be. 
 What we still need to include is the actual cluster/trend index for each of the data sets, and compare that to the percentages. (This is done in ParameterAnalysis.R and should be copied in here.) }
-\begin{figure}
-\centering
-<<echo=FALSE, out.width='0.5\\textwidth'>>=
+<<pvalues, echo=FALSE>>=
 modeldata$one.correct <- with(modeldata, trend.correct | cluster.correct)
 mframe <- ddply(modeldata, .(dataset, plottype, k, trend.diff2, cluster.diff2), summarise,
                 n = length(dataset),
                 correct = sum(one.correct))
-qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~cluster.diff2) + geom_smooth(aes(group=1),  method="lm") + theme_bw()
 
 library(vinference) # install from heike/vinference github
-dvisual(0:5, K=5, m=20, N=10000, type="scenario3", target=1:2)
+mframe$pvisual <- NA
+for ( i in 1:nrow(mframe)) {
+  mframe$pvisual[i] <- dvisual(x=mframe$correct[i], K=mframe$n[i], m=20, type="scenario3", target=1:2)$scenario3
+}
+@
+\begin{figure}
+\centering
+<<echo=FALSE, out.width='0.5\\textwidth'>>=
+qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~cluster.diff2) + geom_smooth(aes(group=1),  method="lm") + theme_bw()
+
 @
 \caption{\label{cluster-trend} Overall, the percentages of correct data identifications match variability (i.e.\ they decrease as variability increases). }
 \end{figure}
