@@ -767,6 +767,9 @@ mframe <- ddply(modeldata, .(dataset, plottype, k, trend.diff2, cluster.diff2), 
                 n = length(dataset),
                 correct = sum(one.correct))
 qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~cluster.diff2) + geom_smooth(aes(group=1),  method="lm") + theme_bw()
+
+library(vinference) # install from heike/vinference github
+dvisual(0:5, K=5, m=20, N=10000, type="scenario3", target=1:2)
 @
 \caption{\label{cluster-trend} Overall, the percentages of correct data identifications match variability (i.e.\ they decrease as variability increases). }
 \end{figure}
