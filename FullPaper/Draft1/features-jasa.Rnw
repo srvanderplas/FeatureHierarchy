@@ -78,7 +78,8 @@ library(xtable)
 source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
 @
-
+\newpage
+\tableofcontents
 \section{Introduction and background}
 Numerical information can be difficult to communicate effectively in raw form, due to limits on attention span, short term memory, and information storage mechanisms within the human brain. 
 Graphics are much more effective for communicating numerical information, as (well-designed) graphics order the numerical information spatially and utilize the higher-bandwidth visual system. 
@@ -592,8 +593,10 @@ Participants were required to complete 10 lineups, answering ``Which plot is the
 After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
 
 \section{Results}\label{sec:Results}
-\newdo{I think we need to straighten out the analysis: after the overview of the demographics, the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started), and then do the face-off. 
-We might be able to move the single models into a separate paper... so don't delete any of it, I'm just trying to get the flow right at the moment.
+\newdo{I think we need to straighten out the analysis: after the overview of the demographics, 
+the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started ***update*** visual p-values are all essentially zero, so no need to report anything - but we can include a discussion on how to get visual p-values (simulation based, in the appendix?)), 
+so let's go straight into the face-off. 
+But in the faceoff we need to add a discussion on how many values we have for evaluation (the CI intervals keep getting bigger as we have more clustering) - for this, we can include the discussion that is in the single target clustering models right now and go into the wordles afterwards (participant reasoning).
 }
 
 <<results-setup,echo=F,include=F>>=
@@ -712,7 +715,7 @@ save(modeldata, file="../../Data/modeldata.Rdata")
 totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time = max(end_time)-min(start_time))
 @
 
-\subsection{General results}
+\subsection{General results \& Demographics}
 Data collection was conducted over a \Sexpr{round(as.numeric(difftime(max(modeldata$end_time), min(modeldata$start_time), units="hours")))} hour period, 
 during which time \Sexpr{length(unique(userdata$nick_name))} individuals completed \Sexpr{nrow(userdata)} unique lineup evaluations. 
 Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{incomplete.participant.data} evaluations), and lineup evaluations in excess of 10 for each participant were also removed from the study (\Sexpr{extra.participant.data} evaluations). 
@@ -755,7 +758,7 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 
 We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
-\subsection{Is difficulty of Lineups matching with parameter settings?}
+\subsection{Is difficulty of Lineups matching with parameter settings? *** out? appendix? ***}
 
 \newdo{We should look at the percentages and match them with the actual numeric values of the indices in the data.}
 
@@ -820,7 +823,7 @@ qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~c
 
 
 
-\subsection{Single Target Plot Models}
+\subsection{Single Target Plot Models *** out ***}
 
 We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
 
@@ -899,7 +902,7 @@ print(xtable(line.fixef.aes[,c(8, 1:4)], caption=c("Fitted values of fixed effec
 Once error bands are added to the plot, the continuity and common region heuristics may be applied. The results are consistent with this idea: only the dual continuity emphasis of trend + error bands (along with the common region emphasis) significantly increases the probability that participants will identify the target plot generated under $M_T$. 
 
 
-\subsubsection{Cluster Target Selection}\label{sec:groupModel}
+\subsubsection{Cluster Target Selection *** keep some of the cognitive discussion ***}\label{sec:groupModel}
 <<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
 group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
                      data = modeldata, 
@@ -976,6 +979,8 @@ In future experiments, it will be advantageous to control the variability in clu
 
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
+\newdo{Include a discussion of how many results we have for each of the plot types. Try to explain differences using parts of the single target models.} 
+
 Next, we consider only the subset of trials in which participants identified one of the two target plots (\Sexpr{sum(1-modeldata$neither)} trials). For these trials, we compare the probability of selecting the cluster target generated by $M_C$ compared with the probability of selecting the trend target generated by $M_T$. 
 Define $C_{ijk}$ to be the event $$\{\text{Participant }k\text{ selects the cluster target for dataset }j\text{ with aesthetic set }i\}$$
 and $T_{ijk}$ to be the analogous selection of the trend target.
@@ -1034,7 +1039,7 @@ When trend line and error are present in the same plot, the additional Gestalt p
 This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
 
-\subsection{Response Time}
+\subsection{Response Time *** out ***}
 As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the time between initial lineup presentation (trial start) and answer submission (trial end). 
 Examining differences in average response times across trials provides us with an additional measure of trial difficulty or perceptual complexity. 
 We can also explore whether participants spent more time on certain types of plots and how additional time is realted to accurate target identification. 
@@ -1144,7 +1149,7 @@ print(xtable(coefs2[,c(4, 3, 5)], caption=c("Fitted values of plot type and firs
 In a second model, we fit log response time as a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure \ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
 The time to evaluate each plot increases slightly with trend difficulty and cluster difficulty (across trials), conditional on outcome, but the "medium" difficulty trials seem to be somewhat discordant in many cases; in some cases, time to evaluate increases and in others, it decreases. This may be due to a conflict between the trend and cluster target plots: when there is no clear signal numerically, evaluation time increases while participants waver between potential targets. 
 
-\subsection{Participant Confidence}
+\subsection{Participant Confidence *** out ***}
 In addition to participant identification of target plots, we also asked participants to rate their confidence in their answer. 
 Figure \ref{fig:conflevel} shows aggregate participant confidence rating as a function of trial outcome. 
 Participants who did not identify either target plot were less likely to be ``extremely confident'' in their answer, while participants who identified either the trend or the cluster target correctly were highly confident that their answer was correct. 
