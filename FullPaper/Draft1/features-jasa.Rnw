@@ -770,18 +770,20 @@ All of the (plain plottype) lineups are hugely significant (less than 1 in 10,00
 modeldata$one.correct <- with(modeldata, trend.correct | cluster.correct)
 mframe <- ddply(modeldata, .(data_name, dataset, plottype, k, trend.diff2, cluster.diff2), summarise,
                 n = length(dataset),
+                trend.correct = sum(trend.correct),
+                cluster.correct = sum(cluster.correct),
                 correct = sum(one.correct))
 
-library(vinference) # install from heike/vinference github
-mframe$pvisual <- NA
-for ( i in 1:nrow(mframe)) {
-  mframe$pvisual[i] <- dvisual(x=mframe$correct[i], K=mframe$n[i], m=20, type="scenario3", target=1:2)$scenario3
-}
+#library(vinference) # install from heike/vinference github
+#mframe$pvisual <- NA
+#for ( i in 1:nrow(mframe)) {
+#  mframe$pvisual[i] <- dvisual(x=mframe$correct[i], K=mframe$n[i], m=20, type="scenario3", target=1:2)$scenario3
+#}
 @
 <<answers, echo=FALSE>>=
 answers2 <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors = F)
 res <- ldply(unique(answers2$data_name), function(x){
-  return(cbind(data_name = x, read.csv(paste0("../../FeatureHierarchyImages/Turk16/Data/", x, ".csv"))))
+  return(cbind(data_name = x, read.csv(paste0("../../Images/Turk16/Stats/", x, ".csv"))))
 })
 
 library(stringr)
