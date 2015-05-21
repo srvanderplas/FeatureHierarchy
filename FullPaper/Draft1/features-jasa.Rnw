@@ -819,8 +819,19 @@ dstats <- merge(dstats, mframe, by="data_name")
 qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~cluster.diff2) + geom_smooth(aes(group=1),  method="lm") + theme_bw()
 
 @
-\caption{\label{cluster-trend} Overall, the percentages of correct data identifications match variability (i.e.\ they decrease as variability increases). }
+\caption{\label{cluster-trend} Overall, the percentages of correct data identifications match variability (i.e.\ they decrease as variability increases - the above plot shows results from plain plots only). }
 \end{figure}
+
+\begin{figure}
+\centering
+<<echo=FALSE, out.width='0.5\\textwidth'>>=
+qplot(data=dstats, trend-decoy.trend, trend.correct/n, facets=k~.) + geom_smooth() + theme_bw()
+qplot(data=dstats, cluster-decoy.cluster, cluster.correct/n, facets=k~.) + geom_smooth() + theme_bw()
+@
+\caption{\label{clusters.and.trends} For future reference - as the difference between the signals increases, the chance that an observer picks the corresponding target increases.}
+\end{figure}
+
+
 
 
 
@@ -1000,6 +1011,15 @@ As in equation \ref{eqn:linearModel}, the random effects for dataset and partici
 The estimated odds of a decision in favor of cluster over trend target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
 
 \begin{figure}[ht]\centering
+<<faceoffdata, echo=FALSE>>=
+
+faceoff <- subset(modeldata, trend.correct | cluster.correct)
+qplot(reorder(plottype,plottype,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations")
+@
+\caption{\label{fig:faceoff} number of evaluations by plot type, in which at least one of the targets was identified. Due to the design each plot type was evaluated almost the same number of times (between 1195 and 1208 times).}
+\end{figure}
+
+\begin{figure}[ht]\centering
 <<group-vs-line, echo=FALSE, fig.width=8, fig.height=4, out.width='.85\\linewidth'>>=
 gvl.model <-  glmer(cluster.correct~plottype + (1|data_name) + (1|individualID), data=subset(modeldata, trend.correct | cluster.correct), family=binomial(), control=glmerControl(optimizer="bobyqa"))
 gvl.fixef <- data.frame(confint(gvl.model, method="Wald"))
@@ -1030,6 +1050,17 @@ ggplot(data=gvl.fixef[-1,]) +
   geom_text(aes(y=0.25, x=label, label=letters)) + 
   scale_y_continuous("Odds (Cluster vs Trend) and 95% Wald Intervals\n(Reference level: Plain plot)", 
                      breaks=c(0.2, 0.5, 1.0, 1.5, 2.0, 2.4), labels=c("<--Trend\n  Target", "0.5", "1.0", "1.5", "2.0", "Cluster-->\nTarget  "), limits=c(0.2, 2.4))
+
+ggplot(data=gvl.fixef[-1,]) + 
+  geom_pointrange(aes(x=label, y=OR, ymin=LB, ymax=UB)) + 
+  coord_flip() + 
+  theme_bw() + 
+  geom_hline(yintercept=0, colour="gray70") + 
+  ggtitle("Log Odds of Selecting Cluster vs Trend Target \n (given one target was identified)") + 
+  xlab("Plot Type") + 
+  geom_text(aes(y=-0.8, x=label, label=letters)) + 
+  scale_y_continuous("Log Odds (Cluster vs Trend) and 95% Wald Intervals\n(Reference level: Plain plot)", 
+                     breaks=c(-.8, -0.5, 0, 0.5, .8), labels=c("<--Trend\n  Target", "-0.5", "0.0", "0.5", "Cluster-->\nTarget  "), limits=c(-.8,.8))
 @
 \caption[Estimated odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
