@@ -1011,12 +1011,11 @@ As in equation \ref{eqn:linearModel}, the random effects for dataset and partici
 The estimated odds of a decision in favor of cluster over trend target are shown in figure~\ref{fig:faceoff}. From left to right the odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
 
 \begin{figure}[ht]\centering
-<<faceoffdata, echo=FALSE>>=
-
+<<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.5, out.width='.75\\textwidth'>>=
 faceoff <- subset(modeldata, trend.correct | cluster.correct)
-qplot(reorder(plottype,plottype,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations")
+qplot(reorder(plottype,plottype,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations") + geom_bar(aes(x=plottype), data=modeldata, fill=NA, colour="black")
 @
-\caption{\label{fig:faceoff} number of evaluations by plot type, in which at least one of the targets was identified. Due to the design each plot type was evaluated almost the same number of times (between 1195 and 1208 times).}
+\caption{\label{fig:faceoff} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
 
 \begin{figure}[ht]\centering
@@ -1058,9 +1057,9 @@ ggplot(data=gvl.fixef[-1,]) +
   geom_hline(yintercept=0, colour="gray70") + 
   ggtitle("Log Odds of Selecting Cluster vs Trend Target \n (given one target was identified)") + 
   xlab("Plot Type") + 
-  geom_text(aes(y=-0.8, x=label, label=letters)) + 
+  geom_text(aes(y=-1, x=label, label=letters)) + 
   scale_y_continuous("Log Odds (Cluster vs Trend) and 95% Wald Intervals\n(Reference level: Plain plot)", 
-                     breaks=c(-.8, -0.5, 0, 0.5, .8), labels=c("<--Trend\n  Target", "-0.5", "0.0", "0.5", "Cluster-->\nTarget  "), limits=c(-.8,.8))
+                     breaks=c(-1, -0.5, 0, 0.5, 1), labels=c("<--Trend\n  Target", "-0.5", "0.0", "0.5", "Cluster-->\nTarget  "), limits=c(-1,1))
 @
 \caption[Estimated odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
