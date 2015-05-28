@@ -1012,8 +1012,19 @@ The estimated odds of a decision in favor of cluster over trend target are shown
 
 \begin{figure}[ht]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.5, out.width='.75\\textwidth'>>=
+modeldata$label <- modeldata$plottype
+modeldata$label <- modeldata$plottype %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("( \\+ )$", "")
+
+
 faceoff <- subset(modeldata, trend.correct | cluster.correct)
-qplot(reorder(plottype,plottype,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations") + geom_bar(aes(x=plottype), data=modeldata, fill=NA, colour="black")
+
+qplot(reorder(label,label,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations") + geom_bar(aes(x=label), data=modeldata, fill=NA, colour="black")
 @
 \caption{\label{fig:faceoff} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
