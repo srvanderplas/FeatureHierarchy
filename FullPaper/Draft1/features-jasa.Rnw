@@ -101,18 +101,16 @@ Another area of psychological research, Gestalt psychology, examines perception 
 Gestalt rules of perception can be easily applied to statistical graphics, as they describe the way we organize visual input, focusing on the holistic experience rather than the individual perceptual features. 
 
 For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. This is due to certain perceptual heuristics, which provide a ``top-down" method of understanding visual stimuli by taking into account past experience. 
-\newtext{
+
 The rules of perceptual grouping or organization relevant to graphical perception in this experiment are:
-}
 \begin{itemize}
 \item \textbf{Proximity}: two elements which are close together are more likely to belong to a single unit.
 \item \textbf{Similarity}: the more similar two elements are, the more likely they belong to a single unit.
 \item \textbf{Good continuation}: two elements which blend together smoothly likely belong to one unit.
 \item \textbf{Common region}: elements contained within a common region likely belong together. 
 \end{itemize}
-\newtext{
 A complete list of the rules of perceptual grouping can be found in \citet{goldstein2009encyclopedia}.
-}
+
 
 \begin{figure}\centering
 <<gestalt1, echo =FALSE, out.width='0.32\\linewidth', fig.width=3, fig.height=3, fig.show='hold'>>=
@@ -980,7 +978,7 @@ and
 This suggests that our cluster allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
 Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than three points and in these cases, ellipses were not drawn. 
 Visually, the conspicuous absence of an ellipse will lead participants to select null plots with that feature (see section~\ref{sec:sentiment} for a more detailed look at participants' responses).
-\newtext{In particular, counting is pre-attentive, and the number of ellipses in each plot is within some estimates of the `subitizing' range of counting, which can be counted without spatial attention \citep{trick1994small}. Thus, the number of ellipses present dominates other features which are important for gestalt grouping heuristics. }
+In particular, counting is pre-attentive, and the number of ellipses in each plot is within some estimates of the `subitizing' range of counting, which can be counted without spatial attention \citep{trick1994small}. Thus, the number of ellipses present dominates other features which are important for gestalt grouping heuristics. 
 
 % \newdo{Counting and estimation is one of the pre-attentive tasks (besides target detection, boundary detection, and region tracking) that studies have identified, for an overview see \url{http://www.csc.ncsu.edu/faculty/healey/download/tvcg.11.pdf} (Healey's TVCG paper corresponding to his website on the overview of pre-attentiveness). }
 
@@ -1225,7 +1223,7 @@ ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=out
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
-As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. \newtext{In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud.} What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
+As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
 
 \begin{figure}[ht]\centering
 <<sentiment, eval=FALSE, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\linewidth', fig.show='hold'>>=
