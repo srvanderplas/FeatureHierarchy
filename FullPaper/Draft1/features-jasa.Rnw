@@ -775,10 +775,26 @@ modeldata$label <- modeldata$plottype %>%
   str_replace("plain", "Plain") %>%
   str_replace("( \\+ )$", "")
 
-
 faceoff <- subset(modeldata, trend.correct | cluster.correct)
 
-qplot(reorder(label,label,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations") + geom_bar(aes(x=label), data=modeldata, fill=NA, colour="black")
+fac.order <- levels(with(faceoff, reorder(label,label,function(x) -length(x))))
+modeldata$label <- factor(modeldata$label, levels=fac.order)
+
+# qplot(reorder(label,label,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations") + geom_bar(aes(x=label), data=modeldata, fill=NA, colour="black")
+
+totals <- modeldata %>% group_by(label) %>% summarize(eval=length(label), type="Total")
+correct.totals <- faceoff %>% group_by(label) %>% summarize(eval=length(label), type="Correct")
+
+totals <- rbind(totals, correct.totals)
+totals$label <- factor(totals$label, levels=fac.order, ordered=T)
+
+ggplot() + 
+  coord_flip() + 
+  theme_bw() + 
+  xlab("") + ylab("# of target evaluations") + 
+  geom_bar(aes(x=label, y=eval, fill=type), data=totals, stat="identity", position="identity", color="black") + 
+  scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90"))
+
 @
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
