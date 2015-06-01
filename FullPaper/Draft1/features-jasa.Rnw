@@ -102,7 +102,7 @@ Gestalt rules of perception can be easily applied to statistical graphics, as th
 
 For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. This is due to certain perceptual heuristics, which provide a ``top-down" method of understanding visual stimuli by taking into account past experience. 
 
-The rules of perceptual grouping or organization relevant to graphical perception in this experiment are:
+The rules of perceptual organization relevant to graphical perception in this experiment are:
 \begin{itemize}
 \item \textbf{Proximity}: two elements which are close together are more likely to belong to a single unit.
 \item \textbf{Similarity}: the more similar two elements are, the more likely they belong to a single unit.
