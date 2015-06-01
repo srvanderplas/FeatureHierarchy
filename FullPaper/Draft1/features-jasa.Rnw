@@ -134,7 +134,7 @@ qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
 @
 \caption[Gestalt principles applied to statistical plots]{\label{fig:gestalt} \emph{Proximity} renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create different groups of points in the middle scatterplot, invoking the Gestalt principle of \emph{Similarity}. \emph{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
 \end{figure}
-\afterpage{\clearpage}
+% \afterpage{\clearpage}
 
 The plots in figure \ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (continuity and common region). 
 
