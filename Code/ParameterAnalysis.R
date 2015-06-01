@@ -238,16 +238,28 @@ simulation.results$target[simulation.results$target==""] <- "decoy"
 simulation.results <- ddply(simulation.results, .(K, sd.trend, sd.cluster, rep), transform, trend.r2 = R2[sample==trend.target], cluster.c2=C2[sample==cluster.target])
 simulation.results <- ddply(simulation.results, .(K, sd.trend, sd.cluster), transform, trend.rank=floor(order(trend.r2)/20), cluster.rank=floor(order(cluster.c2)/20))
 
-ggplot(data=simulation.results) + 
-  geom_point(aes(x=R2, y=rep, color=target, size=target), shape=1, alpha=.5) + 
+simulation.summary <- ddply(simulation.results, .(K, sd.trend, sd.cluster, sdLine, sdGroup, rep, target), summarise, min.r2 = min(R2), max.r2 = max(R2), min.c2 = min(C2), max.c2 = max(C2))
+
+ggplot() + 
+  geom_segment(aes(x=max.r2, xend=min.r2, y=rep, yend=rep, color=target, size=target), data=subset(simulation.summary, target=="decoy"), alpha=.25) + 
+  geom_point(aes(x=min.r2, y=rep, color=target, size=target), shape=1, alpha=.25, data=subset(simulation.summary, target%in%c("cluster", "trend"))) + 
   facet_grid(sdLine~K+sdGroup, labeller=label_parsed) +
-  scale_size_manual(values=c(1.5, 1, 1.5)) + 
-  scale_colour_manual(values=c("red", "grey50", "blue")) +
+  scale_size_manual(values=c(.75, .25, 1)) + 
+  scale_colour_manual(values=c("red", "grey70", "blue")) +
   theme_bw() + 
   ggtitle("Change in R^2 with parameter values")
 
+ggplot() + 
+  geom_segment(aes(x=max.c2, xend=min.c2, y=rep, yend=rep, color=target, size=target), data=subset(simulation.summary, target=="decoy"), alpha=.25) + 
+  geom_point(aes(x=min.c2, y=rep, color=target, size=target), shape=1, alpha=.25, data=subset(simulation.summary, target%in%c("cluster", "trend"))) + 
+  facet_grid(sdGroup~K+sdLine, labeller=label_parsed, scales="free") +
+  scale_size_manual(values=c(1, .25, .75)) + 
+  scale_colour_manual(values=c("red", "grey70", "blue")) +
+  theme_bw() + 
+  ggtitle("Change in C^2 with parameter values")
+
 ggplot(data=simulation.results) + 
-  geom_point(aes(x=C2, y=rep, color=target, size=target), shape=1, alpha=.5) + 
+  geom_point(aes(x=C2, y=rep, color=target, size=target, shape=target), shape=1, alpha=.5) + 
   facet_grid(sdGroup~K+sdLine, labeller=label_parsed) +
   scale_size_manual(values=c(1.5, 1, 1.5)) + 
   scale_colour_manual(values=c("red", "grey50", "blue")) +
