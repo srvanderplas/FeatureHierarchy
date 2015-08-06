@@ -1408,5 +1408,25 @@ Additionally, after the experiment was complete, we examined the distribution of
 \subsection{Cluster Model Results}\label{app:clustermodel}
 \input{figure/group-fixef-table}
 
+\section{Simulation based inference in a two-target lineup scenario}
+
+Assume that there are two targets embedded in a lineup of overall size $m$, where $m$ in our experiment is taken to be $m=20$. Let $A$ be the event that one of these targets is chosen.
+Under the null hypothesis that both targets are consistent with being created based on data from the null model, we can assume that under the null hypothesis the expected value of the probability that an observer picks one of these plots from the lineup is $2/m = E[ P(A \mid H_o) ]$.
+For the distribution of $A \mid H_o$ we employ a simulation-based strategy:
+Under the null hypothesis, we can assume, that the $p$-value corresponding to a hypothesis test `the presented data is consistent with the null model' has a standard uniform distribution, i.e. $p_i \sim U[0,1]$ i.i.d.~for all $1 \le i \le m$. We assume that the choice observers make can be modeled using a multinomial distribution, where the probability $\pi_i$ to pick panel $i$ is inversely linear to $p_i$, with $\sum_{i=1}^m \pi_i = 1$.
+ 
+W.l.o.g.~we can assume that the two target plots are in positions 1 and 2. 
+Given that a lineup was evaluated by $K$ individuals, the simulation process for $P(A|H_o$ is then as follows:
+%
+\begin{enumerate}
+\item Pick two values $p_i \sim U[0,1], i=1, 2$.
+\item Repeat $B$ times:
+\begin{enumerate}
+    \item Pick $m-2$ values $p_i \sim U[0,1], i=3, ..., m$.
+    \item Pick $K$ values from a Multinomial distribution with $\pi = (1-p)/|| 1- p||$, i.e. $x_j \sim M_\pi, i=1, ..., K$
+    \item Return the number of times that $x_j$ is 1 or 2. 
+\end{enumerate} 
+\end{enumerate}
+
 \end{appendix}
 \end{document}
