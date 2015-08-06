@@ -1420,13 +1420,16 @@ Given that a lineup was evaluated by $K$ individuals, the simulation process for
 %
 \begin{enumerate}
 \item Pick two values $p_i \sim U[0,1], i=1, 2$.
-\item Repeat $B$ times:
+\item Repeat $b_1$ times:
 \begin{enumerate}
     \item Pick $m-2$ values $p_i \sim U[0,1], i=3, ..., m$.
     \item Pick $K$ values from a Multinomial distribution with $\pi = (1-p)/|| 1- p||$, i.e. $x_j \sim M_\pi, i=1, ..., K$
     \item Return the number of times that $x_j$ is 1 or 2. 
 \end{enumerate} 
 \end{enumerate}
+Repeat the above process $b_2$ times, and average results for a distribution of $A \mid H_o$. 
+The choice of $b_1$ and $b_2$ decides on the number of decimal places to which the estimated distribution can be used reliably. 
 
+\newdo{Include an example of the simulation's results that's relevant to the paper.}
 \end{appendix}
 \end{document}
