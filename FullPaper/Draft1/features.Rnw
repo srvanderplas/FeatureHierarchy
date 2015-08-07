@@ -1402,13 +1402,8 @@ Additionally, after the experiment was complete, we examined the distribution of
 \caption{Simulated interquartile range of group size inequality statistic values for cluster and null data distributions. \label{fig:simulationGiniIntervals}}
 \end{figure}
 
-\section{Model Results}
-\subsection{Trend Model Results}\label{app:trendmodel}
-\input{figure/linear-fixef-table}
-\subsection{Cluster Model Results}\label{app:clustermodel}
-\input{figure/group-fixef-table}
 
-\section{Simulation based inference in a two-target lineup scenario}
+\section{Simulation based inference in a two-target lineup scenario}\label{sec:simulation}
 
 Assume that there are two targets embedded in a lineup of overall size $m$, where $m$ in our experiment is taken to be $m=20$. Let $A$ be the event that one of these targets is chosen.
 Under the null hypothesis that both targets are consistent with being created based on data from the null model, we can assume that under the null hypothesis the expected value of the probability that an observer picks one of these plots from the lineup is $2/m = E[ P(A \mid H_o) ]$.
@@ -1423,13 +1418,35 @@ Given that a lineup was evaluated by $K$ individuals, the simulation process for
 \item Repeat $b_1$ times:
 \begin{enumerate}
     \item Pick $m-2$ values $p_i \sim U[0,1], i=3, ..., m$.
-    \item Pick $K$ values from a Multinomial distribution with $\pi = (1-p)/|| 1- p||$, i.e. $x_j \sim M_\pi, i=1, ..., K$
+    \item Pick $K$ values from a Multinomial distribution with $\pi = \frac{1-p}{|| 1- p||}$, i.e. $x_j \sim M_\pi, i=1, ..., K$
     \item Return the number of times that $x_j$ is 1 or 2. 
 \end{enumerate} 
 \end{enumerate}
 Repeat the above process $b_2$ times, and average results for a distribution of $A \mid H_o$. 
 The choice of $b_1$ and $b_2$ decides on the number of decimal places to which the estimated distribution can be used reliably. 
 
-\newdo{Include an example of the simulation's results that's relevant to the paper.}
+\begin{figure}
+<<twotarget, echo=FALSE, out.width='0.7\\linewidth', fig.width=8, fig.height=5>>=
+library(vinference) # install from heike/vinference github
+K <- 10
+res <- ldply(1:10, function(x)
+      dvisual(x=0:K, K=K, m=20, type="scenario3", target=1:2, N=100000)
+      )
+means <- ddply(res, .(x), summarize, avg=mean(scenario3))
+qplot(x, scenario3, data=res) +
+theme_bw() + 
+ylab("estimated probability") + xlab("Number of times (out of 10) one of the targets is picked") + 
+  geom_segment(aes(x=x-0.3, xend=x+0.3, y=avg, yend=avg), data=means) + 
+  geom_point(aes(x=x, y=binom), colour="steelblue", shape=21)
+@
+\caption{\label{fig:simulation} Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$ assuming $K=10$ evaluations. The averages of the ten simulation runs are shown as lines. The open circles are probabilities from  Binomial $B_{2/20, 10}$.}
+\end{figure}
+
+\section{Model Results}
+\subsection{Trend Model Results}\label{app:trendmodel}
+\input{figure/linear-fixef-table}
+\subsection{Cluster Model Results}\label{app:clustermodel}
+\input{figure/group-fixef-table}
+
 \end{appendix}
 \end{document}
