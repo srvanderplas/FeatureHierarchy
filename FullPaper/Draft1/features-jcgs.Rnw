@@ -102,7 +102,7 @@ library(stringr)
 library(lubridate)
 
 library(reshape2)
-library(plyr)
+#library(plyr) ## clashes with dplyr
 library(dplyr)
 library(magrittr)
 
@@ -259,8 +259,9 @@ The use of $R^2$ to assess the strength of the linear relationship (rather than 
 
 \begin{figure}[ht]
 <<trends, fig.width=8, fig.height=3, out.width='\\linewidth', echo=FALSE>>=
-sd <- c(0.1, 0.2, 0.3, 0.4)
-res <- ldply(sd, function(x) { data.frame(sd.trend=x, sim.line(N=45, sd.trend=x)) })
+res <- data.frame(sd.trend = rep(c(0.1, 0.2, 0.3, 0.4), each=45))
+res <- res %>% group_by(sd.trend) %>% do(sim.line(N=45, sd.trend=as.numeric(.[1,1])))
+
 res$label <- paste("sigma[T] :",res$sd.trend)
 qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"))
@@ -300,7 +301,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 
 \begin{figure}[bht]
 <<cluster, fig.width=8, fig.height=4.5, out.width='\\linewidth', echo=FALSE>>=
-sd <- c(0.15, 0.2, 0.25, 0.3)
+
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
@@ -324,11 +325,17 @@ color5pal <- best.combo(5, colors, colortm)
 shape3pal <- best.combo(3, shapes, shapetm)
 shape5pal <- best.combo(5, shapes, shapetm)
 
-res <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=3, N=45, sd.cluster=x)) })
+res <- data.frame(sd.cluster= rep(c(0.15, 0.20, 0.25, 0.30), each=45))
+res <- res %>% group_by(sd.cluster) %>% do(data.frame({set.seed(325098573); sim.clusters(K=3, N=45, sd.cluster=as.numeric(.[1,1]))}))
+
+#res <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=3, N=45, sd.cluster=x)) })
 res$K <- 3
 res$color <- color3pal[res$group]
 res$shape <- shape3pal[res$group]
-res2 <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=5, N=75, sd.cluster=x)) })
+
+res2 <- data.frame(sd.cluster= rep(c(0.15, 0.20, 0.25, 0.30), each=75))
+res2 <- res2 %>% group_by(sd.cluster) %>% do({set.seed(325098573); sim.clusters(K=5, N=75, sd.cluster=as.numeric(.[1,1]))})
+#res2 <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=5, N=75, sd.cluster=x)) })
 res2$K <- 5
 res2$color <- color5pal[res2$group]
 res2$shape <- shape5pal[res2$group]
