@@ -608,7 +608,9 @@ For each plot type (aesthetic combination), we first consider the probability th
 }
 
 
+\begin{kframe}
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `[.data.frame`(base, names(rows)): undefined columns selected}}\end{kframe}
 \end{knitrout}
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
@@ -641,14 +643,18 @@ The estimated log odds of a decision in favor of cluster over trend target are s
 
 \begin{figure}[ht]\centering
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=.85\linewidth]{figure/group-vs-line-1} 
-
-}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}OR"{}, value = structure(c(1.16689342958925, : replacement has 10 rows, data has 12}}
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}letters"{}, value = structure(c("{}b"{}, : replacement has 10 rows, data has 12}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}label"{}, value = c("{}(Intercept)"{}, "{}trend"{}, : replacement has 10 rows, data has 12}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in split.default(X, group): first argument must be a vector}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'OR' not found}}\end{kframe}
 \end{knitrout}
 \caption[Estimated log odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated log odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}

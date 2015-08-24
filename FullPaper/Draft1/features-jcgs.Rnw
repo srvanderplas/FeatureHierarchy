@@ -805,7 +805,10 @@ For each plot type (aesthetic combination), we first consider the probability th
 \newdo{somewhere in this section include a discussion of how many results we have for each of the plot types. Try to explain differences using parts of the single target models.} 
 
 \begin{figure}[ht]\centering
-<<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.5, out.width='.75\\textwidth'>>=
+<<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
+md <- data.frame(plottype = levels(modeldata$plottype), 
+                 tendency=c("none", "trend", "group", "group", "group", "group", "conflict", "trend", "group", "conflict"))
+
 modeldata$label <- modeldata$plottype
 modeldata$label <- modeldata$plottype %>% 
   str_replace("color", "Color + ") %>% 
@@ -827,14 +830,42 @@ totals <- modeldata %>% group_by(label) %>% summarize(eval=length(label), type="
 correct.totals <- faceoff %>% group_by(label) %>% summarize(eval=length(label), type="Correct")
 
 totals <- rbind(totals, correct.totals)
+totals <- merge(totals, md, by.x="label", by.y="plottype")
+totals$tendency <- factor(totals$tendency, levels=c("none", "trend", "group", "conflict"))
 totals$label <- factor(totals$label, levels=fac.order, ordered=T)
 
 ggplot() + 
-  coord_flip() + 
   theme_bw() + 
   xlab("") + ylab("# of target evaluations") + 
-  geom_bar(aes(x=label, y=eval, fill=type), data=totals, stat="identity", position="identity", color="black") + 
-  scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90"))
+#  facet_grid(tendency~., space="free", scales="free") +
+  geom_bar(aes(x=label, y=eval, fill=type), 
+           data=subset(totals, type=="Total"), stat="identity", 
+           position="identity", colour="black") + 
+  geom_bar(aes(x=label, y=eval, fill=type), 
+           data=subset(totals, type=="Correct"), stat="identity", 
+           position="identity", colour="black") + 
+  scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90")) +   coord_flip() 
+
+md <- merge(md, subset(totals, type=="Correct")[,c("label", "eval")], by.x="plottype", by.y="label")
+md <- md[order(md$tendency, md$eval),]
+
+totals$label <- factor(totals$label, levels=md$plottype)
+  
+totals$nlabel=as.numeric(totals$label)
+ggplot() + 
+  theme_bw() + 
+  xlab("# of target evaluations") + ylab("") + 
+  facet_grid(tendency~., space="free_y", scales="free_y") +
+  geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
+           data=subset(totals, type=="Total"), stat="identity", 
+           position="identity", colour="black") + 
+  geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
+           data=subset(totals, type=="Correct"), stat="identity", 
+           position="identity", colour="black") + 
+  scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90")) +
+  scale_y_continuous(breaks=1:10, labels=md$plottype) +
+  theme(legend.position="bottom", strip.text.y = element_text(angle=0))
+
 
 @
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
