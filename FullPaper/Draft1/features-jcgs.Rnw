@@ -180,7 +180,7 @@ qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
 \end{figure}
 % \afterpage{\clearpage}
 
-The plots in figure \ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (continuity and common region). 
+The plots in Figure~\ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (continuity and common region). 
 
 The processing of visual stimuli utilizes low-level feature detection, which occurs automatically in the preattentive perceptual phase, and higher-level mental heuristics which are informed by experience. Both types of mental processes utilize physical location, color, and shape  to organize perceptual stimuli and direct attention to graphical features which stand out. 
 
@@ -196,7 +196,7 @@ Statistical graphics can be difficult to examine experimentally; qualitative stu
 are an important experimental tool for evaluating the perceptual utility of graphical displays. Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests to facilitate formal experimental evaluation of statistical graphics. 
 
 Lineups are an experimental tool designed to serve as a visual hypothesis test, separating ``significant" visual effects from those that would be expected under a null hypothesis \citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
-A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in figure \ref{fig:plotExamples}). 
+A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in Figure~\ref{fig:plotExamples}). 
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
 If participants can identify the target plot from the field of distractors, then the visual display is deemed significant in the same sense that a numerical test with $p<0.05$ is significant. 
 
@@ -209,7 +209,7 @@ If both targets exhibit similar signal, observers may identify both targets, rem
 
 By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
 
-Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of figure \ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure should be enhanced if the points in each group were colored differently, as the proximity heuristic is supplemented by similarity. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal.
+Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the Figure~should be enhanced if the points in each group were colored differently, as the proximity heuristic is supplemented by similarity. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal.
 
 The study in this paper is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. 
 
@@ -514,53 +514,53 @@ Each of the generated datasets is then plotted as a lineup, where we apply aesth
 
 \subsection{Lineup Rendering}
 \subsubsection{Plot Aesthetics}
-Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in figure \ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in figure \ref{fig:plotExamples}.
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Plain}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-1}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-2}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Shape}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-3}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Shape + Color}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-4}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Color + Ellipse}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-5}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Shape + Ellipse}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-6}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-7}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend + Error }
   \includegraphics[width=\linewidth]{figure/fig-samplepics-8}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend + Color}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-9}
 \end{subfigure}
-\begin{subfigure}[t]{0.28\linewidth}
+\begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend + Color + Ellipse}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
-\afterpage{\clearpage}
+%\afterpage{\clearpage}
 
 
 \begin{table}[ht]
@@ -577,7 +577,7 @@ Line + Prediction \end{tabular}\\
 \caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
 
-\afterpage{\clearpage}
+%\afterpage{\clearpage}
 
 We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses  increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model. 
 
@@ -596,10 +596,10 @@ qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lin
 \end{figure}
 \afterpage{\clearpage}
 
-The color palette used in \citet{heer:2014} and shown in figure \ref{fig:colors} is derived from colors available in Tableau visualization software\citep{tableau}. 
+The color palette used in \citet{heer:2014} and shown in Figure~\ref{fig:colors} is derived from colors available in Tableau visualization software~\citep{tableau}. 
 In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (gray) which is difficult to distinguish for those with color deficiency.  
 
-Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in figure \ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 cluster datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
+Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in Figure~\ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 cluster datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
 \begin{figure}
 <<shape-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth',message=F, warning=F>>=
@@ -757,7 +757,7 @@ during which time \Sexpr{length(unique(userdata$nick_name))} individuals complet
 Participants who completed fewer than 10 lineups were removed from the study (\Sexpr{length(incomplete.participants)} participants, \Sexpr{incomplete.participant.data} evaluations), and lineup evaluations in excess of 10 for each participant were also removed from the study (\Sexpr{extra.participant.data} evaluations). 
 After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} trials completed by \Sexpr{length(unique(modeldata$individualID))} participants. 
 
-Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see figure~\ref{fig:demographics}). 
+Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see Figure~\ref{fig:demographics}). 
 Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plot.eval.tab)} individuals 
 (\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
@@ -772,7 +772,7 @@ qplot(education, data=users) + theme_bw() + xlab("(self-reported) Highest level 
 \end{figure}
 
 
-From figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target type over another target type, but generally pick both types over the course of ten lineups.
+From Figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target type over another target type, but generally pick both types over the course of ten lineups.
 
 \begin{figure}[ht]
 \centering
@@ -858,7 +858,7 @@ We model the cluster vs. trend decision using a logistic regression with a rando
 %As in equation \ref{eqn:linearModel}, the 
 We also assume that random effects for dataset and participant are orthogonal. 
 
-The estimated log odds of a decision in favor of cluster over trend target are shown in figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
+The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
 
 
 \begin{figure}[ht]\centering
@@ -1075,7 +1075,7 @@ qplot(data=lexicaldata, x=outcome, fill=reason, geom="histogram", position="dodg
 \end{figure}
 
 \afterpage{\clearpage}
-The results of this analysis, shown in figure \ref{fig:lexicalanalysis} and supported by figure \ref{fig:wordles}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size. In future studies, however, group size should be more tightly controlled to reduce the presence of distractor aesthetics in null plots. 
+The results of this analysis, shown in Figure~\ref{fig:lexicalanalysis} and supported by Figure~\ref{fig:wordles}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size. In future studies, however, group size should be more tightly controlled to reduce the presence of distractor aesthetics in null plots. 
 
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
@@ -1139,7 +1139,7 @@ qplot(data=tmp, x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segm
 \caption{Simulated interquartile range of cluster cohesion statistic values for target and null data distributions. \label{fig:simulationClusterIntervals}}
 \end{figure}
 
-Additionally, after the experiment was complete, we examined the distribution of group size (as measured by gini impurity) to establish whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure \ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have significantly lower group size differences than null plots at all parameter combinations. It is therefore possible that some participants will identify extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. Future studies should more tightly control group size in order to reduce this effect. 
+Additionally, after the experiment was complete, we examined the distribution of group size (as measured by gini impurity) to establish whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure~\ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have significantly lower group size differences than null plots at all parameter combinations. It is therefore possible that some participants will identify extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. Future studies should more tightly control group size in order to reduce this effect. 
 
 \begin{figure}[ht]\centering
 \includegraphics[width=.8\linewidth]{figure/simulationparameters-3}
@@ -1264,7 +1264,7 @@ type_compare <- glht(line.model, mcp(plottype="Tukey"))
 line.fixef$letters <- cld(type_compare)$mcletters$Letters
 @
 
-We define success as ``the participant correctly identified the trend target plot generated by $M_T$" and use this as dependent variable in model equation (\ref{eqn:linearModel}).  Figure \ref{fig:linear.fixef} shows the fixed effects of the resulting model fit. Color, Shape, and Ellipse aesthetics (and combinations thereof) decrease participant recognition of the trend target plot, while the Trend + Error combination increases participant recognition of the trend target plot.
+We define success as ``the participant correctly identified the trend target plot generated by $M_T$" and use this as dependent variable in model equation (\ref{eqn:linearModel}).  Figure~\ref{fig:linear.fixef} shows the fixed effects of the resulting model fit. Color, Shape, and Ellipse aesthetics (and combinations thereof) decrease participant recognition of the trend target plot, while the Trend + Error combination increases participant recognition of the trend target plot.
 
 These results are consistent with our hypothesis that aesthetics which emphasize the gestalt similarity heuristic decrease recognition of the trend target plot. The aesthetic combinations of color + shape + ellipse and color + ellipse, which recruit gestalt heuristics for similarity and common region, strongly reduce the probability of detecting the trend target plot. Aesthetic combinations which only activate the gestalt similarity heuristic, such as color, shape, and color+shape, have somewhat less of an effect. As would be predicted by previous studies, such as \citet{lewandowsky1989discriminating}, color (or color + shape) more strongly detracts from trend target recognition than shape alone. 
 
@@ -1364,7 +1364,7 @@ print(xtable(group.fixef2[,c(8, 1:4)], caption=c("Fitted values of fixed effects
 \end{figure}
 
 
-Figure \ref{fig:group.fixef} contains odds and 95\% Wald intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
+Figure~\ref{fig:group.fixef} contains odds and 95\% Wald intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
 According to the model results, no plot aesthetics significantly increase the odds of selecting the group target plot compared to the plain design; however, several aesthetic combinations decrease the odds. Consistent with our hypothesis,  Color + Ellipse + Trend + Error and Trend + Error plot aesthetic combinations significantly decrease the detection of the group target plot. 
 
 However, the implication that Color + Ellipse and Color + Shape + Ellipse also decrease group target detection is not consistent with our hypotheses. Examination of participants' reasons for selecting specific target plots provides at least some explanation; participants cited reasons such as 
@@ -1433,7 +1433,7 @@ qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + the
 \caption{\label{fig:timemodel-aes} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
 \end{figure}
 
-We model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed \citep{Majumder:2014up}. A random effect for participant and dataset is included to account for the experimental design. Figure \ref{fig:timemodel-aes} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
+We model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed \citep{Majumder:2014up}. A random effect for participant and dataset is included to account for the experimental design. Figure~\ref{fig:timemodel-aes} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
 
 \begin{figure}[ht]\centering
 <<timemodel-pars,echo=F, fig.width=8, fig.height=6, out.width='.8\\linewidth', dependson='results-setup'>>=
@@ -1484,18 +1484,18 @@ coefs2$name <- coefs2$name %>%
 coefs2$Interval <- sprintf("(%.2f, %.2f)", coefs2$low, coefs2$high)
 names(coefs2)[3:5] <- c("Estimate", "Effect", "95% Confidence Interval")
 
-print(xtable(coefs2[,c(4, 3, 5)], caption=c("Fitted values of plot type and first trial effects for a model describing log evaluation time as a function of plot type, first trial, and data generation parameters, with a random effect for participant. Additional parameters and intervals are shown in figure \\ref{fig:timemodel-pars}.", "Fixed effects for trial time model including data parameters."), label="tab:timemodel-pars", align=c('r', 'r', 'r', 'r'), digits=c(0, 0, 3, 0)), include.rownames=F, file="figure/timemodel-pars-fixef-table")
+print(xtable(coefs2[,c(4, 3, 5)], caption=c("Fitted values of plot type and first trial effects for a model describing log evaluation time as a function of plot type, first trial, and data generation parameters, with a random effect for participant. Additional parameters and intervals are shown in Figure~\\ref{fig:timemodel-pars}.", "Fixed effects for trial time model including data parameters."), label="tab:timemodel-pars", align=c('r', 'r', 'r', 'r'), digits=c(0, 0, 3, 0)), include.rownames=F, file="figure/timemodel-pars-fixef-table")
 @
 \caption{\label{fig:timemodel-pars} Results of a model describing log evaluation time by evaluation outcome, plot type, data-generation parameters, and participant experience. }
 \end{figure}
 \input{figure/timemodel-pars-fixef-table}
 
-In a second model, we fit log response time as a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure \ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
+In a second model, we fit log response time as a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure~\ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
 The time to evaluate each plot increases slightly with trend difficulty and cluster difficulty (across trials), conditional on outcome, but the "medium" difficulty trials seem to be somewhat discordant in many cases; in some cases, time to evaluate increases and in others, it decreases. This may be due to a conflict between the trend and cluster target plots: when there is no clear signal numerically, evaluation time increases while participants waver between potential targets. 
 
 \subsection{Participant Confidence *** out ***}
 In addition to participant identification of target plots, we also asked participants to rate their confidence in their answer. 
-Figure \ref{fig:conflevel} shows aggregate participant confidence rating as a function of trial outcome. 
+Figure~\ref{fig:conflevel} shows aggregate participant confidence rating as a function of trial outcome. 
 Participants who did not identify either target plot were less likely to be ``extremely confident'' in their answer, while participants who identified either the trend or the cluster target correctly were highly confident that their answer was correct. 
 Overall, though, participants seem to have some degree of confidence in their answer, regardless of whether the answer was correct.
 
