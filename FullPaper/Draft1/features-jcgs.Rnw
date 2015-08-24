@@ -1,7 +1,7 @@
-\documentclass[11pt]{article}
-\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
-\usepackage{graphicx}
+\documentclass[12pt]{article}
+% \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+% \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{afterpage}
 \usepackage{amssymb}
@@ -190,7 +190,7 @@ Research on preattentive perception is important because features that are perce
 This paper describes the results of a user study designed to explore the hierarchy of gestalt principles in perception of statistical graphics. We utilize information from previous studies \citep{heer:2014, robinson:03, healey1996high} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
 
 
-Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. \newtext{In this study, we utilize statistical lineup methodology to provide quantitative and qualitative information.}
+Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Here, we are describing the setup and results of a study using statistical lineup methodology to provide quantitative and qualitative information.
 
 \paragraph{Statistical lineups} 
 are an important experimental tool for evaluating the perceptual utility of graphical displays. Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests to facilitate formal experimental evaluation of statistical graphics. 
@@ -518,43 +518,43 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
 \centering
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Plain}
-  \includegraphics[width=\linewidth]{figure/samplepics-1}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-1}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Color}
-  \includegraphics[width=\linewidth]{figure/samplepics-2}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-2}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Shape}
-  \includegraphics[width=\linewidth]{figure/samplepics-3}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-3}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Shape + Color}
-  \includegraphics[width=\linewidth]{figure/samplepics-4}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-4}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Color + Ellipse}
-  \includegraphics[width=\linewidth]{figure/samplepics-5}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-5}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Shape + Ellipse}
-  \includegraphics[width=\linewidth]{figure/samplepics-6}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-6}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend}
-  \includegraphics[width=\linewidth]{figure/samplepics-7}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend + Error }
-  \includegraphics[width=\linewidth]{figure/samplepics-8}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend + Color}
-  \includegraphics[width=\linewidth]{figure/samplepics-9}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-9}
 \end{subfigure}
 \begin{subfigure}[t]{0.28\linewidth}
   \caption{Trend + Color + Ellipse}
-  \includegraphics[width=\linewidth]{figure/samplepics-10}
+  \includegraphics[width=\linewidth]{figure/fig-samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
@@ -790,8 +790,7 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 \caption{\label{fig:targets}Target identifications by users. Users are not generally primed for one target over the other target.}
 \end{figure}
 
-\done{The following paragraph needs to be updated}
-\newtext{For each plot type (aesthetic combination), we consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target (given that the participant has selected one of the two target plots). }
+For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
 % We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
 \subsection{Selection of Target Plots}
@@ -834,8 +833,8 @@ ggplot() +
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
 
-\newtext{In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). }
-\newtext{Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times, participants chose at least one of the targets (shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} seem to lead to (significantly, XXX p-value?, see section~\ref{sec:sentiment}) fewer correct evaluations. We will discuss a possible cause for this in more detail in a later section. }
+In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
+Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to (significantly, XXX p-value?, see section~\ref{sec:sentiment}) fewer correct evaluations. We will discuss a possible cause for this in more detail in section~\ref{XXX}. 
 
 
 
@@ -914,7 +913,7 @@ When trend line and error are present in the same plot, the additional Gestalt p
 
 This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
-\newtext{The lineup experimental protocol allows us to collect participant justifications for their target selection. These short explanations provide some additional insight into participant reasoning, and further support the gestalt explanation for the experimental results. }
+The lineup experimental protocol allows us to collect participant justifications for their target selection. These short explanations provide some additional insight into participant reasoning, and further support the gestalt explanation for the experimental results. 
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
