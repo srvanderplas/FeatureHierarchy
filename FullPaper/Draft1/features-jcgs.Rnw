@@ -505,9 +505,9 @@ qplot(data=subset(longres, Statistic != "Gini Impurity"), x=value, y=..density..
 @
 \caption[Simulation-based test statistic density for null and target plots]{\label{fig:targetsignal-0}Density of test statistics measuring trend strength and cluster strength for target distributions and null plots based on 1,000 draws of lineup data with $\sigma_T= 0.25, \sigma_C=0.20$ and $K=3$. }
 \end{figure}
-\afterpage{\clearpage}
+%\afterpage{\clearpage}
 
-\newdo{move simulation results back in here.}
+%\newdo{move simulation results back in here.}
 Graphical summaries of simulation results for a whole range of values for $\sigma_C$ and $\sigma_T$ are provided in appendix \ref{app:parametersimulation}. Using information from the simulation, we identified values of $\sigma_T$ and $\sigma_C$ corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. It is important to note that the numerical measures we have described in equations \eqref{eq:linearMeasure} and \eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with information on the perceptual discriminability, and it has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
 
 Each of the generated datasets is then plotted as a lineup, where we apply aesthetics which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change participants' ability to identify each target plot. The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
@@ -565,6 +565,7 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
 
 \begin{table}[ht]
 \centering
+\scalebox{0.8}{
 \begin{tabular}{ccccc}
 \begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Line Emphasis} \\
 & Strength & 0 & 1 & 2 \\
@@ -573,11 +574,11 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
 \cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
 Line + Prediction \end{tabular}\\
 \cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
-\end{tabular}
+\end{tabular}}
 \caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
 
-%\afterpage{\clearpage}
+\afterpage{\clearpage}
 
 We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses  increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model. 
 
@@ -586,29 +587,34 @@ Similarly, we expect that relative to a plot with no extra aesthetics or statist
 \subsubsection{Color and Shape Palettes}
 Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified sets of 3 and 5 colors and shapes which maximize the sum of pairwise differences, subject to certain constraints imposed by software and accessibility concerns. 
 
-\begin{figure}[ht]\centering
-<<color-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth'>>=
+\begin{figure}[bhtp]\centering
+\begin{subfigure}[t]{0.475\textwidth}
+<<color-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='\\linewidth'>>=
 colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
             "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 qplot(x=1:10, y=0, color=colors, size=I(5)) + scale_color_identity() + theme_lineup()
 @
-\caption[Color palette used to maximize preattentive perception]{Colors in \protect\citet{heer:2014}. This study removed gray from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
+\caption[Color palette used to maximize preattentive perception]{Color Palette. For the present study  gray was removed from the palette to make the experiment more inclusive of participants with colorblindness.\label{fig:colors}}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.475\textwidth}
+<<shape-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='\\linewidth',message=F, warning=F>>=
+shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
+
+qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lineup()
+@
+\caption[Shape palette used to maximize preattentive perception]{Shape palette. Due to varying point size between Unicode vs. non-Unicode characters, the last two shapes were removed for our investigation.\label{fig:shapes}}
+\end{subfigure}
+\caption{Color and shape palettes investigated in \protect\citet{heer:2014}. }
 \end{figure}
-\afterpage{\clearpage}
+\afterpage{clearpage}
 
 The color palette used in \citet{heer:2014} and shown in Figure~\ref{fig:colors} is derived from colors available in Tableau visualization software~\citep{tableau}. 
 In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (gray) which is difficult to distinguish for those with color deficiency.  
 
 Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in Figure~\ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 cluster datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
-\begin{figure}
-<<shape-palette, dev='cairo_pdf', echo=FALSE, fig.width=5, fig.height=1, out.width='.5\\linewidth',message=F, warning=F>>=
-shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
 
-qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lineup()
-@
-\caption[Shape palette used to maximize preattentive perception]{Shapes in \protect\citet{heer:2014}. In order to control for varying point size due to Unicode vs. non-Unicode characters, the last two shapes were removed.\label{fig:shapes}}
-\end{figure}
 
 
 \subsection{Experimental Design}
