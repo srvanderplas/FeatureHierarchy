@@ -1,53 +1,4 @@
-\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
-\makeatletter
-\def\maxwidth{ %
-  \ifdim\Gin@nat@width>\linewidth
-    \linewidth
-  \else
-    \Gin@nat@width
-  \fi
-}
-\makeatother
-
-\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
-\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
-\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
-\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
-\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
-\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
-\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
-\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
-\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
-
-\usepackage{framed}
-\makeatletter
-\newenvironment{kframe}{%
- \def\at@end@of@kframe{}%
- \ifinner\ifhmode%
-  \def\at@end@of@kframe{\end{minipage}}%
-  \begin{minipage}{\columnwidth}%
- \fi\fi%
- \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
- \colorbox{shadecolor}{##1}\hskip-\fboxsep
-     % There is no \\@totalrightmargin, so:
-     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
- \MakeFramed {\advance\hsize-\width
-   \@totalleftmargin\z@ \linewidth\hsize
-   \@setminipage}}%
- {\par\unskip\endMakeFramed%
- \at@end@of@kframe}
-\makeatother
-
-\definecolor{shadecolor}{rgb}{.97, .97, .97}
-\definecolor{messagecolor}{rgb}{0, 0, 0}
-\definecolor{warningcolor}{rgb}{1, 0, 1}
-\definecolor{errorcolor}{rgb}{1, 0, 0}
-\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
-
-\usepackage{alltt}
+\documentclass[12pt]{article}
 % \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 % \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 %\usepackage{graphicx}
@@ -95,7 +46,8 @@
 \addtolength{\textwidth}{1in}%
 \addtolength{\textheight}{1.3in}%
 \addtolength{\topmargin}{-.8in}%
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+
 \begin{document}
 
 %\bibliographystyle{natbib}
@@ -271,14 +223,14 @@ The use of $R^2$ to assess the strength of the linear relationship (rather than 
 
 \begin{figure}[ht]
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=\linewidth]{figure/trends-1} 
-
-}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}ldply"{}}}
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste("{}sigma[T] :"{}, res\$sd.trend): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(data, aesthetics, environment = env): object 'res' not found}}\end{kframe}
 \end{knitrout}
 \caption[Parameters affecting $M_T$]{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for parameter values of  $\sigma_T \in \{0.1, 0.2, 0.3, 0.4\}$.}
 \end{figure}
@@ -315,14 +267,32 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 
 \begin{figure}[bht]
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=\linewidth]{figure/cluster-1} 
-
-}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}ldply"{}}}
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in res\$K <- 3: object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}ldply"{}}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in res2\$K <- 5: object 'res2' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res2' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res2' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in rbind(res, res2): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste("{}sigma[C] :"{}, res\$sd.cluster): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste("{}K :"{}, res\$K): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(aes(x = x, y = y, color = color, shape = shape), data = res): object 'res' not found}}\end{kframe}
 \end{knitrout}
 \caption[Parameters affecting $M_C$]{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. The colors and shapes shown are those used in the lineups for $K=3$ and $K=5$.}
 \end{figure}
@@ -346,14 +316,32 @@ The generative model for null data is a mixture model $M_0$ that draws $n_c \sim
 
 \begin{figure}[hbt]
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=.9\linewidth]{figure/lambda-1} 
-
-}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}ldply"{}}}
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in res\$K <- 3: object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): could not find function "{}ldply"{}}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in res2\$K <- 5: object 'res2' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res2' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'res2' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in rbind(res, res2): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste("{}lambda :"{}, res\$lambda): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in paste("{}K :"{}, res\$K): object 'res' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(aes(x = x, y = y, color = color, shape = shape), data = res): object 'res' not found}}\end{kframe}
 \end{knitrout}
 \caption[Mixing parameter for null model $M_0$]{\label{fig:lambda} Scatterplots of data generated from $M_0$ using different values of $\lambda$, generated using the same random seed at each $\lambda$ value.}
 \end{figure}
@@ -549,652 +537,22 @@ But in the faceoff we need to add a discussion on how many values we have for ev
 
 
 
-\subsection{General results \& Demographics}
-Data collection was conducted over a 24 hour period, 
-during which time 1356 individuals completed 13519 unique lineup evaluations. 
-Participants who completed fewer than 10 lineups were removed from the study (159 participants, 1060 evaluations), and lineup evaluations in excess of 10 for each participant were also removed from the study (421 evaluations). 
-After these data filtration steps, our data consist of 12010 trials completed by 1201 participants. 
 
-Of the participants who completed at least 10 lineup evaluations, 61\% were male, relatively younger than the US population and relatively well educated (see Figure~\ref{fig:demographics}). 
-Each plot was evaluated by between 11 and 37 individuals 
-(Mean: 22.24, SD= 4.62).
-82.7\% of the participant evaluations identified at least one of the two target plots successfully (Trend: 26.6\%, Cluster: 56.7\%). 
 
-\begin{figure}[ht]
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
-{\centering \includegraphics[width=.48\linewidth]{figure/demographics-1} 
-\includegraphics[width=.48\linewidth]{figure/demographics-2} 
 
-}
 
 
 
-\end{knitrout}
-\caption{\label{fig:demographics}Basic demographics of participants.}
-\end{figure}
 
 
-From Figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target type over another target type, but generally pick both types over the course of ten lineups.
 
-\begin{figure}[ht]
-\centering
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
-{\centering \includegraphics[width=0.6\linewidth]{figure/targets-1} 
 
-}
 
 
 
-\end{knitrout}
-\caption{\label{fig:targets}Target identifications by users. Users are not generally primed for one target over the other target.}
-\end{figure}
 
-For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
-% We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
-\subsection{Target Plot Identifications}
-\newdo{somewhere in this section include a discussion of how many results we have for each of the plot types. Try to explain differences using parts of the single target models.} 
 
-\begin{figure}[ht]\centering
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
-{\centering \includegraphics[width=.75\textwidth]{figure/faceoffdata-1} 
-
-}
-
-
-\begin{kframe}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `[.data.frame`(base, names(rows)): undefined columns selected}}\end{kframe}
-\end{knitrout}
-\caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
-\end{figure}
-
-In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (9936 trials). 
-Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to (significantly, XXX p-value?, see section~\ref{sec:sentiment}) fewer correct evaluations. We will discuss a possible cause for this in more detail in section~\ref{XXX}. 
-
-
-
-
-\subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
-
- For all trials, in which at least one of the targets was correctly identified, we compare the probability of selecting the cluster target generated by $M_C$ compared with the probability of selecting the trend target generated by $M_T$. 
-Define $C_{ijk}$ to be the event $$\{\text{Participant }k\text{ selects the cluster target for dataset }j\text{ with aesthetic set }i\}$$
-and $T_{ijk}$ to be the analogous selection of the trend target.
-We model the cluster vs. trend decision using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data, and a random effect for participant to account for skill level, as shown in equation \ref{eqn:faceoffModel}. 
-
-
-\begin{align}
-\text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}\\
-\text{where } \beta_i & \hphantom{\sim} \text{describe plot types}\nonumber\\
-\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\!\text{,  random effect for dataset specific characteristics}\nonumber\\
-\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\!\text{, random effect for participant characteristics}\nonumber\\
-\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\!\text{, error associated with a single trial evaluation} \nonumber\end{align}
-%As in equation \ref{eqn:linearModel}, the 
-We also assume that random effects for dataset and participant are orthogonal. 
-
-The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different (see the letter values \cite{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison). Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
-
-
-\begin{figure}[ht]\centering
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}OR"{}, value = structure(c(1.16689342958925, : replacement has 10 rows, data has 12}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}letters"{}, value = structure(c("{}b"{}, : replacement has 10 rows, data has 12}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}label"{}, value = c("{}(Intercept)"{}, "{}trend"{}, : replacement has 10 rows, data has 12}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in split.default(X, group): first argument must be a vector}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'OR' not found}}\end{kframe}
-\end{knitrout}
-\caption[Estimated log odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated log odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
-\end{figure}
-
-Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color + trend (similarity vs. continuity) condition. 
-
-When trend line and error are present in the same plot, the additional Gestalt principle of common region is recruited, in addition to the continuity heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot (and increasing the probability that the trend target will be selected). 
-
-This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
-
-The lineup experimental protocol allows us to collect participant justifications for their target selection. These short explanations provide some additional insight into participant reasoning, and further support the gestalt explanation for the experimental results. 
-
-
-\subsection{Participant Reasoning}\label{sec:sentiment}
-\newdo{This needs to be linked with the previous section.}
-\newdo{We will do the link by including a model on the probability of selecting at least one target by plot aesthetic.}
-As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
-
-\begin{figure}[ht]\centering
-
-\centering
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Plain, neither target} \vspace{-0.15in}
-  \includegraphics[width=0.9\linewidth]{figure/sentiment-1}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Plain, cluster target}\vspace{-0.15in}
-  \includegraphics[width=0.9\linewidth]{figure/sentiment-2}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Plain, trend target}\vspace{-0.15in}
-  \includegraphics[width=0.9\linewidth]{figure/sentiment-3}
-\end{subfigure}
-
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Trend, neither target}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-4}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Trend, cluster target}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-5}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Trend, trend target}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-6}
-\end{subfigure}
-
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Color, neither target}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-7}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Color, cluster target}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-8}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Color, trend target}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-9}
-\end{subfigure}
-
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Color + Ellipse, neither}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-10}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Color + Ellipse, cluster}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-11}
-\end{subfigure}
-\begin{subfigure}[t]{0.275\linewidth}
-  \caption{Color + Ellipse, trend}\vspace{-0.2in}
-  \includegraphics[width=.9\linewidth]{figure/sentiment-12}
-\end{subfigure}
-\caption[Wordclouds of participant responses for selected plot types]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
-\end{figure}
-\afterpage{\clearpage}
-For a more quantitative analysis, responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
-\begin{figure}[ht]\centering
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=.8\linewidth]{figure/lexical-analysis-1} 
-
-}
-
-
-
-\end{knitrout}
-\caption[Lexical analysis of participant reasoning]{Lexical analysis of participants' justification of plot selection. Group sentiment in the reasoning is highly associated with selection of the cluster target plot; linear sentiment is highly associated with selection of the trend target plot.}\label{fig:lexicalanalysis}
-\end{figure}
-
-\afterpage{\clearpage}
-The results of this analysis, shown in Figure~\ref{fig:lexicalanalysis} and supported by Figure~\ref{fig:wordles}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size. In future studies, however, group size should be more tightly controlled to reduce the presence of distractor aesthetics in null plots. 
-
-
-\section{Discussion and Conclusions}\label{sec:Conclusion}
-
-Taken together, the results presented suggest that plot aesthetics influence the perception of the dominant effect in the displayed data. This effect is not simply additive (otherwise, the two conflicting aesthetic conditions would result in similarly neutral effects); rather, the effect is consistent with layering of gestalt perceptual heuristics. Plot layers which add additional heuristics show larger effects than plot layers which duplicate heuristics which are already in play. For example, adding ellipses to a plot which has color aesthetics increases group recognition by recruiting the common region heuristic in addition to the point similarity heuristic recruited by color; adding shape to a plot which has color aesthetics may increases group recognition slightly, but does not add additional gestalt heuristics (though point similarity is emphasized through two different mechanisms). 
-
-In order to explicitly rank aesthetics given this nonadditive mechanism, it would be necessary to test ellipse and error band aesthetics alone; in this study, we have only examined those aesthetics in combination with color and regression line plot layers, as the bounding aesthetics are seldom seen alone. 
-
-While further studies are necessary to control for the effects of cluster size as well as to explore the gestalt heuristics applicable to other types of plots, these results demonstrate the importance of carefully constructing graphs in order to consistently convey the most important aspects of the displayed data. 
-
-
-\bibliographystyle{asa}
-\bibliography{references}
-\newpage
-\begin{appendix}
-\section{Simulation Studies of Parameter Space}\label{app:parametersimulation}
-
-Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength for null and target plots. 
-
-Figures~\ref{fig:simulationLineIntervals} and~\ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and cluster strength summary statistics for each set of parameter values. These plots guide our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
-
-Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
-
-
-
-\begin{figure}[bht]\centering
-\begin{subfigure}[t]{.8\linewidth}
-\caption{$R^2$ values for target and null data distributions. \label{fig:simulationLineIntervals}}
-\vspace{-.15in}
-\includegraphics[width=\textwidth]{figure/simulationparameters-1}
-\end{subfigure}
-\begin{subfigure}[t]{.8\linewidth}
-\caption{Cluster cohesion statistics. \label{fig:simulationClusterIntervals}}
-\vspace{-.15in}
-\includegraphics[width=\textwidth]{figure/simulationparameters-2}
-\end{subfigure}
-\caption{Simulated interquartile ranges between target and most extreme statistic from one of the 18 null plots. }
-\end{figure}
-\afterpage{\clearpage}
-% \comment{Let's keep that back for the new experiment, this is just going to cause us grief.}
-% Additionally, after the experiment was complete, we examined the distribution of group size (as measured by gini impurity) to establish whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure~\ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have significantly lower group size differences than null plots at all parameter combinations. It is therefore possible that some participants will identify extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. Future studies should more tightly control group size in order to reduce this effect. 
-
-% \begin{figure}[ht]\centering
-% \includegraphics[width=.8\linewidth]{figure/simulationparameters-3}
-% \caption{Simulated interquartile range of group size inequality statistic values for cluster and null data distributions. \label{fig:simulationGiniIntervals}}
-% \end{figure}
-
-
-
-\section{Model Results}
-
-We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
-
-For plot type $i$, displaying dataset $j=1, ..., 54$ and participant $k=1, ..., P$, we model
-
-\begin{align}
-\text{logit }P(\text{success}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:linearModel}\\
-\text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
-\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
-\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{, the random effect for participant characteristics}\nonumber\\
-\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, the error associated with a single trial evaluation} \nonumber
-\end{align}
-
-We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
-\subsection{Trend Model Results}\label{app:trendmodel}
-We define success as ``the participant correctly identified the trend target plot generated by $M_T$" and use this as dependent variable in model equation (\ref{eqn:linearModel}).  Table~\ref{tab:line.fixef} presents the fixed effects of the resulting model fit. Color, Shape, and Ellipse aesthetics (and combinations thereof) decrease participant recognition of the trend target plot, while the Trend + Error combination increases participant recognition of the trend target plot.
-
-\input{figure/linear-fixef-table}
-
-These results are consistent with our hypothesis that aesthetics which emphasize the gestalt similarity heuristic decrease recognition of the trend target plot. The aesthetic combinations of color + shape + ellipse and color + ellipse, which recruit gestalt heuristics for similarity and common region, strongly reduce the probability of detecting the trend target plot. Aesthetic combinations which only activate the gestalt similarity heuristic, such as color, shape, and color+shape, have somewhat less of an effect. As would be predicted by previous studies, such as \citet{lewandowsky1989discriminating}, color (or color + shape) more strongly detracts from trend target recognition than shape alone. 
-
-The trend line aesthetic does not significantly increase trend target plot recognition, either alone or in the conflict condition color + trend. This may be because the gestalt heuristic recruited in this case is good continuation (``two elements which blend together smoothly likely belong to one unit"), the same heuristic recruited by the points alone. Thus, the trend line may provide only slight additional visual emphasis from the gestalt perspective.
-
-\subsection{Cluster Model Results}\label{app:clustermodel}
-\comment{XXX still to do: change the two tables for the linear models to 95\% confidence intervals.}
-\input{figure/group-fixef-table}
-\newdo{Table~\ref{tab:group.fixef} is an orphan at the moment, it also needs some text.}
-
-We now examine the probability of selecting the cluster target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that the dependent variable in this model is defined as the successful identification of the cluster target plot. 
-
-\begin{figure}[ht]\centering
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=.75\linewidth]{figure/group-fixef-1} 
-
-}
-
-
-
-\end{knitrout}
-\caption{Odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in cluster size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
-\end{figure}
-
-
-Figure~\ref{fig:group.fixef} contains odds and 95\% Wald intervals of the estimated fixed effects obtained by fitting equation \ref{eqn:linearModel} to a binary indicator of successful cluster target identification. 
-According to the model results, no plot aesthetics significantly increase the odds of selecting the group target plot compared to the plain design; however, several aesthetic combinations decrease the odds. Consistent with our hypothesis,  Color + Ellipse + Trend + Error and Trend + Error plot aesthetic combinations significantly decrease the detection of the group target plot. 
-
-However, the implication that Color + Ellipse and Color + Shape + Ellipse also decrease group target detection is not consistent with our hypotheses. Examination of participants' reasons for selecting specific target plots provides at least some explanation; participants cited reasons such as 
-``There is no circle highlighting the yellow symbols in this plot" %line 13515 
-and 
-``Lack of a circle around the red symbols".  %line 13516
-
-This suggests that our cluster allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
-Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than three points and in these cases, ellipses were not drawn. 
-Visually, the conspicuous absence of an ellipse will lead participants to select null plots with that feature (see section~\ref{sec:sentiment} for a more detailed look at participants' responses).
-In particular, counting is pre-attentive, and the number of ellipses in each plot is within some estimates of the `subitizing' range of counting, which can be counted without spatial attention \citep{trick1994small}. Thus, the number of ellipses present dominates other features which are important for gestalt grouping heuristics. 
-
-% \newdo{Counting and estimation is one of the pre-attentive tasks (besides target detection, boundary detection, and region tracking) that studies have identified, for an overview see \url{http://www.csc.ncsu.edu/faculty/healey/download/tvcg.11.pdf} (Healey's TVCG paper corresponding to his website on the overview of pre-attentiveness). }
-
-This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with cluster size of fewer than three points), participants were more likely to identify the cluster target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
-The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not in the way the authors originally intended). 
-In future experiments, it will be advantageous to control the variability in cluster size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. 
-
-%' \subsection{Is difficulty of Lineups matching with parameter settings? *** out? appendix? ***}
-%' 
-%' \newdo{We should look at the percentages and match them with the actual numeric values of the indices in the data.}
-%' 
-%' \newdo{Figure~\ref{cluster-trend} shows the percentages of correct data identification in plain plots facetted by trend/cluster parameter. For $K=5$ the identification is negatively impacted by a higher variability, as it should be. 
-%' What we still need to include is the actual cluster/trend index for each of the data sets, and compare that to the percentages. (This is done in ParameterAnalysis.R and should be copied in here.) 
-%' All of the (plain plottype) lineups are hugely significant (less than 1 in 10,000 events), i.e.\ participants reliably identify at least one of the targets as different from the other panels. We can therefore go directly into the conditional analysis of section \ref{sec:faceoff}.
-%' }
-%' <<pvalues, echo=FALSE>>=
-%' modeldata$one.correct <- with(modeldata, trend.correct | cluster.correct)
-%' mframe <- ddply(modeldata, .(data_name, dataset, plottype, k, trend.diff2, cluster.diff2), summarise,
-%'                 n = length(dataset),
-%'                 trend.correct = sum(trend.correct),
-%'                 cluster.correct = sum(cluster.correct),
-%'                 correct = sum(one.correct))
-%' 
-%' #library(vinference) # install from heike/vinference github
-%' #mframe$pvisual <- NA
-%' #for ( i in 1:nrow(mframe)) {
-%' #  mframe$pvisual[i] <- dvisual(x=mframe$correct[i], K=mframe$n[i], m=20, type="scenario3", target=1:2)$scenario3
-%' #}
-%' @
-%' <<answers, echo=FALSE>>=
-%' answers2 <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors = F)
-%' res <- ldply(unique(answers2$data_name), function(x){
-%'   return(cbind(data_name = x, read.csv(paste0("../../Images/Turk16/Stats/", x, ".csv"))))
-%' })
-%' 
-%' library(stringr)
-%' res$target <- paste0(c("", "trend")[(res$.sample==res$target1)+1], c("", "cluster")[(res$.sample==res$target2) + 1])
-%' res$target[res$target==""] <- "decoy"
-%' 
-%' res$set <- str_extract(res$data_name, pattern="set-\\d{1,2}") %>% str_replace(pattern="set-", "") %>% as.numeric()
-%' res$k <- str_extract(res$data_name, pattern="k-\\d") %>% str_replace(pattern="k-", "") %>% as.numeric()
-%' res$sd.line <- str_extract(res$data_name, pattern="sdline-0.\\d{1,2}") %>% str_replace(pattern="sdline-", "") %>% as.numeric()
-%' res$sd.group <- str_extract(res$data_name, pattern="sdgroup-0.\\d{1,2}") %>% str_replace(pattern="sdgroup-", "") %>% as.numeric()
-%' 
-%' res <- ddply(res, .(k, sd.line, sd.group), transform, rep = set-min(set)+1)
-%' res$sdLine <- paste("sigma[T] :",res$sd.line)
-%' res$sdGroup <- paste("sigma[C] :", res$sd.group)
-%' res$K <- paste("K: ", res$k)
-%' 
-%' # summarise for each lineup:
-%' stats <- ddply(res, .(data_name, target), summarize, 
-%'                line=max(line),
-%'                group=max(group))
-%' stats.line <- dcast(stats, data_name~target, value.var="line")
-%' names(stats.line)[3] <- "decoy.trend"
-%' stats.group <- dcast(stats, data_name~target, value.var="group")
-%' names(stats.group)[3] <- "decoy.cluster"
-%' dstats <- merge(stats.line[,c("data_name", "trend", "decoy.trend")], 
-%'                 stats.group[,c("data_name", "cluster", "decoy.cluster")], by="data_name")
-%' dstats <- merge(dstats, mframe, by="data_name")
-%' @
-%' 
-%' \begin{figure}
-%' \centering
-%' <<echo=FALSE, out.width='0.5\\textwidth'>>=
-%' qplot(data=subset(mframe, plottype=="plain"), trend.diff2, correct/n, facets=k~cluster.diff2) + geom_smooth(aes(group=1),  method="lm") + theme_bw()
-%' 
-%' @
-%' \caption{\label{cluster-trend} Overall, the percentages of correct data identifications match variability (i.e.\ they decrease as variability increases - the above plot shows results from plain plots only). }
-%' \end{figure}
-%' 
-%' \begin{figure}
-%' \centering
-%' <<echo=FALSE, out.width='0.5\\textwidth'>>=
-%' qplot(data=dstats, trend-decoy.trend, trend.correct/n, facets=k~.) + geom_smooth() + theme_bw()
-%' qplot(data=dstats, cluster-decoy.cluster, cluster.correct/n, facets=k~.) + geom_smooth() + theme_bw()
-%' @
-%' \caption{\label{clusters.and.trends} For future reference - as the difference between the signals increases, the chance that an observer picks the corresponding target increases.}
-%' \end{figure}
-%' 
-%' 
-
-
-
-
-%' \subsection{Single Target Plot Models *** out ***}
-%' 
-%' 
-%' 
-%' \subsubsection{Linear Target Model}
-%' 
-%' <<line-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
-%' line.model <- glmer(trend.correct ~ plottype + (1|individualID) + (1|dataset), 
-%'                     data = modeldata, 
-%'                     family = binomial(link="logit"), 
-%'                     control=glmerControl(optimizer="bobyqa"))
-%' line.fixef <- data.frame(summary(line.model)$coefficients, confint(line.model, method="Wald"))
-%' names(line.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
-%' line.fixef$OR <- exp(line.fixef[,1])
-%' line.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(line.fixef)), fixed=T)
-%' 
-%' suppressMessages(require(multcomp))
-%' type_compare <- glht(line.model, mcp(plottype="Tukey"))
-%' line.fixef$letters <- cld(type_compare)$mcletters$Letters
-%' @
-%' 
-%' 
-
-
-%' \begin{figure}[htbp]\centering
-%' <<line-fixef, echo=FALSE, dependson='line-model', fig.width=8, fig.height=4, out.width='.75\\linewidth'>>=
-%' line.fixef.aes <- line.fixef[grepl("(color)|([Ss]hape)|([Tt]rend)|(Ellipse)|(Error)", rownames(line.fixef)),]
-%' line.fixef.aes <- line.fixef.aes[order(line.fixef.aes$OR, decreasing = T),]
-%' line.fixef.aes$label <- 
-%'   line.fixef.aes$label %>% 
-%'   str_replace("color", "Color + ") %>% 
-%'   str_replace("[sS]hape", "Shape + ") %>%
-%'   str_replace("[tT]rend", "Trend + ") %>%
-%'   str_replace("Ellipse", "Ellipse + ") %>%
-%'   str_replace("Error", "Error + ") %>%
-%'   str_replace("( \\+ )$", "")
-%' line.fixef.aes$label <- factor(line.fixef.aes$label, levels=line.fixef.aes$label[order(line.fixef.aes$OR, decreasing = T)], ordered=T)
-%' line.fixef.aes$LB <- exp(line.fixef.aes$LB)
-%' line.fixef.aes$UB <- exp(line.fixef.aes$UB)
-%' 
-%' qplot(data=line.fixef.aes, x=label, y=OR, ymin=LB, ymax=UB, geom="pointrange") + 
-%'   geom_text(aes(x=label, y=0, label=letters)) + 
-%'   coord_flip() + 
-%'   ylab("Odds + 95% Wald Interval") + 
-%'   xlab("Plot Type") + 
-%'   geom_hline(yintercept=1, colour="gray70") +
-%'   ggtitle("Odds of Selecting Line Target Plot") + 
-%'   theme_bw()
-%' 
-%' names(line.fixef.aes)[1:4] <- c("Log Odds", "Std. Error", "Z", "P value")
-%' names(line.fixef.aes)[8] <- "Plot Aesthetic"
-%' names(line.fixef.aes)[9] <- "Tukey Post Hoc Differences"
-%' 
-%' print(xtable(line.fixef.aes[,c(8, 1:4)], caption=c("Fitted values of fixed effects for the model described in \\eqref{eqn:linearModel}. Only Trend+Error plots significantly increase the probability of detecting the linear target plot (with data generated from $M_T$), while most other aesthetic combinations decrease the probability of detecting the linear target plot.", "Fixed effects for linear target logistic model"), label="tab:line.fixef", align=c('r', 'r', 'r', 'r', 'r', 'r'), digits=c(0, 0, 4, 4, 2, 4)), include.rownames=F, file="figure/linear-fixef-table")
-%' @
-%' \caption{Odds of detecting the linear target plot for each aesthetic. Only the combination of Trend + Error significantly increases the odds of linear target plot detection relative to the control plot (plain scatterplot). \label{fig:linear.fixef}}
-%' \end{figure}
-%' \afterpage{\clearpage}
-%' 
-%' \newdo{at the moment I can not imagine an error band that would involve connectedness. I don't think you ever mentioned connectedness in the talks ... could we leave this out to clean the argument up?}
-%' Once error bands are added to the plot, the continuity and common region heuristics may be applied. The results are consistent with this idea: only the dual continuity emphasis of trend + error bands (along with the common region emphasis) significantly increases the probability that participants will identify the target plot generated under $M_T$. 
-%' 
-%' 
-%' \subsubsection{Cluster Target Selection *** keep some of the cognitive discussion ***}\label{sec:groupModel}
-%' <<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
-%' group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
-%'                      data = modeldata, 
-%'                      family = binomial(link="logit"), 
-%'                      control=glmerControl(optimizer="bobyqa"))
-%' group.fixef <- data.frame(summary(group.model)$coefficients, confint(group.model, method="Wald"))
-%' names(group.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
-%' group.fixef$OR <- exp(group.fixef[,1])
-%' group.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(group.fixef)), fixed=T)
-%' 
-%' suppressMessages(require(multcomp))
-%' type_compare <- glht(group.model, mcp(plottype="Tukey"))
-%' group.fixef$letters <- cld(type_compare)$mcletters$Letters
-%' @
-%' 
-%' 
-%' \subsection{Response Time *** out ***}
-%' As data collection was conducted entirely online, we cannot measure responses in the millisecond range characteristic of many psychometric studies, however, the data server does record the time between initial lineup presentation (trial start) and answer submission (trial end). 
-%' Examining differences in average response times across trials provides us with an additional measure of trial difficulty or perceptual complexity. 
-%' We can also explore whether participants spent more time on certain types of plots and how additional time is realted to accurate target identification. 
-%' 
-%' \begin{figure}[ht]\centering
-%' <<timemodel-plottype, echo=FALSE, fig.width=8, fig.height=6, out.width='\\linewidth', dependson='results-setup'>>=
-%' library(lubridate)
-%' 
-%' time.model <- lmer(log(as.numeric(trial.time))~ simpleoutcome:plottype + first.trial  + (1|individualID) + (1|dataset), data=modeldata)
-%' 
-%' coefs <- data.frame(exp(confint(time.model, method="Wald")))[-c(1:2),]
-%' names(coefs) <- c("low", "high")
-%' coefs$estimate <- exp(fixef(time.model)[-c(1:2)])
-%' coefs$name <- names(fixef(time.model))[-c(1:2)]
-%' ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
-%' coefs$outcome <- gsub("simpleoutcome", "", ll$V1)
-%' coefs$plottype <- gsub("plottype", "", ll$V2)
-%' coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
-%' coefs$simple <- factor(coefs$simple)
-%' levels(coefs$simple) <- c("Neither", "Cluster, Trend", "Both")
-%' coefs$outcome <- factor(coefs$outcome, levels=c("neither", "cluster", "trend", "both"))
-%' 
-%' coefs$plottype <- coefs$plottype %>% 
-%'   str_replace("color", "Color + ") %>% 
-%'   str_replace("[sS]hape", "Shape + ") %>%
-%'   str_replace("[tT]rend", "Trend + ") %>%
-%'   str_replace("Ellipse", "Ellipse + ") %>%
-%'   str_replace("Error", "Error + ") %>%
-%'   str_replace("plain", "Plain") %>%
-%'   str_replace("( \\+ )$", "")
-%' coefs$plottype <- factor(coefs$plottype)
-%' 
-%' coefs$plottype <- with(coefs, reorder(plottype, estimate))
-%' 
-%' coefs$pos <- as.numeric(factor(coefs$plottype)) + as.numeric(coefs$outcome)/6 - 1/3
-%' coefs$outcome <- factor(coefs$outcome, levels=c("neither", "trend", "cluster", "both"), labels=c("Neither", "Trend", "Cluster", "Both"))
-%' 
-%' qplot(estimate, pos, data=coefs, colour=outcome, size=I(4), shape=outcome) + theme_bw() + 
-%'   scale_colour_brewer("Target Identified", palette="Set1") +
-%'   scale_shape_discrete("Target Identified") +
-%'   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
-%'   scale_y_continuous(breaks=1:10, labels=levels(coefs$plottype)) + 
-%'   xlab("Additional time to evaluate each plot type (in seconds) given outcome") + ylab("") + 
-%'   theme(legend.position="bottom") + 
-%'   ggtitle("Evaluation Time by Aesthetics and Outcome")
-%' @
-%' \caption{\label{fig:timemodel-aes} Results of a model describing log evaluation time by evaluation outcome and plot type. Participants take less time to evaluate plots with a single aesthetic compared with more complicated plots. }
-%' \end{figure}
-%' 
-%' We model log-transformed reaction time as a function of evaluation outcome (neither target identified, cluster or trend target identified, or both targets identified) and plot type. In order to remove the ``novelty" effect of an unfamiliar task, we also include an indicator variable for the first trial an individual completed \citep{Majumder:2014up}. A random effect for participant and dataset is included to account for the experimental design. Figure~\ref{fig:timemodel-aes} displays the model results for each outcome of the lineup evaluation; simple plots (color, trend, shape) take less time to evaluate (across all conditions) than plots with more than one aesthetic. Additionally, participants who identified the cluster target took less time (in most cases) than participants identifying the trend target.  
-%' 
-%' \begin{figure}[ht]\centering
-%' <<timemodel-pars,echo=F, fig.width=8, fig.height=6, out.width='.8\\linewidth', dependson='results-setup'>>=
-%' time.model2 <- lmer(log(as.numeric(trial.time))~ first.trial + plottype + simpleoutcome:trend.diff:cluster.diff:k  + (1|individualID) , data=modeldata)
-%' 
-%' coefs <- data.frame(exp(confint(time.model2, method="Wald")))[-(1:11),]
-%' names(coefs) <- c("low", "high")
-%' coefs$estimate <- exp(fixef(time.model2)[-(1:11)])
-%' coefs$name <- names(fixef(time.model2))[-(1:11)]
-%' ll <- ldply(strsplit(coefs$name, split=":"), function(x) x)
-%' coefs$outcome <- gsub("simpleoutcome", "", ll$V1)
-%' coefs$trend.diff <- gsub("trend\\.diff", "", ll$V2)
-%' coefs$trend.diff <- factor(coefs$trend.diff, levels=c("easy", "medium", "hard"), labels=paste0("Trend:", c("Easy", "Medium", "Hard")))
-%' coefs$cluster.diff <- gsub("cluster\\.diff", "", ll$V3)
-%' coefs$cluster.diff <- factor(coefs$cluster.diff, levels=c("easy", "medium", "hard"), labels=paste0("Cluster:", c("Easy", "Medium", "Hard")))
-%' coefs$k <- gsub("k", "", ll$V4)
-%' coefs$simple <- coefs$outcome %in% c("both") - coefs$outcome%in%c("neither")
-%' coefs$simple <- factor(coefs$simple)
-%' levels(coefs$simple) <- c("Neither", "Cluster, Trend", "Both")
-%' 
-%' coefs$outcome <- factor(coefs$outcome, levels=c("neither", "cluster", "trend", "both"), labels=c("Neither Identified", "Cluster Identified", "Trend Identified", "Both Identified"))
-%' coefs$pos <- as.numeric(factor(coefs$k)) + (as.numeric(factor(coefs$trend.diff))-2)/4
-%' 
-%' qplot(estimate, pos, data=subset(coefs, outcome!="Both Identified"), colour=trend.diff, size=I(4), shape=trend.diff) + theme_bw() + 
-%'   scale_colour_manual("Trend", values=c("#7bccc4", "#2b8cbe", "#084081")) +
-%'   scale_shape_discrete("Trend") + 
-%'   geom_segment(aes(x=low, xend=high, y=pos, yend=pos)) + 
-%'   facet_grid(cluster.diff~outcome) + 
-%'   scale_y_continuous(breaks=1:2, labels=unique(coefs$k), limits=c(0.5,2.5)) + 
-%'   xlab("Additional time to evaluate each plot type (in seconds) given outcome") + ylab("K") + 
-%'   ggtitle("Evaluation Time by Model Parameters and Outcome")
-%' 
-%' coefs2 <- data.frame(exp(confint(time.model2, method="Wald")))[c(1:11),]
-%' names(coefs2) <- c("low", "high")
-%' coefs2$estimate <- exp(fixef(time.model2)[c(1:11)])
-%' coefs2$name <- names(fixef(time.model2))[c(1:11)]
-%' coefs2$name <- coefs2$name %>% 
-%'   str_replace("first\\.trialTRUE", "First Trial") %>%
-%'   str_replace("plottype", "Plot Type: ") %>% 
-%'   str_replace("color", "Color + ") %>% 
-%'   str_replace("[sS]hape", "Shape + ") %>%
-%'   str_replace("[tT]rend", "Trend + ") %>%
-%'   str_replace("Ellipse", "Ellipse + ") %>%
-%'   str_replace("Error", "Error + ") %>%
-%'   str_replace("plain", "Plain") %>%
-%'   str_replace("( \\+ )$", "") %>%
-%'   str_replace(fixed("(Intercept)"), "Intercept")
-%' coefs2$Interval <- sprintf("(%.2f, %.2f)", coefs2$low, coefs2$high)
-%' names(coefs2)[3:5] <- c("Estimate", "Effect", "95% Confidence Interval")
-%' 
-%' print(xtable(coefs2[,c(4, 3, 5)], caption=c("Fitted values of plot type and first trial effects for a model describing log evaluation time as a function of plot type, first trial, and data generation parameters, with a random effect for participant. Additional parameters and intervals are shown in Figure~\\ref{fig:timemodel-pars}.", "Fixed effects for trial time model including data parameters."), label="tab:timemodel-pars", align=c('r', 'r', 'r', 'r'), digits=c(0, 0, 3, 0)), include.rownames=F, file="figure/timemodel-pars-fixef-table")
-%' @
-%' \caption{\label{fig:timemodel-pars} Results of a model describing log evaluation time by evaluation outcome, plot type, data-generation parameters, and participant experience. }
-%' \end{figure}
-%' \input{figure/timemodel-pars-fixef-table}
-%' 
-%' In a second model, we fit log response time as a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure~\ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
-%' The time to evaluate each plot increases slightly with trend difficulty and cluster difficulty (across trials), conditional on outcome, but the "medium" difficulty trials seem to be somewhat discordant in many cases; in some cases, time to evaluate increases and in others, it decreases. This may be due to a conflict between the trend and cluster target plots: when there is no clear signal numerically, evaluation time increases while participants waver between potential targets. 
-%' 
-%' \subsection{Participant Confidence *** out ***}
-%' In addition to participant identification of target plots, we also asked participants to rate their confidence in their answer. 
-%' Figure~\ref{fig:conflevel} shows aggregate participant confidence rating as a function of trial outcome. 
-%' Participants who did not identify either target plot were less likely to be ``extremely confident'' in their answer, while participants who identified either the trend or the cluster target correctly were highly confident that their answer was correct. 
-%' Overall, though, participants seem to have some degree of confidence in their answer, regardless of whether the answer was correct.
-%' 
-%' <<participant-confidence,echo=F, fig.width=6.5, fig.height=4.25, out.width='.5\\linewidth', fig.cap="Participant confidence levels compared with trial results. \\label{fig:conflevel}">>=
-%' conf.acc <- modeldata %>% 
-%'   mutate(weight=1/nrow(modeldata), 
-%'          outcome=factor(gsub("gini", "", outcome), 
-%'                         levels=c("both", "cluster", "trend", "neither"))
-%'          ) %>% 
-%'   group_by(conf_level, outcome) %>% 
-%'   summarize(pct.accuracy = sum(weight))
-%' label.lines <- conf.acc %>% 
-%'   filter(conf_level==5) %>% 
-%'   transform(conf_level=5.25, 
-%'             label=paste0("Target:\n",
-%'                          gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", outcome, perl=TRUE))
-%'             )
-%' ggplot(data=conf.acc, aes(x=conf_level, y=pct.accuracy, group=outcome, color=outcome)) + 
-%'   geom_line(size=2) + 
-%'   scale_x_continuous("Participant Confidence", limits=c(-.25, 5.65), breaks=0:5) + 
-%'   geom_text(data=label.lines, aes(label=label), hjust=.2, vjust=.5, color="black", show_guide=F, size=4) + 
-%'   scale_color_brewer(guide="none", palette="Set1") + 
-%'   ylab("Proportion of Trials") + 
-%'   ggtitle("Participant Confidence and Trial Outcome") + 
-%'   theme_bw()
-%' 
-%' @
-
-\section{Simulation based inference in a two-target lineup scenario}\label{sec:simulation}
-
-Assume that there are two targets embedded in a lineup of overall size $m$, where $m$ in our experiment is taken to be $m=20$. Let $A$ be the event that one of these targets is chosen.
-Under the null hypothesis that both targets are consistent with being created based on data from the null model, we can assume that under the null hypothesis the expected value of the probability that an observer picks one of these plots from the lineup is $2/m = E[ P(A \mid H_o) ]$.
-For the distribution of $A \mid H_o$ we employ a simulation-based strategy:
-Under the null hypothesis, we can assume, that the $p$-value corresponding to a hypothesis test `the presented data is consistent with the null model' has a standard uniform distribution, i.e. $p_i \sim U[0,1]$ i.i.d.~for all $1 \le i \le m$. We assume that the choice observers make can be modeled using a multinomial distribution, where the probability $\pi_i$ to pick panel $i$ is inversely linear to $p_i$, with $\sum_{i=1}^m \pi_i = 1$.
- 
-W.l.o.g.~we can assume that the two target plots are in positions 1 and 2. 
-Given that a lineup was evaluated by $K$ individuals, the simulation process for $P(A|H_o$ is then as follows:
-%
-\begin{enumerate}
-\item Pick two values $p_i \sim U[0,1], i=1, 2$.
-\item Repeat $b_1$ times:
-\begin{enumerate}
-    \item Pick $m-2$ values $p_i \sim U[0,1], i=3, ..., m$.
-    \item Pick $K$ values from a Multinomial distribution with $\pi = \frac{1-p}{|| 1- p||}$, i.e. $x_j \sim M_\pi, i=1, ..., K$
-    \item Return the number of times that $x_j$ is 1 or 2. 
-\end{enumerate} 
-\end{enumerate}
-Repeat the above process $b_2$ times, and average results for a distribution of $A \mid H_o$. 
-The choice of $b_1$ and $b_2$ decides on the number of decimal places to which the estimated distribution can be used reliably. 
-
-\begin{figure}
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=0.7\linewidth]{figure/twotarget-1} 
-
-}
-
-
-
-\end{knitrout}
-\caption{\label{fig:simulation} Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$ assuming $K=10$ evaluations. The averages of the ten simulation runs are shown as lines. The crosses are probabilities from  Binomial $B_{2/20, 10}$.}
-\end{figure}
-\end{appendix}
-\end{document}

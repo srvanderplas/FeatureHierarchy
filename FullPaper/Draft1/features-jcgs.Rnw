@@ -1603,7 +1603,8 @@ K <- 10
 res <- ldply(1:10, function(x)
       dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
       )
-means <- ddply(res, .(x), summarize, avg=mean(scenario3))
+means <- res %>% group_by(x) %>%
+  summarize(avg=mean(scenario3))
 @
 <<twotarget, dependson='twotarget-simu', echo=FALSE, out.width='0.7\\linewidth', fig.width=8, fig.height=5>>=
 qplot(x, scenario3, data=res, shape=I(21), alpha=I(0.8)) +
