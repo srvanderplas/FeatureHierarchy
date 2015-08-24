@@ -202,7 +202,7 @@ If participants can identify the target plot from the field of distractors, then
 
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
 
-\comment{Should the next 3 paragraphs go into a different section? Otherwise, the "Intro" part in the last paragraph gets hidden under the "Statistical Lineups" heading...}
+% \comment{Should the next 3 paragraphs go into a different section? Otherwise, the "Intro" part in the last paragraph gets hidden under the "Statistical Lineups" heading...}
 
 In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. The two targets represent two different, competing signals; an observer's choice then demonstrates empirically which signal is more salient. 
 If both targets exhibit similar signal, observers may identify both targets, removing any forced-choice scenario which might skew results in a study. % (few participants exercised this option). 
@@ -299,15 +299,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 \end{algorithm} 
 
 
-As a measure of cluster cohesion we use a coefficient to assess the amount of variability within each cluster, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale (which we achieve by scaling in the final step of the generation algorithm).
-
-For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
-
-\begin{eqnarray}\label{eq:clusterMeasure}
-C^2 &=& \frac{CSS}{TSS},\\
-\nonumber CSS &=& \sum_{i=1}^n \left(x_{j(i)} - \overline{x}_{j(i)}\right)^2 + \left(y_{j(i)} - \overline{y}_{j(i)} \right)^2, \\
-\nonumber TSS &=& \sum_{i=1}^n \left(x_i - \bar{x}\right)^2 + \left(y_i - \bar{y}\right)^2.
-\end{eqnarray}
+As a measure of cluster cohesion we use a coefficient to assess the amount of variability within each cluster, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale. This ensures that $\sigma_C$is a scaling parameter that regulates the amount of spread between the clusters (see Figure~\ref{fig:clusters}).  % (which we achieve by scaling in the final step of the generation algorithm).
 
 \begin{figure}[ht]
 <<cluster, fig.width=8, fig.height=4.5, out.width='\\linewidth', echo=FALSE>>=
@@ -355,7 +347,16 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
 @
 \caption[Parameters affecting $M_C$]{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. The colors and shapes shown are those used in the lineups for $K=3$ and $K=5$.}
 \end{figure}
-\afterpage{\clearpage}
+%\afterpage{\clearpage}
+
+For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
+
+\begin{eqnarray}\label{eq:clusterMeasure}
+C^2 &=& \frac{CSS}{TSS},\\
+\nonumber CSS &=& \sum_{i=1}^n \left(x_{j(i)} - \overline{x}_{j(i)}\right)^2 + \left(y_{j(i)} - \overline{y}_{j(i)} \right)^2, \\
+\nonumber TSS &=& \sum_{i=1}^n \left(x_i - \bar{x}\right)^2 + \left(y_i - \bar{y}\right)^2.
+\end{eqnarray}
+
 
 \subsubsection{Null Model \texorpdfstring{$M_0$}{M0}}
 The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned to specific clusters using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
