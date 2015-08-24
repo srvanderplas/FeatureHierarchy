@@ -518,7 +518,7 @@ Colors and shapes used in this study were selected in order to maximize preatten
 The color palette used in \citet{heer:2014} and shown in Figure~\ref{fig:colors} is derived from colors available in Tableau visualization software~\citep{tableau}. 
 In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (gray) which is difficult to distinguish for those with color deficiency.  
 
-Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in Figure~\ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 cluster datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
+Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in Figure~\ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded from our investigation due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 cluster datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled shapes, which means that they are consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
 
 
@@ -596,8 +596,7 @@ From Figure~\ref{fig:targets} we see that users identified more cluster targets 
 For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
 % We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
 
-\subsection{Selection of Target Plots}
-\newdo{This needs a better title}
+\subsection{Target Plot Identifications}
 \newdo{somewhere in this section include a discussion of how many results we have for each of the plot types. Try to explain differences using parts of the single target models.} 
 
 \begin{figure}[ht]\centering
@@ -631,9 +630,9 @@ We model the cluster vs. trend decision using a logistic regression with a rando
 \begin{align}
 \text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}\\
 \text{where } \beta_i & \hphantom{\sim} \text{describe plot types}\nonumber\\
-\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
-\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{, the random effect for participant characteristics}\nonumber\\
-\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, the error associated with a single trial evaluation} \nonumber\end{align}
+\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{,  random effect for dataset specific characteristics}\nonumber\\
+\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{,  random effect for participant characteristics}\nonumber\\
+\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, error associated with a single trial evaluation} \nonumber\end{align}
 %As in equation \ref{eqn:linearModel}, the 
 We also assume that random effects for dataset and participant are orthogonal. 
 
@@ -761,7 +760,7 @@ While further studies are necessary to control for the effects of cluster size a
 
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength for null and target plots. 
 
-Figures \ref{fig:simulationLineIntervals} and \ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and cluster strength summary statistics for each set of parameter values. These plots guided our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
+Figures~\ref{fig:simulationLineIntervals} and~\ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and cluster strength summary statistics for each set of parameter values. These plots guide our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
 
 Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the size of the blue intervals (bottom figure) changes in size between different levels of $K$, it changes for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
 
@@ -777,6 +776,7 @@ Additionally, we note that there is an interaction between $\sigma_C$ and $\sigm
 \caption{Simulated interquartile range of cluster cohesion statistic values for target and null data distributions. \label{fig:simulationClusterIntervals}}
 \end{figure}
 
+\newcomment{Let's keep that back for the new experiment, this is just going to cause us grief.}
 Additionally, after the experiment was complete, we examined the distribution of group size (as measured by gini impurity) to establish whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure~\ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have significantly lower group size differences than null plots at all parameter combinations. It is therefore possible that some participants will identify extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. Future studies should more tightly control group size in order to reduce this effect. 
 
 \begin{figure}[ht]\centering
@@ -784,11 +784,35 @@ Additionally, after the experiment was complete, we examined the distribution of
 \caption{Simulated interquartile range of group size inequality statistic values for cluster and null data distributions. \label{fig:simulationGiniIntervals}}
 \end{figure}
 
+
+
 \section{Model Results}
+
+We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
+
+For plot type $i$, displaying dataset $j=1, ..., 54$ and participant $k=1, ..., P$, we model
+
+\begin{align}
+\text{logit }P(\text{success}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:linearModel}\\
+\text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
+\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
+\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{, the random effect for participant characteristics}\nonumber\\
+\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, the error associated with a single trial evaluation} \nonumber
+\end{align}
+
+We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
 \subsection{Trend Model Results}\label{app:trendmodel}
+We define success as ``the participant correctly identified the trend target plot generated by $M_T$" and use this as dependent variable in model equation (\ref{eqn:linearModel}).  Table~\ref{tab:line.fixef} presents the fixed effects of the resulting model fit. Color, Shape, and Ellipse aesthetics (and combinations thereof) decrease participant recognition of the trend target plot, while the Trend + Error combination increases participant recognition of the trend target plot.
+
 \input{figure/linear-fixef-table}
+
+These results are consistent with our hypothesis that aesthetics which emphasize the gestalt similarity heuristic decrease recognition of the trend target plot. The aesthetic combinations of color + shape + ellipse and color + ellipse, which recruit gestalt heuristics for similarity and common region, strongly reduce the probability of detecting the trend target plot. Aesthetic combinations which only activate the gestalt similarity heuristic, such as color, shape, and color+shape, have somewhat less of an effect. As would be predicted by previous studies, such as \citet{lewandowsky1989discriminating}, color (or color + shape) more strongly detracts from trend target recognition than shape alone. 
+
+The trend line aesthetic does not significantly increase trend target plot recognition, either alone or in the conflict condition color + trend. This may be because the gestalt heuristic recruited in this case is good continuation (``two elements which blend together smoothly likely belong to one unit"), the same heuristic recruited by the points alone. Thus, the trend line may provide only slight additional visual emphasis from the gestalt perspective.
+
 \subsection{Cluster Model Results}\label{app:clustermodel}
 \input{figure/group-fixef-table}
+\newdo{Table~\ref{tab:group.fixef} is an orphan at the moment, it also needs some text.}
 
 
 \subsection{Is difficulty of Lineups matching with parameter settings? *** out? appendix? ***}
@@ -846,29 +870,13 @@ All of the (plain plottype) lineups are hugely significant (less than 1 in 10,00
 
 \subsection{Single Target Plot Models *** out ***}
 
-We  model the probability of selecting the target plot using a logistic regression with plot type as a fixed effect, and random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). 
 
-For plot type $i$, displaying dataset $j=1, ..., 54$ and participant $k=1, ..., P$, we model
-
-\begin{align}
-\text{logit }P(\text{success}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:linearModel}\\
-\text{where } \beta_i & \hphantom{\sim} \text{describe the effect of specific plot aesthetics}\nonumber\\
-\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{, the random effect for dataset specific characteristics}\nonumber\\
-\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{, the random effect for participant characteristics}\nonumber\\
-\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, the error associated with a single trial evaluation} \nonumber
-\end{align}
-
-We note that any variance due to parameters $K$, $\sigma_T$, and $\sigma_C$ is contained within $\sigma^2_{\text{data}}$ and can be examined using a subsequent model. 
 
 \subsubsection{Linear Target Model}
 
 
 
-We define success as ``the participant correctly identified the trend target plot generated by $M_T$" and use this as dependent variable in model equation (\ref{eqn:linearModel}).  Figure~\ref{fig:linear.fixef} shows the fixed effects of the resulting model fit. Color, Shape, and Ellipse aesthetics (and combinations thereof) decrease participant recognition of the trend target plot, while the Trend + Error combination increases participant recognition of the trend target plot.
 
-These results are consistent with our hypothesis that aesthetics which emphasize the gestalt similarity heuristic decrease recognition of the trend target plot. The aesthetic combinations of color + shape + ellipse and color + ellipse, which recruit gestalt heuristics for similarity and common region, strongly reduce the probability of detecting the trend target plot. Aesthetic combinations which only activate the gestalt similarity heuristic, such as color, shape, and color+shape, have somewhat less of an effect. As would be predicted by previous studies, such as \citet{lewandowsky1989discriminating}, color (or color + shape) more strongly detracts from trend target recognition than shape alone. 
-
-The trend line aesthetic does not significantly increase trend target plot recognition, either alone or in the conflict condition color + trend. This may be because the gestalt heuristic recruited in this case is good continuation (``two elements which blend together smoothly likely belong to one unit"), the same heuristic recruited by the points alone. Thus, the trend line may provide only slight additional visual emphasis from the gestalt perspective.
 
 
 \begin{figure}[htbp]\centering
