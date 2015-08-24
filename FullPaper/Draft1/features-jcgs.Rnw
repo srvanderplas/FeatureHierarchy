@@ -1500,20 +1500,24 @@ Repeat the above process $b_2$ times, and average results for a distribution of 
 The choice of $b_1$ and $b_2$ decides on the number of decimal places to which the estimated distribution can be used reliably. 
 
 \begin{figure}
-<<twotarget, echo=FALSE, out.width='0.7\\linewidth', fig.width=8, fig.height=5>>=
+<<twotarget-simu, echo=FALSE, results='hide'>>=
 library(vinference) # install from heike/vinference github
+set.seed(20140501)
 K <- 10
 res <- ldply(1:10, function(x)
-      dvisual(x=0:K, K=K, m=20, type="scenario3", target=1:2, N=100000)
+      dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
       )
 means <- ddply(res, .(x), summarize, avg=mean(scenario3))
-qplot(x, scenario3, data=res) +
+@
+<<twotarget, dependson='twotarget-simu', echo=FALSE, out.width='0.7\\linewidth', fig.width=8, fig.height=5>>=
+qplot(x, scenario3, data=res, shape=I(21), alpha=I(0.8)) +
 theme_bw() + 
 ylab("estimated probability") + xlab("Number of times (out of 10) one of the targets is picked") + 
   geom_segment(aes(x=x-0.3, xend=x+0.3, y=avg, yend=avg), data=means) + 
-  geom_point(aes(x=x, y=binom), colour="steelblue", shape=21)
+  geom_point(aes(x=x, y=binom), colour="steelblue", pch=4, size=4) + 
+  scale_x_continuous(breaks=0:K, labels=0:K)
 @
-\caption{\label{fig:simulation} Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$ assuming $K=10$ evaluations. The averages of the ten simulation runs are shown as lines. The open circles are probabilities from  Binomial $B_{2/20, 10}$.}
+\caption{\label{fig:simulation} Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$ assuming $K=10$ evaluations. The averages of the ten simulation runs are shown as lines. The crosses are probabilities from  Binomial $B_{2/20, 10}$.}
 \end{figure}
 \end{appendix}
 \end{document}
