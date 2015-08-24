@@ -519,43 +519,43 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
 \begin{figure}[ht]
 \centering
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Plain}
+  \caption{Plain}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-1}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color}
+  \caption{Color}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-2}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Shape}
+  \caption{Shape}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-3}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Shape + Color}
+  \caption{Shape + Color}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-4}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color + Ellipse}
+  \caption{Color + Ellipse}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-5}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Shape + Ellipse}
+  \caption{Shape + Ellipse}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-6}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend}
+  \caption{Trend}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend + Error }
+  \caption{Trend + Error }\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend + Color}
+  \caption{Trend + Color}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-9}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend + Color + Ellipse}
+  \caption{Trend + Color + Ellipse}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
@@ -605,9 +605,9 @@ qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lin
 @
 \caption[Shape palette used to maximize preattentive perception]{Shape palette. Due to varying point size between Unicode vs. non-Unicode characters, the last two shapes were removed for our investigation.\label{fig:shapes}}
 \end{subfigure}
-\caption{Color and shape palettes investigated in \protect\citet{heer:2014}. }
+\caption{Color and shape palettes investigated for differentiability in \protect\citet{heer:2014}. }
 \end{figure}
-\afterpage{clearpage}
+%\afterpage{clearpage}
 
 The color palette used in \citet{heer:2014} and shown in Figure~\ref{fig:colors} is derived from colors available in Tableau visualization software~\citep{tableau}. 
 In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette. This modification produced maximally different color combinations which did not include red-green combinations, while also removing a color (gray) which is difficult to distinguish for those with color deficiency.  
@@ -968,57 +968,56 @@ pal <- pal[-(1:2)]
 wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T, rot.per=.15, colors="black", vfont=c("sans serif","plain"))
 }
 @
-
 \centering
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Plain, neither target}
+  \caption{Plain, neither target} \vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/sentiment-1}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Plain, cluster target}
+  \caption{Plain, cluster target}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/sentiment-2}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Plain, trend target}
+  \caption{Plain, trend target}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/sentiment-3}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend, neither target}
+  \caption{Trend, neither target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-4}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend, cluster target}
+  \caption{Trend, cluster target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-5}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend, trend target}
+  \caption{Trend, trend target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-6}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color, neither target}
+  \caption{Color, neither target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color, cluster target}
+  \caption{Color, cluster target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color, trend target}
+  \caption{Color, trend target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-9}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color + Ellipse, neither target}
+  \caption{Color + Ellipse, neither target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-10}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color + Ellipse, cluster target}
+  \caption{Color + Ellipse, cluster target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-11}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color + Ellipse, trend target}
+  \caption{Color + Ellipse, trend target}\vspace{-0.2in}
   \includegraphics[width=\linewidth]{figure/sentiment-12}
 \end{subfigure}
 \caption[Wordclouds of participant responses for selected plot types]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
