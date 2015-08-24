@@ -857,9 +857,9 @@ We model the cluster vs. trend decision using a logistic regression with a rando
 \begin{align}
 \text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & =  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}\\
 \text{where } \beta_i & \hphantom{\sim} \text{describe plot types}\nonumber\\
-\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\text{,  random effect for dataset specific characteristics}\nonumber\\
-\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\text{,  random effect for participant characteristics}\nonumber\\
-\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\text{, error associated with a single trial evaluation} \nonumber\end{align}
+\hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\!\text{,  random effect for dataset specific characteristics}\nonumber\\
+\hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\!\text{, random effect for participant characteristics}\nonumber\\
+\text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\!\text{, error associated with a single trial evaluation} \nonumber\end{align}
 %As in equation \ref{eqn:linearModel}, the 
 We also assume that random effects for dataset and participant are orthogonal. 
 
@@ -1182,6 +1182,7 @@ These results are consistent with our hypothesis that aesthetics which emphasize
 The trend line aesthetic does not significantly increase trend target plot recognition, either alone or in the conflict condition color + trend. This may be because the gestalt heuristic recruited in this case is good continuation (``two elements which blend together smoothly likely belong to one unit"), the same heuristic recruited by the points alone. Thus, the trend line may provide only slight additional visual emphasis from the gestalt perspective.
 
 \subsection{Cluster Model Results}\label{app:clustermodel}
+\comment{XXX still to do: change the two tables for the linear models to 95\% confidence intervals.}
 \input{figure/group-fixef-table}
 \newdo{Table~\ref{tab:group.fixef} is an orphan at the moment, it also needs some text.}
 
