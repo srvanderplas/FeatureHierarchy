@@ -349,7 +349,7 @@ As a measure of cluster cohesion we use a coefficient to assess the amount of va
 
 %\afterpage{\clearpage}
 
-\newcomment{$\sigma_C$ is the theoretical regulator of variability, while $C^2$ is the after-the-fact measure of the amount of spread. XXX Do we know the relationship between those two measurements? -- it should be similar to $R^2$ versus $\sigma$.}
+\comment{$\sigma_C$ is the theoretical regulator of variability, while $C^2$ is the after-the-fact measure of the amount of spread. XXX Do we know the relationship between those two measurements? -- it should be similar to $R^2$ versus $\sigma$.}
 For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
 
 \begin{eqnarray}\label{eq:clusterMeasure}
@@ -968,56 +968,56 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 }
 @
 \centering
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Plain, neither target} \vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/sentiment-1}
+  \includegraphics[width=0.9\linewidth]{figure/sentiment-1}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Plain, cluster target}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/sentiment-2}
+  \includegraphics[width=0.9\linewidth]{figure/sentiment-2}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Plain, trend target}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/sentiment-3}
+  \includegraphics[width=0.9\linewidth]{figure/sentiment-3}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Trend, neither target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-4}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-4}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Trend, cluster target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-5}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-5}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Trend, trend target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-6}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-6}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Color, neither target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-7}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-7}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Color, cluster target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-8}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-8}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{0.275\linewidth}
   \caption{Color, trend target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-9}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-9}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color + Ellipse, neither target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-10}
+\begin{subfigure}[t]{0.275\linewidth}
+  \caption{Color + Ellipse, neither}\vspace{-0.2in}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-10}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color + Ellipse, cluster target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-11}
+\begin{subfigure}[t]{0.275\linewidth}
+  \caption{Color + Ellipse, cluster}\vspace{-0.2in}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-11}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
-  \caption{Color + Ellipse, trend target}\vspace{-0.2in}
-  \includegraphics[width=\linewidth]{figure/sentiment-12}
+\begin{subfigure}[t]{0.275\linewidth}
+  \caption{Color + Ellipse, trend}\vspace{-0.2in}
+  \includegraphics[width=.9\linewidth]{figure/sentiment-12}
 \end{subfigure}
 \caption[Wordclouds of participant responses for selected plot types]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
