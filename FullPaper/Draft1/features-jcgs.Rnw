@@ -298,10 +298,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
   \end{enumerate}
 \end{algorithm} 
 
-
-As a measure of cluster cohesion we use a coefficient to assess the amount of variability within each cluster, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale. This ensures that $\sigma_C$is a scaling parameter that regulates the amount of spread between the clusters (see Figure~\ref{fig:clusters}).  % (which we achieve by scaling in the final step of the generation algorithm).
-
-\begin{figure}[ht]
+\begin{figure}[bht]
 <<cluster, fig.width=8, fig.height=4.5, out.width='\\linewidth', echo=FALSE>>=
 sd <- c(0.15, 0.2, 0.25, 0.3)
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
@@ -347,8 +344,12 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
 @
 \caption[Parameters affecting $M_C$]{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. The colors and shapes shown are those used in the lineups for $K=3$ and $K=5$.}
 \end{figure}
+As a measure of cluster cohesion we use a coefficient to assess the amount of variability within each cluster, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale. This ensures that $\sigma_C$is a scaling parameter that regulates the amount of cluster cohesion (see Figure~\ref{fig:clusters}).  % (which we achieve by scaling in the final step of the generation algorithm).
+
+
 %\afterpage{\clearpage}
 
+\newcomment{$\sigma_C$ is the theoretical regulator of variability, while $C^2$ is the after-the-fact measure of the amount of spread. XXX Do we know the relationship between those two measurements? -- it should be similar to $R^2$ versus $\sigma$.}
 For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
 
 \begin{eqnarray}\label{eq:clusterMeasure}
