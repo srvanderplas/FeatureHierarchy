@@ -371,15 +371,21 @@ The generative model for null data is a mixture model $M_0$ that draws $n_c \sim
 
 \begin{figure}[hbt]
 <<lambda, fig.width=8, fig.height=3.5, out.width='.9\\linewidth', echo=FALSE>>=
-lambda <- c(0, .25, .5, .75, 1)
+
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 
-res <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)}) })
+res <- data.frame(lambda=rep(c(0, .25, .5, .75, 1), each=45))
+res <- res %>% group_by(lambda) %>% do(data.frame({set.seed(325098573); mixture.sim(as.numeric(.[1,1]), K=3, N=45, sd.trend=.25, sd.cluster=.25)}))
+#res <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=3, N=45, sd.trend=.25, sd.cluster=.25)}) })
 res$K <- 3
 res$color <- color3pal[res$group]
 res$shape <- shape3pal[res$group]
-res2 <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)}) })
+#res2 <- ldply(lambda, function(x) { data.frame(lambda=x, {set.seed(325098573); mixture.sim(x, K=5, N=75, sd.trend=.25, sd.cluster=.2)}) })
+
+res2 <- data.frame(lambda=rep(c(0, .25, .5, .75, 1), each=45))
+res2 <- res2 %>% group_by(lambda) %>% do(data.frame({set.seed(325098573); mixture.sim(as.numeric(.[1,1]), K=5, N=45, sd.trend=.25, sd.cluster=.2)}))
+
 res2$K <- 5
 res2$color <- color5pal[res2$group]
 res2$shape <- shape5pal[res2$group]
@@ -674,10 +680,12 @@ correct.ans <- function(x,y){
   lineplot <- as.numeric(answers[1])
   groupplot <- as.numeric(answers[2])
   giniplot <- ifelse(groupplot==as.numeric(answers[3]) | lineplot==as.numeric(answers[3]), NA, as.numeric(answers[3]))
-  c(n.answers=length(x1), trend.correct=lineplot%in%x1, cluster.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1), none.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
+  cbind(n.answers=length(x1), trend.correct=lineplot%in%x1, cluster.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1), none.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
 }
 
-useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
+#useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
+useranswers <- tmp %>% group_by(response.id) %>% do(data.frame(correct.ans(.["response_no"], .[,"obs_plot_location"]), drop=FALSE))
+
 useranswers <- merge(useranswers, tmp)
 useranswers$plottype <- gsub("turk16-", "", useranswers$test_param)
 useranswers$plottype <- factor(useranswers$plottype, levels=c("plain", "trend", "color", "shape", "colorShape", "colorEllipse", "colorTrend",  "trendError", "colorShapeEllipse", "colorEllipseTrendError"))
@@ -686,8 +694,16 @@ useranswers$sd.line <- factor(useranswers$sd.line)
 useranswers$k <- factor(useranswers$k)
 useranswers$start_time <- ymd_hms(useranswers$start_time)
 useranswers$end_time <- ymd_hms(useranswers$end_time)
-useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
-useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = rank(start_time), trial.num=order(start_time))
+#useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
+useranswers <- useranswers %>% group_by(param_value, test_param) %>% mutate(
+  param_idx=as.numeric(factor(pic_id))
+)
+
+#useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = rank(start_time), trial.num=order(start_time))
+useranswers <- useranswers %>% group_by(ip_address, nick_name) %>% 
+  mutate(ntrials=length(unique(pic_id)), 
+         trial.no = rank(start_time), 
+         trial.num=order(start_time))
 
 # Remove data from <18 participants
 useranswers <- filter(useranswers, !nick_name%in%users$nick_name[users$age=="<18"])
@@ -727,7 +743,13 @@ modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_nam
 modeldata$start_time <- ymd_hms(modeldata$start_time)
 modeldata$end_time <- ymd_hms(modeldata$end_time)
 modeldata$trial.time <- with(modeldata, end_time-start_time)
-modeldata <- ddply(modeldata, .(k), transform, trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))])
+#modeldata <- ddply(modeldata, .(k), transform, trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))])
+
+modeldata <- modeldata %>% group_by(k) %>% mutate(
+  trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], 
+  cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))]
+)
+
 modeldata$trend.diff <- factor(modeldata$trend.diff, levels=c("easy", "medium", "hard"))
 modeldata$cluster.diff <- factor(modeldata$cluster.diff, levels=c("easy", "medium", "hard"))
 modeldata$cluster.diff2 <- factor(modeldata$cluster.diff, levels=c("easy", "medium", "hard"), labels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
@@ -761,7 +783,10 @@ modeldata.long$plottype <-
 
 save(modeldata, file="../../Data/modeldata.Rdata")
 
-totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time = max(end_time)-min(start_time))
+#totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time = max(end_time)-min(start_time))
+totaltime <- modeldata %>% group_by(individualID) %>% summarize(
+  total.experiment.time = max(end_time)-min(start_time)
+)
 @
 
 \subsection{General results \& Demographics}
