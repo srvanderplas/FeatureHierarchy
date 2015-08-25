@@ -356,11 +356,14 @@ As a measure of cluster cohesion we use a coefficient to assess the amount of va
 
 %\afterpage{\clearpage}
 
-\comment{$\sigma_C$ is the theoretical regulator of variability, while $C^2$ is the after-the-fact measure of the amount of spread. XXX Do we know the relationship between those two measurements? -- it should be similar to $R^2$ versus $\sigma$.}
+\comment{$\sigma_C$ is the theoretical regulator of variability, while $C^2$ is the after-the-fact measure of the amount of spread. XXX Do we know the relationship between those two measurements? -- it should be similar to $R^2$ versus $\sigma$.
+*** update ***
+the relationship between $\sigma_C^2$ and $C^2$ is approximately inverse linear.
+}
 For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
 
 \begin{eqnarray}\label{eq:clusterMeasure}
-C^2 &=& \frac{CSS}{TSS},\\
+C^2 &=& 1 - \frac{CSS}{TSS},\\
 \nonumber CSS &=& \sum_{i=1}^n \left(x_{j(i)} - \overline{x}_{j(i)}\right)^2 + \left(y_{j(i)} - \overline{y}_{j(i)} \right)^2, \\
 \nonumber TSS &=& \sum_{i=1}^n \left(x_i - \bar{x}\right)^2 + \left(y_i - \bar{y}\right)^2.
 \end{eqnarray}
