@@ -858,30 +858,30 @@ modeldata$label <- factor(modeldata$label, levels=fac.order)
 
 # qplot(reorder(label,label,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations") + geom_bar(aes(x=label), data=modeldata, fill=NA, colour="black")
 
-totals <- modeldata %>% group_by(label) %>% summarize(eval=length(label), type="Total")
-correct.totals <- faceoff %>% group_by(label) %>% summarize(eval=length(label), type="Correct")
+totals <- modeldata %>% group_by(label, plottype) %>% summarize(eval=length(label), type="Total")
+correct.totals <- faceoff %>% group_by(label, plottype) %>% summarize(eval=length(label), type="Correct")
 
 totals <- rbind(totals, correct.totals)
-totals <- merge(totals, md, by.x="label", by.y="plottype")
+totals <- merge(totals, md, by="plottype")
 totals$tendency <- factor(totals$tendency, levels=c("none", "trend", "group", "conflict"))
 totals$label <- factor(totals$label, levels=fac.order, ordered=T)
 
-ggplot() + 
-  theme_bw() + 
-  xlab("") + ylab("# of target evaluations") + 
-#  facet_grid(tendency~., space="free", scales="free") +
-  geom_bar(aes(x=label, y=eval, fill=type), 
-           data=subset(totals, type=="Total"), stat="identity", 
-           position="identity", colour="black") + 
-  geom_bar(aes(x=label, y=eval, fill=type), 
-           data=subset(totals, type=="Correct"), stat="identity", 
-           position="identity", colour="black") + 
-  scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90")) +   coord_flip() 
+# ggplot() + 
+#   theme_bw() + 
+#   xlab("") + ylab("# of target evaluations") + 
+# #  facet_grid(tendency~., space="free", scales="free") +
+#   geom_bar(aes(x=label, y=eval, fill=type), 
+#            data=subset(totals, type=="Total"), stat="identity", 
+#            position="identity", colour="black") + 
+#   geom_bar(aes(x=label, y=eval, fill=type), 
+#            data=subset(totals, type=="Correct"), stat="identity", 
+#            position="identity", colour="black") + 
+#   scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90")) +   coord_flip() 
 
-md <- merge(md, subset(totals, type=="Correct")[,c("label", "eval")], by.x="plottype", by.y="label")
+md <- merge(md, subset(totals, type=="Correct")[,c("plottype", "label", "eval")], by="plottype")
 md <- md[order(md$tendency, md$eval),]
 
-totals$label <- factor(totals$label, levels=md$plottype)
+totals$label <- factor(totals$label, levels=md$label)
   
 totals$nlabel=as.numeric(totals$label)
 ggplot() + 
@@ -894,11 +894,9 @@ ggplot() +
   geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
            data=subset(totals, type=="Correct"), stat="identity", 
            position="identity", colour="black") + 
-  scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90")) +
-  scale_y_continuous(breaks=1:10, labels=md$plottype) +
+  scale_fill_manual("# Evaluations", values=c("Correct"="black", "Total" = "grey90")) +
+  scale_y_continuous(breaks=1:10, labels=md$label) +
   theme(legend.position="bottom", strip.text.y = element_text(angle=0))
-
-
 @
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
