@@ -709,7 +709,7 @@ useranswers <- useranswers %>% group_by(ip_address, nick_name) %>%
 useranswers <- filter(useranswers, !nick_name%in%users$nick_name[users$age=="<18"])
 users <- filter(users, age!="<18")
 
-modeldata <- useranswers[,c(1, 2, 9:30, 3:8)]
+modeldata <- useranswers[,c(1, 2, 9:31, 3:8)]
 
 # Remove data from participants who did not complete 10 trials
 incomplete.participants <- unique(modeldata$nick_name[modeldata$ntrials<10])
