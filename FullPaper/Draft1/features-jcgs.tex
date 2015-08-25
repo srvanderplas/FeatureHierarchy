@@ -131,11 +131,11 @@
 
 \bigskip
 \begin{abstract}
-Graphics are very effective for communicating numerical information quickly and efficiently, but many of the design choices we make are based on subjective measures, such as personal taste or conventions of the discipline rather than objective criteria. We briefly introduce perceptual principles such as preattentive features and gestalt heuristics, and then discuss the design and results of a factorial experiment designed to examine the effect of plot aesthetics such as color and trend lines on participants' assessment of ambiguous data displays. The quantitative and qualitative experimental results strongly suggest that plot aesthetics have a significant impact on the perception of important features in data displays. 
+Graphics are very effective for communicating numerical information quickly and efficiently, but many of the design choices we make are based on subjective measures, such as personal taste or conventions of the discipline rather than objective criteria. We briefly introduce perceptual principles such as preattentive features and gestalt heuristics, and then discuss the design and results of a factorial experiment examining the effect of plot aesthetics such as color and trend lines on participants' assessment of ambiguous data displays. The quantitative and qualitative experimental results strongly suggest that plot aesthetics have a significant impact on the perception of important features in data displays. 
 \end{abstract}
 
 \noindent%
-{\it Keywords:}  3 to 6 keywords, that do not appear in the title
+{\it Keywords:}  Visual inference, Lineup protocol, Preattentive Features, 3 to 6 keywords, that do not appear in the title
 \vfill
 
 \newpage
@@ -144,6 +144,7 @@ Graphics are very effective for communicating numerical information quickly and 
 \tableofcontents
 \newpage
 \section{Introduction and Background}
+\newdo{XXX we need a summary of the results in an overview table or list form - what are the results, exactly.}
 Numerical information can be difficult to communicate effectively in raw form, due to limits on attention span, short term memory, and information storage mechanisms within the human brain. 
 Graphics are much more effective for communicating numerical information, as (well-designed) graphics order the numerical information spatially and utilize the higher-bandwidth visual system. 
 Visual data displays serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data which would be hopelessly confusing in tabular format. 
@@ -331,14 +332,17 @@ As a measure of cluster cohesion we use a coefficient to assess the amount of va
 
 %\afterpage{\clearpage}
 
-\comment{$\sigma_C$ is the theoretical regulator of variability, while $C^2$ is the after-the-fact measure of the amount of spread. XXX Do we know the relationship between those two measurements? -- it should be similar to $R^2$ versus $\sigma$.}
+
 For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
 
 \begin{eqnarray}\label{eq:clusterMeasure}
-C^2 &=& \frac{CSS}{TSS},\\
+C^2 &=& 1 - \frac{CSS}{TSS},\\
 \nonumber CSS &=& \sum_{i=1}^n \left(x_{j(i)} - \overline{x}_{j(i)}\right)^2 + \left(y_{j(i)} - \overline{y}_{j(i)} \right)^2, \\
 \nonumber TSS &=& \sum_{i=1}^n \left(x_i - \bar{x}\right)^2 + \left(y_i - \bar{y}\right)^2.
 \end{eqnarray}
+
+\newtext{The cluster index $C^2$, which is approximately inversely linear in $\sigma_C^2$, measures the actual amount of clustering in the generated data.
+}
 
 
 \subsubsection{Null Model \texorpdfstring{$M_0$}{M0}}
@@ -656,7 +660,7 @@ The estimated log odds of a decision in favor of cluster over trend target are s
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
-{\centering \includegraphics[width=.85\linewidth]{figure/group-vs-line-1} 
+{\centering \includegraphics[width=.95\linewidth]{figure/group-vs-line-1} 
 
 }
 
