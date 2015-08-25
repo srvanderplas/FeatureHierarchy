@@ -1250,6 +1250,21 @@ The trend line aesthetic does not significantly increase trend target plot recog
 
 We now examine the probability of selecting the cluster target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that the dependent variable in this model is defined as the successful identification of the cluster target plot. 
 
+<<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
+group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
+                     data = modeldata, 
+                     family = binomial(link="logit"), 
+                     control=glmerControl(optimizer="bobyqa"))
+group.fixef <- data.frame(summary(group.model)$coefficients, confint(group.model, method="Wald")[-(1:2),])
+names(group.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
+group.fixef$OR <- exp(group.fixef[,1])
+group.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(group.fixef)), fixed=T)
+
+suppressMessages(require(multcomp))
+type_compare <- glht(group.model, mcp(plottype="Tukey"))
+group.fixef$letters <- cld(type_compare)$mcletters$Letters
+@
+
 \begin{figure}[ht]\centering
 <<group-fixef, echo=FALSE, dependson='group-model', fig.width=8, fig.height=4, out.width='.75\\linewidth'>>=
 group.fixef2 <- group.fixef[2:10,]
@@ -1447,20 +1462,6 @@ In future experiments, it will be advantageous to control the variability in clu
 %' 
 %' 
 %' \subsubsection{Cluster Target Selection *** keep some of the cognitive discussion ***}\label{sec:groupModel}
-%' <<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
-%' group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
-%'                      data = modeldata, 
-%'                      family = binomial(link="logit"), 
-%'                      control=glmerControl(optimizer="bobyqa"))
-%' group.fixef <- data.frame(summary(group.model)$coefficients, confint(group.model, method="Wald"))
-%' names(group.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
-%' group.fixef$OR <- exp(group.fixef[,1])
-%' group.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(group.fixef)), fixed=T)
-%' 
-%' suppressMessages(require(multcomp))
-%' type_compare <- glht(group.model, mcp(plottype="Tukey"))
-%' group.fixef$letters <- cld(type_compare)$mcletters$Letters
-%' @
 %' 
 %' 
 %' \subsection{Response Time *** out ***}
@@ -1631,9 +1632,13 @@ The choice of $b_1$ and $b_2$ decides on the number of decimal places to which t
 library(vinference) # install from heike/vinference github
 set.seed(20140501)
 K <- 10
-res <- ldply(1:10, function(x)
-      dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
-      )
+res <- data.frame(rep=rep(1:10, each=K+1))
+res <- res %>% group_by(rep) %>% do(
+  dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
+  )
+#res <- ldply(1:10, function(x)
+#      dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
+#      )
 means <- res %>% group_by(x) %>%
   summarize(avg=mean(scenario3))
 @

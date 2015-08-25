@@ -641,18 +641,14 @@ The estimated log odds of a decision in favor of cluster over trend target are s
 
 \begin{figure}[ht]\centering
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=.85\linewidth]{figure/group-vs-line-1} 
+
+}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}OR"{}, value = structure(c(1.17346882928362, : replacement has 10 rows, data has 12}}
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}letters"{}, value = structure(c("{}b"{}, : replacement has 10 rows, data has 12}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `\$<-.data.frame`(`*tmp*`, "{}label"{}, value = c("{}(Intercept)"{}, "{}trend"{}, : replacement has 10 rows, data has 12}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in split.default(X, group): first argument must be a vector}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'OR' not found}}\end{kframe}
 \end{knitrout}
 \caption[Estimated log odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated log odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
@@ -825,32 +821,18 @@ The trend line aesthetic does not significantly increase trend target plot recog
 
 We now examine the probability of selecting the cluster target plot as a function of plot type, with random effects for dataset (which encompasses parameter effects) and participant (accounting for variation in individual skill level). The model fit here is the same as that shown in equation \eqref{eqn:linearModel}, except that the dependent variable in this model is defined as the successful identification of the cluster target plot. 
 
+
+
 \begin{figure}[ht]\centering
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=.75\linewidth]{figure/group-fixef-1} 
+
+}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'group.fixef' not found}}
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in factor(group.fixef2\$label, levels = group.fixef2\$label[order(group.fixef2\$OR, : object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(data, aesthetics, environment = env): object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in names(group.fixef2)[1:4] <- c("{}Log Odds"{}, "{}Std. Error"{}, "{}Z"{}, : object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in names(group.fixef2)[8] <- "{}Plot Aesthetic"{}: object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in names(group.fixef2)[9] <- "{}Tukey Post Hoc Differences"{}: object 'group.fixef2' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in print(xtable(group.fixef2[, c(8, 1:4)], caption = c("{}Fitted values of fixed effects for the model described in section\textasciitilde{}\textbackslash{}ref\{sec:groupModel\}."{}, : error in evaluating the argument 'x' in selecting a method for function 'print': Error in xtable(group.fixef2[, c(8, 1:4)], caption = c("{}Fitted values of fixed effects for the model described in section\textasciitilde{}\textbackslash{}ref\{sec:groupModel\}."{},\ \ : \\\#\#\ \  object 'group.fixef2' not found}}\end{kframe}
 \end{knitrout}
 \caption{Odds of detecting the cluster target plot for each aesthetic, relative to a plain scatterplot. The presence of error lines or bounding ellipses significantly decreases the probability of correct target detection, and no aesthetic successfully increases the probability of correct target detection. This may be due to differences in cluster size for null plots, with data generated under $M_0$ compared with the group target plot displaying data generated under $M_C$. \label{fig:group.fixef}}
 \end{figure}
@@ -1017,20 +999,6 @@ In future experiments, it will be advantageous to control the variability in clu
 %' 
 %' 
 %' \subsubsection{Cluster Target Selection *** keep some of the cognitive discussion ***}\label{sec:groupModel}
-%' <<group-model, echo=FALSE, include=FALSE, dependson='results-setup'>>=
-%' group.model <- glmer(cluster.correct~ plottype + (1|individualID) + (1|dataset), 
-%'                      data = modeldata, 
-%'                      family = binomial(link="logit"), 
-%'                      control=glmerControl(optimizer="bobyqa"))
-%' group.fixef <- data.frame(summary(group.model)$coefficients, confint(group.model, method="Wald"))
-%' names(group.fixef) <- c("Estimate", "StdError", "Z", "p value", "LB", "UB")
-%' group.fixef$OR <- exp(group.fixef[,1])
-%' group.fixef$label <- gsub("(Intercept)", "", gsub("plottype", "", rownames(group.fixef)), fixed=T)
-%' 
-%' suppressMessages(require(multcomp))
-%' type_compare <- glht(group.model, mcp(plottype="Tukey"))
-%' group.fixef$letters <- cld(type_compare)$mcletters$Letters
-%' @
 %' 
 %' 
 %' \subsection{Response Time *** out ***}
