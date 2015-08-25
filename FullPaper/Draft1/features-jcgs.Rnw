@@ -930,13 +930,14 @@ The estimated log odds of a decision in favor of cluster over trend target are s
 \begin{figure}[ht]\centering
 <<group-vs-line, echo=FALSE, fig.width=8, fig.height=4, out.width='.85\\linewidth'>>=
 gvl.model <-  glmer(cluster.correct~plottype + (1|data_name) + (1|individualID), data=subset(modeldata, trend.correct | cluster.correct), family=binomial(), control=glmerControl(optimizer="bobyqa"))
-gvl.fixef <- data.frame(confint(gvl.model, method="Wald"))
+gvl.fixef <- data.frame(confint(gvl.model, method="Wald"))[-(1:2),] # exclude sigmas
 names(gvl.fixef) <- c("LB", "UB")
 gvl.fixef$OR <- fixef(gvl.model)
 
 suppressMessages(require(multcomp))
 type_compare <- glht(gvl.model, mcp(plottype="Tukey"))
 gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
+# not sure what to do about those warnings
 
 gvl.fixef$label <- gsub("plottype", "", names(fixef(gvl.model)))
 gvl.fixef$label <- gvl.fixef$label %>% 
