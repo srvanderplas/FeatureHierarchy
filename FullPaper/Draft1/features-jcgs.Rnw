@@ -511,7 +511,7 @@ qplot(data=subset(longres, Statistic != "Gini Impurity"), x=value, y=..density..
       xlab="Simulated Distribution of Test Statistic", 
       ylab="Density", 
       position="identity") + 
-  facet_grid(.~Statistic, scales="free", labeller=label_both) + 
+  facet_grid(.~Statistic,  labeller=label_both) + # better not use scales="free" 
   scale_color_manual("Distribution", values=c("black",  "gray")) + 
   scale_fill_manual("Distribution", values=c("transparent", "gray")) +  
   theme_bw()
@@ -663,7 +663,7 @@ users <- read.csv("../../Data/turk16_users_anon.csv", stringsAsFactors=F, header
 names(users) <- c("nick_name", "age", "gender", "education", "ip_address")
 users$age <- factor(users$age, levels=0:10, labels=c("NA", "<18", "18-25", "26-30", "31-35", "36-40", "41-45", "45-50", "51-55", "56-60", "61+"))
 users$gender <- factor(users$gender, levels=0:2, labels=c("NA", "Male", "Female"))
-users$education <- factor(users$education, levels=0:5, labels=c("NA", "High School or less", "Some college", "Bachelor's degree", "Some graduate school", "Graduate degree"))
+users$education <- factor(users$education, levels=0:5, labels=c("NA", "High School or less", "Some college", "Bachelor's degree", "Grad school or higher", "Grad school or higher"))
 
 userdata <- read.csv("../../Data/turk16_results_anon.csv", stringsAsFactors=FALSE)
 userdata$response.id <- 1:nrow(userdata)
@@ -801,11 +801,16 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
 
 \begin{figure}[ht]
-<<demographics, echo=FALSE, fig.width=7.5, fig.height=4, fig.keep='all', fig.show='hold', out.width='.48\\linewidth'>>=
-qplot(age, data=users) + theme_bw() + xlab("Age of participants") + ylab("# Participants") + ggtitle("Participant Age Distribution")
-
-qplot(education, data=users) + theme_bw() + xlab("(self-reported) Highest level of participants' education") + ylab("# Participants") + ggtitle("Participant Education Levels")
+\begin{subfigure}[t]{0.55\linewidth}
+<<demographics-1, echo=FALSE, fig.width=8.53, fig.height=4, fig.keep='all', fig.show='hold', out.width='\\linewidth'>>=
+qplot(age, data=users, fill=I("grey50"), colour=I("grey40")) + theme_bw() + xlab("Age of participants") + ylab("# Participants") + ggtitle("Participant Age Distribution")
 @
+\end{subfigure}
+\begin{subfigure}[t]{0.43\linewidth}
+<<demographics-2, echo=FALSE, fig.width=6.6, fig.height=4, fig.keep='all', fig.show='hold', out.width='\\linewidth'>>=
+qplot(education, data=users, fill=I("grey50"), colour=I("grey40")) + theme_bw() + xlab("(self-reported) Highest level of participants' education") + ylab("# Participants") + ggtitle("Participant Education Levels")
+@
+\end{subfigure}
 \caption{\label{fig:demographics}Basic demographics of participants.}
 \end{figure}
 
@@ -814,7 +819,7 @@ From Figure~\ref{fig:targets} we see that users identified more cluster targets 
 
 \begin{figure}[ht]
 \centering
-<<targets, fig.width=7.5, fig.height=5, out.width='0.6\\linewidth', echo=FALSE>>=
+<<targets, fig.width=6, fig.height=4.0, out.width='0.55\\linewidth', echo=FALSE>>=
 user.data <- modeldata %>% group_by(individualID) %>% 
   summarize(answers=length(individualID),
             cluster=sum(cluster.correct),
