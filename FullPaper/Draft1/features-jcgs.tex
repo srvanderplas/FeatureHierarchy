@@ -110,10 +110,10 @@
 {
   \title{\bf Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
   \author{Susan VanderPlas\thanks{
-    The authors gratefully acknowledge \textit{please remember to list all relevant funding sources in the unblinded version}}\hspace{.2cm}\\
+    The authors gratefully acknowledge NSF grant XXX id}\hspace{.2cm}\\
     Department of Statistics and Statistical Laboratory, Iowa State University\\
     and \\
-    , Heike Hofmann\\
+    Heike Hofmann\\
     Department of Statistics and Statistical Laboratory, Iowa State University}
   \maketitle
 } \fi
@@ -226,22 +226,26 @@ If both targets exhibit similar signal, observers may identify both targets, rem
 
 %By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
 
-Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure should be enhanced if the points in each group are colored differently, as this adds to the similarity to the proximity heuristic. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal over the other.
+Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure should be enhanced if the points in each group are colored differently, as this adds similarity to the proximity heuristic. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal over the other.
 
 The study in this paper is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. 
 
 The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. Experimental results are presented in section \ref{sec:Results}, and implications and conclusions are discussed in section \ref{sec:Conclusion}. 
 
 \section{Experimental Setup and Design} \label{sec:ExperimentalDesign}
-In this section, we discuss the generating data models for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
+In this section, we discuss the models generating data for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
 
 \subsection{Data Generation}
-Lineups require a single ``target" data set (which we are expanding to two competing ``target" data sets), and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through permutations.
+Conventional lineups require a single ``target" data set %(which we are expanding to two competing ``target" data sets),
+and a method for generating null plots. When utilizing real data for target plots, null plots are often generated through permutations.
 
-Here, it is possible to generate true null plots, which are generated from the null model and do not depend on the data used in the target plot. 
-This experiment will measure two competing gestalt heuristics, proximity and good continuation, using two data-generating models: $M_C$, which generates data with $K$ clusters, and $M_T$, which generates data with a positive correlation between $x$ and $y$. 
-True null datasets are created using a mixture model $M_0$ which combines $M_C$ and $M_T$. Both $M_C$ and $M_T$ generate data in the same range of values. 
-Additionally, $M_C$ generates clustered data with linear correlations that are within $\rho = (0.25, 0.75)$, similar to the linear relationship between datasets generated by $M_0$, and $M_T$ generates data with clustering similar to $M_0$. These constraints provide some assurance that participants who select a plot with data generated from $M_T$ are doing so because of visual cues indicating a linear trend (rather than a lack of clustering compared to plots with data generated from $M_0$), and participants who select a plot with data generated from $M_C$ are doing so because of visual cues indicating clustering, rather than a lack of a linear relationship relative to plots with data generated from $M_0$. 
+Here, it is possible to generate true null plots %, which are generated 
+from a null model that do not depend on the data used in the target plot. 
+This experiment measures two competing gestalt heuristics, proximity and good continuation, using two data-generating models. Both models provide data in $X$ and $Y$;  $M_C$ generates data  with $K$ clusters, while $M_T$ assures a positive correlation between the variables.
+%True 
+Null datasets are created using a mixture model $M_0$ which combines $M_C$ and $M_T$. Both $M_C$ and $M_T$ generate data in the same range of values. 
+Additionally, $M_C$ generates clustered data with linear correlations that are within $\rho = (0.25, 0.75)$, similar to the linear relationship between datasets generated by $M_0$, and $M_T$ generates data with clustering similar to $M_0$.
+\comment{Where does $M_T$ ensure this clustering? I don't see that in the algorithm - we'd need to remove that note. } These constraints provide some assurance that participants who select a plot with data generated from $M_T$ are doing so because of visual cues indicating a linear trend (rather than a lack of clustering compared to plots with data generated from $M_0$), and participants who select a plot with data generated from $M_C$ are doing so because of visual cues indicating clustering, rather than a lack of a linear relationship relative to plots with data generated from $M_0$. 
 
 
 \subsubsection{Regression Model \texorpdfstring{$M_T$}{Mt}}
@@ -251,7 +255,9 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line \\
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
-    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points from $[-1, 1]$. 
+    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points in $[-1, 1]$.
+    
+    This step ensures that the full range in $x$ is used, which in turn keeps the ratio of $x$ to $y$ range constant.
     \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, where $\eta_i \sim \text{Unif}(-z, z)$, $z = \frac{2}{5(N-1)}$.
     \item Generate $y_i$ as a linear regressand of $x_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$.
     \item Center and scale $x_i$, $y_i$.
@@ -345,8 +351,8 @@ C^2 &=& 1 - \frac{CSS}{TSS},\\
 \nonumber TSS &=& \sum_{i=1}^n \left(x_i - \bar{x}\right)^2 + \left(y_i - \bar{y}\right)^2.
 \end{eqnarray}
 
-\newtext{The cluster index $C^2$, which is approximately inversely linear in $\sigma_C^2$, measures the actual amount of clustering in the generated data.
-}
+The cluster index $C^2$, which is approximately inversely linear in $\sigma_C^2$, measures the actual amount of clustering in the generated data.
+
 
 
 \subsubsection{Null Model \texorpdfstring{$M_0$}{M0}}
