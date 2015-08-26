@@ -145,16 +145,18 @@ Graphics are very effective for communicating numerical information quickly and 
 \newpage
 \section{Introduction and Background}
 \newdo{XXX we need a summary of the results in an overview table or list form - what are the results, exactly.}
-Numerical information can be difficult to communicate effectively in raw form, due to limits on attention span, short term memory, and information storage mechanisms within the human brain. 
-Graphics are much more effective for communicating numerical information, as (well-designed) graphics order the numerical information spatially and utilize the higher-bandwidth visual system. 
-Visual data displays serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data which would be hopelessly confusing in tabular format. 
+Limits on attention span, short term memory, and information storage mechanisms within the human brain make it difficult for us to process numerical information  in raw form effectively. 
+(Well-designed) data displays are much better suited for this kind of communication, as  they serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data
+and thereby invoking our higher-bandwidth visual system. 
+%Visual data displays serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data which would be hopelessly confusing in tabular format. 
+
 One fantastic example of this phenomenon is the Hertzsprung-Russell (HR) diagram, which was described as ``one of the greatest observational syntheses in astronomy and astrophysics" because it allowed astronomers to clearly relate the absolute magnitude of a star to its' spectral classification; facilitating greater understanding of stellar evolution \citep{spence1993remarkable}. 
-The data it displayed was previously available in several different tables; when plotted on the same chart, information that was invisible in a tabular representation became immediately clear \citep{lewandowsky1989perception}. 
+The data it displayed was previously available in several different tables; but when plotted within the same chart, information that was invisible in a tabular representation became immediately clear \citep{lewandowsky1989perception}. 
 Graphical displays more efficiently utilize cognitive resources by reducing the burden of storing, ordering, and summarizing raw data; this frees bandwidth for higher levels of information synthesis, allowing observers to note outliers, understand relationships between variables, and form new hypotheses.
 
 Graphical displays are powerful because they efficiently and effectively convey numerical information, but there exists  relatively sparse empirical information about how the human perceptual system processes these displays. Our understanding of the perception of statistical graphics is informed by general psychological and psychophysics research as well as more specific research into the perception of data displays \citep{cleveland:1984}. 
 
-One relevant focus of psychological research is pre-attentive perception, that is, perception which occurs automatically in the first 200 ms of exposure to a visual stimulus \citep{treisman1985preattentive}. 
+One relevant focus of psychological research is preattentive perception, that is, perception which occurs automatically in the first 200 ms of exposure to a visual stimulus \citep{treisman1985preattentive}. 
 
 Research into {\bf preattentive perception} provides us with some information about the temporal hierarchy of graphical feature processing. Color, line orientation, and shape are processed preattentively; that is, within 200 ms, it is possible to identify a single target in a field of distractors, if the target differs with respect to color or shape \citep{goldstein2009encyclopedia}. 
 Research by \citet{healey1999large} extends this work, demonstrating that certain features of three-dimensional data displays are also processed preattentively. However, neither target identification nor three-dimensional data processing always translate into faster or more accurate inference about the data displayed, particularly when participants have to integrate several preattentive features to understand the data. 
@@ -169,7 +171,7 @@ For example, rather than perceiving four legs, a tail, two eyes, two ears, and a
 The rules of perceptual organization relevant to graphical perception in this experiment are:
 \begin{itemize}
 \item \textbf{Proximity}: two elements which are close together are more likely to belong to a single unit.
-\item \textbf{Similarity}: the more similar two elements are, the more likely they belong to a single unit.
+\item \textbf{Similarity}: the more similar two elements are, the more likely they belong to a single unit. \comment{XXX `similar' is a bit vague - would a phrasing of `the more of the same or similar aesthetics two elements share' be possible? }
 \item \textbf{Good continuation}: two elements which blend together smoothly likely belong to one unit.
 \item \textbf{Common region}: elements contained within a common region likely belong together. 
 \end{itemize}
@@ -197,21 +199,23 @@ The plots in Figure~\ref{fig:gestalt} demonstrate several of the gestalt princip
 
 The processing of visual stimuli utilizes low-level feature detection, which occurs automatically in the preattentive perceptual phase, and higher-level mental heuristics which are informed by experience. Both types of mental processes utilize physical location, color, and shape  to organize perceptual stimuli and direct attention to graphical features which stand out. 
 
-Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli; subsequent top-down gestalt heuristics can be applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
+Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli \comment{as much as ... ? I know, it's implicitly there, but finish the thought}; subsequent top-down gestalt heuristics can be applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
 
 
-This paper describes the results of a user study designed to explore the hierarchy of gestalt principles in perception of statistical graphics. We utilize information from previous studies \citep{heer:2014, robinson:03, healey1996high} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
+This paper describes the design and the results of a user study exploring the hierarchy of gestalt principles in the perception of statistical graphics. We utilize information from previous studies \citep{heer:2014, robinson:03, healey1996high} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
 
 
 Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Here, we are describing the setup and results of a study using statistical lineup methodology to provide quantitative and qualitative information.
 
 \paragraph{Statistical lineups} 
-are an important experimental tool for evaluating the perceptual utility of graphical displays. Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests to facilitate formal experimental evaluation of statistical graphics. 
+are an important experimental tool for \newtext{quantifying the significance of a finding in a graphical display.}%evaluating the perceptual utility of graphical displays. 
+Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests, \newtext{thereby enabling} %to facilitate 
+formal experimental evaluation of statistical graphics. 
 
-Lineups are an experimental tool designed to serve as a visual hypothesis test, separating ``significant" visual effects from those that would be expected under a null hypothesis \citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
+Lineups are an experimental tool designed to serve as a visually conducted hypothesis test, separating significant effects from those that would be expected under a null hypothesis \citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
 A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in Figure~\ref{fig:plotExamples}). 
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
-If participants can identify the target plot from the field of distractors, then the visual display is deemed significant in the same sense that a numerical test with $p<0.05$ is significant. 
+If a participant can identify the target plot from the field of distractors, this counts as evidence against the null hypothesis. Based on the number of evaulations and the number of target identifications we can then evaluate significance in the same sense as for a conventional hypothesis test. 
 
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
 
@@ -866,9 +870,9 @@ and
 This suggests that our cluster allocation for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
 Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than three points and in these cases, ellipses were not drawn. 
 Visually, the conspicuous absence of an ellipse will lead participants to select null plots with that feature (see section~\ref{sec:sentiment} for a more detailed look at participants' responses).
-In particular, counting is pre-attentive, and the number of ellipses in each plot is within some estimates of the `subitizing' range of counting, which can be counted without spatial attention \citep{trick1994small}. Thus, the number of ellipses present dominates other features which are important for gestalt grouping heuristics. 
+In particular, counting is preattentive, and the number of ellipses in each plot is within some estimates of the `subitizing' range of counting, which can be counted without spatial attention \citep{trick1994small}. Thus, the number of ellipses present dominates other features which are important for gestalt grouping heuristics. 
 
-% \newdo{Counting and estimation is one of the pre-attentive tasks (besides target detection, boundary detection, and region tracking) that studies have identified, for an overview see \url{http://www.csc.ncsu.edu/faculty/healey/download/tvcg.11.pdf} (Healey's TVCG paper corresponding to his website on the overview of pre-attentiveness). }
+% \newdo{Counting and estimation is one of the preattentive tasks (besides target detection, boundary detection, and region tracking) that studies have identified, for an overview see \url{http://www.csc.ncsu.edu/faculty/healey/download/tvcg.11.pdf} (Healey's TVCG paper corresponding to his website on the overview of preattentiveness). }
 
 This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with cluster size of fewer than three points), participants were more likely to identify the cluster target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
 The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not in the way the authors originally intended). 
