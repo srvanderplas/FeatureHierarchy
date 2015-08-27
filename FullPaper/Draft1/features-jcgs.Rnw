@@ -125,7 +125,6 @@ source("../../Code/theme_lineup.R")
 \tableofcontents
 \newpage
 \section{Introduction and Background}
-\newdo{XXX we need a summary of the results in an overview table or list form - what are the results, exactly.}
 Limits on attention span, short term memory, and information storage mechanisms within the human brain make it difficult for us to process numerical information  in raw form effectively. 
 (Well-designed) data displays are much better suited for this kind of communication, as  they serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data
 and thereby invoking our higher-bandwidth visual system. 
@@ -152,7 +151,7 @@ For example, rather than perceiving four legs, a tail, two eyes, two ears, and a
 The rules of perceptual organization relevant to graphical perception in this experiment are:
 \begin{itemize}
 \item \textbf{Proximity}: two elements which are close together are more likely to belong to a single unit.
-\item \textbf{Similarity}: the more similar two elements are, the more likely they belong to a single unit. \comment{XXX `similar' is a bit vague - would a phrasing of `the more of the same or similar aesthetics two elements share' be possible? }
+\item \textbf{Similarity}: the more of the same or similar aesthetics two elements share two elements are, the more likely they belong to a single unit. 
 \item \textbf{Good continuation}: two elements which blend together smoothly likely belong to one unit.
 \item \textbf{Common region}: elements contained within a common region likely belong together. 
 \end{itemize}
@@ -179,7 +178,7 @@ y2 <- x2 + rnorm(25, sd=0.1)
 
 qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") 
 @
-\caption[Gestalt principles applied to statistical plots]{\label{fig:gestalt} \emph{Proximity} renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create different groups of points in the middle scatterplot, invoking the Gestalt principle of \emph{Similarity}. \emph{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
+\caption[Gestalt principles applied to statistical plots]{\label{fig:gestalt} \emph{Proximity} renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create three groups of points in the middle scatterplot by invoking the Gestalt principle of \emph{Similarity}. \emph{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
 \end{figure}
 % \afterpage{\clearpage}
 
@@ -187,10 +186,10 @@ The plots in Figure~\ref{fig:gestalt} demonstrate several of the gestalt princip
 
 The processing of visual stimuli utilizes low-level feature detection, which occurs automatically in the preattentive perceptual phase, and higher-level mental heuristics which are informed by experience. Both types of mental processes utilize physical location, color, and shape  to organize perceptual stimuli and direct attention to graphical features which stand out. 
 
-Research on preattentive perception is important because features that are perceived preattentively do not require as much mental effort to process from raw visual stimuli \comment{as much as ... ? I know, it's implicitly there, but finish the thought}; subsequent top-down gestalt heuristics can be applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
+Research on preattentive perception is important because features that are perceived preattentively require less mental effort to process from raw visual stimuli than non-preattentive features. Top-down gestalt heuristics are subsequently applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
 
 
-This paper describes the design and the results of a user study exploring the hierarchy of gestalt principles in the perception of statistical graphics. We utilize information from previous studies \citep{heer:2014, robinson:03, healey1996high} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
+This paper describes the design and the results of a user study exploring the hierarchy of gestalt principles in the perception of statistical graphics. We utilize information from previous studies~\citep{heer:2014, robinson:03, healey1996high} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
 
 
 Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Here, we are describing the setup and results of a study using statistical lineup methodology to provide quantitative and qualitative information.
@@ -543,6 +542,20 @@ Each of the generated datasets is then plotted as a lineup using aesthetics, whi
 \subsection{Lineup Rendering}
 \subsubsection{Plot Aesthetics}
 Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
+\begin{table}[hbtp]
+\centering
+\scalebox{0.8}{
+\begin{tabular}{ccccc}
+\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Line Emphasis} \\
+& Strength & 0 & 1 & 2 \\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Line &  \cellcolor{gray!25} Line + Prediction \\
+\cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Line \\
+\cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
+Line + Prediction \end{tabular}\\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
+\end{tabular}}
+\caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
+\end{table}
 
 \begin{figure}[ht]
 \centering
@@ -582,29 +595,17 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
   \caption{Trend + Color}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-9}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{\linewidth}
+\centering
   \caption{Trend + Color + Ellipse}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-10}
+  \includegraphics[width=0.25\linewidth]{figure/fig-samplepics-10}
 \end{subfigure}
-\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
+\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
 %\afterpage{\clearpage}
 
 
-\begin{table}[ht]
-\centering
-\scalebox{0.8}{
-\begin{tabular}{ccccc}
-\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Line Emphasis} \\
-& Strength & 0 & 1 & 2 \\
-\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Line &  \cellcolor{gray!25} Line + Prediction \\
-\cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Line \\
-\cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
-Line + Prediction \end{tabular}\\
-\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
-\end{tabular}}
-\caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
-\end{table}
+
 
 \afterpage{\clearpage}
 
@@ -664,11 +665,14 @@ Participants were required to complete 10 lineups, answering ``Which plot is the
 After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
 
 \section{Results}\label{sec:Results}
-\newdo{I think we need to straighten out the analysis: after the overview of the demographics, 
-the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started ***update*** visual p-values are all essentially zero, so no need to report anything - but we can include a discussion on how to get visual p-values (simulation based, in the appendix?)), 
-so let's go straight into the face-off. 
-But in the faceoff we need to add a discussion on how many values we have for evaluation (the CI intervals keep getting bigger as we have more clustering) - for this, we can include the discussion that is in the single target clustering models right now and go into the wordles afterwards (participant reasoning).
-}
+\newdo{XXX we need a summary of the results in an overview table or list form - what are the results, exactly.}
+
+% all done, yeah!
+% \newdo{I think we need to straighten out the analysis: after the overview of the demographics, 
+% the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started ***update*** visual p-values are all essentially zero, so no need to report anything - but we can include a discussion on how to get visual p-values (simulation based, in the appendix?)), 
+% so let's go straight into the face-off. 
+% But in the faceoff we need to add a discussion on how many values we have for evaluation (the CI intervals keep getting bigger as we have more clustering) - for this, we can include the discussion that is in the single target clustering models right now and go into the wordles afterwards (participant reasoning).
+% }
 
 <<results-setup,echo=F,include=F>>=
 lineups <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors=FALSE)

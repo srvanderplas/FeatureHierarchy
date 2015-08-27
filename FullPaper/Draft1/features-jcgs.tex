@@ -144,7 +144,6 @@ Graphics are very effective for communicating numerical information quickly and 
 \tableofcontents
 \newpage
 \section{Introduction and Background}
-\newdo{XXX we need a summary of the results in an overview table or list form - what are the results, exactly.}
 Limits on attention span, short term memory, and information storage mechanisms within the human brain make it difficult for us to process numerical information  in raw form effectively. 
 (Well-designed) data displays are much better suited for this kind of communication, as  they serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data
 and thereby invoking our higher-bandwidth visual system. 
@@ -171,7 +170,7 @@ For example, rather than perceiving four legs, a tail, two eyes, two ears, and a
 The rules of perceptual organization relevant to graphical perception in this experiment are:
 \begin{itemize}
 \item \textbf{Proximity}: two elements which are close together are more likely to belong to a single unit.
-\item \textbf{Similarity}: the more similar two elements are, the more likely they belong to a single unit. \comment{XXX `similar' is a bit vague - would a phrasing of `the more of the same or similar aesthetics two elements share' be possible? }
+\item \textbf{Similarity}: the more of the same or similar aesthetics two elements share two elements are, the more likely they belong to a single unit. 
 \item \textbf{Good continuation}: two elements which blend together smoothly likely belong to one unit.
 \item \textbf{Common region}: elements contained within a common region likely belong together. 
 \end{itemize}
@@ -376,7 +375,7 @@ The generative model for null data is a mixture model $M_0$ that draws $n_c \sim
 Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$ to ensure maximal distance of the null plots from either target. 
 
 \subsubsection{Parameters used in Data Generation}
-Models $M_C$, $M_T$, and $M_0$ provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ for varying numbers of clusters $K=3, 5$, we  systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in table \ref{tab:parameters}, we  generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. 
+Models $M_C$, $M_T$, and $M_0$ provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ for varying numbers of clusters $K=3, 5$, we  systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in Table~\ref{tab:parameters}, we  generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. 
 
 \begin{table}[hbtp]
   \rowcolors{2}{gray!25}{white}
@@ -420,11 +419,25 @@ There is some overlap in the distribution of $R^2$ for the null plots compared t
 Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in appendix \ref{app:parametersimulation}. Using information from the simulation, we identified values and generate lineup data sets for each  $\sigma_T$ and $\sigma_C$ (as shown in Table~\ref{tab:parameters}) corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. It is important to note that the numerical measures we have described in equations~\eqref{eq:linearMeasure} and~\eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with exact information on the perceptual discriminability. It has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
 
 
-Each of the generated datasets is then plotted as a lineup, where we apply aesthetics which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change participants' ability to identify each target plot. The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
+Each of the generated datasets is then plotted as a lineup using aesthetics, which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change a participant's preference and ability to identify each target plot. The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
 
 \subsection{Lineup Rendering}
 \subsubsection{Plot Aesthetics}
-Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in table \ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
+\begin{table}[hbtp]
+\centering
+\scalebox{0.8}{
+\begin{tabular}{ccccc}
+\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Line Emphasis} \\
+& Strength & 0 & 1 & 2 \\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Line &  \cellcolor{gray!25} Line + Prediction \\
+\cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Line \\
+\cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
+Line + Prediction \end{tabular}\\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
+\end{tabular}}
+\caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
+\end{table}
 
 \begin{figure}[ht]
 \centering
@@ -464,29 +477,17 @@ Gestalt perceptual theory suggests that perceptual features such as shape, color
   \caption{Trend + Color}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/fig-samplepics-9}
 \end{subfigure}
-\begin{subfigure}[t]{0.25\linewidth}
+\begin{subfigure}[t]{\linewidth}
+\centering
   \caption{Trend + Color + Ellipse}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-10}
+  \includegraphics[width=0.25\linewidth]{figure/fig-samplepics-10}
 \end{subfigure}
-\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Each of the 10 plot feature combinations tested in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
+\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
 %\afterpage{\clearpage}
 
 
-\begin{table}[ht]
-\centering
-\scalebox{0.8}{
-\begin{tabular}{ccccc}
-\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Line Emphasis} \\
-& Strength & 0 & 1 & 2 \\
-\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Line &  \cellcolor{gray!25} Line + Prediction \\
-\cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Line \\
-\cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
-Line + Prediction \end{tabular}\\
-\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
-\end{tabular}}
-\caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
-\end{table}
+
 
 \afterpage{\clearpage}
 
@@ -538,7 +539,7 @@ Software compatibility issues led us to exclude two shapes used in \citet{heer:2
 
 
 \subsection{Experimental Design}
-The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in table \ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination.
+The study is designed hierarchically, as a factorial experiment for combinations of $\sigma_C$, $\sigma_T$, and $K$, with three replicates at each parameter combination. These parameters are used to generate lineup datasets which serve as blocks for the plot aesthetic level of the experiment; each dataset is rendered with every combination of aesthetics described in Table~\ref{tab:plotaesthetics}. Participants are assigned to generated plots according to an augmented balanced incomplete block scheme: each participant is asked to evaluate 10 plots, which consist of one plot at each combination of $\sigma_C$ and $\sigma_T$, randomized across levels of $K$, with one additional plot providing replication of one level of $\sigma_C\times\sigma_T$. Each of a participant's 10 plots will present a different aesthetic combination.
 
 \subsection{Hypotheses}
 The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses, will increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, will increase the probability of detecting the linear relationship. 
@@ -556,11 +557,14 @@ Participants were required to complete 10 lineups, answering ``Which plot is the
 After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
 
 \section{Results}\label{sec:Results}
-\newdo{I think we need to straighten out the analysis: after the overview of the demographics, 
-the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started ***update*** visual p-values are all essentially zero, so no need to report anything - but we can include a discussion on how to get visual p-values (simulation based, in the appendix?)), 
-so let's go straight into the face-off. 
-But in the faceoff we need to add a discussion on how many values we have for evaluation (the CI intervals keep getting bigger as we have more clustering) - for this, we can include the discussion that is in the single target clustering models right now and go into the wordles afterwards (participant reasoning).
-}
+\newdo{XXX we need a summary of the results in an overview table or list form - what are the results, exactly.}
+
+% all done, yeah!
+% \newdo{I think we need to straighten out the analysis: after the overview of the demographics, 
+% the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started ***update*** visual p-values are all essentially zero, so no need to report anything - but we can include a discussion on how to get visual p-values (simulation based, in the appendix?)), 
+% so let's go straight into the face-off. 
+% But in the faceoff we need to add a discussion on how many values we have for evaluation (the CI intervals keep getting bigger as we have more clustering) - for this, we can include the discussion that is in the single target clustering models right now and go into the wordles afterwards (participant reasoning).
+% }
 
 
 
@@ -1136,7 +1140,7 @@ In future experiments, it will be advantageous to control the variability in clu
 %' \end{figure}
 %' \input{figure/timemodel-pars-fixef-table}
 %' 
-%' In a second model, we fit log response time as a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure~\ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and table \ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
+%' In a second model, we fit log response time as a function of the plot type, first trial, and the interaction between the outcome and data-generation parameters $\sigma_C$, $\sigma_T$, and $K$. In order to model the task as designed, we have coded $\sigma_C$ and $\sigma_T$ according to difficulty level - easy, medium, and hard, rather than modeling the numerical parameters themselves; this allows us to describe the psychological task rather than the numerical task (and also simplifies the model slightly). Figure~\ref{fig:timemodel-pars} shows the estimated difference in time as a function of difficulty level and trial outcome, and Table~\ref{tab:timemodel-pars} shows the additional fitted effects and 95\% intervals which are not shown graphically. 
 %' The time to evaluate each plot increases slightly with trend difficulty and cluster difficulty (across trials), conditional on outcome, but the "medium" difficulty trials seem to be somewhat discordant in many cases; in some cases, time to evaluate increases and in others, it decreases. This may be due to a conflict between the trend and cluster target plots: when there is no clear signal numerically, evaluation time increases while participants waver between potential targets. 
 %' 
 %' \subsection{Participant Confidence *** out ***}
