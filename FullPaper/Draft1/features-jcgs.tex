@@ -615,7 +615,7 @@ Each plot was evaluated by between 11 and 36 individuals
 \end{figure}
 
 
-From Figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target type over another target type, but generally pick both types over the course of ten lineups.
+From Figure~\ref{fig:targets} we see that participants identified more cluster targets than trend targets, but also did not primarily identify one target type over the other. Generally a participant picked both types over the course of ten lineups.
 
 \begin{figure}[ht]
 \centering
@@ -629,7 +629,7 @@ From Figure~\ref{fig:targets} we see that users identified more cluster targets 
 
 
 \end{knitrout}
-\caption{\label{fig:targets}Target identifications by users. Users are not generally primed for one target over the other target.}
+\caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
 
 For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
@@ -653,9 +653,32 @@ For each plot type (aesthetic combination), we first consider the probability th
 \end{figure}
 
 In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (9959 trials). 
-Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to (significantly, XXX p-value?, see section~\ref{sec:sentiment}) fewer correct evaluations. We will discuss a possible cause for this in more detail in section~\ref{XXX}. 
+Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations. This, together with a  possible cause is discussed in more detail in section~\ref{sec:sentiment}. 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: Response is constant}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in confint(gvl.model, method = "{}Wald"{}): object 'gvl.model' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in names(gvl.fixef) <- c("{}LB"{}, "{}UB"{}): object 'gvl.fixef' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in fixef(gvl.model): object 'gvl.model' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in gvl.fixef[1, 1:3] <- 0: object 'gvl.fixef' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in factor\_contrasts(model): no 'model.matrix' method for 'model' found!}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in cld(type\_compare): object 'type\_compare' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in fixef(gvl.model): object 'gvl.model' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'gvl.fixef' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(data = gvl.fixef): object 'gvl.fixef' not found}}\end{kframe}
+\end{knitrout}
 
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
@@ -703,6 +726,7 @@ The lineup experimental protocol allows us to collect participant justifications
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
 \newdo{This needs to be linked with the previous section.}
+\newdo{ XXX p-value? for the difference in the number of correct evaluation}
 \newdo{We will do the link by including a model on the probability of selecting at least one target by plot aesthetic.}
 As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
 

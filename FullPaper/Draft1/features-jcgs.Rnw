@@ -750,7 +750,7 @@ modeldata <- filter(modeldata, trial.num<=10)
 # Remove users from database who didn't complete any trials
 message(paste0(sum(!users$nick_name%in%modeldata$nick_name), " users removed from user database - no trials found."))
 users <- users %>% filter(nick_name%in%modeldata$nick_name)
-modeldata <- modeldata[,-30]
+#modeldata <- modeldata[,-30]
 
 modeldata$outcome <- paste(c("", "trend")[1+as.numeric(modeldata$trend.correct==1)], 
                            c("", "cluster")[1+as.numeric(modeldata$cluster.correct==1)], 
@@ -933,11 +933,58 @@ ggplot() +
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
 
+<<target-model, echo=FALSE>>=
+modeldata$one.correct <- 1 - modeldata$neither.correct
+gol.model <-  glmer(one.correct~plottype + (1|data_name) + (1|individualID), data=modeldata, family=binomial(), control=glmerControl(optimizer="bobyqa"))
+gol.fixef <- data.frame(confint(gol.model, method="Wald"))[-(1:2),] # exclude sigmas
+names(gol.fixef) <- c("LB", "UB")
+gol.fixef$OR <- fixef(gol.model)
+gol.fixef[1,1:3] <- 0
+
+suppressMessages(require(multcomp))
+type_compare <- glht(gol.model, mcp(plottype="Tukey"))
+gol.fixef$letters <- cld(type_compare)$mcletters$Letters
+# not sure what to do about those warnings
+
+gol.fixef$label <- gsub("plottype", "", names(fixef(gol.model)))
+gol.fixef$label <- gol.fixef$label %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("\\(Intercept\\)", "Plain + ") %>%
+  str_replace("( \\+ )$", "") %>% 
+  reorder(gol.fixef$OR)
+
+
+sig <- anova(gol.model)
+@
 In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
-Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to (significantly, XXX p-value?, see section~\ref{sec:sentiment}) fewer correct evaluations. We will discuss a possible cause for this in more detail in section~\ref{XXX}. 
+Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 385$, $p$-value < 0.0001). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
+\begin{figure}[ht]\centering
+<<target-model-vis, dependson='target-model', echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\linewidth'>>=
 
+#yleft <- with(gvl.fixef, LB-OR)[1]
+#yright <- with(gvl.fixef, UB-OR)[1]
+ggplot(data=gol.fixef) + 
+#  geom_segment(aes(x=label, xend=label), y=yleft, yend=yright, 
+#               colour="grey80", size=10) +
+  geom_hline(yintercept=0, colour="gray70") + 
+  geom_pointrange(aes(x=label, y=OR, ymin=LB, ymax=UB), size=.75) + 
+  coord_flip() + 
+  theme_bw() + 
+  ggtitle("Odds of selecting one of the targets") + 
+  xlab("") +
+  #  xlab("Plot Type") + 
+  geom_text(aes(y=-2, x=label, label=letters)) + 
+  scale_y_continuous("Odds (on log scale) of identifying one of the targets and 95% Wald Intervals\n(Reference level: Plain plot)", 
+                     breaks=c(-2, log(c(1/c(4.5,3, 1.5), 1)), 0.25), labels=c("<--\nMiss", "1/4.5","1/3", "1/1.5", "1", "-->\nIdentification"), limits=c(-2,0.25))
 
+@
+\caption{\label{fig:onetarget}I don't think we should include this chart. It shows a bit much of the difference.}
+\end{figure}
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
 
@@ -1014,6 +1061,7 @@ The lineup experimental protocol allows us to collect participant justifications
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
 \newdo{This needs to be linked with the previous section.}
+\newdo{ XXX p-value? for the difference in the number of correct evaluation}
 \newdo{We will do the link by including a model on the probability of selecting at least one target by plot aesthetic.}
 As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
 
