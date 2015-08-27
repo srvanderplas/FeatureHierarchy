@@ -63,7 +63,7 @@
 {
   \title{\bf Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
   \author{Susan VanderPlas\thanks{
-    The authors gratefully acknowledge ational Science Foundation Grant \# DMS 1007697.}\hspace{.2cm}\\
+    The authors gratefully acknowledge funding from the National Science Foundation Grant \# DMS 1007697.}\hspace{.2cm}\\
     Department of Statistics and Statistical Laboratory, Iowa State University\\
     and \\
     Heike Hofmann\\
@@ -88,7 +88,7 @@ Graphics are very effective for communicating numerical information quickly and 
 \end{abstract}
 
 \noindent%
-{\it Keywords:}  Visual inference, Lineup protocol, Preattentive Features, 3 to 6 keywords, that do not appear in the title
+{\it Keywords:}  Visual inference, Lineup protocol, Preattentive Features, \comment{XXX do you have any more? } 3 to 6 keywords, that do not appear in the title
 \vfill
 
 \newpage
@@ -672,8 +672,6 @@ After the first question, basic demographic information was collected: age range
 Throughout the experiment, participants were not informed about the inclusion of a second target into the lineup plots.  The small number of participants choosing multiple plots in their answer suggests, that we were successful in not giving away this aspect of the study.
 
 \section{Results}\label{sec:Results}
-\newdo{XXX we need a summary of the results in an overview table or list form - what are the results, exactly.}
-
 % all done, yeah!
 % \newdo{I think we need to straighten out the analysis: after the overview of the demographics, 
 % the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started ***update*** visual p-values are all essentially zero, so no need to report anything - but we can include a discussion on how to get visual p-values (simulation based, in the appendix?)), 
@@ -1003,10 +1001,13 @@ We model the cluster versus trend decision using a logistic regression with a ra
 %As in equation \ref{eqn:linearModel}, the 
 We also assume that random effects for dataset and participant are orthogonal. 
 
-The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
+The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 
 
-\begin{figure}[ht]\centering
+% Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
+
+
+\begin{figure}[hbtp]\centering
 <<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\linewidth'>>=
 gvl.model <-  glmer(cluster.correct~plottype + (1|data_name) + (1|individualID), data=subset(modeldata, trend.correct | cluster.correct), family=binomial(), control=glmerControl(optimizer="bobyqa"))
 gvl.fixef <- data.frame(confint(gvl.model, method="Wald"))[-(1:2),] # exclude sigmas
@@ -1055,6 +1056,8 @@ Examining the model results from the perspective of Gestalt heuristics, it is cl
 When trend line and error are present in the same plot, the additional Gestalt principle of common region is recruited, in addition to the continuity heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot in favor of the trend target. 
 
 This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
+
+\newtext{In summary, the results from this experiment show, that in order to gain a significant difference from a plain representation, and visually emphasize groups or trends, we need to make use of a statistical layer, usually associated with a confidence interval/region, in form of an error band or an ellipse. }
 
 The lineup experimental protocol allows us to collect participant justifications for their target selection. These short explanations provide some additional insight into participant reasoning, and further support the gestalt explanation for the experimental results. 
 
