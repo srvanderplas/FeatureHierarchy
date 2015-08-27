@@ -416,10 +416,10 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
 \end{figure}
 %\afterpage{\clearpage}
 
-Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$. 
+Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$ to ensure maximal distance of the null plots from either target. 
 
 \subsubsection{Parameters used in Data Generation}
-Models $M_C$, $M_T$, and $M_0$ provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ (directly related to correlation strength) for varying numbers of clusters $K=3, 5$, we can systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in table \ref{tab:parameters}, we  generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. 
+Models $M_C$, $M_T$, and $M_0$ provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ for varying numbers of clusters $K=3, 5$, we  systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in table \ref{tab:parameters}, we  generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. 
 
 \begin{table}[hbtp]
   \rowcolors{2}{gray!25}{white}
@@ -436,10 +436,9 @@ $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .25, .30, .35 
 \caption{Parameter settings for generation of lineup datasets. \label{tab:parameters}}
 \end{table}
 
-The parameter values were chosen after examining the full parameter space through simulation of 1000 lineup datasets for each combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$; 
-for each data set generated, the previously described statistics for trend and cluster strength were computed. We compared the statistics for the relevant target plot to the most extreme value for the 18 null plots. 
+The parameter values were chosen in an approach similar to that taken in \citet{niladri:2014}: for each  combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$ we simulated 1000 lineup datasets. For each of the simulated target plots, trend and cluster strength indices, $R^$ and $C^2$, were computed and compared to the most extreme value for each of the 18 null plots of the same lineup data.
 
-These distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception). A target plot with $R^2=0.95$ is very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ make the target plot more difficult to identify. This approach is similar to that taken in \citet{niladri:2014}. 
+The resulting distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception) within the full parameter space. E.g., a target plot with $R^2=0.95$ is very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ make the target plot more difficult to identify. 
 
 Figure~\ref{fig:targetsignal-0} shows  densities of each measure computed from the  maximum of 18 null plots compared to the measure in the signal plot for one combination of parameters.
 There is some overlap in the distribution of $R^2$ for the null plots compared to the target plot displaying data drawn from $M_T$. As a result, the distribution of the cluster statistic values are more easily separated from the null data sets than the distribution of the line statistic, that is, $\sigma_C = 0.20$ is producing cluster target data sets that are a bit easier to identify numerically than trend targets with a parameter value of $\sigma_T = 0.25$.
@@ -525,7 +524,7 @@ qplot(data=subset(longres, Statistic != "Gini Impurity"), x=value, y=..density..
       xlab="Simulated Distribution of Test Statistic", 
       ylab="Density", 
       position="identity") + 
-  facet_grid(.~Statistic,  labeller=label_both) + # better not use scales="free" 
+  facet_grid(.~Statistic,  labeller=label_both, scales="free") + # better not use scales="free" 
   scale_color_manual("Distribution", values=c("black",  "gray")) + 
   scale_fill_manual("Distribution", values=c("transparent", "gray")) +  
   theme_bw()
