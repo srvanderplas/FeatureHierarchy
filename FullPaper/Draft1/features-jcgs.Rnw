@@ -842,7 +842,7 @@ qplot(education, data=users, fill=I("grey50"), colour=I("grey40")) + theme_bw() 
 \end{figure}
 
 
-From Figure~\ref{fig:targets} we see that users identified more cluster targets than trend targets, but users also do not primarily identify one target type over another target type, but generally pick both types over the course of ten lineups.
+From Figure~\ref{fig:targets} we see that participants identified more cluster targets than trend targets, but also did not primarily identify one target type over the other. Generally a participant picked both types over the course of ten lineups.
 
 \begin{figure}[ht]
 \centering
@@ -859,7 +859,7 @@ clm <- melt(clusters, measure.var=2:3)
 
 ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, data=clm) + theme_bw() + scale_colour_brewer("Target", palette="Set1") + scale_shape_discrete("Target") + theme(legend.position="bottom") + ylab("Number of participants") + xlab("Number of target identifications (out of ten)") + geom_line(aes(x, value, colour=variable, group=variable), data=clm) + ggtitle("Target Identification by Participants")
 @
-\caption{\label{fig:targets}Target identifications by users. Users are not generally primed for one target over the other target.}
+\caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
 
 For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
