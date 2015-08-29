@@ -193,28 +193,32 @@ This paper describes the design and the results of a user study exploring the hi
 Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Here, we are describing the setup and results of a study using statistical lineup methodology to provide quantitative and qualitative information.
 
 \paragraph{Statistical lineups} are an important experimental tool for quantifying the significance of a finding in a graphical display. 
-Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests, thereby enabling %to facilitate 
-formal experimental evaluation of statistical graphics. 
+Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests, thereby enabling formal experimental evaluation of statistical graphics. 
 
 Lineups are an experimental tool designed to serve as a visually conducted hypothesis test, separating significant effects from those that would be expected under a null hypothesis \citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
 A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in Figure~\ref{fig:plotExamples}). 
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
-If a participant can identify the target plot from the field of distractors, this counts as evidence against the null hypothesis. Based on the number of evaluations and the number of target identifications, significance of a finding is then determined in the same sense as for a conventional hypothesis test. 
+If a participant can identify the target plot from the field of distractors, this counts as evidence against the null hypothesis. 
+Based on the number of evaluations and the number of target identifications, significance of a finding is then determined in the same sense as for a conventional hypothesis test. 
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
 
-In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. The two targets represent two different, competing signals; an observer's choice then demonstrates empirically which signal is more salient. 
+In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. 
+The two targets represent two different, competing signals; an observer's choice then demonstrates empirically which signal is more salient. 
 If both targets exhibit similar signal, observers may identify both targets, removing any forced-choice scenario which might skew results in a study. 
 
-%By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
+%By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. 
+%At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
 
 Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. 
-These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. 
+These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. 
+We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. 
 Similarly, the grouping effect in the first plot in the figure should be enhanced if the points in each group are colored differently, as this adds similarity to the proximity heuristic. 
 In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal over the other.
 
 The study in this paper is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. 
 
-The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. Experimental results are presented in section \ref{sec:Results}, and implications and conclusions are discussed in section \ref{sec:Conclusion}. 
+The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. 
+Experimental results are presented in section \ref{sec:Results}, and implications and conclusions are discussed in section \ref{sec:Conclusion}. 
 
 \section{Experimental Setup and Design} \label{sec:ExperimentalDesign}
 In this section, we discuss the models generating data for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
@@ -238,8 +242,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
   Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line \\
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
-    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points in $[-1, 1]$.
-    
+    \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points in $[-1, 1]$.\\
     This step ensures that the full range in $x$ is used, which in turn keeps the ratio of $x$ to $y$ range constant.
     \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, where $\eta_i \sim \text{Unif}(-z, z)$, $z = \frac{2}{5(N-1)}$.
     \item Generate $y_i$ as a linear regressand of $x_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$.
@@ -265,12 +268,12 @@ The use of $R^2$ to assess the strength of the linear relationship (rather than 
 
 \begin{figure}[ht]
 <<trends, fig.width=8, fig.height=3, out.width='\\linewidth', echo=FALSE>>=
-res <- data.frame(sd.trend = rep(c(0.1, 0.2, 0.3, 0.4), each=45))
-res <- res %>% group_by(sd.trend) %>% do(sim.line(N=45, sd.trend=as.numeric(.[1,1])))
+res <- data.frame(sd.trend = rep(c(0.1, 0.2, 0.3, 0.4), each = 45))
+res <- res %>% group_by(sd.trend) %>% do(sim.line(N = 45, sd.trend = as.numeric(.[1,1])))
 
 res$label <- paste("sigma[T] :",res$sd.trend)
-qplot(x,y, data=res, pch=I(1)) + facet_grid(facets=.~label, labeller="label_parsed") + theme_bw() + 
-  theme(plot.margin=unit(c(0,0,0,0), "cm"))
+qplot(x,y, data = res, pch = I(1)) + facet_grid(facets = .~label, labeller = "label_parsed") + theme_bw() + 
+  theme(plot.margin = unit(c(0,0,0,0), "cm"))
 @
 \caption[Parameters affecting $M_T$]{\label{fig:trends} Set of scatterplots showing one draw each from the trend model $M_T$ for parameter values of  $\sigma_T \in \{0.1, 0.2, 0.3, 0.4\}$.}
 \end{figure}
@@ -332,16 +335,19 @@ shape3pal <- best.combo(3, shapes, shapetm)
 shape5pal <- best.combo(5, shapes, shapetm)
 
 res <- data.frame(sd.cluster= rep(c(0.15, 0.20, 0.25, 0.30), each=45))
-res <- res %>% group_by(sd.cluster) %>% do(data.frame({set.seed(325098573); sim.clusters(K=3, N=45, sd.cluster=as.numeric(.[1,1]))}))
+res <- res %>% 
+  group_by(sd.cluster) %>% 
+  do(data.frame({set.seed(325098573); sim.clusters(K=3, N=45, sd.cluster=as.numeric(.[1,1]))}))
 
-#res <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=3, N=45, sd.cluster=x)) })
 res$K <- 3
 res$color <- color3pal[res$group]
 res$shape <- shape3pal[res$group]
 
 res2 <- data.frame(sd.cluster= rep(c(0.15, 0.20, 0.25, 0.30), each=75))
-res2 <- res2 %>% group_by(sd.cluster) %>% do({set.seed(325098573); sim.clusters(K=5, N=75, sd.cluster=as.numeric(.[1,1]))})
-#res2 <- ldply(sd, function(x) { set.seed(325098573); data.frame(sd.cluster=x, sim.clusters(K=5, N=75, sd.cluster=x)) })
+res2 <- res2 %>% 
+  group_by(sd.cluster) %>% 
+  do({set.seed(325098573); sim.clusters(K=5, N=75, sd.cluster=as.numeric(.[1,1]))})
+
 res2$K <- 5
 res2$color <- color5pal[res2$group]
 res2$shape <- shape5pal[res2$group]
@@ -349,21 +355,24 @@ res <- rbind(res, res2)
 suppressMessages(library(ggplot2))
 res$label <- paste("sigma[C] :",res$sd.cluster)
 res$Klabel <- paste("K :",res$K)
+
 ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) + 
   geom_point() + 
   facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
   scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1)
 @
-\caption[Parameters affecting $M_C$]{\label{fig:clusters} Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. The colors and shapes shown are those used in the lineups for $K=3$ and $K=5$.}
+\caption[Parameters affecting $M_C$]{\label{fig:clusters} 
+Scatterplots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. 
+The colors and shapes shown are those used in the lineups for $K=3$ and $K=5$.}
 \end{figure}
-As a measure of cluster cohesion we use a coefficient to assess the amount of variability within each cluster, compared to total variability. Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale. This ensures that $\sigma_C$is a scaling parameter that regulates the amount of cluster cohesion (see Figure~\ref{fig:clusters}).  % (which we achieve by scaling in the final step of the generation algorithm).
+As a measure of cluster cohesion we use a coefficient to assess the amount of variability within each cluster, compared to total variability. 
+Note that for the purpose of clustering, variability is measured as the variability in both $x$ and $y$ from a common mean, i.e.\ we implicitly assume that the values in $x$ and $y$ are on the same scale. 
+This ensures that $\sigma_C$is a scaling parameter that regulates the amount of cluster cohesion (see Figure~\ref{fig:clusters}).  
 
-
-%\afterpage{\clearpage}
-
-
-For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
+For two numeric variables $x$ and $y$ and grouping variable $g$ with $g_i \in \{1, ..., K\}, i = 1, ..., n$, we compute the  {\it cluster index} $C^2$ as follows: 
+let $j(i)$ be the function that maps index $i = 1, ..., n$ to one of the clusters $1, ..., K$ given by the grouping variable $g$. 
+Then for each  level of $g$, we find  a cluster center as $\bar{x}_{j(i)}$ and  $\bar{y}_{j(i)}$, and we determine the strength of the clustering by comparing the within cluster variability with the overall variability: 
 
 \begin{eqnarray}\label{eq:clusterMeasure}
 C^2 &=& 1 - \frac{CSS}{TSS},\\
@@ -376,7 +385,9 @@ The cluster index $C^2$, which is approximately inversely linear in $\sigma_C^2$
 
 
 \subsubsection{Null Model \texorpdfstring{$M_0$}{M0}}
-The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Observations are assigned to specific clusters using hierarchical clustering, which creates groups consistent with any structure present in the generated data. This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
+The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. 
+Observations are assigned to specific clusters using hierarchical clustering, which creates groups consistent with any structure present in the generated data. 
+This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[hbt]
 <<lambda, fig.width=8, fig.height=3.5, out.width='.9\\linewidth', echo=FALSE>>=
@@ -409,12 +420,12 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
 @
 \caption[Mixing parameter for null model $M_0$]{\label{fig:lambda} Scatterplots of data generated from $M_0$ using different values of $\lambda$, generated using the same random seed at each $\lambda$ value.}
 \end{figure}
-%\afterpage{\clearpage}
 
 Null data in this experiment is generated using $\lambda = 0.5$, that is, each point in a null data set is equally likely to have been generated from $M_C$ and $M_T$ to ensure maximal distance of the null plots from either target. 
 
 \subsubsection{Parameters used in Data Generation}
-Models $M_C$, $M_T$, and $M_0$ provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ for varying numbers of clusters $K=3, 5$, we  systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in Table~\ref{tab:parameters}, we  generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. 
+Models $M_C$, $M_T$, and $M_0$ provide the foundation for this experiment; by manipulating cluster standard deviation $\sigma_C$ and regression standard deviation $\sigma_T$ for varying numbers of clusters $K=3, 5$, we  systematically control the statistical signal present in the target plots and generate corresponding null plots that are mixtures of the two distributions. 
+For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in Table~\ref{tab:parameters}, we  generate a lineup dataset consisting of one set drawn from $M_C$, one set drawn from $M_T$, and 18 sets drawn from $M_0$. 
 
 \begin{table}[hbtp]
   \rowcolors{2}{gray!25}{white}
@@ -431,12 +442,15 @@ $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .25, .30, .35 
 \caption{Parameter settings for generation of lineup datasets. \label{tab:parameters}}
 \end{table}
 
-The parameter values were chosen in an approach similar to that taken in \citet{niladri:2014}: for each  combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$ we simulated 1000 lineup datasets. Then trend and cluster strength indices, $R^2$ and $C^2$, were computed  for the simulated target plots, and compared to the most extreme value for each of the 18 null plots of the same lineup data.
+The parameter values were chosen in an approach similar to that taken in \citet{niladri:2014}: for each combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$ we simulated 1000 lineup datasets. 
+Then trend and cluster strength indices, $R^2$ and $C^2$, were computed  for the simulated target plots, and compared to the most extreme value for each of the 18 null plots of the same lineup data.
 
-The resulting distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception) within the full parameter space. E.g., a target plot with $R^2=0.95$ is very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ make the target plot more difficult to identify. 
+The resulting distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception) within the full parameter space. 
+That is, a target plot with $R^2=0.95$ is very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ make the target plot more difficult to identify. 
 
 Figure~\ref{fig:targetsignal-0} shows  densities of each measure computed from the  maximum of 18 null plots compared to the measure in the signal plot for one combination of parameters.
-There is some overlap in the distribution of $R^2$ for the null plots compared to the target plot displaying data drawn from $M_T$. As a result, the distribution of the cluster statistic values are more easily separated from the null data sets than the distribution of the line statistic, that is, $\sigma_C = 0.20$ is producing cluster target data sets that are a bit easier to identify numerically than trend targets with a parameter value of $\sigma_T = 0.25$.
+There is some overlap in the distribution of $R^2$ for the null plots compared to the target plot displaying data drawn from $M_T$. 
+As a result, the distribution of the cluster statistic values are more easily separated from the null data sets than the distribution of the line statistic, e.g. $\sigma_C = 0.20$ is producing cluster target data sets that are a bit easier to identify numerically than trend targets with a parameter value of $\sigma_T = 0.25$.
 
 \begin{figure}[ht]
 \centering
@@ -451,34 +465,34 @@ M = 1000
 if (file.exists("../../Data/SmallSimulation.Rdata")) {
   load("../../Data/SmallSimulation.Rdata")
 } else {
-#   nulldist<- function(N, sT=0.25, sC=0.2) {
-#     nulls <- data.frame(t(replicate(N, {
-#       lp <- data.frame(t(replicate(18, {
-#         mix = mixture.sim(lambda=0.5, K=3, N=45, sd.cluster=sC, sd.trend=sT)
-#         reg <- lm(y~x, data=mix)
-#         
-#   c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
-#   })))
-#     c(fline=max(lp$fline), fgroup=max(lp$fgroup))
-#   })))
-#   
-#   trends <- replicate(10, {
-#     mix = mixture.sim(lambda=0, K=3, N=45, sd.cluster=sC, sd.trend=sT)
-#     reg <- lm(y~x, data=mix)
-#     c(fline=summary(reg)$r.squared)
-#   })
-#   
-#   clusters <- replicate(10, {
-#     mix = mixture.sim(lambda=1, K=3, N=45, sd.cluster=sC, sd.trend=sT)
-#     clust <- lm(y~factor(group) + 0, data=mix)
-#     res <- summary(aov(clust))
-#     c(fgroup=cluster(mix))
-#   })
-#   
-#   list(nulls=nulls, trends=trends, clusters=clusters)
-# }
-# 
-# res <- nulldist(N=N, sC=sC, sT=sT)
+  nulldist<- function(N, sT=0.25, sC=0.2) {
+    nulls <- data.frame(t(replicate(N, {
+      lp <- data.frame(t(replicate(18, {
+        mix = mixture.sim(lambda=0.5, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+        reg <- lm(y~x, data=mix)
+        
+  c(fline=summary(reg)$r.squared, fgroup=cluster(mix))
+  })))
+    c(fline=max(lp$fline), fgroup=max(lp$fgroup))
+  })))
+  
+  trends <- replicate(10, {
+    mix = mixture.sim(lambda=0, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+    reg <- lm(y~x, data=mix)
+    c(fline=summary(reg)$r.squared)
+  })
+  
+  clusters <- replicate(10, {
+    mix = mixture.sim(lambda=1, K=3, N=45, sd.cluster=sC, sd.trend=sT)
+    clust <- lm(y~factor(group) + 0, data=mix)
+    res <- summary(aov(clust))
+    c(fgroup=cluster(mix))
+  })
+  
+  list(nulls=nulls, trends=trends, clusters=clusters)
+}
+
+res <- nulldist(N=N, sC=sC, sT=sT)
   library(compiler)
   tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.25) {
     data.frame(
@@ -499,45 +513,48 @@ if (file.exists("../../Data/SmallSimulation.Rdata")) {
   save(res, file="./figure/nulldist.Rdata")
 }
 
-# require(ggplot2)
-# qplot(fline, data=res$nulls, binwidth=0.02, fill=I("gray70"), color=I("gray20")) + geom_vline(aes(xintercept=res$trends), color="black") + theme_bw() + xlab("Max(18) Distribution of Cluster Measure under Null Model")
-# ggsave("figure/fline.pdf", width=8, height=4)
-# qplot(fgroup, data=res$nulls, binwidth=0.01, fill=I("gray70"), color=I("gray20")) + geom_vline(aes(xintercept=res$clusters), color="black") + theme_bw() + xlab("Max(18) Distribution of Trend Measure under Null Model")
-# ggsave("figure/fgroup.pdf", width=8, height=4)
-
-longres <- melt(res, id.vars=1:4, variable.name="type", value.name = "value")
-longres$dist <- c("Data", "Most Extreme of\n18 Null Dists")[1+grepl("null", longres$type)]
-longres$type <- gsub("null.", "", longres$type, fixed=T)
+longres <- melt(res, id.vars = 1:4, variable.name = "type", value.name = "value")
+longres$dist <- c("Data", "Most Extreme of\n18 Null Dists")[1 + grepl("null", longres$type)]
+longres$type <- gsub("null.", "", longres$type, fixed = T)
 longres$Statistic <- longres$type
-longres$Statistic[longres$type=="cluster"] <- "Cluster Measure"
-longres$Statistic[longres$type=="line"] <- "R squared"
-longres$Statistic[longres$type=="gini"] <- "Gini Impurity"
-longres$Statistic <- factor(longres$Statistic, levels=c("R squared", "Cluster Measure", "Gini Impurity"))
+longres$Statistic[longres$type == "cluster"] <- "Cluster Measure"
+longres$Statistic[longres$type == "line"] <- "R squared"
+longres$Statistic[longres$type == "gini"] <- "Gini Impurity"
+longres$Statistic <- factor(longres$Statistic, levels = c("R squared", "Cluster Measure", "Gini Impurity"))
 
-qplot(data=subset(longres, Statistic != "Gini Impurity"), x=value, y=..density.., stat="density", color=dist, fill=dist, geom="area", alpha=I(.5), 
-    #  main=expression(paste("Simulation Results " , group("(", list(K==3, sigma[T]==.25, sigma[C]==.2), ")"))), 
-      xlab="Simulated Distribution of Test Statistic", 
-      ylab="Density", 
-      position="identity") + 
-  facet_grid(.~Statistic,  labeller=label_both) + # better not use scales="free" 
-  scale_color_manual("Distribution", values=c("black",  "gray")) + 
-  scale_fill_manual("Distribution", values=c("transparent", "gray")) +  
-  theme_bw()
+ggplot(data = subset(longres, Statistic != "Gini Impurity")) + 
+  geom_area(aes(x = value, y = ..density.., color = dist, fill = dist), 
+            stat = "density", position = "identity", 
+            alpha = 0.5) + 
+  xlab("Simulated Distribution of Test Statistic") + 
+  ylab("Density") + 
+  facet_grid(. ~ Statistic,  labeller = label_both) + 
+  scale_color_manual("Distribution", values = c("black",  "gray")) + 
+  scale_fill_manual("Distribution", values = c("transparent", "gray")) +  
+  theme_bw() + 
+  theme(legend.position = c(.15, .8))
 
 @
-\caption[Simulation-based test statistic density for null and target plots]{\label{fig:targetsignal-0}Density of test statistics measuring trend strength and cluster strength for target distributions and null plots based on 1,000 draws of lineup data with $\sigma_T= 0.25, \sigma_C=0.20$ and $K=3$. }
+\caption[Simulation-based test statistic density for null and target plots]{
+\label{fig:targetsignal-0}
+Density of test statistics measuring trend strength and cluster strength for target distributions and null plots based on 1,000 draws of lineup data with $\sigma_T= 0.25, \sigma_C=0.20$ and $K=3$.
+}
 \end{figure}
-%\afterpage{\clearpage}
 
-%\newdo{move simulation results back in here.}
-Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in appendix \ref{app:parametersimulation}. Using information from the simulation, we identified values and generate lineup data sets for each  $\sigma_T$ and $\sigma_C$ (as shown in Table~\ref{tab:parameters}) corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. It is important to note that the numerical measures we have described in equations~\eqref{eq:linearMeasure} and~\eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with exact information on the perceptual discriminability. It has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
+Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in appendix \ref{app:parametersimulation}. 
+Using information from the simulation, we identified values and generate lineup data sets for each  $\sigma_T$ and $\sigma_C$ (as shown in Table~\ref{tab:parameters}) corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. 
+It is important to note that the numerical measures we have described in equations~\eqref{eq:linearMeasure} and~\eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with exact information on the perceptual discriminability.
+It has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
 
-
-Each of the generated datasets is then plotted as a lineup using aesthetics, which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change a participant's preference and ability to identify each target plot. The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
+Each of the generated datasets is then plotted as a lineup using aesthetics, which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change a participant's preference and ability to identify each target plot. 
+The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
 
 \subsection{Lineup Rendering}
 \subsubsection{Plot Aesthetics}
-Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification. Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. 
+For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification.
+Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
+
 \begin{table}[hbtp]
 \centering
 \scalebox{0.8}{
@@ -596,21 +613,20 @@ Line + Prediction \end{tabular}\\
   \caption{Trend + Color + Ellipse}\vspace{-0.15in}
   \includegraphics[width=0.25\linewidth]{figure/samplepics-10}
 \end{subfigure}
-\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Overview of each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
+\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{
+Overview of each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. 
+\label{fig:plotExamples}
+}
 \end{figure}
-%\afterpage{\clearpage}
-
-
-
 
 \afterpage{\clearpage}
 
-We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses  increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model. 
+We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model. 
 
 Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval  increases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model, and decreases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
 
 \subsubsection{Color and Shape Palettes}
-Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified a maximally differentiable set of 3 and 5 colors each.%, subject to certain constraints imposed by software and accessibility concerns. 
+Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified a maximally differentiable set of 3 and 5 colors each. 
 
 \begin{figure}[bhtp]\centering
 \caption{Color and shape palettes investigated for differentiability in \protect\citet{heer:2014}. }
