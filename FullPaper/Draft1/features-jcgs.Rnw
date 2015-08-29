@@ -680,30 +680,24 @@ Once participants completed the example task and provided informed consent, they
 Participants were required to complete 10 lineups, answering ``Which plot is the most different from the others?". Participants were asked to provide a short reason for their choice, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 1 (least confident) to 5 (most confident). 
 After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
 
-Throughout the experiment, participants were not informed about the inclusion of a second target into the lineup plots.  The small number of participants choosing multiple plots in their answer suggests, that we were successful in not giving away this aspect of the study.
+Throughout the experiment, participants were not informed about the inclusion of a second target into the lineup plots.  
+The small number of participants choosing multiple plots in their answer suggests that most participants did not discover that two target plots were present in each lineup and were thus naive to the true purpose of the experiment.
 
 \section{Results}\label{sec:Results}
-% all done, yeah!
-% \newdo{I think we need to straighten out the analysis: after the overview of the demographics, 
-% the first part should be an assessment of the difficulty of the lineup (using visual p-values, I'll get that started ***update*** visual p-values are all essentially zero, so no need to report anything - but we can include a discussion on how to get visual p-values (simulation based, in the appendix?)), 
-% so let's go straight into the face-off. 
-% But in the faceoff we need to add a discussion on how many values we have for evaluation (the CI intervals keep getting bigger as we have more clustering) - for this, we can include the discussion that is in the single target clustering models right now and go into the wordles afterwards (participant reasoning).
-% }
-
 <<results-setup,echo=F,include=F>>=
 lineups <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
 lineups$pic_id <- 1:nrow(lineups)
 
-users <- read.csv("../../Data/turk16_users_anon.csv", stringsAsFactors=F, header=F)
+users <- read.csv("../../Data/turk16_users_anon.csv", stringsAsFactors=F, header=F, skip = 1)
 names(users) <- c("nick_name", "age", "gender", "education", "ip_address")
 users$age <- factor(users$age, levels=0:10, labels=c("NA", "<18", "18-25", "26-30", "31-35", "36-40", "41-45", "45-50", "51-55", "56-60", "61+"))
 users$gender <- factor(users$gender, levels=0:2, labels=c("NA", "Male", "Female"))
-users$education <- factor(users$education, levels=0:5, labels=c("NA", "High School or less", "Some college", "Bachelor's degree", "Grad school or higher", "Grad school or higher"))
+users$education <- users$education %>% replace(users$education==5, 4) %>% 
+  factor(levels = 0:4, labels = c(NA, "High School or less", "Some college", "Bachelor's degree", "Grad school or higher"))
 
 userdata <- read.csv("../../Data/turk16_results_anon.csv", stringsAsFactors=FALSE)
 userdata$response.id <- 1:nrow(userdata)
-# table(userdata$ip_address, userdata$nick_name)
 
 tmp <- merge(userdata[!is.na(userdata$pic_id),], lineups[,c("pic_id", "sample_size", "test_param", "param_value", "p_value", "obs_plot_location")], all.x=T, all.y=F)
 tmp$k <- as.numeric(substr(tmp$param_value, 3, 3))
@@ -719,7 +713,6 @@ correct.ans <- function(x,y){
   cbind(n.answers=length(x1), trend.correct=lineplot%in%x1, cluster.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1), none.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
 }
 
-#useranswers <- ddply(tmp, .(response.id), function(df) correct.ans(df$response_no, df$obs_plot_location))
 useranswers <- tmp %>% group_by(response.id) %>% do(data.frame(correct.ans(.["response_no"], .[,"obs_plot_location"]), drop=FALSE))
 
 useranswers <- merge(useranswers, tmp)
@@ -730,12 +723,10 @@ useranswers$sd.line <- factor(useranswers$sd.line)
 useranswers$k <- factor(useranswers$k)
 useranswers$start_time <- ymd_hms(useranswers$start_time)
 useranswers$end_time <- ymd_hms(useranswers$end_time)
-#useranswers <- ddply(useranswers, .(param_value, test_param), transform, param_idx=as.numeric(factor(pic_id)))
 useranswers <- useranswers %>% group_by(param_value, test_param) %>% mutate(
   param_idx=as.numeric(factor(pic_id))
 )
 
-#useranswers <- ddply(useranswers, .(ip_address, nick_name), transform, ntrials = length(unique(pic_id)), trial.no = rank(start_time), trial.num=order(start_time))
 useranswers <- useranswers %>% group_by(ip_address, nick_name) %>% 
   mutate(ntrials=length(unique(pic_id)), 
          trial.no = rank(start_time), 
@@ -751,15 +742,16 @@ modeldata <- useranswers[,c(1, 2, 9:31, 3:8)]
 incomplete.participants <- unique(modeldata$nick_name[modeldata$ntrials<10])
 incomplete.participant.data <- sum(modeldata$ntrials<10)
 message(paste0(sum(modeldata$ntrials<10), " trials removed because participant completed <10 trials total."))
+
 # Remove data from participants who completed > 10 trials
 modeldata <- filter(modeldata, ntrials>=10)
 extra.participant.data <- sum(modeldata$trial.num>10)
 message(paste0(sum(modeldata$trial.num>10), " trials removed because participant >10 trials."))
 modeldata <- filter(modeldata, trial.num<=10)
+
 # Remove users from database who didn't complete any trials
-message(paste0(sum(!users$nick_name%in%modeldata$nick_name), " users removed from user database - no trials found."))
-users <- users %>% filter(nick_name%in%modeldata$nick_name)
-#modeldata <- modeldata[,-30]
+message(paste0(sum(!users$nick_name %in% modeldata$nick_name), " users removed from user database - no trials found."))
+users <- users %>% filter(nick_name %in% modeldata$nick_name)
 
 modeldata$outcome <- paste(c("", "trend")[1+as.numeric(modeldata$trend.correct==1)], 
                            c("", "cluster")[1+as.numeric(modeldata$cluster.correct==1)], 
@@ -779,7 +771,6 @@ modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_nam
 modeldata$start_time <- ymd_hms(modeldata$start_time)
 modeldata$end_time <- ymd_hms(modeldata$end_time)
 modeldata$trial.time <- with(modeldata, end_time-start_time)
-#modeldata <- ddply(modeldata, .(k), transform, trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))])
 
 modeldata <- modeldata %>% group_by(k) %>% mutate(
   trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], 
@@ -832,7 +823,7 @@ After these data filtration steps, our data consist of \Sexpr{nrow(modeldata)} t
 
 Of the participants who completed at least 10 lineup evaluations, \Sexpr{round(mean(users$gender=="Male")*100)}\% were male, relatively younger than the US population and relatively well educated (see Figure~\ref{fig:demographics}). 
 Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plot.eval.tab)} individuals 
-(\Sexpr{sprintf("Mean: %.2f, SD= %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
+(\Sexpr{sprintf("Mean: %.2f, SD: %.2f", mean(plot.eval.tab), sd(plot.eval.tab))}).
 \Sexpr{round(100*(1-mean(modeldata$neither.correct)), 1)}\% of the participant evaluations identified at least one of the two target plots successfully (Trend: \Sexpr{round(100*(mean(modeldata$trend.correct)), 1)}\%, Cluster: \Sexpr{round(100*(mean(modeldata$cluster.correct)), 1)}\%). 
 
 \begin{figure}[ht]
@@ -871,15 +862,15 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 \end{figure}
 
 For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
-% We  first consider the effect of plot aesthetics on target selection for each target type (separately), and then compare the probability of selecting the cluster target compared with the trend target as a function of plot aesthetics. Finally, we will consider data on response times for each type of plot.
+
 
 \subsection{Target Plot Identifications}
-
-
-
 <<target-model, echo=FALSE>>=
 modeldata$one.correct <- 1 - modeldata$neither.correct
-gol.model <-  glmer(one.correct~plottype + (1|data_name) + (1|individualID), data=modeldata, family=binomial(), control=glmerControl(optimizer="bobyqa"))
+gol.model <-  glmer(
+  one.correct~plottype + (1 | data_name) + (1 | individualID), 
+  data = modeldata, family = binomial(), control = glmerControl(optimizer = "bobyqa")
+)
 gol.fixef <- data.frame(confint(gol.model, method="Wald"))[-(1:2),] # exclude sigmas
 names(gol.fixef) <- c("LB", "UB")
 gol.fixef$OR <- fixef(gol.model)
@@ -905,9 +896,10 @@ gol.fixef$label <- gol.fixef$label %>%
 sig <- anova(gol.model)
 @
 In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
-Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 385$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
+Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
+Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 385$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
-\begin{figure}[hbtp]\centering
+\begin{figure}[h!bt]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
 md <- data.frame(plottype = levels(modeldata$plottype), 
                  tendency=c("none", "trend", "group", "group", "group", "group", "conflict", "trend", "group", "conflict"))
@@ -937,18 +929,6 @@ totals <- merge(totals, md, by="plottype")
 totals$tendency <- factor(totals$tendency, levels=c("none", "trend", "group", "conflict"))
 totals$label <- factor(totals$label, levels=fac.order, ordered=T)
 
-# ggplot() + 
-#   theme_bw() + 
-#   xlab("") + ylab("# of target evaluations") + 
-# #  facet_grid(tendency~., space="free", scales="free") +
-#   geom_bar(aes(x=label, y=eval, fill=type), 
-#            data=subset(totals, type=="Total"), stat="identity", 
-#            position="identity", colour="black") + 
-#   geom_bar(aes(x=label, y=eval, fill=type), 
-#            data=subset(totals, type=="Correct"), stat="identity", 
-#            position="identity", colour="black") + 
-#   scale_fill_manual("Evaluations", values=c("Correct"="black", "Total" = "grey90")) +   coord_flip() 
-
 md <- merge(md, subset(totals, type=="Correct")[,c("plottype", "label", "eval")], by="plottype")
 md <- md[order(md$tendency, md$eval),]
 
@@ -971,32 +951,10 @@ ggplot() +
 @
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
-\begin{figure}[ht]\centering
-<<target-model-vis, dependson='target-model', echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\linewidth'>>=
 
-#yleft <- with(gvl.fixef, LB-OR)[1]
-#yright <- with(gvl.fixef, UB-OR)[1]
-ggplot(data=gol.fixef) + 
-#  geom_segment(aes(x=label, xend=label), y=yleft, yend=yright, 
-#               colour="grey80", size=10) +
-  geom_hline(yintercept=0, colour="gray70") + 
-  geom_pointrange(aes(x=label, y=OR, ymin=LB, ymax=UB), size=.75) + 
-  coord_flip() + 
-  theme_bw() + 
-  ggtitle("Odds of selecting one of the targets") + 
-  xlab("") +
-  #  xlab("Plot Type") + 
-  geom_text(aes(y=-2, x=label, label=letters)) + 
-  scale_y_continuous("Odds (on log scale) of identifying one of the targets and 95% Wald Intervals\n(Reference level: Plain plot)", 
-                     breaks=c(-2, log(c(1/c(4.5,3, 1.5), 1)), 0.25), labels=c("<--\nMiss", "1/4.5","1/3", "1/1.5", "1", "-->\nIdentification"), limits=c(-2,0.25))
-
-@
-\caption{\label{fig:onetarget2}I don't think we should include this chart. It shows a bit much of the difference.}
-\end{figure}
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
-
- For all trials, in which at least one of the targets was correctly identified, we compare the probability of selecting the cluster target generated by $M_C$  with the probability of selecting the trend target generated by $M_T$. 
+ For all trials in which at least one of the targets was correctly identified, we compare the probability of selecting the cluster target generated by $M_C$  with the probability of selecting the trend target generated by $M_T$. 
 Define $C_{ijk}$ to be the event $$\{\text{Participant }k\text{ selects the cluster target for dataset }j\text{ with aesthetic set }i\}$$
 and $T_{ijk}$ to be the analogous selection of the trend target.
 We model the cluster versus trend decision using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data, and a random effect for participant to account for skill level, as shown in equation~\ref{eqn:faceoffModel}. 
@@ -1008,16 +966,14 @@ We model the cluster versus trend decision using a logistic regression with a ra
 \hphantom{where } \gamma_j & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)\!\text{,  random effect for dataset specific characteristics,}\nonumber\\
 \hphantom{where } \eta_k & \overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)\!\text{, random effect for participant characteristics,}\nonumber\\
 \text{and } \epsilon_{ijk} & \overset{iid}{\sim}  N\left(0, \sigma^2_e\right)\!\text{, error associated with a single trial evaluation.} \nonumber\end{align}
-%As in equation \ref{eqn:linearModel}, the 
+
 We also assume that random effects for dataset and participant are orthogonal. 
 
-The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
+The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
+As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. 
+Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 
-
-% Trend + error plots and color + ellipse + trend + error plots are significantly different from all of the other designs. 
-
-
-\begin{figure}[hbtp]\centering
+\begin{figure}[h!bt]\centering
 <<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\linewidth'>>=
 gvl.model <-  glmer(cluster.correct~plottype + (1|data_name) + (1|individualID), data=subset(modeldata, trend.correct | cluster.correct), family=binomial(), control=glmerControl(optimizer="bobyqa"))
 gvl.fixef <- data.frame(confint(gvl.model, method="Wald"))[-(1:2),] # exclude sigmas
@@ -1041,21 +997,17 @@ gvl.fixef$label <- gvl.fixef$label %>%
   str_replace("( \\+ )$", "") %>% 
   reorder(gvl.fixef$OR)
 
-#yleft <- with(gvl.fixef, LB-OR)[1]
-#yright <- with(gvl.fixef, UB-OR)[1]
 ggplot(data=gvl.fixef) + 
-#  geom_segment(aes(x=label, xend=label), y=yleft, yend=yright, 
-#               colour="grey80", size=10) +
   geom_hline(yintercept=0, colour="gray70") + 
   geom_pointrange(aes(x=label, y=OR, ymin=LB, ymax=UB), size=.75) + 
   coord_flip() + 
   theme_bw() + 
   ggtitle("Odds of selecting Cluster over Trend Target") + 
   xlab("") +
-  #  xlab("Plot Type") + 
   geom_text(aes(y=-1, x=label, label=letters)) + 
-  scale_y_continuous("Odds (on log scale) of selecting Cluster over Trend Target and 95% Wald Intervals\n(Reference level: Plain plot)", 
-                     breaks=c(-1, log(c(1/c(2, 1.75, 1.5,1.25), c(1,1.25,1.5, 1.75,2 ))), 1), labels=c("<--Trend\n  Target", "1/2","1/1.75", "1/1.5", "1/1.25","1","1.25","1.5", "1.75", "2", "Cluster-->\nTarget  "), limits=c(-1,1))
+  scale_y_continuous(
+    "Odds (on log scale) of selecting Cluster over Trend Target and 95% Wald Intervals\n(Reference level: Plain plot)", 
+    breaks=c(-1, log(c(1/c(2, 1.75, 1.5,1.25), c(1,1.25,1.5, 1.75,2 ))), 1), labels=c("<--Trend\n  Target", "1/2  ","1/1.75", "1/1.5", "1/1.25","1","1.25","1.5", "1.75", "2", "Cluster-->\nTarget  "), limits=c(-1,1))
 
 @
 \caption[Estimated odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
@@ -1067,15 +1019,16 @@ When trend line and error are present in the same plot, the additional Gestalt p
 
 This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
-\newtext{In summary, the results from this experiment show, that in order to gain a significant difference from a plain representation, and visually emphasize groups or trends, we need to make use of a statistical layer, usually associated with a confidence interval/region, in form of an error band or an ellipse. }
+In summary, the results from this experiment show that in order to gain a significant difference from a plain representation and visually emphasize groups or trends, we need to make use of a statistical layer associated with a confidence interval/region in the form of an error band or an ellipse.
 
-The lineup experimental protocol allows us to collect participant justifications for their target selection. These short explanations provide some additional insight into participant reasoning, and further support the gestalt explanation for the experimental results. 
+The lineup experimental protocol allows us to collect participant justifications for their target selection. 
+These short explanations provide some additional insight into participant reasoning, and further support the gestalt explanation for the experimental results. 
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
 As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
 
-\begin{figure}[ht]\centering
+\begin{figure}[h!t]\centering
 <<sentiment, eval=FALSE, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\linewidth', fig.show='hold'>>=
 lexicaldata <- modeldata
 lexicaldata$choice_reason <- tolower(lexicaldata$choice_reason)
@@ -1168,7 +1121,6 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 \end{subfigure}
 \caption[Wordclouds of participant responses for selected plot types]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
-\afterpage{\clearpage}
 
 %' For a more quantitative analysis, responses were categorized based on keywords such as ``line(ar)'', ``correlation'', ``group'', ``cluster'', ``clump'', as well as the presence of negation words (non, not, less, etc.). In addition to linear, nonlinear, and group sentiment, many responses focused on the presence of outliers or the amount of variability present in the chosen plot. 
 %' \begin{figure}[ht]\centering
@@ -1722,11 +1674,9 @@ res <- data.frame(rep=rep(1:10, each=K+1))
 res <- res %>% group_by(rep) %>% do(
   dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
   )
-#res <- ldply(1:10, function(x)
-#      dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
-#      )
-means <- res %>% group_by(x) %>%
-  summarize(avg=mean(scenario3))
+res <- res %>% dplyr::ungroup() %>% dplyr::group_by(x)
+means <- res %>% 
+  dplyr::summarise(avg = mean(scenario3))
 @
 <<twotarget, dependson='twotarget-simu', echo=FALSE, out.width='0.7\\linewidth', fig.width=8, fig.height=5>>=
 qplot(x, scenario3, data=res, shape=I(21), alpha=I(0.8)) +
@@ -1736,7 +1686,10 @@ ylab("estimated probability") + xlab("Number of times (out of 10) one of the tar
   geom_point(aes(x=x, y=binom), colour="steelblue", pch=4, size=4) + 
   scale_x_continuous(breaks=0:K, labels=0:K)
 @
-\caption{\label{fig:simulation} Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$ assuming $K=10$ evaluations. The averages of the ten simulation runs are shown as lines. The crosses are probabilities from  Binomial $B_{2/20, 10}$.}
+\caption{\label{fig:simulation} 
+Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$ assuming $K=10$ evaluations. 
+The averages of the ten simulation runs are shown as lines. The crosses are probabilities from  Binomial $B_{2/20, 10}$.
+}
 \end{figure}
 \end{appendix}
 \end{document}
