@@ -129,7 +129,6 @@ source("../../Code/theme_lineup.R")
 Limits on attention span, short term memory, and information storage mechanisms within the human brain make it difficult for us to process numerical information  in raw form effectively. 
 (Well-designed) data displays are much better suited for this kind of communication, as  they serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data
 and thereby invoking our higher-bandwidth visual system. 
-%Visual data displays serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data which would be hopelessly confusing in tabular format. 
 
 One fantastic example of this phenomenon is the Hertzsprung-Russell (HR) diagram, which was described as ``one of the greatest observational syntheses in astronomy and astrophysics" because it allowed astronomers to clearly relate the absolute magnitude of a star to its' spectral classification; facilitating greater understanding of stellar evolution \citep{spence1993remarkable}. 
 The data it displayed was previously available in several different tables; but when plotted within the same chart, information that was invisible in a tabular representation became immediately clear \citep{lewandowsky1989perception}. 
@@ -158,7 +157,6 @@ The rules of perceptual organization relevant to graphical perception in this ex
 \end{itemize}
 A complete list of the rules of perceptual grouping can be found in \citet{goldstein2009encyclopedia}.
 
-
 \begin{figure}\centering
 <<gestalt1, echo =FALSE, out.width='0.32\\linewidth', fig.width=3, fig.height=3, fig.show='hold'>>=
 x1 <- rnorm(25, mean=4, sd=0.5)
@@ -179,9 +177,8 @@ y2 <- x2 + rnorm(25, sd=0.1)
 
 qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") 
 @
-\caption[Gestalt principles applied to statistical plots]{\label{fig:gestalt} \emph{Proximity} renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create three groups of points in the middle scatterplot by invoking the Gestalt principle of \emph{Similarity}. \emph{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.} 
+\caption[Gestalt principles applied to statistical plots]{\label{fig:gestalt} \emph{Proximity} renders the fifty points of the first scatterplot as two distinct (and equal-sized) groups. Shapes and colors create three groups of points in the middle scatterplot by invoking the Gestalt principle of \emph{Similarity}. \emph{Good Continuation} renders the points in the scatterplot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.}
 \end{figure}
-% \afterpage{\clearpage}
 
 The plots in Figure~\ref{fig:gestalt} demonstrate several of the gestalt principles which combine to order our perceptual experience from the top down. These laws help to order our perception of charts as well: points which are colored or shaped the same are perceived as belonging to a group (similarity), points within a bounding interval or ellipse are perceived as belonging to the same group (common region), and regression lines with confidence intervals are perceived as single units (continuity and common region). 
 
@@ -195,8 +192,7 @@ This paper describes the design and the results of a user study exploring the hi
 
 Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Here, we are describing the setup and results of a study using statistical lineup methodology to provide quantitative and qualitative information.
 
-\paragraph{Statistical lineups} 
-are an important experimental tool for quantifying the significance of a finding in a graphical display. %evaluating the perceptual utility of graphical displays. 
+\paragraph{Statistical lineups} are an important experimental tool for quantifying the significance of a finding in a graphical display. 
 Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests, thereby enabling %to facilitate 
 formal experimental evaluation of statistical graphics. 
 
@@ -204,17 +200,17 @@ Lineups are an experimental tool designed to serve as a visually conducted hypot
 A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in Figure~\ref{fig:plotExamples}). 
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
 If a participant can identify the target plot from the field of distractors, this counts as evidence against the null hypothesis. Based on the number of evaluations and the number of target identifications, significance of a finding is then determined in the same sense as for a conventional hypothesis test. 
-
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
 
-% \comment{Should the next 3 paragraphs go into a different section? Otherwise, the "Intro" part in the last paragraph gets hidden under the "Statistical Lineups" heading...}
-
 In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. The two targets represent two different, competing signals; an observer's choice then demonstrates empirically which signal is more salient. 
-If both targets exhibit similar signal, observers may identify both targets, removing any forced-choice scenario which might skew results in a study. % (few participants exercised this option). 
+If both targets exhibit similar signal, observers may identify both targets, removing any forced-choice scenario which might skew results in a study. 
 
 %By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
 
-Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. Similarly, the grouping effect in the first plot in the figure should be enhanced if the points in each group are colored differently, as this adds similarity to the proximity heuristic. In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal over the other.
+Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. 
+These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. 
+Similarly, the grouping effect in the first plot in the figure should be enhanced if the points in each group are colored differently, as this adds similarity to the proximity heuristic. 
+In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal over the other.
 
 The study in this paper is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. 
 
@@ -786,7 +782,7 @@ plot.eval.tab <- apply(with(modeldata, table(dataset, plottype)), 1:2, sum)
 # long dataset for table-esque plots
 modeldata.long <- melt(modeldata, id.vars=which(!grepl("(correct)|(outcome)", names(modeldata))), value.vars=c("trend.correct", "cluster.correct", "neither.correct"), value.name="correct", variable.name="answer.type")
 modeldata.long$answer.type <- gsub(".correct", "", modeldata.long$answer.type)
-modeldata.long <- filter(modeldata.long, answer.type%in%c("cluster", "trend", "neither"))
+modeldata.long <- filter(modeldata.long, answer.type %in% c("cluster", "trend", "neither"))
 modeldata.long$correct <- as.numeric(modeldata.long$correct)
 modeldata.long$answer.type <- factor(modeldata.long$answer.type, levels=c("cluster", "trend", "neither"))
 modeldata.long$plottype <- 
@@ -807,7 +803,6 @@ modeldata.long$plottype <-
 
 save(modeldata, file="../../Data/modeldata.Rdata")
 
-#totaltime <- ddply(modeldata, .(individualID), summarize, total.experiment.time = max(end_time)-min(start_time))
 totaltime <- modeldata %>% group_by(individualID) %>% summarize(
   total.experiment.time = max(end_time)-min(start_time)
 )
