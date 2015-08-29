@@ -40,7 +40,7 @@ sim.clusters <- function(K, N, sd.cluster=.3){
   return(cluster.data)
 }
 
-sim.line <- function(K, N, sd.trend=.3){
+sim.line <- function(K = 3, N = 45, sd.trend = .3){
   # Simulate data from line
   line.data <- data.frame(x=jitter(seq(-1, 1, length.out=N)), y=0)
   line.data$y <- line.data$x + rnorm(N, 0, sd.trend)
