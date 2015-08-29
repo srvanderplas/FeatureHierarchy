@@ -435,7 +435,7 @@ $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .25, .30, .35 
 \caption{Parameter settings for generation of lineup datasets. \label{tab:parameters}}
 \end{table}
 
-The parameter values were chosen in an approach similar to that taken in \citet{niladri:2014}: for each  combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$ we simulated 1000 lineup datasets. Then trend and cluster strength indices, $R^$ and $C^2$, were computed  for the simulated target plots, and compared to the most extreme value for each of the 18 null plots of the same lineup data.
+The parameter values were chosen in an approach similar to that taken in \citet{niladri:2014}: for each  combination of $\sigma_T\in\{0.2, 0.25, ..., 0.5\}$, $\sigma_C\in\{0.1, 0.15, ..., 0.4\}$, and $K\in\{3,5\}$ we simulated 1000 lineup datasets. Then trend and cluster strength indices, $R^2$ and $C^2$, were computed  for the simulated target plots, and compared to the most extreme value for each of the 18 null plots of the same lineup data.
 
 The resulting distributions allow us to objectively assess the difficulty of detecting the target datasets computationally (without relying on human perception) within the full parameter space. E.g., a target plot with $R^2=0.95$ is very easy to identify when surrounded by null plots with $R^2=0.5$, while null plots with $R^2=0.9$ make the target plot more difficult to identify. 
 
