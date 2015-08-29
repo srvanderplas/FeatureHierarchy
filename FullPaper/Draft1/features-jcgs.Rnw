@@ -561,44 +561,44 @@ Line + Prediction \end{tabular}\\
 \centering
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Plain}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-1}
+  \includegraphics[width=\linewidth]{figure/samplepics-1}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Color}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-2}
+  \includegraphics[width=\linewidth]{figure/samplepics-2}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Shape}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-3}
+  \includegraphics[width=\linewidth]{figure/samplepics-3}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Shape + Color}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-4}
+  \includegraphics[width=\linewidth]{figure/samplepics-4}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Color + Ellipse}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-5}
+  \includegraphics[width=\linewidth]{figure/samplepics-5}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Shape + Ellipse}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-6}
+  \includegraphics[width=\linewidth]{figure/samplepics-6}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-7}
+  \includegraphics[width=\linewidth]{figure/samplepics-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend + Error }\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-8}
+  \includegraphics[width=\linewidth]{figure/samplepics-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
   \caption{Trend + Color}\vspace{-0.15in}
-  \includegraphics[width=\linewidth]{figure/fig-samplepics-9}
+  \includegraphics[width=\linewidth]{figure/samplepics-9}
 \end{subfigure}
 \begin{subfigure}[t]{\linewidth}
 \centering
   \caption{Trend + Color + Ellipse}\vspace{-0.15in}
-  \includegraphics[width=0.25\linewidth]{figure/fig-samplepics-10}
+  \includegraphics[width=0.25\linewidth]{figure/samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Overview of each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \label{fig:plotExamples}}
 \end{figure}
