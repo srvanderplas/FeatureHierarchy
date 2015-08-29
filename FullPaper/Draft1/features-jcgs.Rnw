@@ -980,7 +980,7 @@ ggplot(data=gol.fixef) +
                      breaks=c(-2, log(c(1/c(4.5,3, 1.5), 1)), 0.25), labels=c("<--\nMiss", "1/4.5","1/3", "1/1.5", "1", "-->\nIdentification"), limits=c(-2,0.25))
 
 @
-\caption{\label{fig:onetarget}I don't think we should include this chart. It shows a bit much of the difference.}
+\caption{\label{fig:onetarget2}I don't think we should include this chart. It shows a bit much of the difference.}
 \end{figure}
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
