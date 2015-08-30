@@ -1184,12 +1184,15 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
 
-Taken together, the results presented suggest that plot aesthetics influence the perception of the dominant effect in the displayed data. This effect is not simply additive (otherwise, the two conflicting aesthetic conditions would result in similarly neutral effects); rather, the effect is consistent with layering of gestalt perceptual heuristics. Plot layers which add additional heuristics show larger effects than plot layers which duplicate heuristics that are already in play. For example, adding ellipses to a plot which has color aesthetics increases group recognition by recruiting the common region heuristic in addition to the point similarity heuristic recruited by color; while adding shape to a plot which has color aesthetics increases group recognition only slightly, but does not add additional gestalt heuristics (though point similarity is emphasized through two different mechanisms). 
+Taken together, the results presented suggest that plot aesthetics influence the perception of the dominant effect in the displayed data. 
+This effect is not simply additive (otherwise, the two conflicting aesthetic conditions would result in similarly neutral effects); rather, the effect is consistent with layering of gestalt perceptual heuristics. 
+Plot layers which add additional heuristics show larger effects than plot layers which duplicate heuristics that are already in play. 
+For example, adding ellipses to a plot which has color aesthetics increases group recognition by recruiting the common region heuristic in addition to the point similarity heuristic recruited by color. 
+Adding shape to a plot which has color aesthetics increases group recognition only slightly, but does not add additional gestalt heuristics (though point similarity is emphasized through two different mechanisms). 
 
-In order to explicitly rank aesthetics given this nonadditive mechanism, it would be necessary to test ellipse and error band aesthetics alone; in this study, we have only examined those aesthetics in combination with color and regression line plot layers, as the bounding aesthetics are seldom seen alone. 
+Statistically, this is important because the addition of ellipses or prediction intervals provides important statistical context, while reinforcing the visual emphasis by addition of the common region heuristic. Graphics which more effectively convey the statistical results are composed of aesthetic layers which recruit multiple gestalt heuristics in order to present a unified message. This represents a departure from the ``show the data" mentality, but is still consistent with the goal of good graphics, that is, to convey the data in a way that is easily understandable while still providing appropriate detail. 
 
-While further studies are necessary to control for the effects of cluster sizes as well as to explore the gestalt heuristics applicable to other types of plots, these results demonstrate the importance of carefully constructing graphs in order to consistently convey the most important aspects of the displayed data. 
-
+While more studies are necessary to fully explore the nonadditive mechanism of additional gestalt heuristics and understand their effect in other types of plots, these results demonstrate the importance of carefully constructing graphs to convey the most important aspects of the displayed data. 
 
 \bibliographystyle{asa}
 \bibliography{references}
