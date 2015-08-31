@@ -63,7 +63,7 @@
 {
   \title{\bf Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
   \author{Susan VanderPlas\thanks{
-    The authors gratefully acknowledge funding from the National Science Foundation Grant \# DMS 1007697.}\hspace{.2cm}\\
+    The authors gratefully acknowledge funding from the National Science Foundation Grant \# DMS 1007697. All data collection has been conducted with approval from the Institutional Review Board IRB 10-347}\hspace{.2cm}\\
     Department of Statistics and Statistical Laboratory, Iowa State University\\
     and \\
     Heike Hofmann\\
