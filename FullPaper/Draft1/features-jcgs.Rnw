@@ -63,7 +63,7 @@
 {
   \title{\bf Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
   \author{Susan VanderPlas\thanks{
-    The authors gratefully acknowledge funding from the National Science Foundation Grant \# DMS 1007697.}\hspace{.2cm}\\
+    The authors gratefully acknowledge funding from the National Science Foundation Grant \# DMS 1007697. All data collection has been conducted with approval from the Institutional Review Board IRB 10-347}\hspace{.2cm}\\
     Department of Statistics and Statistical Laboratory, Iowa State University\\
     and \\
     Heike Hofmann\\
@@ -653,7 +653,7 @@ qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lin
 The color palette used in \citet{heer:2014} and shown in Figure~\ref{fig:colors} is derived from colors available in the visualization software Tableau~\citep{tableau}. 
 
 % \comment{the following statement sounds like a non-sequitur - removing gray to take care of red/green color deficiency does not sound like the first idea that comes to ones mind. How can we re-phrase that to make it less startling?}
-In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette, as gray is often difficult to distinguish from red and green for those with protanopia and deuteranopia, the most common types of colorblindness. This modification also resulted in maximally different color combinations which did not include red-green combinations, which would also impact the ability of color-deficient individuals to participate fully in this experiment.  
+In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette, as gray is often difficult to distinguish from red and green for those with protanopia and deuteranopia, the most common types of colorblindness. This modification also resulted in maximally different color combinations that did not include red-green combinations, which would also impact the ability of color-deficient individuals to participate fully in this experiment.  
 
 Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in Figure~\ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded from our investigation due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 cluster datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled, making them consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
@@ -1284,9 +1284,9 @@ Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$
 The averages of the ten simulation runs are shown as lines. The crosses are probabilities from  Binomial $B_{2/20, 10}$.
 }
 \end{figure} 
-\comment{probably should refer to this figure...}
-W.l.o.g.~we can assume that the two target plots are in positions 1 and 2. 
-Given that a lineup was evaluated by $K$ individuals, the simulation process for $P(A|H_o$ is then as follows:
+
+W.l.o.g.\ we can assume that the two target plots are in positions 1 and 2. 
+Given that a lineup was evaluated by $K$ individuals, the simulation process for the conditional probability of identifying one of the targets given that both are consistent with the null model, $P(A|H_o)$, is then as follows:
 %
 \begin{enumerate}
 \item Pick two values $p_i \sim U[0,1], i=1, 2$.
@@ -1300,5 +1300,6 @@ Given that a lineup was evaluated by $K$ individuals, the simulation process for
 Repeat the above process $b_2$ times, and average results for a distribution of $A \mid H_o$. 
 The choice of $b_1$ and $b_2$ decides on the number of decimal places to which the estimated distribution can be used reliably. 
 
+Figure~\ref{fig:simulation} shows the result of this simulation approach for a lineup of size 20 assuming $K=10$ evaluation. The density of $A \mid H_o$ is plotted for ten runs (open circles). The variability in the results is relatively small - for comparison, the density of a Binomial distribution $B_{2/20, 10}$ is shown using crosses. The main difference between the densities is the probability of zero or only one identification, while the tail probabilities are very similar.
 \end{appendix}
 \end{document}
