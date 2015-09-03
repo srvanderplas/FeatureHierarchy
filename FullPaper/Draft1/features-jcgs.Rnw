@@ -15,6 +15,7 @@
 \usepackage[dvipsnames,svgnames,table]{xcolor}
 \usepackage{hyperref}
 \graphicspath{{figure/}}
+% \usepackage{endfloat} % Figures to the end of the document
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage[colorinlistoftodos]{todonotes}
