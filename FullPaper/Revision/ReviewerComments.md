@@ -3,8 +3,6 @@ title: "Reviewer Comments"
 output: html_document
 ---
 
-# Reviewer Comments
-
 ## Reviewer 1
 - perceptual theorizing more up to date (attentional processing, guided search models, biased competition models)
 - statistical sophistication of participants not addressed
