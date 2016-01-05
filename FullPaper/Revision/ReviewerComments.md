@@ -45,3 +45,5 @@ output: html_document
 - I appreciate the word cloud visualizations of participant comments but I expected a more thorough discussion of their reasoning. 
 - Revisit the sentance "...the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution." for clarification. Also, discuss why the plot types associated with clustering had significantly fewer correct evaluations more thoroughly.
 - Discussion of additive effects can benefit fro the psychophysics literature on integrality (or separability) of perceptual dimensions (Garner & Felfoldy, Integrality of stimulus dimensions in various types of information processing, 1970). 
+- Page 19: table 2 -> Table 2
+    - *Fixed*
