@@ -98,7 +98,7 @@ Graphics are very effective for communicating numerical information quickly and 
 rm(list=ls())
 options(replace.assign=TRUE,width=70)
 require(knitr)
-opts_chunk$set(fig.path='figure/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, message=F, warning=F)
+opts_chunk$set(fig.path='fig/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, message=F, warning=F)
 
 library(stringr)
 library(lubridate)
@@ -903,7 +903,7 @@ Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetic
 \begin{figure}[h!bt]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
 md <- data.frame(plottype = levels(modeldata$plottype), 
-                 tendency=c("none", "trend", "group", "group", "group", "group", "conflict", "trend", "group", "conflict"))
+                 tendency=c("none", "trend", "cluster", "cluster", "cluster", "cluster", "conflict", "trend", "cluster", "conflict"))
 
 modeldata$label <- modeldata$plottype
 modeldata$label <- modeldata$plottype %>% 
