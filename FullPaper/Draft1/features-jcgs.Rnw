@@ -240,13 +240,13 @@ These constraints provide some assurance that participants who select a plot wit
 This model has the parameter $\sigma_T$ to reflect the amount of scatter around the trend line. It generates $N$ points $(x_i, y_i), i=1, ..., N$ where $x$ and $y$ have a positive linear relationship. The data generation mechanism is as follows: 
 
 \begin{algorithm}\hfill\newline
-  Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the line \\
+  Input Parameters: sample size $N$, $\sigma_T$ standard deviation around the linear trend \\
   Output: $N$ points, in form of vectors $x$ and $y$.
   \begin{enumerate}
     \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points in $[-1, 1]$.\\
     This step ensures that the full range in $x$ is used, which in turn keeps the ratio of $x$ to $y$ range constant.
     \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, where $\eta_i \sim \text{Unif}(-z, z)$, $z = \frac{2}{5(N-1)}$.
-    \item Generate $y_i$ as a linear regressand of $x_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$.
+    \item Generate $y_i$ as a linear regressand of $x_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$. Several values of $\sigma^2_T$ are shown in Figure \ref{fig:trends}. 
     \item Center and scale $x_i$, $y_i$.
   \end{enumerate}
 \end{algorithm}
@@ -451,7 +451,7 @@ That is, a target plot with $R^2=0.95$ is very easy to identify when surrounded 
 
 Figure~\ref{fig:targetsignal-0} shows  densities of each measure computed from the  maximum of 18 null plots compared to the measure in the signal plot for one combination of parameters.
 There is some overlap in the distribution of $R^2$ for the null plots compared to the target plot displaying data drawn from $M_T$. 
-As a result, the distribution of the cluster statistic values are more easily separated from the null data sets than the distribution of the line statistic, e.g. $\sigma_C = 0.20$ is producing cluster target data sets that are a bit easier to identify numerically than trend targets with a parameter value of $\sigma_T = 0.25$.
+As a result, the distribution of the cluster statistic values are more easily separated from the null data sets than the distribution of the trend statistic, e.g. $\sigma_C = 0.20$ is producing cluster target data sets that are a bit easier to identify numerically than trend targets with a parameter value of $\sigma_T = 0.25$.
 
 \begin{figure}[ht]
 \centering
@@ -560,12 +560,12 @@ Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
 \centering
 \scalebox{0.8}{
 \begin{tabular}{ccccc}
-\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Line Emphasis} \\
+\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Trend Emphasis} \\
 & Strength & 0 & 1 & 2 \\
-\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Line &  \cellcolor{gray!25} Line + Prediction \\
-\cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Line \\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Trend &  \cellcolor{gray!25} Trend + Prediction \\
+\cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Trend \\
 \cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
-Line + Prediction \end{tabular}\\
+Trend + Prediction \end{tabular}\\
 \cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
 \end{tabular}}
 \caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
@@ -594,7 +594,7 @@ Line + Prediction \end{tabular}\\
   \includegraphics[width=\linewidth]{figure/samplepics-5}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Shape + Ellipse}\vspace{-0.15in}
+  \caption{Color + Shape + Ellipse}\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/samplepics-6}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
@@ -602,7 +602,7 @@ Line + Prediction \end{tabular}\\
   \includegraphics[width=\linewidth]{figure/samplepics-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
-  \caption{Trend + Error }\vspace{-0.15in}
+  \caption{Trend + Prediction }\vspace{-0.15in}
   \includegraphics[width=\linewidth]{figure/samplepics-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.25\linewidth}
@@ -611,7 +611,7 @@ Line + Prediction \end{tabular}\\
 \end{subfigure}
 \begin{subfigure}[t]{\linewidth}
 \centering
-  \caption{Trend + Color + Ellipse}\vspace{-0.15in}
+  \caption{Trend + Prediction + Color + Ellipse}\vspace{-0.15in}
   \includegraphics[width=0.25\linewidth]{figure/samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{
@@ -624,7 +624,7 @@ Overview of each of the 10 plot feature combinations compared in this study, wit
 
 We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model. 
 
-Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval  increases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model, and decreases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
+Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval (``error band") increases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model, and decreases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
 
 \subsubsection{Color and Shape Palettes}
 Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified a maximally differentiable set of 3 and 5 colors each. 
@@ -898,7 +898,7 @@ sig <- anova(gol.model)
 @
 In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
 Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
-Plot types  associated with  clustering as shown in table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 385$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
+Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 385$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
 \begin{figure}[h!bt]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
@@ -927,7 +927,7 @@ correct.totals <- faceoff %>% group_by(label, plottype) %>% summarize(eval=lengt
 
 totals <- rbind(totals, correct.totals)
 totals <- merge(totals, md, by="plottype")
-totals$tendency <- factor(totals$tendency, levels=c("none", "trend", "group", "conflict"))
+totals$tendency <- factor(totals$tendency, levels=c("none", "trend", "cluster", "conflict"))
 totals$label <- factor(totals$label, levels=fac.order, ordered=T)
 
 md <- merge(md, subset(totals, type=="Correct")[,c("plottype", "label", "eval")], by="plottype")
@@ -971,7 +971,7 @@ We model the cluster versus trend decision using a logistic regression with a ra
 We also assume that random effects for dataset and participant are orthogonal. 
 
 The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
-As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. 
+As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + prediction results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 
 \begin{figure}[h!bt]\centering
@@ -1016,11 +1016,11 @@ ggplot(data=gvl.fixef) +
 
 Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color + trend (similarity vs. continuity) condition. 
 
-When trend line and error are present in the same plot, the additional Gestalt principle of common region is recruited, in addition to the continuity heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot in favor of the trend target. 
+When trend line and prediction intervals (``error bands") are present in the same plot, the additional Gestalt principle of common region is recruited, in addition to the continuity heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot in favor of the trend target. 
 
-This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend + error elements is stronger than the effect of color + ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
+This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + prediction condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend and prediction interval elements is stronger than the effect of color and ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
-In summary, the results from this experiment show that in order to gain a significant difference from a plain representation and visually emphasize groups or trends, we need to make use of a statistical layer associated with a confidence interval/region in the form of an error band or an ellipse.
+In summary, the results from this experiment show that in order to gain a significant difference from a plain representation and visually emphasize groups or trends, we need to make use of a statistical layer associated with a statistical interval/probability region in the form of an error band or an ellipse.
 
 The lineup experimental protocol allows us to collect participant justifications for their target selection. 
 These short explanations provide some additional insight into participant reasoning, and further support the gestalt explanation for the experimental results. 
@@ -1188,8 +1188,8 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 Taken together, the results presented suggest that plot aesthetics influence the perception of the dominant effect in the displayed data. 
 This effect is not simply additive (otherwise, the two conflicting aesthetic conditions would result in similarly neutral effects); rather, the effect is consistent with layering of gestalt perceptual heuristics. 
 Plot layers which add additional heuristics show larger effects than plot layers which duplicate heuristics that are already in play. 
-For example, adding ellipses to a plot which has color aesthetics increases group recognition by recruiting the common region heuristic in addition to the point similarity heuristic recruited by color. 
-Adding shape to a plot which has color aesthetics increases group recognition only slightly, but does not add additional gestalt heuristics (though point similarity is emphasized through two different mechanisms). 
+For example, adding ellipses to a plot which has color aesthetics increases cluster recognition by recruiting the common region heuristic in addition to the point similarity heuristic recruited by color. 
+Adding shape to a plot which has color aesthetics increases cluster recognition only slightly, but does not add additional gestalt heuristics (though point similarity is emphasized through two different mechanisms). 
 
 Statistically, this is important because the addition of ellipses or prediction intervals provides important statistical context, while reinforcing the visual emphasis by addition of the common region heuristic. Graphics which more effectively convey the statistical results are composed of aesthetic layers which recruit multiple gestalt heuristics in order to present a unified message. This represents a departure from the ``show the data" mentality, but is still consistent with the goal of good graphics, that is, to convey the data in a way that is easily understandable while still providing appropriate detail. 
 
@@ -1201,9 +1201,9 @@ While more studies are necessary to fully explore the nonadditive mechanism of a
 \begin{appendix}
 \section{Simulation Studies of Parameter Space}\label{app:parametersimulation}
 
-Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the line strength ($R^2$) and cluster strength for null and target plots. 
+Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the strength of the linear relationship ($R^2$) and cluster strength for null and target plots. 
 
-Figures~\ref{fig:simulationLineIntervals} and~\ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and cluster strength summary statistics for each set of parameter values. These plots guide our evaluation of ``easy", ``medium" and ``hard" parameter values for line and cluster tasks. 
+Figures~\ref{fig:simulationLineIntervals} and~\ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and cluster strength summary statistics for each set of parameter values. These plots guide our evaluation of ``easy", ``medium" and ``hard" parameter values for trend and cluster tasks. 
 
 Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the width of the blue intervals (bottom figure) changes  between different levels of $K$ and for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
 
