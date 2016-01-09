@@ -609,10 +609,10 @@ Trend + Prediction \end{tabular}\\
   \caption{Trend + Color}\vspace{-0.15in}
   \includegraphics[width=\textwidth]{figure/samplepics-9}
 \end{subfigure}
-\begin{subfigure}[t]{.24\textwidth}
+\begin{subfigure}[t]{.5\textwidth}
 \centering
-  \caption{Trend + Prediction + Color + Ellipse}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-10}
+  \caption{\scalebox{.8}{Trend + Prediction + Color + Ellipse}}\vspace{-0.15in}
+  \includegraphics[width=.49\textwidth]{figure/samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{
 Overview of each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. 
@@ -925,6 +925,9 @@ modeldata$label <- factor(modeldata$label, levels=fac.order)
 totals <- modeldata %>% group_by(label, plottype) %>% summarize(eval=length(label), type="Total")
 correct.totals <- faceoff %>% group_by(label, plottype) %>% summarize(eval=length(label), type="Correct")
 
+sub.totals <- modeldata %>% group_by(label, plottype, simpleoutcome) %>% summarize(eval=length(label))
+sub.totals <- merge(sub.totals, md, by="plottype")
+
 totals <- rbind(totals, correct.totals)
 totals <- merge(totals, md, by="plottype")
 totals$tendency <- factor(totals$tendency, levels=c("none", "trend", "cluster", "conflict"))
@@ -936,21 +939,37 @@ md <- md[order(md$tendency, md$eval),]
 totals$label <- factor(totals$label, levels=md$label)
   
 totals$nlabel=as.numeric(totals$label)
-ggplot() + 
-  theme_bw() + 
-  xlab("# of target evaluations") + ylab("") + 
-  facet_grid(tendency~., space="free_y", scales="free_y") +
-  geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
-           data=subset(totals, type=="Total"), stat="identity", 
-           position="identity", colour="black") + 
-  geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
-           data=subset(totals, type=="Correct"), stat="identity", 
-           position="identity", colour="black") + 
-  scale_fill_manual("# Evaluations", values=c("Correct"="black", "Total" = "grey90")) +
-  scale_y_continuous(breaks=1:10, labels=md$label) +
-  theme(legend.position="bottom", strip.text.y = element_text(angle=0))
+sub.totals$nlabel = as.numeric(factor(sub.totals$label, levels=md$label))
+sub.totals$simpleoutcome <- factor(
+  sub.totals$simpleoutcome,
+  levels=c("cluster", "both", "trend", "neither"))
+sub.totals$tendency <- factor(sub.totals$tendency, levels=c("none", "trend", "cluster", "conflict"))
+ggplot() +
+  geom_bar(aes(label, fill=simpleoutcome, weight=eval), data=sub.totals, 
+           colour="grey40") +
+  facet_grid(.~tendency, space="free", scales="free") +
+  xlab("") + ylab("# of target evaluations") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +
+  scale_fill_manual("Outcome", values=c("grey20", "grey30", "grey20", "grey90"),
+                    guide = guide_legend(reverse=TRUE)) 
+
+
+# ggplot() + 
+#   theme_bw() + 
+#   xlab("# of target evaluations") + ylab("") + 
+#   facet_grid(tendency~., space="free_y", scales="free_y") +
+#   geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
+#            data=subset(totals, type=="Total"), stat="identity", 
+#            position="identity", colour="black") + 
+#   geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
+#            data=subset(totals, type=="Correct"), stat="identity", 
+#            position="identity", colour="black") + 
+#   scale_y_continuous(breaks=1:10, labels=md$label) +
+#   theme(legend.position="bottom", strip.text.y = element_text(angle=0))
 @
-\caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
+\caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Each of the dark areas is split into two, according to the type of target, with evaluations where both targets were identified between the two.
+Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
 
 
