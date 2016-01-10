@@ -1006,6 +1006,7 @@ type_compare <- glht(gvl.model, mcp(plottype="Tukey"))
 gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
 # not sure what to do about those warnings
 
+
 gvl.fixef$label <- gsub("plottype", "", names(fixef(gvl.model)))
 gvl.fixef$label <- gvl.fixef$label %>% 
   str_replace("color", "Color + ") %>% 
@@ -1028,7 +1029,8 @@ ggplot(data=gvl.fixef) +
   scale_y_continuous(
     "Odds (on log scale) of selecting Cluster over Trend Target and 95% Wald Intervals\n(Reference level: Plain plot)", 
     breaks=c(-1, log(c(1/c(2, 1.75, 1.5,1.25), c(1,1.25,1.5, 1.75,2 ))), 1), labels=c("<--Trend\n  Target", "1/2  ","1/1.75", "1/1.5", "1/1.25","1","1.25","1.5", "1.75", "2", "Cluster-->\nTarget  "), limits=c(-1,1))
-
+# dt <- xtable(gvl.fixef[order(gvl.fixef$OR), c("label", "OR", "LB", "UB")], digits=4)
+# print(dt, include.rownames=FALSE)
 @
 \caption[Estimated odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
@@ -1321,5 +1323,61 @@ Repeat the above process $b_2$ times, and average results for a distribution of 
 The choice of $b_1$ and $b_2$ decides on the number of decimal places to which the estimated distribution can be used reliably. 
 
 Figure~\ref{fig:simulation} shows the result of this simulation approach for a lineup of size 20 assuming $K=10$ evaluation. The density of $A \mid H_o$ is plotted for ten runs (open circles). The variability in the results is relatively small - for comparison, the density of a Binomial distribution $B_{2/20, 10}$ is shown using crosses. The main difference between the densities is the probability of zero or only one identification, while the tail probabilities are very similar.
+\section{Modelling results}
+
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Sat Jan  9 23:22:34 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrr}
+  \hline
+plot type & Odds Ratio & LB & UB \\ 
+  \hline
+Trend + Error & -0.6512 & -0.8774 & -0.4250 \\ 
+  Color + Ellipse + Trend + Error & -0.5143 & -0.7497 & -0.2789 \\ 
+  Plain & 0.0000 & --- & --- \\ 
+  Trend & 0.1292 & -0.1013 & 0.3598 \\ 
+  Color & 0.2709 & 0.0329 & 0.5088 \\ 
+  Shape & 0.2764 & 0.0437 & 0.5092 \\ 
+  Color + Shape & 0.3164 & 0.0794 & 0.5534 \\ 
+  Color + Trend & 0.4585 & 0.2183 & 0.6987 \\ 
+  Color + Ellipse & 0.4605 & 0.2087 & 0.7122 \\ 
+  Color + Shape + Ellipse & 0.5722 & 0.3160 & 0.8284 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain plot type as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
+}
+\end{table}
+
+\begin{figure}
+<<complex,echo=FALSE, fig.width=8, fig.height=12, out.width='\\textwidth'>>=
+library(productplots)
+modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
+modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
+modeldata$pv <- with(modeldata, paste("s_T=", sd.line,", s_C=",sd.cluster, sep=""))
+prodplot(data=subset(modeldata, k==3), ~simpleoutcome+label+pv) + aes(fill=simpleoutcome) +
+  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() + 
+  facet_grid(pv~., scales="free", space="free") +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
+        legend.position="bottom", strip.text.y = element_text(angle=0))
+@
+\end{figure}
+\begin{figure}
+<<complex-2,echo=FALSE, fig.width=8, fig.height=12, out.width='\\textwidth'>>=
+library(productplots)
+modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
+modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
+modeldata$pv <- with(modeldata, paste("s_T=", sd.line,", s_C=",sd.cluster, sep=""))
+prodplot(data=subset(modeldata, k==5), ~simpleoutcome+label+pv) + aes(fill=simpleoutcome) +
+  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() + 
+  facet_grid(pv~., scales="free", space="free") +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
+        legend.position="bottom", strip.text.y = element_text(angle=0))
+@
+\end{figure}
 \end{appendix}
 \end{document}
