@@ -1350,7 +1350,7 @@ Trend + Error & -0.6512 & -0.8774 & -0.4250 \\
 \end{table}
 
 \begin{figure}
-<<complex,echo=FALSE, fig.width=8, fig.height=12, out.width='\\textwidth'>>=
+<<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 library(productplots)
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
 modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
@@ -1363,9 +1363,34 @@ prodplot(data=subset(modeldata, k==3), ~simpleoutcome+label+pv) + aes(fill=simpl
         axis.text.x=element_text(angle=30, hjust=1, vjust=1),
         legend.position="bottom", strip.text.y = element_text(angle=0))
 @
+\caption{For $k=3$. }
 \end{figure}
 \begin{figure}
-<<complex-2,echo=FALSE, fig.width=8, fig.height=12, out.width='\\textwidth'>>=
+<<complex-1b,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+modeldata$set <- as.numeric(gsub("set-([0-9]+)-.*", "\\1", as.character(modeldata$data_name)))
+load("../../Data/Lineups.Rdata") # includes object data.stats
+data.stats <- data.stats %>% group_by(sd.trend, sd.cluster) %>% mutate(
+  sd.trend.new = mean(sd.trend.est),
+  sd.cluster.new = mean(sd.cluster.est)
+)
+
+
+modeldata <- merge(modeldata, data.stats[,c("set", "sd.trend.new", "sd.cluster.new")], by="set", all=T)
+modeldata$pv_new <- with(modeldata, paste("s_C=", round(sd.cluster.new,3),", s_T=",round(sd.trend.new,3), sep=""))
+
+ggplot(data=subset(modeldata, k==3)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(pv_new~.) +
+  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
+        legend.position="bottom", strip.text.y = element_text(angle=0))
+@
+\caption{For $k=3$, estimated values. }
+\end{figure}
+\begin{figure}
+<<complex-2,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 library(productplots)
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
 modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
