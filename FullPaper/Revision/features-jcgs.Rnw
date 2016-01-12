@@ -1358,34 +1358,37 @@ Trend + Error & -0.6512 & -0.8774 & -0.4250 \\
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
 modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
-modeldata$pv <- with(modeldata, paste("s_T=", sdline_new,", s_C=",sdgroup_new, sep=""))
+modeldata$st <- factor(sprintf("sigma[T]==%.2f", modeldata$sdline_new))
+modeldata$sc <- factor(sprintf("sigma[C]==%.2f", modeldata$sdgroup_new))
+modeldata$sc <- factor(modeldata$sc, levels=rev(levels(modeldata$sc)))
 ggplot(data=subset(modeldata, k_new==3)) +
   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
-  facet_grid(pv~.) +
+  facet_grid(st+sc~., 
+             labeller=label_parsed) +
   scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.title=element_blank(), 
-        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
-        legend.position="bottom", strip.text.y = element_text(angle=0))
+        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+        legend.position="bottom", 
+        strip.text.y = element_text(angle=0))
 @
 \caption{For $k=3$. }
 \end{figure}
 
 \begin{figure}
-<<complex-2,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
-library(productplots)
-modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
-modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
-modeldata$pv <- with(modeldata, paste("s_T=", sd.line,", s_C=",sd.cluster, sep=""))
+<<complex-2, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 ggplot(data=subset(modeldata, k_new==5)) +
   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
-  facet_grid(pv~.) +
+  facet_grid(st+sc~., 
+             labeller=label_parsed) +
   scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.title=element_blank(), 
-        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
-        legend.position="bottom", strip.text.y = element_text(angle=0))
+        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+        legend.position="bottom", 
+        strip.text.y = element_text(angle=0))
 @
+\caption{for $k=5$.}
 \end{figure}
 \end{appendix}
 \end{document}
