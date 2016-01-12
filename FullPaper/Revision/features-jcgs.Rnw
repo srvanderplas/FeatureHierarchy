@@ -767,12 +767,17 @@ modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("neither", "
 modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
 modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>% str_replace("set-", "") %>% as.numeric)
 modeldata$individualID <- factor(sprintf("%s-%s", modeldata$ip_address, modeldata$nick_name))
+# data_name and k is not reliable. Use lineups-parameters-new instead
 modeldata$k <- factor(modeldata$k, levels=c(3, 5))
 modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_name))
 modeldata$start_time <- ymd_hms(modeldata$start_time)
 modeldata$end_time <- ymd_hms(modeldata$end_time)
 modeldata$trial.time <- with(modeldata, end_time-start_time)
 
+lps <- read.csv("../../Data/lineups-parameters-new.csv")
+modeldata <- merge(modeldata, lps[,c("set","k_new","sdline_new","sdgroup_new")], by.x="dataset", by.y="set")
+
+# should be replaced, but carefully
 modeldata <- modeldata %>% group_by(k) %>% mutate(
   trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], 
   cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))]
@@ -1351,13 +1356,13 @@ Trend + Error & -0.6512 & -0.8774 & -0.4250 \\
 
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
-library(productplots)
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
 modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
-modeldata$pv <- with(modeldata, paste("s_T=", sd.line,", s_C=",sd.cluster, sep=""))
-prodplot(data=subset(modeldata, k==3), ~simpleoutcome+label+pv) + aes(fill=simpleoutcome) +
-  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() + 
-  facet_grid(pv~., scales="free", space="free") +
+modeldata$pv <- with(modeldata, paste("s_T=", sdline_new,", s_C=",sdgroup_new, sep=""))
+ggplot(data=subset(modeldata, k_new==3)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(pv~.) +
+  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.title=element_blank(), 
         axis.text.x=element_text(angle=30, hjust=1, vjust=1),
@@ -1365,39 +1370,17 @@ prodplot(data=subset(modeldata, k==3), ~simpleoutcome+label+pv) + aes(fill=simpl
 @
 \caption{For $k=3$. }
 \end{figure}
-\begin{figure}
-<<complex-1b,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
-modeldata$set <- as.numeric(gsub("set-([0-9]+)-.*", "\\1", as.character(modeldata$data_name)))
-load("../../Data/Lineups.Rdata") # includes object data.stats
-data.stats <- data.stats %>% group_by(sd.trend, sd.cluster) %>% mutate(
-  sd.trend.new = mean(sd.trend.est),
-  sd.cluster.new = mean(sd.cluster.est)
-)
 
-
-modeldata <- merge(modeldata, data.stats[,c("set", "sd.trend.new", "sd.cluster.new")], by="set", all=T)
-modeldata$pv_new <- with(modeldata, paste("s_C=", round(sd.cluster.new,3),", s_T=",round(sd.trend.new,3), sep=""))
-
-ggplot(data=subset(modeldata, k==3)) +
-  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
-  facet_grid(pv_new~.) +
-  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
-  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
-        axis.title=element_blank(), 
-        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
-        legend.position="bottom", strip.text.y = element_text(angle=0))
-@
-\caption{For $k=3$, estimated values. }
-\end{figure}
 \begin{figure}
 <<complex-2,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 library(productplots)
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
 modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
 modeldata$pv <- with(modeldata, paste("s_T=", sd.line,", s_C=",sd.cluster, sep=""))
-prodplot(data=subset(modeldata, k==5), ~simpleoutcome+label+pv) + aes(fill=simpleoutcome) +
-  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() + 
-  facet_grid(pv~., scales="free", space="free") +
+ggplot(data=subset(modeldata, k_new==5)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(pv~.) +
+  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.title=element_blank(), 
         axis.text.x=element_text(angle=30, hjust=1, vjust=1),
