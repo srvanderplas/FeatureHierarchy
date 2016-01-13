@@ -989,7 +989,7 @@ We model the cluster versus trend decision using a logistic regression with a ra
 \text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}
 \end{align}
 where \begin{itemize}
-\item[$\alpha$] is a vector of fixed effects, $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T$ and clusters $s_C$, and $\alpha_K$ for the effect of the number of clusters $K$,
+\item[$\alpha$] \newtext{is a vector of fixed effects, $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$,}
 \item[$\beta_i$] describe plot types,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
@@ -997,11 +997,11 @@ where \begin{itemize}
 \end{itemize}
 We also assume that random effects for dataset and participant are orthogonal. 
 
-\newdo{XXX include discussion of the effects for $s_C$ and $s_T$ -- they are exactly the way that we would hope: as errors increase, the probability for detecting the corresponding type of plot goes down significantly.}
 
-The estimated log odds of a decision in favor of cluster over trend target are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
+The estimated log odds of a decision in favor of cluster over trend target for each of the plot types are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
 As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + prediction results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
+\newtext{The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are strongly significant (see Table~\ref{tab:results} for exact numbers) and work as hypothesized: as the variability increase, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly.}
 
 \begin{figure}[h!bt]\centering
 <<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth'>>=
@@ -1339,32 +1339,8 @@ The choice of $b_1$ and $b_2$ decides on the number of decimal places to which t
 
 Figure~\ref{fig:simulation} shows the result of this simulation approach for a lineup of size 20 assuming $K=10$ evaluation. The density of $A \mid H_o$ is plotted for ten runs (open circles). The variability in the results is relatively small - for comparison, the density of a Binomial distribution $B_{2/20, 10}$ is shown using crosses. The main difference between the densities is the probability of zero or only one identification, while the tail probabilities are very similar.
 \section{Modelling results}
-\newdo{refer to table, explain plots}
-\newdo{Expand table for estimates of $\alpha$}
-% latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Sat Jan  9 23:22:34 2016
-\begin{table}[ht]
-\centering
-\begin{tabular}{lrrr}
-  \hline
-plot type & Odds Ratio & LB & UB \\ 
-  \hline
-Trend + Error & -0.6512 & -0.8774 & -0.4250 \\ 
-  Color + Ellipse + Trend + Error & -0.5143 & -0.7497 & -0.2789 \\ 
-  Plain & 0.0000 & --- & --- \\ 
-  Trend & 0.1292 & -0.1013 & 0.3598 \\ 
-  Color & 0.2709 & 0.0329 & 0.5088 \\ 
-  Shape & 0.2764 & 0.0437 & 0.5092 \\ 
-  Color + Shape & 0.3164 & 0.0794 & 0.5534 \\ 
-  Color + Trend & 0.4585 & 0.2183 & 0.6987 \\ 
-  Color + Ellipse & 0.4605 & 0.2087 & 0.7122 \\ 
-  Color + Shape + Ellipse & 0.5722 & 0.3160 & 0.8284 \\ 
-   \hline
-\end{tabular}
-\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain plot type as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
-}
-\end{table}
-
+\newtext{Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
+The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.}
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
@@ -1376,14 +1352,14 @@ ggplot(data=subset(modeldata, k_new==3)) +
   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
   facet_grid(st+sc~., 
              labeller=label_parsed) +
-  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.title=element_blank(), 
         axis.text.x=element_text(angle=330, hjust=0, vjust=1),
         legend.position="bottom", 
         strip.text.y = element_text(angle=0))
 @
-\caption{For $k=3$. }
+\caption{\label{fig:outcome-parms}Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=3$ clusters.}
 \end{figure}
 
 \begin{figure}
@@ -1392,14 +1368,46 @@ ggplot(data=subset(modeldata, k_new==5)) +
   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
   facet_grid(st+sc~., 
              labeller=label_parsed) +
-  scale_fill_manual("Outcome", values=c("darkred", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.title=element_blank(), 
         axis.text.x=element_text(angle=330, hjust=0, vjust=1),
         legend.position="bottom", 
         strip.text.y = element_text(angle=0))
 @
-\caption{for $k=5$.}
+\caption{Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
 \end{figure}
+
+% library(xtable)
+% xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Tue Jan 12 15:17:45 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+\bf Parameter & \bf Log Odds Ratio & \bf 95\% Lower & \bf 95\% Upper \\ 
+  \hline
+Intercept & 1.018 & -1.615 & 3.651 \\ 
+$\alpha_C$ & 16.254 & 13.276 & 19.231 \\ 
+$\alpha_T$ & -16.038 & -21.935 & -10.140 \\ 
+$\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
+\multicolumn{1}{l}{\bf Plot Type}\\
+  Trend + Error & -0.650 & -0.877 & -0.423 \\ 
+  Color + Ellipse + Trend + Error & -0.515 & -0.751 & -0.279 \\ 
+  Plain & 0.000 & --- & --- \\ 
+  Trend & 0.130 & -0.101 & 0.361 \\ 
+  Color & 0.271 & 0.032 & 0.509 \\ 
+  Shape & 0.277 & 0.043 & 0.510 \\ 
+  Color + Shape & 0.314 & 0.076 & 0.551 \\ 
+  Color + Ellipse & 0.459 & 0.207 & 0.711 \\ 
+  Color + Trend & 0.459 & 0.219 & 0.700 \\ 
+  Color + Shape + Ellipse & 0.573 & 0.317 & 0.830 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain plot type as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
+}
+\end{table}
+
 \end{appendix}
 \end{document}
