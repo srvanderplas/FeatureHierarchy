@@ -14,7 +14,7 @@
 \usepackage{rotating}
 \usepackage[dvipsnames,svgnames,table]{xcolor}
 \usepackage{hyperref}
-\graphicspath{{figure/}}
+\graphicspath{{fig/}}
 % \usepackage{endfloat} % Figures to the end of the document
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -511,7 +511,7 @@ res <- nulldist(N=N, sC=sC, sT=sT)
   
   res <- nulldist(M=M, N=45, K=3, sT=sT, sC=sC)
   
-  save(res, file="./figure/nulldist.Rdata")
+  save(res, file="./fig/nulldist.Rdata")
 }
 
 longres <- melt(res, id.vars = 1:4, variable.name = "type", value.name = "value")
@@ -575,44 +575,44 @@ Trend + Prediction \end{tabular}\\
 \centering
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Plain}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-1}
+  \includegraphics[width=\textwidth]{fig/samplepics-1}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Color}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-2}
+  \includegraphics[width=\textwidth]{fig/samplepics-2}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Shape}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-3}
+  \includegraphics[width=\textwidth]{fig/samplepics-3}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Shape + Color}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-4}
+  \includegraphics[width=\textwidth]{fig/samplepics-4}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Color + Ellipse}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-5}
+  \includegraphics[width=\textwidth]{fig/samplepics-5}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{\scalebox{.8}{Color + Shape + Ellipse}}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-6}
+  \includegraphics[width=\textwidth]{fig/samplepics-6}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Trend}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-7}
+  \includegraphics[width=\textwidth]{fig/samplepics-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Trend + Prediction }\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-8}
+  \includegraphics[width=\textwidth]{fig/samplepics-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
   \caption{Trend + Color}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{figure/samplepics-9}
+  \includegraphics[width=\textwidth]{fig/samplepics-9}
 \end{subfigure}
 \begin{subfigure}[t]{.5\textwidth}
 \centering
   \caption{\scalebox{.8}{Trend + Prediction + Color + Ellipse}}\vspace{-0.15in}
-  \includegraphics[width=.49\textwidth]{figure/samplepics-10}
+  \includegraphics[width=.49\textwidth]{fig/samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{
 Overview of each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. 
@@ -1066,7 +1066,7 @@ These short explanations provide some additional insight into participant reason
 As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
 
 \begin{figure}[h!t]\centering
-<<sentiment, eval=FALSE, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\textwidth', fig.show='hold'>>=
+<<sentiment, eval=T, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\textwidth', fig.show='hold'>>=
 lexicaldata <- modeldata
 lexicaldata$choice_reason <- tolower(lexicaldata$choice_reason)
 lexicaldata$choice_reason <- gsub("^_", "", lexicaldata$choice_reason)
@@ -1107,54 +1107,54 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 \centering
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Plain, neither target} \vspace{-0.15in}
-  \includegraphics[width=0.9\textwidth]{figure/sentiment-1}
+  \includegraphics[width=0.9\textwidth]{fig/sentiment-1}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Plain, cluster target}\vspace{-0.15in}
-  \includegraphics[width=0.9\textwidth]{figure/sentiment-2}
+  \includegraphics[width=0.9\textwidth]{fig/sentiment-2}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Plain, trend target}\vspace{-0.15in}
-  \includegraphics[width=0.9\textwidth]{figure/sentiment-3}
+  \includegraphics[width=0.9\textwidth]{fig/sentiment-3}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Trend, neither target}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-4}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-4}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Trend, cluster target}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-5}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-5}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Trend, trend target}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-6}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-6}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color, neither target}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-7}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color, cluster target}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-8}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color, trend target}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-9}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-9}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color + Ellipse, neither}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-10}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-10}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color + Ellipse, cluster}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-11}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-11}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color + Ellipse, trend}\vspace{-0.2in}
-  \includegraphics[width=.9\textwidth]{figure/sentiment-12}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-12}
 \end{subfigure}
 \caption[Wordclouds of participant responses for selected plot types]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
@@ -1277,12 +1277,12 @@ qplot(data=tmp, x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segm
 \begin{subfigure}[t]{.8\textwidth}
 \caption{$R^2$ values for target and null data distributions. \label{fig:simulationLineIntervals}}
 \vspace{-.15in}
-\includegraphics[width=\textwidth]{figure/simulationparameters-1}
+\includegraphics[width=\textwidth]{fig/simulationparameters-1}
 \end{subfigure}
 \begin{subfigure}[t]{.8\textwidth}
 \caption{Cluster cohesion statistics $C^2$. \label{fig:simulationClusterIntervals}}
 \vspace{-.15in}
-\includegraphics[width=\textwidth]{figure/simulationparameters-2}
+\includegraphics[width=\textwidth]{fig/simulationparameters-2}
 \end{subfigure}
 \caption{Simulated interquartile ranges between target and most extreme statistic from one of the 18 null plots. }
 \end{figure}
