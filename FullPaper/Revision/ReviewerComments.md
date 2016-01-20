@@ -22,7 +22,13 @@ output: html_document
     - *That tends to be how real world stuff goes, but I don't disagree with the point*
     - *True, but we can't say it this way. We need to put in some effort to clean up the results.*
 - Introduction needs a summary of the main points: preattentive perception, gestalt psychology, and statistical lineups
-- Justification of the lineup protocol modification needs expanding - rational justification needs experimental evidence to back it up.
+- The modification to the lineup protocol is a significant and crucial
+leap, with only rational justification (no empirical evidence).
+There are some assumptions here, rather than truisms or established facts.
+    - *True, the modification of the lineup protocol is significant, but I would not call it a leap, but a logical next step for working with the protocol in a different situation. We have to make a better job of listing the assumptions:*
+    - *There are some assumptions that we make without empirical back up: does it matter for individuals decision, whether there is one target or two targets? -- yes it will, but it is not at all clear by how much. We could test the effect by using the same lineups in single target lineups by exchanging the second target by a null plot and comparing results (adjusted for 18 versus 19 null plots). When the second target is removed, the first target will(?) attract more decisions. Should the two separate single target lineups overall show about the same number of decisions?*
+    - *Other assumptions: in the evaluation, we first checked the significance of each two-target lineup by using simulation-based inference. That doesn't seem particularly problematic - and we don't talk about this in the paper anyways.*
+    - *More assumptions: For the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. Should we sample? or maybe use weights to see whether it makes a difference for the model? We are in a mtached pair scenario, but we don't use that in the evaluation besides a random effect for the data. We might be able to get a bit more power out here (to decrease the width of the confidence intervals).*
 - Reference Fig 2 in the text.
     - *Fixed*
 - "Prediction" vs. "error", "line" vs. "trend"
