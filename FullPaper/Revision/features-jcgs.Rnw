@@ -1409,5 +1409,65 @@ $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
 }
 \end{table}
 
+\section{Model for response times}
+
+<<response, echo=FALSE>>=
+load("../../Data/modeldata.Rdata")
+
+library(lubridate)
+modeldata$start <- ymd_hms(modeldata$start_time)
+modeldata$end <- ymd_hms(modeldata$end_time)
+modeldata$time <- as.numeric(with(modeldata, end-start))
+modeldata$k_new <- factor(modeldata$k_new)
+
+library(lme4)
+time <- lmer(log(time)~first.trial+plottype + simpleoutcome+k_new+sdline_new+sdgroup_new+(1|individualID)+(1|dataset), data=modeldata)
+time2 <- update(time, .~.-(1|dataset), data=modeldata)
+
+anova(time, time2) # hugely significant dataset effect? I wouldn't have guessed that. It might be an effect of the large number of evaluations
+
+library(xtable)
+library(multcomp)
+
+table <- data.frame(summary(time)$coefficients)
+
+table$pvals <- cftest(time)$test$pvalues
+@
+
+% xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f","f","e"))
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Wed Jan 20 22:41:48 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & z.value & P values \\ 
+  \hline
+(Intercept) & 2.660 & 0.108 & 24.586 & 0.000e+00 \\ 
+  first.trial TRUE & 0.231 & 0.014 & 16.366 & 0.000e+00 \\ [3pt]
+  \bf Plot Type\\
+  Plain & 0.000 & --- & --- & --- \\ 
+  Shape & 0.112 & 0.019 & 5.889 & 3.885e-09 \\ 
+  Color & 0.133 & 0.019 & 7.012 & 2.348e-12 \\ 
+  Trend & 0.148 & 0.019 & 7.815 & 5.551e-15 \\ 
+  Trend + Error & 0.166 & 0.019 & 8.759 & 0.000e+00 \\ 
+  Color + Ellipse & 0.205 & 0.019 & 10.735 & 0.000e+00 \\ 
+  Color + Shape & 0.214 & 0.019 & 11.281 & 0.000e+00 \\ 
+  Color + Trend & 0.215 & 0.019 & 11.345 & 0.000e+00 \\ 
+  Color + Shape + Ellipse & 0.205 & 0.019 & 10.699 & 0.000e+00 \\ 
+  Color + Ellipse + Trend + Error & 0.252 & 0.019 & 13.215 & 0.000e+00 \\ [3pt]
+  \bf Target \\
+  Trend & -0.182 & 0.016 & -11.665 & 0.000e+00 \\ 
+  Cluster & -0.150 & 0.013 & -11.165 & 0.000e+00 \\ 
+  Neither & 0.000 & --- & --- & --- \\ 
+  Both & 0.166 & 0.059 & 2.820 & 4.797e-03 \\ [3pt]
+  k\_new5 & 0.124 & 0.029 & 4.334 & 1.464e-05 \\ 
+  sdline\_new & 0.461 & 0.152 & 3.039 & 2.376e-03 \\ 
+  sdgroup\_new & 1.703 & 0.300 & 5.673 & 1.407e-08 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$ values are based on a normal approximation of the $t$ statistics.}
+\end{table}
+
 \end{appendix}
 \end{document}
