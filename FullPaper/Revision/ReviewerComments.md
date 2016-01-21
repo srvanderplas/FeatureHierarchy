@@ -13,7 +13,8 @@ output: html_document
 - Controlling for speed/accuracy tradeoff. 
     - *We have some data on response time (though imperfect), so we could discuss this briefly if we want to.*
     - *Susan, by imperfect, do you mean that you don't know what participants were doing, because of the missing control of AMT that we would have in lab sessions? - we can state that and move beyond it.*
-    - *I think we should want to model the results - the model can go into the appendix, the results in a sentence summary in the main paper.*
+    - *A model of the (log) response time is in the appendix, a paragraph of the major finding is added there*
+    - *Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend (Chisq:4.4763, df:2, p-value=0.1067)*
 - Would results have been different if relative difficulty of clusters vs. trends was different?
     - *Probably... but how to measure that objectively? We'd have to do single-target studies and then compare to dual target results or something... XXX Susan, could you explain to me a bit more, how single target studies would help in this situation? -- I was interested in doing some, but for a different reason (see below).*
     - *Yes the results are different, when the parameters s_C and s_T are changed. We have extended the model accordingly, and added details to the appendix.*

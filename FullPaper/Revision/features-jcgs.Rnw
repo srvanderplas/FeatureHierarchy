@@ -1004,8 +1004,9 @@ Most of the effects are not significantly different, as seen in the letter value
 \newtext{The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are strongly significant (see Table~\ref{tab:results} for exact numbers) and work as hypothesized: as the variability increase, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly.}
 
 \begin{figure}[h!bt]\centering
-<<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth'>>=
+<<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
 gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
+gvl.5 <-  update(gvl.4, .~.+first.trial +log(as.numeric(trial.time)), control=glmerControl(optimizer="bobyqa"))
 
 gvl.fixef <- data.frame(confint(gvl.4, method="Wald"))[-(1:2),] # exclude sigmas
 names(gvl.fixef) <- c("LB", "UB")
@@ -1400,20 +1401,22 @@ ggplot(data=subset(modeldata, k_new==5)) +
 %'   theme_bw()
 %' @
 %' 
-
-<<complex-3, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
-ggplot(data=subset(modeldata, k_new==5)) +
-  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
-  facet_grid(st+sc~., 
-             labeller=label_parsed) +
-  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
-  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
-        axis.title=element_blank(), 
-        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
-        legend.position="bottom", 
-        strip.text.y = element_text(angle=0))
-@
-
+%' different alternative, not as messy, but there is also not much to see
+%' <<complex-3, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+%' modeldata <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new) %>% mutate(
+%'   rep = as.numeric(dataset) - min(as.numeric(dataset)) + 1
+%' )
+%' ggplot(data=subset(modeldata, k_new==5)) +
+%'   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+%'   facet_grid(st+sc~rep, labeller=label_parsed, space="free", scales="free") + 
+%'   scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+%'   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+%'         axis.title=element_blank(), 
+%'         axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+%'         legend.position="bottom", 
+%'         strip.text.y = element_text(angle=0))
+%' @
+%' 
 
 % library(xtable)
 % xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
@@ -1449,7 +1452,7 @@ $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
 
 \newpage
 \section{Model for response times}
-\newtext{While we do not have the same amount of control in an AMT study that we would have an a lab setting, we can measure the time between presenting a lineup and the time that a participant submits the results on it. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use log response times.}
+\newtext{While we do not have the same amount of control in an AMT study that we would have an a lab setting, we can measure the time between presenting a lineup and the time that a participant submits the results on it. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use the log of response times $T = \left(t_{ijk}\right)_{n \times 1}$:}
 <<response, echo=FALSE>>=
 #load("../../Data/modeldata.Rdata")
 
@@ -1474,7 +1477,7 @@ table$pvals <- cftest(time)$test$pvalues
 @
 
 \begin{figure}
-<<histogram, echo=FALSE, fig.width=5, fig.height=3, out.width='.6\\textwidth'>>=
+<<histogram, echo=FALSE, fig.width=8, fig.height=5, out.width='.6\\textwidth'>>=
 library(ggplot2)
 qplot(time, data=modeldata, binwidth=.1) + theme_bw() +
   ylab("# Evaluations") + xlab("Log Response time (in seconds)") +
@@ -1488,7 +1491,7 @@ qplot(time, data=modeldata, binwidth=.1) + theme_bw() +
 \text{log } T & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:responseModel}
 \end{align}
 where \begin{itemize}
-\item[$\alpha$] is a vector of fixed effects, $\mu$ the average response time, $\alpha_0$ the average effect of the first trial on the response time,  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$,
+\item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_0, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_0$ the average effect of the first trial on the response time,  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$,
 \item[$\beta_i$] describe plot types,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
@@ -1496,6 +1499,10 @@ where \begin{itemize}
 \end{itemize}
 We also assume that random effects for dataset and participant are orthogonal. 
 
+Table~\ref{tab:response} gives an overview of all parameters of the response time model and their estimates. Similar to what has been found in other lineup studies \citep{humanfactorslineups, hofmann2012graphical}, participants take on average 25\% longer to respond to the first lineup than to subsequent lineups. Aside from this, we see that as the difficulty of lineups increases (controlled by an increase in the parameters $s_C$ and $s_T$), the average amount of time participants spend on the evaluation significantly increases. 
+Depending on the result, there are differences in the amount of time: If either one of the targets is identified, the amount of time taken to answer is significantly shorter than if neither of the targets is found. Answers take on average the longest, if both targets are identified (however, this only happens in 0.6\% of the responses). 
+Plot aesthetics have a significant impact on the amount of time for responses. 
+\newdo{Susan, I'm assuming there is some cognitive load thing going on? If so, could you summarize that impact?  Thanks!}
 % xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f","f","e"))
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
 % Wed Jan 20 22:41:48 2016
@@ -1505,8 +1512,8 @@ We also assume that random effects for dataset and participant are orthogonal.
   \hline
 Parameter & Estimate & Std. Error & z.value & P values \\ 
   \hline
-$\mu$ & 2.660 & 0.108 & 24.586 & 0.000e+00 \\ 
-  $\alpha_0$ & 0.231 & 0.014 & 16.366 & 0.000e+00 \\
+$\mu$ & 2.660 & 0.108 & 24.586 & $\le 10^{-12}$ \\ 
+  $\alpha_0$ & 0.231 & 0.014 & 16.366 & $\le 10^{-12}$ \\
     $\alpha_{K = 3}$ & 0.000 & --- & --- & --- \\ 
     $\alpha_{K = 5}$ & 0.124 & 0.029 & 4.334 & 1.464e-05 \\ 
   $\alpha_T$ & 0.461 & 0.152 & 3.039 & 2.376e-03 \\ 
@@ -1514,15 +1521,14 @@ $\mu$ & 2.660 & 0.108 & 24.586 & 0.000e+00 \\
 {\bf Plot Type} \hfill  Plain & 0.000 & --- & --- & --- \\ 
   Shape & 0.112 & 0.019 & 5.889 & 3.885e-09 \\ 
   Color & 0.133 & 0.019 & 7.012 & 2.348e-12 \\ 
-  Trend & 0.148 & 0.019 & 7.815 & 5.551e-15 \\ 
-  Trend + Error & 0.166 & 0.019 & 8.759 & 0.000e+00 \\ 
-  Color + Ellipse & 0.205 & 0.019 & 10.735 & 0.000e+00 \\ 
-  Color + Shape & 0.214 & 0.019 & 11.281 & 0.000e+00 \\ 
-  Color + Trend & 0.215 & 0.019 & 11.345 & 0.000e+00 \\ 
-  Color + Shape + Ellipse & 0.205 & 0.019 & 10.699 & 0.000e+00 \\ 
-  Color + Ellipse + Trend + Error & 0.252 & 0.019 & 13.215 & 0.000e+00 \\ [3pt]
-  \bf Target \\
-  Trend & -0.182 & 0.016 & -11.665 & 0.000e+00 \\ 
+  Trend & 0.148 & 0.019 & 7.815 & $\le 10^{-12}$ \\ 
+  Trend + Error & 0.166 & 0.019 & 8.759 & $\le 10^{-12}$ \\ 
+  Color + Ellipse & 0.205 & 0.019 & 10.735 & $\le 10^{-12}$ \\ 
+  Color + Shape & 0.214 & 0.019 & 11.281 & $\le 10^{-12}$ \\ 
+  Color + Trend & 0.215 & 0.019 & 11.345 & $\le 10^{-12}$ \\ 
+  Color + Shape + Ellipse & 0.205 & 0.019 & 10.699 & $\le 10^{-12}$ \\ 
+  Color + Ellipse + Trend + Error & 0.252 & 0.019 & 13.215 & $\le 10^{-12}$ \\ [3pt]
+ {\bf Target} \hfill   Trend & -0.182 & 0.016 & -11.665 & 0.000e+00 \\ 
   Cluster & -0.150 & 0.013 & -11.165 & 0.000e+00 \\ 
   Neither & 0.000 & --- & --- & --- \\ 
   Both & 0.166 & 0.059 & 2.820 & 4.797e-03 \\ 
@@ -1530,6 +1536,7 @@ $\mu$ & 2.660 & 0.108 & 24.586 & 0.000e+00 \\
 \end{tabular}
 \caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$ values are based on a normal approximation of the $t$ statistics.}
 \end{table}
+
 
 \end{appendix}
 \end{document}
