@@ -1378,6 +1378,43 @@ ggplot(data=subset(modeldata, k_new==5)) +
 \caption{Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
 \end{figure}
 
+%' 
+%' This alternative looks pretty messy
+%' <<alternative, echo=FALSE>>=
+%' library(dplyr)
+%' stats <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new, dataset, plottype) %>% summarize(
+%'   n = n(),
+%'   neither = sum(simpleoutcome=="neither")/n(),
+%'   cluster = sum(simpleoutcome=="cluster")/n(),
+%'   trend = sum(simpleoutcome=="trend")/n(),
+%'   both = sum(simpleoutcome=="both")/n()
+%' )
+%' 
+%' library(reshape2)
+%' ms <- melt(stats, measure.var=c("neither", "cluster", "trend", "both"))
+%' names(ms)[1:3] <- c("K", "sT", "sC")
+%' 
+%' qplot(plottype, value, data=ms, group=dataset, shape=variable, colour=variable) + 
+%'   facet_grid(facets=K+sC~sT, labeller="label_both") + 
+%'   geom_line(aes(group=interaction(dataset, variable))) + 
+%'   theme_bw()
+%' @
+%' 
+
+<<complex-3, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+ggplot(data=subset(modeldata, k_new==5)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(st+sc~., 
+             labeller=label_parsed) +
+  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+        legend.position="bottom", 
+        strip.text.y = element_text(angle=0))
+@
+
+
 % library(xtable)
 % xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
@@ -1409,10 +1446,12 @@ $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
 }
 \end{table}
 
-\section{Model for response times}
 
+\newpage
+\section{Model for response times}
+\newtext{While we do not have the same amount of control in an AMT study that we would have an a lab setting, we can measure the time between presenting a lineup and the time that a participant submits the results on it. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use log response times.}
 <<response, echo=FALSE>>=
-load("../../Data/modeldata.Rdata")
+#load("../../Data/modeldata.Rdata")
 
 library(lubridate)
 modeldata$start <- ymd_hms(modeldata$start_time)
@@ -1422,9 +1461,9 @@ modeldata$k_new <- factor(modeldata$k_new)
 
 library(lme4)
 time <- lmer(log(time)~first.trial+plottype + simpleoutcome+k_new+sdline_new+sdgroup_new+(1|individualID)+(1|dataset), data=modeldata)
-time2 <- update(time, .~.-(1|dataset), data=modeldata)
+#time2 <- update(time, .~.-(1|dataset), data=modeldata)
 
-anova(time, time2) # hugely significant dataset effect? I wouldn't have guessed that. It might be an effect of the large number of evaluations
+#anova(time, time2) # hugely significant dataset effect? I wouldn't have guessed that. It might be an effect of the large number of evaluations
 
 library(xtable)
 library(multcomp)
@@ -1434,6 +1473,29 @@ table <- data.frame(summary(time)$coefficients)
 table$pvals <- cftest(time)$test$pvalues
 @
 
+\begin{figure}
+<<histogram, echo=FALSE, fig.width=5, fig.height=3, out.width='.6\\textwidth'>>=
+library(ggplot2)
+qplot(time, data=modeldata, binwidth=.1) + theme_bw() +
+  ylab("# Evaluations") + xlab("Log Response time (in seconds)") +
+  scale_x_log10() + 
+  geom_vline(xintercept=median(modeldata$time), colour="grey50")
+@
+\caption{\label{fig:histogram}Histogram of (log) response times. The median evaluation time (vertical line) is 29 seconds. }
+\end{figure}
+
+\begin{align}
+\text{log } T & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:responseModel}
+\end{align}
+where \begin{itemize}
+\item[$\alpha$] is a vector of fixed effects, $\mu$ the average response time, $\alpha_0$ the average effect of the first trial on the response time,  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$,
+\item[$\beta_i$] describe plot types,
+\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+\item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+\item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+\end{itemize}
+We also assume that random effects for dataset and participant are orthogonal. 
+
 % xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f","f","e"))
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
 % Wed Jan 20 22:41:48 2016
@@ -1441,12 +1503,15 @@ table$pvals <- cftest(time)$test$pvalues
 \centering
 \begin{tabular}{rrrrr}
   \hline
- & Estimate & Std. Error & z.value & P values \\ 
+Parameter & Estimate & Std. Error & z.value & P values \\ 
   \hline
-(Intercept) & 2.660 & 0.108 & 24.586 & 0.000e+00 \\ 
-  first.trial TRUE & 0.231 & 0.014 & 16.366 & 0.000e+00 \\ [3pt]
-  \bf Plot Type\\
-  Plain & 0.000 & --- & --- & --- \\ 
+$\mu$ & 2.660 & 0.108 & 24.586 & 0.000e+00 \\ 
+  $\alpha_0$ & 0.231 & 0.014 & 16.366 & 0.000e+00 \\
+    $\alpha_{K = 3}$ & 0.000 & --- & --- & --- \\ 
+    $\alpha_{K = 5}$ & 0.124 & 0.029 & 4.334 & 1.464e-05 \\ 
+  $\alpha_T$ & 0.461 & 0.152 & 3.039 & 2.376e-03 \\ 
+  $\alpha_C$ & 1.703 & 0.300 & 5.673 & 1.407e-08 \\ [3pt]
+{\bf Plot Type} \hfill  Plain & 0.000 & --- & --- & --- \\ 
   Shape & 0.112 & 0.019 & 5.889 & 3.885e-09 \\ 
   Color & 0.133 & 0.019 & 7.012 & 2.348e-12 \\ 
   Trend & 0.148 & 0.019 & 7.815 & 5.551e-15 \\ 
@@ -1460,10 +1525,7 @@ table$pvals <- cftest(time)$test$pvalues
   Trend & -0.182 & 0.016 & -11.665 & 0.000e+00 \\ 
   Cluster & -0.150 & 0.013 & -11.165 & 0.000e+00 \\ 
   Neither & 0.000 & --- & --- & --- \\ 
-  Both & 0.166 & 0.059 & 2.820 & 4.797e-03 \\ [3pt]
-  k\_new5 & 0.124 & 0.029 & 4.334 & 1.464e-05 \\ 
-  sdline\_new & 0.461 & 0.152 & 3.039 & 2.376e-03 \\ 
-  sdgroup\_new & 1.703 & 0.300 & 5.673 & 1.407e-08 \\ 
+  Both & 0.166 & 0.059 & 2.820 & 4.797e-03 \\ 
    \hline
 \end{tabular}
 \caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$ values are based on a normal approximation of the $t$ statistics.}
