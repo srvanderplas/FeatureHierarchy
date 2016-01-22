@@ -1342,6 +1342,7 @@ The choice of $b_1$ and $b_2$ decides on the number of decimal places to which t
 
 Figure~\ref{fig:simulation} shows the result of this simulation approach for a lineup of size 20 assuming $K=10$ evaluation. The density of $A \mid H_o$ is plotted for ten runs (open circles). The variability in the results is relatively small - for comparison, the density of a Binomial distribution $B_{2/20, 10}$ is shown using crosses. The main difference between the densities is the probability of zero or only one identification, while the tail probabilities are very similar.
 \section{Modelling results}
+\subsection{Faceoff Model}
 \newtext{Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
 The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.}
 \begin{figure}
@@ -1460,7 +1461,7 @@ Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chi
 
 
 \newpage
-\section{Model for response times}
+\subsection{Modelling response times}
 \newtext{While we do not have the same amount of control in an AMT study that we would have an a lab setting, we can measure the time between presenting a lineup and the time that a participant submits the results on it. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use the log of response times $T = \left(t_{ijk}\right)_{n \times 1}$:}
 <<response, echo=FALSE>>=
 #load("../../Data/modeldata.Rdata")
@@ -1546,13 +1547,14 @@ $\mu$ & 2.660 & 0.108 & 24.586 & $\le 0.0001$ \\
 \caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$ values are based on a normal approximation of the $t$ statistics.}
 \end{table}
 
-\section{Model of confidence levels}
+\subsection{Model of confidence levels}
 \newtext{With each lineup evaluations, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. }
 
 \newdo{XXX need the model formula here XXX}
 \newtext{The approximation of confidence level (which is a bounded, discrete variable) is far from perfect, but the results are very interpretable.}
 
-\newtext{Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model. The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level as significantly lower than if one of the two targets were identified. Aesthetics in general did not have a significant effect on confidence levels. However, individual plot types did lead to a significant decrease in confidence levels: any plot showing ellipses increases the level of confidence on average by about 0.1. }
+\newtext{Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model. The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level as significantly lower than if one of the two targets were identified. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. }
+\newdo{This is a fun result! It goes hand in hand with the signal strength -- ellipses emphasize the absence of individual groups. }
 <<modconfidence, echo=FALSE>>=
 conf <- lmer(data=modeldata, conf_level~log(as.numeric(trial.time))+plottype+simpleoutcome+sdline_new+sdgroup_new+k_new+(1|dataset)+(1|ip_address))
 

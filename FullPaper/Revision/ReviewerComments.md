@@ -47,8 +47,8 @@ There are some assumptions here, rather than truisms or established facts.
     
 ## Reviewer 3
 - Link given to the experiment isn't active.
- - *Link to https://erichare.shinyapps.io/lineups/ works, but isn't ideal. We're still working on a better description of the experiments.*
- - *One part of the description would be an extended README for the github repo. We need to clean it up, too ...*
+    - *Link to https://erichare.shinyapps.io/lineups/ works, but isn't ideal. We're still working on a better description of the experiments.*
+    - *One part of the description would be an extended README for the github repo. We need to clean it up, too ...*
 - Perceived saliency (ability to identify target) may not mean increased comprehension
     - *valid point, but if you don't see the signal clearly in a non-lineup plot, you can't comprehend whatever it is the creator of the plot was trying to get across...*
     - *Is there some cognitive research on saliency versus comprehension? - There was an Infovis paper in 2013 and 2016 on memorability of graphs.*
@@ -58,6 +58,7 @@ There are some assumptions here, rather than truisms or established facts.
     - *The confusion arises from the problem, that while overall the probability of identifying a target decreases, the odds are still in favor of the clustering target. We might need to add something on the gini index.*
 - How do subjective confidence scores correlate with incorrect evaluations or estimated odds as shown in Fig 11?
     - *They don't. Is this consistent with other Mturk studies?*
+    - *A model of self-reported confidence scores is added to the appendix/supplement. Generally, confidence agrees with (perceived) difficulty of the lineup; i.e. for parameter values that allow for more variability in the trend or the clusters, confidence is reported lower. There is one notable exception: for plots with an ellipse confidence is reported higher, corresponding to an (unintended) signal in the cluster assignment of some of the plots.*
     - *This is pretty consistent with our findings - there's some discussion in the 'Comparing designs' infovis paper*
 - I appreciate the word cloud visualizations of participant comments but I expected a more thorough discussion of their reasoning. 
 - Revisit the sentence "...the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution." for clarification. Also, discuss why the plot types associated with clustering had significantly fewer correct evaluations more thoroughly.
