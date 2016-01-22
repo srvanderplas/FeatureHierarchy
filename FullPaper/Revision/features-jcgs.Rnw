@@ -1118,6 +1118,7 @@ pal <- pal[-(1:2)]
 wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T, rot.per=.15, colors="black", vfont=c("sans serif","plain"))
 }
 @
+
 \centering
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Plain, neither target} \vspace{-0.15in}
@@ -1232,6 +1233,15 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 %' \afterpage{\clearpage}
 %' The results of this analysis, shown in Figure~\ref{fig:lexicalanalysis} and supported by Figure~\ref{fig:wordles}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size. In future studies, however, group size should be more tightly controlled to reduce the presence of distractor aesthetics in null plots. 
 
+\newtext{Further examination of individual participants responses illustrates that group size (and thus, missing ellipses in the target plot) was a factor in the decision to identify specific null plots as different. Participants provided responses such as ``There is no circle highlighting the yellow symbols in this plot" %line 13515 
+and 
+``Lack of a circle around the red symbols" %line 13516
+, which highlight the visual cues which were missing from the identified null plots.  
+}
+\newtext{
+Our cluster allocation algorithm for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
+Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. Appendix \ref{sec:gini} provides more information about the unintentional differences in group sizes between null and cluster target plots. 
+}
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
 
