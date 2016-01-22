@@ -53,6 +53,7 @@ There are some assumptions here, rather than truisms or established facts.
     - *valid point, but if you don't see the signal clearly in a non-lineup plot, you can't comprehend whatever it is the creator of the plot was trying to get across...*
     - *Is there some cognitive research on saliency versus comprehension? - There was an Infovis paper in 2013 and 2016 on memorability of graphs.*
 - Task description in a separate subsection, not buried within the participant recruitment subsection
+    - *that might help, I agree*
 - Fig 11 is confusing, given that plot types associated with clustering have a lower probability of correct target evaluations. What is the frequency of cluster vs. trend target selection in a plain graph?
     - *We added the odds for selecting the cluster over the trend target for the plain graph.*
     - *The confusion arises from the problem, that while overall the probability of identifying a target decreases, the odds are still in favor of the clustering target. We might need to add something on the gini index.*

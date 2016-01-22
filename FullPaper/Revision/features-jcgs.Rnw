@@ -664,7 +664,13 @@ The study is designed hierarchically, as a factorial experiment for combinations
 \subsection{Hypotheses}
 The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses,  increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, increase the probability of detecting the linear relationship. 
 
-%A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
+\newdo{And this can go in the text again!!!}
+
+A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
+
+\subsection{Task description}
+
+
 
 \subsection{Participant Recruitment}
 Participants were recruited using Amazon's Mechanical Turk service\citep{amazon}, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks that are not easily automated. Only workers with at least 100 previous HITs at a 95\% successful completion rate were allowed to sign up for completing the task. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system, as well as a vested interest in doing well. 
