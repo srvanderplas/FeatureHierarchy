@@ -1520,7 +1520,7 @@ Plot aesthetics have a significant impact on the amount of time for responses.
 \centering
 \begin{tabular}{rrrrr}
   \hline
-Parameter & Estimate & Std. Error & z.value & P values \\ 
+Parameter & Estimate & Std.\ Error & $z$ value & $P$-value \\ 
   \hline
 $\mu$ & 2.660 & 0.108 & 24.586 & $\le 0.0001$ \\ 
   $\alpha_0$ & 0.231 & 0.014 & 16.366 & $\le 0.0001$ \\
@@ -1548,9 +1548,20 @@ $\mu$ & 2.660 & 0.108 & 24.586 & $\le 0.0001$ \\
 \end{table}
 
 \subsection{Model of confidence levels}
-\newtext{With each lineup evaluations, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. }
+\newtext{With each lineup evaluations, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. Let $C = \left(c_{ijk} \right)$ be the confidence level participant $k$ reports on the lineup (using aesthetics set $i$) of dataset $j$:}
 
-\newdo{XXX need the model formula here XXX}
+\begin{align}
+C & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:responseModel}
+\end{align}
+where \begin{itemize}
+\item[$\alpha$] is a vector of fixed effects $(\mu, \tau,  \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ an average baseline confidence level, $\tau$ is the effect of time taken to respond on a participant's confidence, $\alpha_T$ and $\alpha_C$ are the effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
+\item[$\beta_i$] describe plot types,
+\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+\item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+\item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+\end{itemize}
+We also assume that random effects for dataset and participant are orthogonal. 
+
 \newtext{The approximation of confidence level (which is a bounded, discrete variable) is far from perfect, but the results are very interpretable.}
 
 \newtext{Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model. The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level as significantly lower than if one of the two targets were identified. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. }
@@ -1568,26 +1579,27 @@ table$pvalues <- pconf$test$pvalues
 \centering
 \begin{tabular}{rrrrr}
   \hline
-Parameter & Estimate & Std.Error & z.value & $P$-value \\ 
+Parameter & Estimate & Std.\ Error & $z$-value & $P$-value \\ 
   \hline
 (Intercept) & 5.800 & 0.186 & 31.190 & $\le 0.0001$ \\ 
   $\tau$ & -0.253 & 0.016 & -16.116 & $\le 0.0001$ \\ 
   $\alpha_T$ & -0.583 & 0.205 & -2.839 & 0.0045 \\ 
   $\alpha_C$ & -1.921 & 0.405 & -4.748 & $\le 0.0001$ \\ 
   $\alpha_K$ & -0.068 & 0.019 & -3.525 & 0.0004 \\ [3pt]
-  plottypetrend & 0.049 & 0.034 & 1.434 & 0.1514 \\ 
-  plottypecolor & 0.038 & 0.034 & 1.119 & 0.2630 \\ 
-  plottypeshape & -0.010 & 0.034 & -0.280 & 0.7793 \\ 
-  plottypecolorShape & 0.018 & 0.034 & 0.521 & 0.6023 \\ 
-  plottypecolorEllipse & 0.063 & 0.034 & 1.834 & 0.0666 \\ 
-  plottypecolorTrend & 0.049 & 0.034 & 1.449 & 0.1474 \\ 
-  plottypetrendError & 0.049 & 0.034 & 1.429 & 0.1530 \\ 
-  plottypecolorShapeEllipse & 0.101 & 0.034 & 2.935 & 0.0033 \\ 
-  plottypecolorEllipseTrendError & 0.101 & 0.034 & 2.959 & 0.0031 \\ [3pt]
-  simpleoutcometrend & 0.000 & --- & --- & --- \\ 
-  simpleoutcomecluster & -0.022 & 0.023 & -0.989 & 0.3225 \\ 
-  simpleoutcomeneither & -0.228 & 0.028 & -8.187 & $\le 0.0001$ \\
-  simpleoutcomeboth & -0.231 & 0.103 & -2.247 & 0.0246 \\ 
+  {\bf Outcome} \hfill   Shape & -0.010 & 0.034 & -0.280 & 0.7793 \\ 
+  Plain & 0.000 & --- & --- & ---\\
+  Color & 0.038 & 0.034 & 1.119 & 0.2630 \\ 
+  Trend & 0.049 & 0.034 & 1.434 & 0.1514 \\ 
+  Color + Shape & 0.018 & 0.034 & 0.521 & 0.6023 \\ 
+  Color + Trend & 0.049 & 0.034 & 1.449 & 0.1474 \\ 
+  Trend + Error & 0.049 & 0.034 & 1.429 & 0.1530 \\ 
+  Color + Ellipse & 0.063 & 0.034 & 1.834 & 0.0666 \\ 
+  Color + Shape + Ellipse & 0.101 & 0.034 & 2.935 & 0.0033 \\ 
+  Color + Ellipse + TrendError & 0.101 & 0.034 & 2.959 & 0.0031 \\ [3pt]
+  {\bf Outcome} \hfill Trend & 0.000 & --- & --- & --- \\ 
+  Cluster & -0.022 & 0.023 & -0.989 & 0.3225 \\ 
+  Neither & -0.228 & 0.028 & -8.187 & $\le 0.0001$ \\
+  Both & -0.231 & 0.103 & -2.247 & 0.0246 \\ 
    \hline
 \end{tabular}
 \caption{\label{tab:conf}Parameters and estimates for the model of participants' confidence.  }
