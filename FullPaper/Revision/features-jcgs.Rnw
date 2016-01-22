@@ -669,7 +669,8 @@ The primary purpose of this study is to understand how visual aesthetics affect 
 A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
 
 \subsection{Task description}
-
+\newdo{What did participants have to do: (i) read through legal matters, (ii) pass two trials of easy (single target) lineups, (iii) give feedback on a set of lineups, (iv) respond to demographics at some point (voluntary).
+}
 
 
 \subsection{Participant Recruitment}
