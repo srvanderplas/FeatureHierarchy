@@ -1481,8 +1481,8 @@ ggplot(data=subset(modeldata, k_new==5)) +
 \bf Parameter & \bf Log Odds Ratio & \bf 95\% Lower & \bf 95\% Upper \\ 
   \hline
 Intercept & 1.018 & -1.615 & 3.651 \\ 
-$\alpha_C$ & 16.254 & 13.276 & 19.231 \\ 
-$\alpha_T$ & -16.038 & -21.935 & -10.140 \\ 
+$\alpha_T$ & 16.254 & 13.276 & 19.231 \\ 
+$\alpha_C$ & -16.038 & -21.935 & -10.140 \\ 
 $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
 {\bf Plot Type} \hfill  Trend + Error & -0.650 & -0.877 & -0.423 \\ 
   Color + Ellipse + Trend + Error & -0.515 & -0.751 & -0.279 \\ 
