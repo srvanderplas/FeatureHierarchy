@@ -201,11 +201,14 @@ A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (exa
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
 If a participant can identify the target plot from the field of distractors, this counts as evidence against the null hypothesis. 
 Based on the number of evaluations and the number of target identifications, significance of a finding is then determined in the same sense as for a conventional hypothesis test. 
+\newtext{Performance on lineups has been shown to depend primarily on logical reasoning ability, and does not depend significantly on statistical training \citep{visualreasoning}.}
+
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
 
 In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. 
 The two targets represent two different, competing signals; an observer's choice then demonstrates empirically which signal is more salient. 
 If both targets exhibit similar signal, observers may identify both targets, removing any forced-choice scenario which might skew results in a study. 
+\newtext{This is analogous to a Bayesian framework in which the relative strengths of two competing models are compared with each other and with a common null.}
 
 %By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. 
 %At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
@@ -1007,7 +1010,7 @@ We also assume that random effects for dataset and participant are orthogonal.
 The estimated log odds of a decision in favor of cluster over trend target for each of the plot types are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
 As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + prediction results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
-\newtext{The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are strongly significant (see Table~\ref{tab:results} for exact numbers) and work as hypothesized: as the variability increase, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly.}
+\newtext{The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are strongly significant (see Table~\ref{tab:results} for exact numbers) and work as hypothesized: as the variability increases, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly.}
 
 \begin{figure}[h!bt]\centering
 <<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
