@@ -451,7 +451,7 @@ For each parameter set $\{K, N, \sigma_C, \sigma_T\}$, as described in Table~\re
 \bf Parameter & \bf Description & \bf Choices\\\hline
 $K$ & \# Clusters &  \begin{tabular}{l}3, 5 \end{tabular} \\
 $N$ & \# Points &  \begin{tabular}{l}$15\cdot K$\end{tabular} \\
-$\sigma_T$ & Scatter around trend line &   \begin{tabular}{l}.15, .25, .35  \end{tabular}\\
+$\sigma_T$ & Scatter around trend line &   \begin{tabular}{l} .25, .35, .45  \end{tabular}\\
 $\sigma_C$ & Scatter around cluster centers & \begin{tabular}{ll} .25, .30, .35 ($K=3$)\\ .20, .25, .30 ($K=5$) \end{tabular}
 \\\hline
 \end{tabular}
@@ -1024,7 +1024,7 @@ We also assume that random effects for dataset and participant are orthogonal.
 The estimated log odds of a decision in favor of cluster over trend target for each of the plot types are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
 As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + prediction results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
-\newtext{The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are strongly significant (see Table~\ref{tab:results} for exact numbers) and work as hypothesized: as the variability increases, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly.}
+The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant (see Table~\ref{tab:results} for exact numbers) and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly.
 
 \begin{figure}[h!bt]\centering
 <<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
