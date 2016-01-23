@@ -205,11 +205,23 @@ Based on the number of evaluations and the number of target identifications, sig
 
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
 
+% modification
 In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. 
+% competing signals
 The two targets represent two different, competing signals; an observer's choice then demonstrates empirically which signal is more salient. 
-If both targets exhibit similar signal, observers may identify both targets, removing any forced-choice scenario which might skew results in a study. 
-\newtext{This is analogous to a Bayesian framework in which the relative strengths of two competing models are compared with each other and with a common null.}
-\newtext{The search for multiple targets is a more demanding cognitive task \citep{cain2011anticipatory} that is more sensitive to contextual effects \citep{adamo2015targets}, but without any time constraints imposed by the experimental protocol, participants can be expected to identify at least one of the plots with accuracy comparable to a single-target search task. Identification of the less-salient target can be expected to suffer due to ``satisfaction of search",\citep{fleck2010generalized} but this will emphasize the any differences between the two competing targets.}
+Cognitively, the presence of two targets leads to a dual-target search scenario~\citep{fleck2010generalized}, which effectively introduces a `masking' effect where the mor salient target is selected and the search for more targets stops (``satisfaction of search"), i.e.\ people tend to pick the more salient target and not notice the second target, even though in the absence of the more salient target they would have picked it out. 
+From a statistical perspective, 
+% like Bayes
+this is analogous to a Bayesian framework in which the relative strengths of two competing models are evaluated by a comparison with each other and with a common null.
+
+% can identify both
+In the present study, participants were allowed to submit multiple selections to prevent any forced-choice scenario which might skew the results. However, only 0.6\% of the evaluations resulted in an identification of both targets. 
+%If both targets exhibit similar signal, observers may identify both targets, 
+% search for two
+
+The search for multiple targets is a more demanding cognitive task \citep{cain2011anticipatory} that is more sensitive to contextual effects \citep{adamo2015targets}, but without any time constraints imposed by the experimental protocol, participants can be expected to identify at least one of the plots with accuracy comparable to a single-target search task. 
+% identification of one
+%Identification of the less-salient target can be expected to suffer due to ``satisfaction of search",\citep{fleck2010generalized} but this will emphasize the any differences between the two competing targets.
 
 %By tracking the proportion of observers choosing either target plot (a measure of overall lineup difficulty) as well as which proportion of observers choose one target over the other target, we can determine the relative strength of the two competing signals amid a field of distractors. 
 %At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 

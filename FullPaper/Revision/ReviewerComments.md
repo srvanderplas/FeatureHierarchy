@@ -16,8 +16,7 @@ output: html_document
     - *A model of the (log) response time is in the appendix, a paragraph of the major finding is added there*
     - *Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend (Chisq:4.4763, df:2, p-value=0.1067)*
 - Would results have been different if relative difficulty of clusters vs. trends was different?
-    - *Probably... but how to measure that objectively? We'd have to do single-target studies and then compare to dual target results or something... XXX Susan, could you explain to me a bit more, how single target studies would help in this situation? -- I was interested in doing some, but for a different reason (see below).*
-    - *Yes the results are different, when the parameters s_C and s_T are changed. We have extended the model accordingly, and added details to the appendix.*
+    - *Yes, the results are different, when relative difficulty changes. Relative difficulty is controlled by the parameters s_C and s_T. We have extended the model accordingly, and added details to the appendix.*
     
 ## Reviewer 2
 - The experiment is very complicated, and the result is not easily interpreted/effectively communicated
@@ -28,9 +27,9 @@ output: html_document
 leap, with only rational justification (no empirical evidence).
 There are some assumptions here, rather than truisms or established facts.
     - *True, the modification of the lineup protocol is significant, but I would not call it a leap, but a logical next step for working with the protocol in a different situation. We have to make a better job of listing the assumptions:*
-    - *There are some assumptions that we make without empirical back up: does it matter for individuals decision, whether there is one target or two targets? -- yes it will, but it is not at all clear by how much. We could test the effect by using the same lineups in single target lineups by exchanging the second target by a null plot and comparing results (adjusted for 18 versus 19 null plots). When the second target is removed, the first target will(?) attract more decisions. Should the two separate single target lineups overall show about the same number of decisions?*
+    - *There are some assumptions that we make without empirical back up: does it matter for individuals decision, whether there is one target or two targets? -- yes it will. The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominate one masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
     - *Other assumptions: in the evaluation, we first checked the significance of each two-target lineup by using simulation-based inference. That doesn't seem particularly problematic - and we don't talk about this in the paper anyways.*
-    - *More assumptions: For the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. Should we sample? or maybe use weights to see whether it makes a difference for the model? We are in a mtached pair scenario, but we don't use that in the evaluation besides a random effect for the data. We might be able to get a bit more power out here (to decrease the width of the confidence intervals).*
+    - *More assumptions: For the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. Should we sample? or maybe use weights to see whether it makes a difference for the model? The different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
 - Reference Fig 2 in the text.
     - *Fixed*
 - "Prediction" vs. "error", "line" vs. "trend"
