@@ -201,7 +201,7 @@ A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (exa
 Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
 If a participant can identify the target plot from the field of distractors, this counts as evidence against the null hypothesis. 
 Based on the number of evaluations and the number of target identifications, significance of a finding is then determined in the same sense as for a conventional hypothesis test. 
-\newtext{Performance on lineups has been shown to depend primarily on logical reasoning ability, and does not depend significantly on statistical training \citep{visualreasoning}.}
+Performance on lineups has been shown to depend primarily on logical reasoning ability, and does not depend significantly on statistical training \citep{visualreasoning}.
 
 Apart from the hypothesis testing construct, the use of statistical lineups to test statistical graphics conforms nicely to psychological testing constructs such as visual search \citep{demita1981validity,treisman1980feature}, where a single target is embedded in a field of distractors and response time, accuracy, or both are used to measure the complexity of the underlying psychological processes leading to identification. 
 
@@ -1012,8 +1012,8 @@ We model the cluster versus trend decision using a logistic regression with a ra
 \text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}
 \end{align}
 where \begin{itemize}
-\item[$\alpha$] \newtext{is a vector of fixed effects, $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$,}
-\item[$\beta_i$] describe plot types,
+\item[$\alpha$] is a vector of fixed effects $\left(\mu, \alpha_T, \alpha_C, \alpha_K \right)$. $\mu$ is a baseline average of the probability to pick the cluster target over the trend target.  $\alpha_T$ and $\alpha_C$ are parameters for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and with cluster variability $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$.
+\item[$\beta_i$] describe plot aesthetics,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
 \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
