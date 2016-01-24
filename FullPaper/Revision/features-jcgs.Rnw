@@ -796,7 +796,7 @@ modeldata$end_time <- ymd_hms(modeldata$end_time)
 modeldata$trial.time <- with(modeldata, end_time-start_time)
 
 lps <- read.csv("../../Data/lineups-parameters-new.csv")
-modeldata <- merge(modeldata, lps[,c("set","k_new","sdline_new","sdgroup_new")], by.x="dataset", by.y="set")
+modeldata <- merge(modeldata, lps[,c("set","k_new","sdline_new","sdgroup_new", "gini.min", "group.min", "no.ellipse")], by.x="dataset", by.y="set")
 
 # should be replaced, but carefully
 modeldata <- modeldata %>% group_by(k) %>% mutate(
@@ -1029,6 +1029,8 @@ The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect o
 gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
 gvl.5 <-  update(gvl.4, .~.+first.trial +log(as.numeric(trial.time)), control=glmerControl(optimizer="bobyqa"))
 gvl.6 <-  update(gvl.4, .~.+factor(conf_level), control=glmerControl(optimizer="bobyqa"))
+modeldata$one.ellipse <- modeldata$no.ellipse == 1
+gvl.7 <-  update(gvl.4, .~.+plottype*one.ellipse, control=glmerControl(optimizer="bobyqa"))
 
 
 gvl.fixef <- data.frame(confint(gvl.4, method="Wald"))[-(1:2),] # exclude sigmas
