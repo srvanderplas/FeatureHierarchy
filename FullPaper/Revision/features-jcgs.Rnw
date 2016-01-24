@@ -680,8 +680,6 @@ The study is designed hierarchically, as a factorial experiment for combinations
 \subsection{Hypotheses}
 The primary purpose of this study is to understand how visual aesthetics affect signal detection in the presence of competing signals. We expect that plot modifications which emphasize similarity and proximity, such as color, shape, and 95\% bounding ellipses,  increase the probability of detecting the clustering relationship, while plot modifications which emphasize good continuation, such as trend lines and prediction intervals, increase the probability of detecting the linear relationship. 
 
-\newdo{And this can go in the text again!!!}
-
 A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
 
 \subsection{Task description}
@@ -1245,14 +1243,14 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 %' \afterpage{\clearpage}
 %' The results of this analysis, shown in Figure~\ref{fig:lexicalanalysis} and supported by Figure~\ref{fig:wordles}, indicate that for the most part participants were making decisions based on the criteria we manipulated; rather than alternate visual cues such as group size. In future studies, however, group size should be more tightly controlled to reduce the presence of distractor aesthetics in null plots. 
 
-\newtext{Further examination of individual participants responses illustrates that group size (and thus, missing ellipses in the target plot) was a factor in the decision to identify specific null plots as different. Participants provided responses such as ``There is no circle highlighting the yellow symbols in this plot" %line 13515 
+Further examination of individual participants' responses illustrates that group size (and thus, missing ellipses in the target plot) was a factor in the decision to identify specific null plots as different. Participants provided responses such as ``There is no circle highlighting the yellow symbols in this plot" %line 13515 
 and 
-``Lack of a circle around the red symbols" %line 13516
-, which highlight the visual cues which were missing from the identified null plots.  
-}
+``Lack of a circle around the red symbols", %line 13516
+ which highlight the visual cues which were missing from the identified null plots.  
+%
 \newtext{
 Our cluster allocation algorithm for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
-Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. Appendix \ref{sec:gini} provides more information about the unintentional differences in group sizes between null and cluster target plots. 
+Numerically, these null data sets had uneven cluster allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. Appendix section~\ref{sec:gini} provides more information about the unintentional differences in group sizes between null and cluster target plots. 
 }
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
@@ -1573,7 +1571,6 @@ Table~\ref{tab:response} gives an overview of all parameters of the response tim
 Depending on the result, there are differences in the amount of time: If either one of the targets is identified, the amount of time taken to answer is significantly shorter than if neither of the targets is found. Answers take on average the longest, if both targets are identified (however, this only happens in 0.6\% of the responses). 
 Plot aesthetics have a significant impact on the amount of time for responses
 \newtext{, with increasing plot complexity associated with increased evaluation time. This may be a function of increased cognitive load, as participants must examine more features in order to identify which plot has the strongest signal. For instance, when color, ellipses, trend lines, and error bands are present, participants must compare the allocation of color to points, the size, shape, and distance between each set of ellipses, the slope of each trend line, and the width of the error bands. While each participant almost certainly does not complete a full pairwise comparison of all 20 lineup plots across each feature set, the increased complexity of each additional feature does increase the space which must be examined using perceptual heuristics in order to identify the target plot correctly. This is consistent with \citet{borgo2012empirical}, who found that visual embellishments increase the time required to perform visual search tasks using data displays.}
-% \newdo{Susan, I'm assuming there is some cognitive load thing going on? If so, could you summarize that impact?  Thanks!}
 % xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f","f","e"))
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
 % Wed Jan 20 22:41:48 2016
