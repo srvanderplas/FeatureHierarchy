@@ -1423,8 +1423,8 @@ Figure~\ref{fig:simulation} shows the result of this simulation approach for a l
 
 \section{Modelling results}
 \subsection{Faceoff Model}
-\newtext{Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
-The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.}
+Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
+The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
@@ -1535,8 +1535,8 @@ $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
 aov <- anova(gvl.4, gvl.5)
 aov2 <- anova(gvl.4, gvl.6)
 @
-\newtext{Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
-Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). }
+Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
+Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
 \subsection{Effect of missing ellipses}\label{sec:gini}
 
@@ -1676,7 +1676,7 @@ Table~\ref{tab:conf} gives an overview of the parameters and estimates of the mo
 \newdo{I don't  agree with the conclusion below: the dependent variable is not accuracy, but self-reported confidence. For speed-accuracy we need to fit a different model -- model gol.5 does attempt this, and shows that we do, indeed have a highly significant speed-accuracy tradeoff. }
 These results suggest that the speed-accuracy tradeoff was not evident in this experiment: participants who identified one target plot correctly were faster than those who did not identify either target plot correctly. This may be due to the pre-selection of participants who were able to successfully complete at least one lineup task.
 
-\newtext{These results suggest that the speed of evaluation is not significantly contributing on the balance between selecting one target over the other. 
+\newtext{These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
 }
 \newdo{This is a fun result! It goes hand in hand with the signal strength -- ellipses emphasize the absence of individual groups. }
 <<modconfidence, echo=FALSE>>=
