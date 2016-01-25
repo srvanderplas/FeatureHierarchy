@@ -1529,10 +1529,19 @@ aov2 <- anova(gvl.4, gvl.6)
 Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). }
 
 \subsection{Effect of missing ellipses}\ref{sec:gini}
-\newdo{Define gini impurity }
+
+\newtext{Gini impurity measures the homogeneity of group allocations. Let $n_i$ be the number of elements in the $i$th cluster, $i = 1, ..., K$, with $n = \sum_{i=1}^K n_i$ and let $p_i = n_i / n$ be the frequency of cluster $i$. Then the gini impurity is calculated as 
+\[
+G(p_1, ..., p_K) = \frac{K}{K-1} \sum_{i=1}^K p_i (1 - p_i).
+\]
+$G$ is an index between 0 and 1, where 0 is maximum diversity that at least one of the frequencies is 0 or 1. A gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.} 
+
 \newdo{Other features considered: minimal group size, number of missing ellipses}
 
-\newdo{Results: Only a single missing result leads to a significant effect.}
+\newdo{Include these features in model of overall correctness (1) and the faceoff model (2)}
+
+
+\newdo{Results for faceoff: Only a single missing ellipse leads to a significant effect(in favor of the trend target over the cluster target).}
 \newdo{Parameter overview of model gvl.7b -- how are individual plot types affected by a single missing ellipse in one of the panels of the lineup? That's a two-way interaction, and a teensy bit messy to explain, because the plot type effects are changed from gvl.4.}
 
 \newpage
