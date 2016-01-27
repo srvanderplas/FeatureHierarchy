@@ -925,13 +925,14 @@ gol.3b <- update(gol.3, .~.+one.ellipse:plottype)
 gol.4 <- update(gol, .~.+max.range) # not significant
 gol.4b <- update(gol, .~.+max.range:plottype) # not significant
 
-gol.5 <- update(gol.2b, .~.+log(time), 
+
+gol.5 <- update(gol, .~.+log(as.numeric(trial.time)), 
                 control = glmerControl(
                   optimizer="bobyqa",
-                  optCtrl = list(maxfun = 1e5)
+                  optCtrl = list(maxfun = 2e5)
                 )) # there is a (highly) significant effect of (log) response time on accuracy. The size of the effect is on average -0.405486 for each unit increase in (log) response time.
 
-gol.5b <- update(gol.2b, .~. + poly(-log(time),2), 
+gol.5b <- update(gol, .~. + poly(as.numeric(trial.time),2), 
                 control = glmerControl(
                   optimizer="bobyqa",
                   optCtrl = list(maxfun = 1e5)
@@ -957,7 +958,7 @@ sig <- anova(gol)
 @
 In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
 Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
-Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 387.9$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
+Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
 \begin{figure}[h!bt]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
