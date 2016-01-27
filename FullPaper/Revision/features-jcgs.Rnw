@@ -1516,6 +1516,7 @@ $\mu$ & 6.15 & 0.84 & 7.28 & 0.00 \\
 
 
 We additionally investigate two more effects: (log) response time and the effect of imbalances in the group allocation on accuracy.  
+
 \subsubsection{Effect of response time}
 The effect of (log) response times on accuracy is highly significant ($\chi^2_1 = $\Sexpr{round(gols.aov.5$Chisq[2],4)}, $P$-value = \Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1 = $\Sexpr{round(gols.aov.5b$Chisq[2],4)}, $P$-value = \Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
 
@@ -1544,129 +1545,7 @@ $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, th
 \newtext{Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither have the number of missing ellipses nor the absence of at least one ellipse a significant effect on this probability, not even when we consider the impact of individual plot types.}
 \newdo{they are all in the range of model gol.3}
 
-\newdo{Include these features in model of overall correctness (1) and the faceoff model (2)}
-
-
-
-\subsection{Faceoff Model}\label{sec:faceoff}
-Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
-The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
-\begin{figure}
-<<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
-modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
-modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
-modeldata$st <- factor(sprintf("sigma[T]==%.2f", modeldata$sdline_new))
-modeldata$sc <- factor(sprintf("sigma[C]==%.2f", modeldata$sdgroup_new))
-modeldata$sc <- factor(modeldata$sc, levels=rev(levels(modeldata$sc)))
-ggplot(data=subset(modeldata, k_new==3)) +
-  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
-  facet_grid(st+sc~., 
-             labeller=label_parsed) +
-  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
-  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
-        axis.title=element_blank(), 
-        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
-        legend.position="bottom", 
-        strip.text.y = element_text(angle=0))
-@
-\caption{\label{fig:outcome-parms}Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=3$ clusters.}
-\end{figure}
-
-\begin{figure}
-<<complex-2, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
-ggplot(data=subset(modeldata, k_new==5)) +
-  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
-  facet_grid(st+sc~., 
-             labeller=label_parsed) +
-  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
-  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
-        axis.title=element_blank(), 
-        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
-        legend.position="bottom", 
-        strip.text.y = element_text(angle=0))
-@
-\caption{Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
-\end{figure}
-
-%' 
-%' This alternative looks pretty messy
-%' <<alternative, echo=FALSE>>=
-%' library(dplyr)
-%' stats <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new, dataset, plottype) %>% summarize(
-%'   n = n(),
-%'   neither = sum(simpleoutcome=="neither")/n(),
-%'   cluster = sum(simpleoutcome=="cluster")/n(),
-%'   trend = sum(simpleoutcome=="trend")/n(),
-%'   both = sum(simpleoutcome=="both")/n()
-%' )
-%' 
-%' library(reshape2)
-%' ms <- melt(stats, measure.var=c("neither", "cluster", "trend", "both"))
-%' names(ms)[1:3] <- c("K", "sT", "sC")
-%' 
-%' qplot(plottype, value, data=ms, group=dataset, shape=variable, colour=variable) + 
-%'   facet_grid(facets=K+sC~sT, labeller="label_both") + 
-%'   geom_line(aes(group=interaction(dataset, variable))) + 
-%'   theme_bw()
-%' @
-%' 
-%' different alternative, not as messy, but there is also not much to see
-%' <<complex-3, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
-%' modeldata <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new) %>% mutate(
-%'   rep = as.numeric(dataset) - min(as.numeric(dataset)) + 1
-%' )
-%' ggplot(data=subset(modeldata, k_new==5)) +
-%'   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
-%'   facet_grid(st+sc~rep, labeller=label_parsed, space="free", scales="free") + 
-%'   scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
-%'   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
-%'         axis.title=element_blank(), 
-%'         axis.text.x=element_text(angle=330, hjust=0, vjust=1),
-%'         legend.position="bottom", 
-%'         strip.text.y = element_text(angle=0))
-%' @
-%' 
-
-% library(xtable)
-% xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
-% latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Tue Jan 12 15:17:45 2016
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrr}
-  \hline
-\bf Parameter & \bf Log Odds Ratio & \bf 95\% Lower & \bf 95\% Upper \\ 
-  \hline
-Intercept & 1.018 & -1.615 & 3.651 \\ 
-$\alpha_T$ & 16.254 & 13.276 & 19.231 \\ 
-$\alpha_C$ & -16.038 & -21.935 & -10.140 \\ 
-$\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
-{\bf Plot Type} \hfill  Trend + Error & -0.650 & -0.877 & -0.423 \\ 
-  Color + Ellipse + Trend + Error & -0.515 & -0.751 & -0.279 \\ 
-  Plain & 0.000 & --- & --- \\ 
-  Trend & 0.130 & -0.101 & 0.361 \\ 
-  Color & 0.271 & 0.032 & 0.509 \\ 
-  Shape & 0.277 & 0.043 & 0.510 \\ 
-  Color + Shape & 0.314 & 0.076 & 0.551 \\ 
-  Color + Ellipse & 0.459 & 0.207 & 0.711 \\ 
-  Color + Trend & 0.459 & 0.219 & 0.700 \\ 
-  Color + Shape + Ellipse & 0.573 & 0.317 & 0.830 \\ 
-   \hline
-\end{tabular}
-\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain plot type as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
-}
-\end{table}
-
-<<tabplus, echo=FALSE, warning=FALSE>>=
-aov <- anova(gvl.4, gvl.5)
-aov2 <- anova(gvl.4, gvl.6)
-@
-Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
-Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
-
-\subsubsection*{Effect of missing ellipse}\label{sec:gini:2}
-\newdo{Results for faceoff: Only a single missing ellipse leads to a significant effect(in favor of the trend target over the cluster target).}
-\newdo{Parameter overview of model gvl.7b -- how are individual plot types affected by a single missing ellipse in one of the panels of the lineup? That's a two-way interaction, and a teensy bit messy to explain, because the plot type effects are changed from gvl.4.}
+\newtext{These features are also discussed in the faceoff model of section~\label{sec:faceoff} to investigate their effect on the balance between target models.}
 
 %\newpage
 \subsection{Modelling response times}\label{sec:response}
@@ -1817,6 +1696,129 @@ Parameter & Estimate & Std.\ Error & $z$-value & $P$-value \\
 \end{tabular}
 \caption{\label{tab:conf}Parameters and estimates for the model of participants' confidence.  }
 \end{table}
+
+
+
+
+\subsection{Faceoff Model}\label{sec:faceoff}
+Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
+The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
+\begin{figure}
+<<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
+modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
+modeldata$st <- factor(sprintf("sigma[T]==%.2f", modeldata$sdline_new))
+modeldata$sc <- factor(sprintf("sigma[C]==%.2f", modeldata$sdgroup_new))
+modeldata$sc <- factor(modeldata$sc, levels=rev(levels(modeldata$sc)))
+ggplot(data=subset(modeldata, k_new==3)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(st+sc~., 
+             labeller=label_parsed) +
+  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+        legend.position="bottom", 
+        strip.text.y = element_text(angle=0))
+@
+\caption{\label{fig:outcome-parms}Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=3$ clusters.}
+\end{figure}
+
+\begin{figure}
+<<complex-2, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+ggplot(data=subset(modeldata, k_new==5)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(st+sc~., 
+             labeller=label_parsed) +
+  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+        legend.position="bottom", 
+        strip.text.y = element_text(angle=0))
+@
+\caption{Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
+\end{figure}
+
+%' 
+%' This alternative looks pretty messy
+%' <<alternative, echo=FALSE>>=
+%' library(dplyr)
+%' stats <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new, dataset, plottype) %>% summarize(
+%'   n = n(),
+%'   neither = sum(simpleoutcome=="neither")/n(),
+%'   cluster = sum(simpleoutcome=="cluster")/n(),
+%'   trend = sum(simpleoutcome=="trend")/n(),
+%'   both = sum(simpleoutcome=="both")/n()
+%' )
+%' 
+%' library(reshape2)
+%' ms <- melt(stats, measure.var=c("neither", "cluster", "trend", "both"))
+%' names(ms)[1:3] <- c("K", "sT", "sC")
+%' 
+%' qplot(plottype, value, data=ms, group=dataset, shape=variable, colour=variable) + 
+%'   facet_grid(facets=K+sC~sT, labeller="label_both") + 
+%'   geom_line(aes(group=interaction(dataset, variable))) + 
+%'   theme_bw()
+%' @
+%' 
+%' different alternative, not as messy, but there is also not much to see
+%' <<complex-3, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+%' modeldata <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new) %>% mutate(
+%'   rep = as.numeric(dataset) - min(as.numeric(dataset)) + 1
+%' )
+%' ggplot(data=subset(modeldata, k_new==5)) +
+%'   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+%'   facet_grid(st+sc~rep, labeller=label_parsed, space="free", scales="free") + 
+%'   scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+%'   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+%'         axis.title=element_blank(), 
+%'         axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+%'         legend.position="bottom", 
+%'         strip.text.y = element_text(angle=0))
+%' @
+%' 
+
+% library(xtable)
+% xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Tue Jan 12 15:17:45 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+\bf Parameter & \bf Log Odds Ratio & \bf 95\% Lower & \bf 95\% Upper \\ 
+  \hline
+Intercept & 1.018 & -1.615 & 3.651 \\ 
+$\alpha_T$ & 16.254 & 13.276 & 19.231 \\ 
+$\alpha_C$ & -16.038 & -21.935 & -10.140 \\ 
+$\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
+{\bf Plot Type} \hfill  Trend + Error & -0.650 & -0.877 & -0.423 \\ 
+  Color + Ellipse + Trend + Error & -0.515 & -0.751 & -0.279 \\ 
+  Plain & 0.000 & --- & --- \\ 
+  Trend & 0.130 & -0.101 & 0.361 \\ 
+  Color & 0.271 & 0.032 & 0.509 \\ 
+  Shape & 0.277 & 0.043 & 0.510 \\ 
+  Color + Shape & 0.314 & 0.076 & 0.551 \\ 
+  Color + Ellipse & 0.459 & 0.207 & 0.711 \\ 
+  Color + Trend & 0.459 & 0.219 & 0.700 \\ 
+  Color + Shape + Ellipse & 0.573 & 0.317 & 0.830 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain plot type as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
+}
+\end{table}
+
+<<tabplus, echo=FALSE, warning=FALSE>>=
+aov <- anova(gvl.4, gvl.5)
+aov2 <- anova(gvl.4, gvl.6)
+@
+Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
+Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
+
+\subsubsection{Effect of missing ellipse}\label{sec:gini:2}
+\newdo{Results for faceoff: Only a single missing ellipse leads to a significant effect(in favor of the trend target over the cluster target).}
+\newdo{Parameter overview of model gvl.7b -- how are individual plot types affected by a single missing ellipse in one of the panels of the lineup? That's a two-way interaction, and a teensy bit messy to explain, because the plot type effects are changed from gvl.4.}
 
 \end{appendix}
 \end{document}
