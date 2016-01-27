@@ -894,31 +894,49 @@ For each plot type (aesthetic combination), we first consider the probability th
 \subsection{Target Plot Identifications}
 <<target-model, echo=FALSE>>=
 modeldata$one.correct <- 1 - modeldata$neither.correct
-gol.model <-  glmer(
-  one.correct~plottype + (1 | data_name) + (1 | individualID), 
+gol <- glmer(
+  one.correct~sdline_new+sdgroup_new+k_new + plottype + (1 | data_name) + (1 | individualID), 
   data = modeldata, family = binomial(), control = glmerControl(optimizer = "bobyqa")
 )
-gol.fixef <- data.frame(confint(gol.model, method="Wald"))[-(1:2),] # exclude sigmas
+#gol.model <-  glmer(
+#  one.correct~plottype + (1 | data_name) + (1 | individualID), 
+#  data = modeldata, family = binomial(), control = glmerControl(optimizer = "bobyqa")
+#)
+gol.fixef <- data.frame(confint(gol, method="Wald"))[-(c(1:2,4:6)),] # exclude sigmas
 names(gol.fixef) <- c("LB", "UB")
-gol.fixef$OR <- fixef(gol.model)
+gol.fixef$OR <- fixef(gol)[-(2:4)]
 gol.fixef[1,1:3] <- 0
 
 modeldata$one.ellipse <- modeldata$no.ellipse == 1
-gol.2 <- update(gol.model, .~.+gini.min) # large gini (i.e. homogeneity) leads to significant better probability of picking one of the targets
-gol.2b <- update(gol.2, .~.+gini.min:plottype) 
-gol.3 <- update(gol.model, .~.+one.ellipse) # not significant, nor is the number of missing ellipses, nor the absence of at least one ellipse
+gol.2 <- update(gol, .~.+gini.min) # large gini (i.e. homogeneity) leads to significant better probability of picking one of the targets
+gol.2b <- update(gol.2, .~.+gini.min:plottype,
+                 control = glmerControl(
+                   optimizer="bobyqa",
+                   optCtrl = list(maxfun = 1e5)
+                )) # individual plot types are significantly different 
+
+gol.3 <- update(gol, .~.+one.ellipse) # not significant, nor is the number of missing ellipses, nor the absence of at least one ellipse
 gol.3b <- update(gol.3, .~.+one.ellipse:plottype) 
-gol.4 <- update(gol.model, .~.+max.range) # not significant
-gol.4b <- update(gol.model, .~.+max.range:plottype) # not significant
+gol.4 <- update(gol, .~.+max.range) # not significant
+gol.4b <- update(gol, .~.+max.range:plottype) # not significant
 
-gol.5 <- update(gol.model, .~.+log(time)) # there is a (highly) significant effect of (log) response time on accuracy. The size of the effect is on average -0.405486 for each unit increase in (log) response time.
+gol.5 <- update(gol.2b, .~.+log(time), 
+                control = glmerControl(
+                  optimizer="bobyqa",
+                  optCtrl = list(maxfun = 1e5)
+                )) # there is a (highly) significant effect of (log) response time on accuracy. The size of the effect is on average -0.405486 for each unit increase in (log) response time.
 
+gol.5b <- update(gol.2b, .~. + poly(-log(time),2), 
+                control = glmerControl(
+                  optimizer="bobyqa",
+                  optCtrl = list(maxfun = 1e5)
+                ))
 suppressMessages(require(multcomp))
-type_compare <- glht(gol.model, mcp(plottype="Tukey"))
+type_compare <- glht(gol, mcp(plottype="Tukey"))
 gol.fixef$letters <- cld(type_compare)$mcletters$Letters
 # not sure what to do about those warnings
 
-gol.fixef$label <- gsub("plottype", "", names(fixef(gol.model)))
+gol.fixef$label <- gsub("plottype", "", names(fixef(gol)))[-(2:4)]
 gol.fixef$label <- gol.fixef$label %>% 
   str_replace("color", "Color + ") %>% 
   str_replace("[sS]hape", "Shape + ") %>%
@@ -930,11 +948,11 @@ gol.fixef$label <- gol.fixef$label %>%
   reorder(gol.fixef$OR)
 
 
-sig <- anova(gol.model)
+sig <- anova(gol)
 @
 In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
 Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
-Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 385$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
+Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 387.9$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
 \begin{figure}[h!bt]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
@@ -1073,6 +1091,7 @@ gvl.fixef$label <- gvl.fixef$label %>%
   str_replace("\\(Intercept\\)", "Plain + ") %>%
   str_replace("( \\+ )$", "") %>% 
   reorder(gvl.fixef$OR)
+
 
 ggplot(data=gvl.fixef) + 
   geom_hline(yintercept=0, colour="gray70") + 
@@ -1269,7 +1288,7 @@ and
 This was due to an unintended side-effect of using the k-means algorithm for cluster allocation in the null plots: due to an imbalance in the size of clusters, an additional cue was introduced into the null plots.
 %Our cluster allocation algorithm for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
 %Numerically, these null data sets had uneven cluster allocation; 
-The estimation of bounding ellipses fails for groups with fewer than three points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. \newtext{When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1 =$\Sexpr{round(aov7$Chisq[2],4)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), and its estimate is -0.8075, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual plot types, it is also significant ($\chi^2_1 =$\Sexpr{round(aov7b$Chisq[2],4)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}).  Appendix section~\ref{sec:gini} gives more details on this model and its effects.}
+The estimation of bounding ellipses fails for groups with fewer than three points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. \newtext{When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1 =$\Sexpr{round(aov7$Chisq[2],4)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), and its estimate is -0.8075, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual plot types, it is also significant ($\chi^2_1 =$\Sexpr{round(aov7b$Chisq[2],4)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}).  Appendix section~\ref{sec:gini:2} gives more details on this model and its effects.}
 %Appendix section~\ref{sec:gini} provides more information about the unintentional differences in group sizes between null and cluster target plots. 
 
 
@@ -1430,18 +1449,41 @@ There are two main types of models discussed in this section:  the models for ac
 \text{logit }P(C_{ijk} \cup T_{ijk}) = X\alpha ...
 \end{equation}
 
+<<gols, echo=FALSE>>=
+gols.aov.2 <- anova(gol, gol.2)
+gols.aov.2b <- anova(gol.2, gol.2b)
+gols.aov.5 <- anova(gol.2b, gol.5)
+gols.aov.5b <- anova(gol.5, gol.5b)
+@
 
-\subsubsection{Effect of group imbalances}\label{sec:gini}
+%' <<pred.gol5b, echo=FALSE>>=
+%' dframe <- data.frame(expand.grid(
+%'   plottype=levels(modeldata$plottype),
+%'   sdline_new=0.25,
+%'   sdgroup_new=0.2,
+%'   k_new=3,
+%'   time=exp(seq(1,7, length.out=50)),
+%'   gini.min=0
+%' ))
+%' dframe$k_new=factor(dframe$k_new)
+%' preds <- predict(gol.5b, newdata=dframe, re.form=~0, type="response")
+%' qplot(log(time),preds, data=dframe, colour=plottype, geom="line")
+%' @
+
+The effect of (log) response times on accuracy is highly significant ($\chi^2_1 = $\Sexpr{round(gols.aov.5$Chisq[2],4)}, $P$-value = \Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1 = $\Sexpr{round(gols.aov.5b$Chisq[2],4)}, $P$-value = \Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
+
+
+\subsubsection*{Effect of group imbalances}\label{sec:gini}
 
 \newtext{Gini impurity measures the homogeneity of group allocations. Let $n_i$ be the number of elements in the $i$th cluster, $i = 1, ..., K$, with $n = \sum_{i=1}^K n_i$ and let $p_i = n_i / n$ be the frequency of cluster $i$. Then the gini impurity is calculated as 
 \[
 G(p_1, ..., p_K) = \frac{K}{K-1} \sum_{i=1}^K p_i (1 - p_i).
 \]
-$G$ is an index between 0 and 1, where 0 is maximum diversity that at least one of the frequencies is 0 or 1. A gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.} 
+$G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, that there is only one group present, i.e.\ $p_i = 0$ for all but one of the groups. A gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.} 
 
 \newtext{Other features measuring the imbalance within a lineup that we consider besides (a) gini impurity are (b)  the difference between the maximum and the minimum number of elements in each of the groups of a lineup, and (c) the number of ellipses missing from the lineup.}
 
-\newtext{The probability to pick at least one of the targets significantly increases with an increase in gini impurity, indicating a higher amount of homogeneity in group sizes ($\chi^2_1 = 3.94$, $P$-value = 0.0472). We further see a significant effect of gini impurity on individual plot types ($\chi^2_9 = 34.69$, $P$-value = 0.0001). }
+\newtext{The probability to pick at least one of the targets significantly increases with an increase in gini impurity, indicating a higher amount of homogeneity in group sizes ($\chi^2_1 = $\Sexpr{round(gols.aov.2$Chisq[2],4)}, $P$-value = \Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). We further see a significant effect of gini impurity on individual plot types ($\chi^2_9 = $\Sexpr{round(gols.aov.2b$Chisq[2],4)}, $P$-value < 0.0001). }
 
 
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
@@ -1458,8 +1500,7 @@ $G$ is an index between 0 and 1, where 0 is maximum diversity that at least one 
 \newdo{Include these features in model of overall correctness (1) and the faceoff model (2)}
 
 
-\newdo{Results for faceoff: Only a single missing ellipse leads to a significant effect(in favor of the trend target over the cluster target).}
-\newdo{Parameter overview of model gvl.7b -- how are individual plot types affected by a single missing ellipse in one of the panels of the lineup? That's a two-way interaction, and a teensy bit messy to explain, because the plot type effects are changed from gvl.4.}
+
 \subsection{Faceoff Model}\label{sec:faceoff}
 Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
 The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
@@ -1576,7 +1617,9 @@ aov2 <- anova(gvl.4, gvl.6)
 Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
 Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
-
+\subsubsection*{Effect of missing ellipse}\label{sec:gini:2}
+\newdo{Results for faceoff: Only a single missing ellipse leads to a significant effect(in favor of the trend target over the cluster target).}
+\newdo{Parameter overview of model gvl.7b -- how are individual plot types affected by a single missing ellipse in one of the panels of the lineup? That's a two-way interaction, and a teensy bit messy to explain, because the plot type effects are changed from gvl.4.}
 
 %\newpage
 \subsection{Modelling response times}\label{sec:response}
@@ -1683,7 +1726,7 @@ The approximation of confidence level (which is a bounded, discrete variable) is
 
 Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model. The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported along with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level is significantly lower than if one of the two targets was identified\protect\footnote{The decrease in confidence when both targets are identified may be due to the additional complexity of dual-target search \citep{fleck2010generalized, cain2011anticipatory, adamo2015targets}}. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. 
 
-\newdo{I don't  agree with the conclusion below: the dependent variable is not accuracy, but self-reported confidence. For speed-accuracy we need to fit a different model -- model gol.5 does attempt this, and shows that we do, indeed have a highly significant speed-accuracy tradeoff. }
+\newdo{I don't  agree with the conclusion below: the dependent variable is not accuracy, but self-reported confidence. For speed-accuracy we need to fit a different model -- model gol.5 does attempt this, and shows that we do indeed have a highly significant speed-accuracy relationship, however, as response times are longer, accuracy goes down. }
 These results suggest that the speed-accuracy tradeoff was not evident in this experiment: participants who identified one target plot correctly were faster than those who did not identify either target plot correctly. This may be due to the pre-selection of participants who were able to successfully complete at least one lineup task.
 
 \newtext{These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
