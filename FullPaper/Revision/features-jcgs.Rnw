@@ -1800,10 +1800,35 @@ aov.9 <- anova(gvl.4, gvl.9) # factor(no.ellipse)
 Response time (composed of log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
 Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
-What does have a significant effect on the balance between cluster target and trend target, is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse leads to a significant effect in favor of the trend target over the cluster target (\newdo{XXX estimate XXX}; $\chi_2^1 =$\Sexpr{round(aov.7$Chisq[2],4)}, $P$-value = \Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
+What does have a significant effect on the balance between cluster target and trend target, is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse cuts the probability that the cluster target is selected in less than half (44.6\%; $\chi_2^1 =$\Sexpr{round(aov.7$Chisq[2],4)}, $P$-value = \Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
 We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual plot types into account ($\chi_2^9 =$\Sexpr{round(aov.7b$Chisq[2],4)}, $P$-value = \Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}).
+\newtext{These effects are summarised in Figure~\ref{fig:gvl7b}.}
+\begin{figure}
+<<gols.7b, echo=FALSE, fig.width=7, fig.height=4, out.width='0.8\\textwidth'>>=
+df7 <- data.frame(expand.grid(
+  plottype =levels(modeldata$plottype),
+  sdline_new = 0.275,
+  sdgroup_new = 0.25,
+  k_new=5,
+  one.ellipse=c(TRUE, FALSE)
+))
 
-\newdo{XXX should we summarise these effects in a figure? XXX}
+df7$pred4 <- predict(gvl.4, newdata=df7, re.form=~0, type="response")
+df7$pred7 <- predict(gvl.7, newdata=df7, re.form=~0, type="response")
+df7$pred7b <- predict(gvl.7b, newdata=df7, re.form=~0, type="response")
+df7 <- merge(df7, unique(modeldata[,c("plottype", "label")]), by="plottype")
+
+df7$plottype <- reorder(df7$plottype, df7$pred4)
+qplot(pred4, label, data=df7, shape=I(3)) + 
+  geom_point(aes(x=pred7b, colour=one.ellipse, shape=one.ellipse), size=3) +
+  theme_bw() + ylab("") +
+  theme(legend.position="bottom") + 
+  scale_colour_manual("One ellipse missing", values=c("steelblue", "darkorange")) +
+  scale_shape("One ellipse missing") +
+  xlab("Probability to pick cluster target\n(given one of the targets was picked)") 
+@
+\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different plot types. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model (\ref{eqn:faceoffModel}), the filled triangle and circle represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and plot types. The Trend plots and Shapes are the least affected by the imbalance in groups, while the Color plot shows huge differences in the predicted probability.}
+\end{figure}
 
 \end{appendix}
 \end{document}
