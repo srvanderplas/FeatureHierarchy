@@ -1449,7 +1449,7 @@ Figure~\ref{fig:simulation} shows the result of this simulation approach for a l
 There are two main types of models discussed in this section:  the models for accuracy  (section~\ref{sec:accuracy}), response times (section~\ref{sec:response}) and confidence levels (section~\ref{sec:confidence}) are based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the faceoff model (section~\ref{sec:faceoff}) uses only lineups, where at least one of the targets was identified to investigate which variables have an effect on the balance between the targets.
 
 \subsection{Accuracy Model}\label{sec:accuracy}
-\newtext{The lineup protocol allows us an easy way of measuring accuracy of  evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that}
+\newtext{The lineup protocol allows us an easy way of measuring accuracy of  evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that participant $k$ identifies (at least) one of the targets on the lineup (using aesthetics set $i$) of dataset $j$:}
 \begin{align}
 \text{logit }P(C_{ijk} \cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:responseModel}
 \end{align}
@@ -1460,7 +1460,7 @@ where \begin{itemize}
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
 \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
 \end{itemize}
-We also assume that random effects are orthogonal.
+We also assume that random effects for dataset and participant are orthogonal. 
 
 <<gols, echo=FALSE>>=
 gols.aov.2 <- anova(gol, gol.2)
@@ -1549,7 +1549,7 @@ $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, th
 
 %\newpage
 \subsection{Modelling response times}\label{sec:response}
-While we do not have the same amount of control in an AMT study that we would have an a lab setting, we can measure the time between presenting a lineup and the time that a participant submits the results on it. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use the log of response times $T = \left(t_{ijk}\right)_{n \times 1}$:
+While we do not have the same amount of control in an AMT study that we would have in a lab setting, we can accurately capture the time between presenting a lineup to a particpant and the time at which results are submitted. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use the log of response times $T = \left(t_{ijk}\right)_{n \times 1}$:
 <<response, echo=FALSE>>=
 #load("../../Data/modeldata.Rdata")
 
@@ -1596,8 +1596,8 @@ where \begin{itemize}
 \end{itemize}
 We also assume that random effects for dataset and participant are orthogonal. 
 
-Table~\ref{tab:response} gives an overview of all parameters of the response time model and their estimates. Similar to what has been found in other lineup studies \citep{humanfactorslineups, hofmann2012graphical}, participants take on average 25\% longer to respond to the first lineup than to subsequent lineups. Aside from this, we see that as the difficulty of lineups increases (controlled by an increase in the parameters $s_C$ and $s_T$), the average amount of time participants spend on the evaluation significantly increases. 
-Depending on the result, there are differences in the amount of time: if either one of the targets is identified, the amount of time taken to answer is significantly shorter than if neither of the targets is found. Answers take on average the longest, if both targets are identified (however, this only happens in 0.6\% of the responses). 
+Table~\ref{tab:response} gives an overview of all parameters of the response time model and their estimates. Similar to what has been found in other lineup studies \citep{humanfactorslineups, hofmann2012graphical}, participants take on average 25\% longer to respond to the first lineup than to subsequent lineups. Aside from this, we see that as the difficulty of lineups increases (controlled by an increase in the parameters $s_C$ and $s_T$), the average amount of time participants spend on each evaluation significantly increases. 
+Depending on the outcome of the evaluation, there are differences in the amount of time: if either one of the targets is identified, the amount of time taken to answer is significantly shorter than if neither of the targets is found. Answers take on average the longest, if both targets are identified (however, this only happens in 0.6\% of the responses). 
 Plot aesthetics have a significant impact on the amount of time for responses, with increasing plot complexity associated with increased evaluation time. This may be a function of increased cognitive load, as participants must examine more features in order to identify which plot has the strongest signal. For instance, when color, ellipses, trend lines, and error bands are present, participants have to compare the allocation of color to points, the size, shape, and distance between each set of ellipses, the slope of each trend line, and the width of the error bands. While each participant almost certainly does not complete a full pairwise comparison of all 20 lineup plots across each feature set, the increased complexity of each additional feature does increase the space which must be examined using perceptual heuristics in order to identify the target plot correctly. This is consistent with \citet{borgo2012empirical}, who found that visual embellishments increase the time required to perform visual search tasks using data displays.
 % xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f","f","e"))
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
@@ -1630,11 +1630,11 @@ $\mu$ & 2.660 & 0.108 & 24.586 & $< 0.0001$ \\
   Both & 0.166 & 0.059 & 2.820 & 0.0048 \\ 
    \hline
 \end{tabular}
-\caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$ values are based on a normal approximation of the $t$ statistics.}
+\caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$-values are based on a normal approximation of the $t$ statistics.}
 \end{table}
 
 \subsection{Model of confidence levels}\label{sec:confidence}
-With each lineup evaluations, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. Let $C = \left(c_{ijk} \right)$ be the confidence level participant $k$ reports on the lineup (using aesthetics set $i$) of dataset $j$:
+With each lineup evaluation, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. Let $C = \left(c_{ijk} \right)$ be the confidence level participant $k$ reports on the lineup (using aesthetics set $i$) of dataset $j$:
 
 \begin{align}
 C & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:confidenceModel}
@@ -1702,7 +1702,7 @@ Parameter & Estimate & Std.\ Error & $z$-value & $P$-value \\
 
 \subsection{Faceoff Model}\label{sec:faceoff}
 Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
-The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). It is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
+The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). The effect of plot types is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
@@ -1740,27 +1740,6 @@ ggplot(data=subset(modeldata, k_new==5)) +
 \caption{Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
 \end{figure}
 
-%' 
-%' This alternative looks pretty messy
-%' <<alternative, echo=FALSE>>=
-%' library(dplyr)
-%' stats <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new, dataset, plottype) %>% summarize(
-%'   n = n(),
-%'   neither = sum(simpleoutcome=="neither")/n(),
-%'   cluster = sum(simpleoutcome=="cluster")/n(),
-%'   trend = sum(simpleoutcome=="trend")/n(),
-%'   both = sum(simpleoutcome=="both")/n()
-%' )
-%' 
-%' library(reshape2)
-%' ms <- melt(stats, measure.var=c("neither", "cluster", "trend", "both"))
-%' names(ms)[1:3] <- c("K", "sT", "sC")
-%' 
-%' qplot(plottype, value, data=ms, group=dataset, shape=variable, colour=variable) + 
-%'   facet_grid(facets=K+sC~sT, labeller="label_both") + 
-%'   geom_line(aes(group=interaction(dataset, variable))) + 
-%'   theme_bw()
-%' @
 %' 
 %' different alternative, not as messy, but there is also not much to see
 %' <<complex-3, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
@@ -1812,13 +1791,18 @@ $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
 <<tabplus, echo=FALSE, warning=FALSE>>=
 aov <- anova(gvl.4, gvl.5)
 aov2 <- anova(gvl.4, gvl.6)
+aov.7 <- anova(gvl.4, gvl.7)
+aov.7b <- anova(gvl.7, gvl.7b)
+aov.8 <- anova(gvl.4, gvl.8) # gini 
+aov.9 <- anova(gvl.4, gvl.9) # factor(no.ellipse) 
 @
-Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
+Response time (composed of log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2 =$\Sexpr{round(aov$Chisq[2],4)}, $P$-value = \Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
 Nor does the confidence level of participants ($\chi_2^2 =$\Sexpr{round(aov2$Chisq[2],4)}, $P$-value = \Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
-\subsubsection{Effect of missing ellipse}\label{sec:gini:2}
-\newdo{Results for faceoff: Only a single missing ellipse leads to a significant effect(in favor of the trend target over the cluster target).}
-\newdo{Parameter overview of model gvl.7b -- how are individual plot types affected by a single missing ellipse in one of the panels of the lineup? That's a two-way interaction, and a teensy bit messy to explain, because the plot type effects are changed from gvl.4.}
+What does have a significant effect on the balance between cluster target and trend target, is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse leads to a significant effect in favor of the trend target over the cluster target (\newdo{XXX estimate XXX}; $\chi_2^1 =$\Sexpr{round(aov.7$Chisq[2],4)}, $P$-value = \Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
+We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual plot types into account ($\chi_2^9 =$\Sexpr{round(aov.7b$Chisq[2],4)}, $P$-value = \Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}).
+
+\newdo{XXX should we summarise these effects in a figure? XXX}
 
 \end{appendix}
 \end{document}
