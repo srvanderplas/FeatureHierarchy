@@ -1484,7 +1484,7 @@ gols.aov.5b <- anova(gol.5, gol.5b)
 %' qplot(log(time),preds, data=dframe, colour=plottype, geom="line")
 %' @
 \newtext{Table~\ref{tab:gol} shows an overview of the parameters of the accuracy model and their estimates. Both $\alpha_T$ and $\alpha_C$ have large negative effects that are highly significant. This indicates that as the signal in the target plots weakens (by an increase in variability around the trend line or within cluster variability), accuracy of participants decreases on average. $\alpha_K$ has a small negative effect, i.e.\ participants are on average answering lineups with three clusters with more accuracy than lineups with five clusters. However, this effect is not significant.
-The order effect is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation. }
+The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation. }
 \newdo{XXX Susan, this is a fatigue effect -- do you have a reference for this?}
 
 \begin{table}[ht]
