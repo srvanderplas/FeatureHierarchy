@@ -235,7 +235,7 @@ In plots that are ambiguous, containing some clustering of points as well as a l
 The study in this paper is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. 
 
 The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. 
-Experimental results are presented in section \ref{sec:Results}, and implications and conclusions are discussed in section \ref{sec:Conclusion}. 
+Experimental results are presented in section~\ref{sec:Results}, and implications and conclusions are discussed in section~\ref{sec:Conclusion}. 
 
 \section{Experimental Setup and Design} \label{sec:ExperimentalDesign}
 In this section, we discuss the models generating data for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
@@ -682,12 +682,8 @@ The primary purpose of this study is to understand how visual aesthetics affect 
 
 A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
 
-\subsection{Task description}
-\newdo{What did participants have to do: (i) read through legal matters, (ii) pass two trials of easy (single target) lineups, (iii) give feedback on a set of lineups, (iv) respond to demographics at some point (voluntary).
-}
 
-
-\subsection{Participant Recruitment}
+\subsection{Participant Recruitment and Task Description}
 Participants were recruited using Amazon's Mechanical Turk service\citep{amazon}, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks that are not easily automated. Only workers with at least 100 previous HITs at a 95\% successful completion rate were allowed to sign up for completing the task. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system, as well as a vested interest in doing well. 
 
 
@@ -696,10 +692,10 @@ Participants had to complete a pre-trial before being able to access the experim
 %Before access to the experiment was given, participants had to complete a an example task similar to the task in the experiment before deciding whether or not to complete the HIT. 
 The lineups used in the pre-trial contained only a single target,% (5 trend and 5 cluster trials were provided), 
 and participants had to correctly identify the target in at least two lineups. %before being allowed into  the HIT and proceeding to the experimental phase. 
-The webpage used to collect data from Amazon Turk participants is available at \url{http://www.mlcape.com:8080/mahbub/turk16/index.html}. No data was recorded from the example task because participants had not yet provided informed consent. 
+The webpage used to collect data from Amazon Turk participants is available at \url{http://www.mlcape.com:8080/mahbub/turk16/index.html}. No data was recorded from the pre-trial because participants had not provided informed consent at this point. 
 
 Once participants completed the example task and provided informed consent, they could accept the HIT through Amazon and were directed to the main experimental task. 
-Participants were required to complete 10 lineups, answering ``Which plot is the most different from the others?". Participants were asked to provide a short reason for their choice, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 1 (least confident) to 5 (most confident). 
+Participants were required to complete ten lineups, answering ``Which plot is the most different from the others?". Participants were asked to provide a short reason for their choice, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 0 (least confident) to 5 (most confident). 
 After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
 
 Throughout the experiment, participants were not informed about the inclusion of a second target into the lineup plots.  
@@ -1056,7 +1052,7 @@ We also assume that random effects for dataset and participant are orthogonal.
 The estimated log odds of a decision in favor of cluster over trend target for each of the plot types are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
 As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + prediction results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
-The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant (see Table~\ref{tab:results} for exact numbers) and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly.
+The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in appendix section~\ref{sec:faceoff} for exact numbers and a discussion of further co-variates).
 
 \begin{figure}[h!bt]\centering
 <<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
@@ -1546,7 +1542,7 @@ $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, th
 \newtext{Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither have the number of missing ellipses nor the absence of at least one ellipse a significant effect on this probability, not even when we consider the impact of individual plot types.}
 %\newdo{they are all in the range of model gol.3}
 
-\newtext{These features are  discussed in more detail in the accuracy model in appendix section~\ref{sec:accuracy}. To investigate their effect on the balance between target models they are also investigated in the faceoff models of  appendix section~\ref{sec:faceoff}.}
+\newtext{To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{sec:faceoff}.}
 
 %\newpage
 \subsection{Modelling response times}\label{sec:response}
