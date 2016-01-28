@@ -928,7 +928,7 @@ gol.5 <- update(gol, .~.+log(as.numeric(trial.time)),
                   optCtrl = list(maxfun = 2e5)
                 )) # there is a (highly) significant effect of (log) response time on accuracy. The size of the effect is on average -0.405486 for each unit increase in (log) response time.
 
-gol.5b <- update(gol, .~. + poly(as.numeric(trial.time),2), 
+gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2), 
                 control = glmerControl(
                   optimizer="bobyqa",
                   optCtrl = list(maxfun = 1e5)
@@ -1462,8 +1462,8 @@ We also assume that random effects for dataset and participant are orthogonal.
 <<gols, echo=FALSE>>=
 gols.aov.2 <- anova(gol, gol.2)
 gols.aov.2b <- anova(gol.2, gol.2b)
-gols.aov.5 <- anova(gol.2b, gol.5)
-gols.aov.5b <- anova(gol.5, gol.5b)
+gols.aov.5 <- anova(gol, gol.5)
+gols.aov.5b <- anova(gol, gol.5b)
 @
 
 %' <<pred.gol5b, echo=FALSE>>=
