@@ -908,31 +908,6 @@ gol.fixef$OR <- fixef(gol)[-(2:5)]
 gol.fixef[1,1:3] <- 0
 
 
-modeldata$one.ellipse <- modeldata$no.ellipse == 1
-gol.2 <- update(gol, .~.+gini.min) # large gini (i.e. homogeneity) leads to significant better probability of picking one of the targets
-gol.2b <- update(gol.2, .~.+gini.min:plottype,
-                 control = glmerControl(
-                   optimizer="bobyqa",
-                   optCtrl = list(maxfun = 1e5)
-                )) # individual plot types are significantly different 
-
-gol.3 <- update(gol, .~.+one.ellipse) # not significant, nor is the number of missing ellipses, nor the absence of at least one ellipse
-gol.3b <- update(gol.3, .~.+one.ellipse:plottype) 
-gol.4 <- update(gol, .~.+max.range) # not significant
-gol.4b <- update(gol, .~.+max.range:plottype) # not significant
-
-
-gol.5 <- update(gol, .~.+log(as.numeric(trial.time)), 
-                control = glmerControl(
-                  optimizer="bobyqa",
-                  optCtrl = list(maxfun = 2e5)
-                )) # there is a (highly) significant effect of (log) response time on accuracy. The size of the effect is on average -0.405486 for each unit increase in (log) response time.
-
-gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2), 
-                control = glmerControl(
-                  optimizer="bobyqa",
-                  optCtrl = list(maxfun = 1e5)
-                ))
 suppressMessages(require(multcomp))
 type_compare <- glht(gol, mcp(plottype="Tukey"))
 gol.fixef$letters <- cld(type_compare)$mcletters$Letters
@@ -951,6 +926,41 @@ gol.fixef$label <- gol.fixef$label %>%
 
 
 sig <- anova(gol)
+
+@
+
+<<gol2, dependson='target-model', echo=FALSE>>=
+gol.2 <- update(gol, .~.+gini.min) # large gini (i.e. homogeneity) leads to significant better probability of picking one of the targets
+gol.2b <- update(gol.2, .~.+gini.min:plottype,
+                 control = glmerControl(
+                   optimizer="bobyqa",
+                   optCtrl = list(maxfun = 1e5)
+                )) # individual plot types are significantly different 
+@
+
+<<gol3, dependson='target-model', echo=FALSE>>=
+modeldata$one.ellipse <- modeldata$no.ellipse == 1
+gol.3 <- update(gol, .~.+one.ellipse) # not significant, nor is the number of missing ellipses, nor the absence of at least one ellipse
+gol.3b <- update(gol.3, .~.+one.ellipse:plottype) 
+@
+
+<<gol4, dependson='target-model', echo=FALSE>>=
+gol.4 <- update(gol, .~.+max.range) # not significant
+gol.4b <- update(gol, .~.+max.range:plottype) # not significant
+@
+
+<<gol5, dependson='target-model', echo=FALSE>>=
+gol.5 <- update(gol, .~.+log(as.numeric(trial.time)), 
+                control = glmerControl(
+                  optimizer="bobyqa",
+                  optCtrl = list(maxfun = 2e5)
+                )) # there is a (highly) significant effect of (log) response time on accuracy. The size of the effect is on average -0.405486 for each unit increase in (log) response time.
+
+gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2), 
+                control = glmerControl(
+                  optimizer="bobyqa",
+                  optCtrl = list(maxfun = 1e5)
+                ))
 @
 In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
 Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
@@ -1054,19 +1064,55 @@ As hypothesized, the strongest signal for identifying groups, is color + shape +
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in appendix section~\ref{sec:faceoff} for exact numbers and a discussion of further co-variates).
 
-\begin{figure}[h!bt]\centering
-<<group-vs-line, echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
+
+<<group-vs-line, echo=FALSE, warning = FALSE>>=
 faceoff$one.ellipse <- faceoff$no.ellipse == 1
 
 gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
+
+gvl.fixef <- data.frame(confint(gvl.4, method="Wald"))[-(1:2),] # exclude sigmas
+names(gvl.fixef) <- c("LB", "UB")
+gvl.fixef$OR <- fixef(gvl.4)
+gvl.fixef <- rbind(gvl.fixef, c(0,0,0))
+row.names(gvl.fixef)[14] <- "plottypePlain"
+
+gvl.all <- gvl.fixef
+gvl.fixef <- gvl.fixef[c(14,5:13),]
+
+suppressMessages(require(multcomp))
+type_compare <- glht(gvl.4, mcp(plottype="Tukey"))
+gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
+# not sure what to do about those warnings
+@
+
+<<gvl5, dependson='group-vs-line', echo=FALSE>>=
 gvl.5 <-  update(gvl.4, .~.+first.trial +log(as.numeric(trial.time)), control=glmerControl(optimizer="bobyqa"))
+@
+
+<<gvl6, dependson='group-vs-line', echo=FALSE>>=
 gvl.6 <-  update(gvl.4, .~.+factor(conf_level), control=glmerControl(optimizer="bobyqa"))
+@
+
+<<gvl7, dependson='group-vs-line', echo=FALSE>>=
 gvl.7 <-  update(gvl.4, .~.+one.ellipse, control=glmerControl(optimizer="bobyqa"))
 aov7 <- anova(gvl.4, gvl.7)
-gvl.8 <-  update(gvl.4, .~.+gini.min, control=glmerControl(optimizer="bobyqa")) # not significant, not even a little bit
-gvl.9 <-  update(gvl.4, .~.+factor(no.ellipse), control=glmerControl(optimizer="bobyqa")) # only 1 missing ellipse has significant negative effect! beautiful!
 gvl.7b <-  update(gvl.7, .~.+one.ellipse:plottype, control=glmerControl(optimizer="bobyqa"))
 aov7b <- anova(gvl.7, gvl.7b)
+@
+
+<<gvl8, dependson='group-vs-line', echo=FALSE>>=
+gvl.8 <-  update(gvl.4, .~.+gini.min, control=glmerControl(optimizer="bobyqa")) # not significant, not even a little bit
+@
+
+<<gvl9, dependson='group-vs-line', echo=FALSE>>=
+gvl.9 <-  update(gvl.4, .~.+factor(no.ellipse), control=glmerControl(optimizer="bobyqa")) # only 1 missing ellipse has significant negative effect! beautiful!
+@
+
+\begin{figure}[h!bt]\centering
+<<group-vs-line-fig, dependson='group-vs-line-fig', echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
+faceoff$one.ellipse <- faceoff$no.ellipse == 1
+
+gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
 
 gvl.fixef <- data.frame(confint(gvl.4, method="Wald"))[-(1:2),] # exclude sigmas
 names(gvl.fixef) <- c("LB", "UB")
@@ -1093,7 +1139,6 @@ gvl.fixef$label <- gvl.fixef$label %>%
   str_replace("\\(Intercept\\)", "Plain + ") %>%
   str_replace("( \\+ )$", "") %>% 
   reorder(gvl.fixef$OR)
-
 
 ggplot(data=gvl.fixef) + 
   geom_hline(yintercept=0, colour="gray70") + 
