@@ -1072,7 +1072,9 @@ As hypothesized, the strongest signal for identifying groups, is color + shape +
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in appendix section~\ref{sec:faceoff} for exact numbers and a discussion of further co-variates).
 
-\newdo{We found the interaction effects between $s_C$ and plot type and $s_T$ and plot type to be not significant, i.e. the results for the plot types are stable in that sense, that it does not seem to matter how difficult (at least within our parameter setting) a lineup is. XXX SUsan, do we want to include this? it's in models gvl.4d and gvl.4e - I didn't include those models in the paper yet, but they are in expanded-model.R.}
+\newdo{We found the interaction effects between $s_C$ and plot type and $s_T$ and plot type to be not significant, i.e. the results for the plot types are stable in that sense, that it does not seem to matter how difficult (at least within our parameter setting) a lineup is. XXX Susan, do we want to include this? it's in models gvl.4d and gvl.4e - I didn't include those models in the paper yet, but they are in expanded-model.R.
+Numbers: $s_T$: plottype interaction: 11.15,9,0.2656 
+$s_C$:plottype interaction: 6.9026,9,0.6473}
 <<group-vs-line, echo=FALSE, warning = FALSE>>=
 faceoff$one.ellipse <- faceoff$no.ellipse == 1
 
