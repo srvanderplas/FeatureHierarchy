@@ -1845,6 +1845,7 @@ We also find a significant effect if we additionally take the two-way interactio
 \newtext{These effects are summarised in Figure~\ref{fig:gvl7b}.}
 \begin{figure}
 <<gols.7b, echo=FALSE, fig.width=7, fig.height=4, out.width='0.8\\textwidth'>>=
+
 df7 <- data.frame(expand.grid(
   plottype =levels(modeldata$plottype),
   sdline_new = 0.275,
@@ -1853,13 +1854,31 @@ df7 <- data.frame(expand.grid(
   one.ellipse=c(TRUE, FALSE)
 ))
 
+df7plus <- data.frame(expand.grid(
+  data_name=unique(faceoff$data_name),
+  plottype =levels(modeldata$plottype),
+  sdline_new = 0.275,
+  sdgroup_new = 0.25,
+  k_new=5,
+  one.ellipse=c(TRUE, FALSE)
+))
 df7$pred4 <- predict(gvl.4, newdata=df7, re.form=~0, type="response")
 df7$pred7 <- predict(gvl.7, newdata=df7, re.form=~0, type="response")
 df7$pred7b <- predict(gvl.7b, newdata=df7, re.form=~0, type="response")
 df7 <- merge(df7, unique(modeldata[,c("plottype", "label")]), by="plottype")
 
+rf7 <- data.frame(ranef(gvl.7b)$data_name)
+rf7$data_name <- row.names(rf7)
+names(rf7)[1] <- "rdata"
+df7plus$pred7b <- predict(gvl.7b, newdata=df7plus, re.form=~0, type="link")
+df7plus <- merge(df7plus, rf7, by="data_name")
+df7plus$predlink <- with(df7plus, pred7b+rdata)
+df7plus$predprob <- with(df7plus, exp(predlink)/(1+exp(predlink)) )
+df7plus <- merge(df7plus, unique(modeldata[,c("plottype", "label")]), by="plottype")
+
 df7$plottype <- reorder(df7$plottype, df7$pred4)
 qplot(pred4, label, data=df7, shape=I(3)) + 
+#  geom_point(aes(x=predprob, colour=one.ellipse, shape=one.ellipse), alpha=0.25, size=1.5, data=df7plus) +
   geom_point(aes(x=pred7b, colour=one.ellipse, shape=one.ellipse), size=3) +
   theme_bw() + ylab("") +
   theme(legend.position="bottom") + 
