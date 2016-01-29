@@ -54,7 +54,8 @@ There are some assumptions here, rather than truisms or established facts.
 - Task description in a separate subsection, not buried within the participant recruitment subsection
     - *that might help, I agree*
 - Fig 11 is confusing, given that plot types associated with clustering have a lower probability of correct target evaluations. What is the frequency of cluster vs. trend target selection in a plain graph?
-    - *We added the odds for selecting the cluster over the trend target for the plain graph.*
+    - *There is no such thing as 'the odds' of cluster versus trend selection for a plain graph, because these odds are highly dependent on the actual parameter setting - e.g. for a lineup with a strong cluster signal (i.e. s_C low, and s_T relatively large), the odds of choosing the cluster target are much higher than if the cluster signal is weak. However, the relative log odds (i.e. the odds ratio) between the plot types is unaffected by this, because model (1) does not include any interaction of plot type effect with another co-variate.*
+    - *We have added the odds for selecting the cluster over the trend target for the plain graph for one set of parameters to give an indication of the overall odds.*
     - *The confusion arises from the problem, that while overall the probability of identifying a target decreases, the odds are still in favor of the clustering target. We might need to add something on the gini index.*
 - How do subjective confidence scores correlate with incorrect evaluations or estimated odds as shown in Fig 11?
     - *They don't. Is this consistent with other Mturk studies?*
