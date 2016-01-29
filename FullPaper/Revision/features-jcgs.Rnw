@@ -31,6 +31,15 @@
 %---------------------------------------------------
 %                 Placing Figures
 
+\renewcommand{\topfraction}{0.99}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.99}	% max fraction of floats at bottom
+
+\renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+%   Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.98}	% require fuller float pages
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.98}	% require fuller float pages
+
 
 %---------------------------------------------------
 % Define new environment
@@ -284,7 +293,7 @@ $$
 The use of $R^2$ to assess the strength of the linear relationship (rather than the correlation) is indicated because human perception of correlation strength more closely aligns with $R^2$ \citep{bobko1979perception,lewandowsky1989perception}. 
 
 \begin{figure}[ht]
-<<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE>>=
+<<trends, fig.width=8, fig.height=2.5, out.width='\\textwidth', echo=FALSE>>=
 res <- data.frame(sd.trend = rep(c(0.1, 0.2, 0.3, 0.4), each = 45))
 res <- res %>% group_by(sd.trend) %>% do(sim.line(N = 45, sd.trend = as.numeric(.[1,1])))
 
@@ -407,7 +416,7 @@ Observations are assigned to specific clusters using hierarchical clustering, wh
 This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[hbt]
-<<lambda, fig.width=8, fig.height=3.5, out.width='.9\\textwidth', echo=FALSE>>=
+<<lambda, fig.width=8, fig.height=3.5, out.width='.95\\textwidth', echo=FALSE>>=
 
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -566,12 +575,6 @@ It has been established that human perception of scatterplots does not replicate
 Each of the generated datasets is then plotted as a lineup using aesthetics, which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change a participant's preference and ability to identify each target plot. 
 The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
 
-\subsection{Lineup Rendering}
-\subsubsection{Plot Aesthetics}
-Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. 
-For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification.
-Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
-
 \begin{table}[hbtp]
 \centering
 \scalebox{0.8}{
@@ -586,6 +589,11 @@ Trend + Prediction \end{tabular}\\
 \end{tabular}}
 \caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
+\subsection{Lineup Rendering}
+\subsubsection{Plot Aesthetics}
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. 
+For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification.
+Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
 
 \begin{figure}[ht]
 \centering
@@ -1528,7 +1536,7 @@ gols.aov.5b <- anova(gol.5, gol.5b)
 The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation. }
 \newdo{XXX Susan, this is a fatigue effect -- do you have a reference for this?}
 
-\begin{table}[ht]
+\begin{table}[htbp]
 % xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
 \centering
 \begin{tabular}{rrrrr}
@@ -1643,7 +1651,7 @@ Plot aesthetics have a significant impact on the amount of time for responses, w
 % xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f","f","e"))
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
 % Wed Jan 20 22:41:48 2016
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{rrrrr}
   \hline
@@ -1698,7 +1706,6 @@ These results suggest that the speed-accuracy tradeoff was not evident in this e
 
 \newtext{These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
 }
-\newdo{This is a fun result! It goes hand in hand with the signal strength -- ellipses emphasize the absence of individual groups. }
 <<modconfidence, echo=FALSE>>=
 conf <- lmer(data=modeldata, conf_level~log(as.numeric(trial.time))+plottype+simpleoutcome+sdline_new+sdgroup_new+k_new+(1|dataset)+(1|ip_address))
 
@@ -1708,7 +1715,7 @@ table$pvalues <- pconf$test$pvalues
 @
 
 % xtable(table, digits=c(0,3,3,3, 3), display=c("s","f","f", "f","e"))
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{rrrrr}
   \hline
@@ -1803,7 +1810,7 @@ ggplot(data=subset(modeldata, k_new==5)) +
 % xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
 % Tue Jan 12 15:17:45 2016
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{rrrr}
   \hline
