@@ -1529,28 +1529,27 @@ The order effect $\alpha_O$ is small, but significant; as participants answer mo
 \newdo{XXX Susan, this is a fatigue effect -- do you have a reference for this?}
 
 \begin{table}[ht]
-% xtable(summary(gol)$coefficients, digits=c(4))
+% xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
 \centering
 \begin{tabular}{rrrrr}
   \hline
 Parameter & Estimate & Std.\ Error & $z$-value & Pr($>$$|$z$|$) \\ 
   \hline
-$\mu$ & 6.15 & 0.84 & 7.28 & 0.00 \\ 
-  $\alpha_T$ & -2.55 & 1.20 & -2.13 & 0.03 \\ 
-  $\alpha_C$ & -8.59 & 2.37 & -3.62 & 0.00 \\ 
-  $\alpha_{K=3}$ & 0.00 & --- & --- & --- \\ 
-  $\alpha_{K=5}$ & -0.21 & 0.23 & -0.93 & 0.35 \\ 
-  $\alpha_O$  & -0.02 & 0.01 & -2.33 & 0.02 \\ [3pt]
+$\mu$ & 6.47 & 1.08 & 6.01 & $< 0.0001$ \\ 
+  $\alpha_T$ & -2.55 & 1.20 & -2.12 & 0.0339 \\ 
+  $\alpha_C$ & -8.59 & 2.40 & -3.58 & 0.0003 \\ 
+  $\alpha_{K}$ & -0.11 & 0.11 & -0.93 & 0.3523 \\ 
+  $\alpha_O$  & -0.02 & 0.01 & -2.33 & 0.0199 \\ [3pt]
 {\bf Plot type} \hfill Plain & 0.00 & --- & --- & --- \\ 
-  Trend + Error & -0.08 & 0.14 & -0.57 & 0.57 \\ 
-  Shape & -0.08 & 0.14 & -0.57 & 0.57 \\ 
-  Trend & -0.35 & 0.13 & -2.61 & 0.01 \\ 
-  Color + Shape & -0.51 & 0.13 & -3.95 & 0.00 \\ 
-  Color & -0.60 & 0.13 & -4.64 & 0.00 \\ 
-  Color + Trend & -0.70 & 0.13 & -5.49 & 0.00 \\ 
-  Color + Ellipse + Trend + Error & -1.12 & 0.12 & -9.05 & 0.00 \\ 
-  Color + Shape + Ellipse & -1.40 & 0.12 & -11.45 & 0.00 \\ 
-  Color + Ellipse & -1.47 & 0.12 & -12.09 & 0.00 \\ 
+  Trend + Error & -0.08 & 0.14 & -0.57 & 0.5701 \\ 
+  Shape & -0.08 & 0.14 & -0.57 & 0.5694 \\ 
+  Trend & -0.35 & 0.13 & -2.61 & 0.0090 \\ 
+  Color + Shape & -0.51 & 0.13 & -3.95 & 0.0001 \\ 
+  Color & -0.60 & 0.13 & -4.64 & $< 0.0001$ \\ 
+  Color + Trend & -0.70 & 0.13 & -5.49 & $< 0.0001$ \\ 
+  Color + Ellipse + Trend + Error & -1.12 & 0.12 & -9.05 & $< 0.0001$ \\ 
+  Color + Shape + Ellipse & -1.40 & 0.12 & -11.45 & $< 0.0001$ \\ 
+  Color + Ellipse & -1.47 & 0.12 & -12.09 & $< 0.0001$ \\ 
    \hline
 \end{tabular}
 \caption{\label{tab:gol}Parameters and estimates of the accuracy model. }
