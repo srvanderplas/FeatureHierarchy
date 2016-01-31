@@ -564,7 +564,7 @@ Density of test statistics measuring trend strength and cluster strength for tar
 }
 \end{figure}
 
-Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in appendix \ref{app:parametersimulation}. 
+Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in Appendix \ref{app:parametersimulation}. 
 Using information from the simulation, we identified values and generate lineup data sets for each  $\sigma_T$ and $\sigma_C$ (as shown in Table~\ref{tab:parameters}) corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. 
 It is important to note that the numerical measures we have described in equations~\eqref{eq:linearMeasure} and~\eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target datasets from the null datasets; the simulation cannot provide us with exact information on the perceptual discriminability.
 It has been established that human perception of scatterplots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
