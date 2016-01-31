@@ -31,6 +31,15 @@
 %---------------------------------------------------
 %                 Placing Figures
 
+\renewcommand{\topfraction}{0.99}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.99}	% max fraction of floats at bottom
+
+\renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+%   Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.98}	% require fuller float pages
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.98}	% require fuller float pages
+
 
 %---------------------------------------------------
 % Define new environment
@@ -284,7 +293,7 @@ $$
 The use of $R^2$ to assess the strength of the linear relationship (rather than the correlation) is indicated because human perception of correlation strength more closely aligns with $R^2$ \citep{bobko1979perception,lewandowsky1989perception}. 
 
 \begin{figure}[ht]
-<<trends, fig.width=8, fig.height=3, out.width='\\textwidth', echo=FALSE>>=
+<<trends, fig.width=8, fig.height=2.5, out.width='\\textwidth', echo=FALSE>>=
 res <- data.frame(sd.trend = rep(c(0.1, 0.2, 0.3, 0.4), each = 45))
 res <- res %>% group_by(sd.trend) %>% do(sim.line(N = 45, sd.trend = as.numeric(.[1,1])))
 
@@ -407,7 +416,7 @@ Observations are assigned to specific clusters using hierarchical clustering, wh
 This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[hbt]
-<<lambda, fig.width=8, fig.height=3.5, out.width='.9\\textwidth', echo=FALSE>>=
+<<lambda, fig.width=8, fig.height=3.5, out.width='.95\\textwidth', echo=FALSE>>=
 
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -566,12 +575,6 @@ It has been established that human perception of scatterplots does not replicate
 Each of the generated datasets is then plotted as a lineup using aesthetics, which emphasize clusters and/or linear relationships, to experimentally determine how these aesthetics change a participant's preference and ability to identify each target plot. 
 The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
 
-\subsection{Lineup Rendering}
-\subsubsection{Plot Aesthetics}
-Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. 
-For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification.
-Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
-
 \begin{table}[hbtp]
 \centering
 \scalebox{0.8}{
@@ -586,6 +589,11 @@ Trend + Prediction \end{tabular}\\
 \end{tabular}}
 \caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
 \end{table}
+\subsection{Lineup Rendering}
+\subsubsection{Plot Aesthetics}
+Gestalt perceptual theory suggests that perceptual features such as shape, color, trend lines, and boundary regions modify the perception of ambiguous graphs, emphasizing clustering in the data (in the case of shape, color, and bounding ellipses) or linear relationships (in the case of trend lines and prediction intervals), as demonstrated in Figure~\ref{fig:gestalt}. 
+For each dataset we examine the effect of plot aesthetics (color, shape) and statistical layers (trend line, boundary ellipses, prediction intervals) shown in Table~\ref{tab:plotaesthetics}  on target identification.
+Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
 
 \begin{figure}[ht]
 \centering
@@ -1064,7 +1072,9 @@ As hypothesized, the strongest signal for identifying groups, is color + shape +
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in appendix section~\ref{sec:faceoff} for exact numbers and a discussion of further co-variates).
 
-
+\newdo{We found the interaction effects between $s_C$ and plot type and $s_T$ and plot type to be not significant, i.e. the results for the plot types are stable in that sense, that it does not seem to matter how difficult (at least within our parameter setting) a lineup is. XXX Susan, do we want to include this? it's in models gvl.4d and gvl.4e - I didn't include those models in the paper yet, but they are in expanded-model.R.
+Numbers: $s_T$: plottype interaction: 11.15,9,0.2656 
+$s_C$:plottype interaction: 6.9026,9,0.6473}
 <<group-vs-line, echo=FALSE, warning = FALSE>>=
 faceoff$one.ellipse <- faceoff$no.ellipse == 1
 
@@ -1335,7 +1345,7 @@ and
 This was due to an unintended side-effect of using the k-means algorithm for cluster allocation in the null plots: due to an imbalance in the size of clusters, an additional cue was introduced into the null plots.
 %Our cluster allocation algorithm for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
 %Numerically, these null data sets had uneven cluster allocation; 
-The estimation of bounding ellipses fails for groups with fewer than three points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. \newtext{When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1$=\Sexpr{round(aov7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), and its estimate is $-0.8075$, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual plot types, it is also significant ($\chi^2_9$=\Sexpr{round(aov7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}).  Appendix section~\ref{sec:accuracy} gives more details on this model and its effects.}
+The estimation of bounding ellipses fails for groups with fewer than three points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. \newtext{When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1$=\Sexpr{round(aov7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), with an estimate of $-0.8075$, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual plot types, it is also significant ($\chi^2_9$=\Sexpr{round(aov7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}).  Appendix section~\ref{sec:accuracy} gives more details on this model and its effects.}
 %Appendix section~\ref{sec:gini} provides more information about the unintentional differences in group sizes between null and cluster target plots. 
 
 
@@ -1528,29 +1538,28 @@ gols.aov.5b <- anova(gol.5, gol.5b)
 The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation. }
 \newdo{XXX Susan, this is a fatigue effect -- do you have a reference for this?}
 
-\begin{table}[ht]
-% xtable(summary(gol)$coefficients, digits=c(4))
+\begin{table}[htbp]
+% xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
 \centering
 \begin{tabular}{rrrrr}
   \hline
 Parameter & Estimate & Std.\ Error & $z$-value & Pr($>$$|$z$|$) \\ 
   \hline
-$\mu$ & 6.15 & 0.84 & 7.28 & 0.00 \\ 
-  $\alpha_T$ & -2.55 & 1.20 & -2.13 & 0.03 \\ 
-  $\alpha_C$ & -8.59 & 2.37 & -3.62 & 0.00 \\ 
-  $\alpha_{K=3}$ & 0.00 & --- & --- & --- \\ 
-  $\alpha_{K=5}$ & -0.21 & 0.23 & -0.93 & 0.35 \\ 
-  $\alpha_O$  & -0.02 & 0.01 & -2.33 & 0.02 \\ [3pt]
+$\mu$ & 6.47 & 1.08 & 6.01 & $< 0.0001$ \\ 
+  $\alpha_T$ & -2.55 & 1.20 & -2.12 & 0.0339 \\ 
+  $\alpha_C$ & -8.59 & 2.40 & -3.58 & 0.0003 \\ 
+  $\alpha_{K}$ & -0.11 & 0.11 & -0.93 & 0.3523 \\ 
+  $\alpha_O$  & -0.02 & 0.01 & -2.33 & 0.0199 \\ [3pt]
 {\bf Plot type} \hfill Plain & 0.00 & --- & --- & --- \\ 
-  Trend + Error & -0.08 & 0.14 & -0.57 & 0.57 \\ 
-  Shape & -0.08 & 0.14 & -0.57 & 0.57 \\ 
-  Trend & -0.35 & 0.13 & -2.61 & 0.01 \\ 
-  Color + Shape & -0.51 & 0.13 & -3.95 & 0.00 \\ 
-  Color & -0.60 & 0.13 & -4.64 & 0.00 \\ 
-  Color + Trend & -0.70 & 0.13 & -5.49 & 0.00 \\ 
-  Color + Ellipse + Trend + Error & -1.12 & 0.12 & -9.05 & 0.00 \\ 
-  Color + Shape + Ellipse & -1.40 & 0.12 & -11.45 & 0.00 \\ 
-  Color + Ellipse & -1.47 & 0.12 & -12.09 & 0.00 \\ 
+  Trend + Error & -0.08 & 0.14 & -0.57 & 0.5701 \\ 
+  Shape & -0.08 & 0.14 & -0.57 & 0.5694 \\ 
+  Trend & -0.35 & 0.13 & -2.61 & 0.0090 \\ 
+  Color + Shape & -0.51 & 0.13 & -3.95 & 0.0001 \\ 
+  Color & -0.60 & 0.13 & -4.64 & $< 0.0001$ \\ 
+  Color + Trend & -0.70 & 0.13 & -5.49 & $< 0.0001$ \\ 
+  Color + Ellipse + Trend + Error & -1.12 & 0.12 & -9.05 & $< 0.0001$ \\ 
+  Color + Shape + Ellipse & -1.40 & 0.12 & -11.45 & $< 0.0001$ \\ 
+  Color + Ellipse & -1.47 & 0.12 & -12.09 & $< 0.0001$ \\ 
    \hline
 \end{tabular}
 \caption{\label{tab:gol}Parameters and estimates of the accuracy model. }
@@ -1644,7 +1653,7 @@ Plot aesthetics have a significant impact on the amount of time for responses, w
 % xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f","f","e"))
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
 % Wed Jan 20 22:41:48 2016
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{rrrrr}
   \hline
@@ -1698,7 +1707,6 @@ Table~\ref{tab:conf} gives an overview of the parameters and estimates of the mo
 
 \newtext{These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
 }
-\newdo{This is a fun result! It goes hand in hand with the signal strength -- ellipses emphasize the absence of individual groups. }
 <<modconfidence, echo=FALSE>>=
 conf <- lmer(data=modeldata, conf_level~log(as.numeric(trial.time))+plottype+simpleoutcome+sdline_new+sdgroup_new+k_new+(1|dataset)+(1|ip_address))
 
@@ -1708,7 +1716,7 @@ table$pvalues <- pconf$test$pvalues
 @
 
 % xtable(table, digits=c(0,3,3,3, 3), display=c("s","f","f", "f","e"))
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{rrrrr}
   \hline
@@ -1803,7 +1811,7 @@ ggplot(data=subset(modeldata, k_new==5)) +
 % xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
 % Tue Jan 12 15:17:45 2016
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{rrrr}
   \hline
@@ -1838,13 +1846,14 @@ aov.8 <- anova(gvl.4, gvl.8) # gini
 aov.9 <- anova(gvl.4, gvl.9) # factor(no.ellipse) 
 @
 Response time (composed of log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2$=\Sexpr{round(aov$Chisq[2],1)}, $P$-value=\Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
-Nor does the confidence level of participants ($\chi_2^2$=\Sexpr{round(aov2$Chisq[2],1)}, $P$-value=\Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
+Nor does the confidence level of participants ($\chi_5^2$=\Sexpr{round(aov2$Chisq[2],1)}, $P$-value=\Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
-What does have a significant effect on the balance between cluster target and trend target, is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse cuts the probability that the cluster target is selected in less than half (44.6\%; $\chi_2^1$=\Sexpr{round(aov.7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
-We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual plot types into account ($\chi_2^9$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}).
+What does have a significant effect on the balance between cluster target and trend target, is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse cuts the probability that the cluster target is selected in less than half (44.6\%; $\chi_1^2$=\Sexpr{round(aov.7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
+We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual plot types into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}).
 \newtext{These effects are summarised in Figure~\ref{fig:gvl7b}.}
 \begin{figure}
 <<gols.7b, echo=FALSE, fig.width=7, fig.height=4, out.width='0.8\\textwidth'>>=
+
 df7 <- data.frame(expand.grid(
   plottype =levels(modeldata$plottype),
   sdline_new = 0.275,
@@ -1853,13 +1862,31 @@ df7 <- data.frame(expand.grid(
   one.ellipse=c(TRUE, FALSE)
 ))
 
+df7plus <- data.frame(expand.grid(
+  data_name=unique(faceoff$data_name),
+  plottype =levels(modeldata$plottype),
+  sdline_new = 0.275,
+  sdgroup_new = 0.25,
+  k_new=5,
+  one.ellipse=c(TRUE, FALSE)
+))
 df7$pred4 <- predict(gvl.4, newdata=df7, re.form=~0, type="response")
 df7$pred7 <- predict(gvl.7, newdata=df7, re.form=~0, type="response")
 df7$pred7b <- predict(gvl.7b, newdata=df7, re.form=~0, type="response")
 df7 <- merge(df7, unique(modeldata[,c("plottype", "label")]), by="plottype")
 
+rf7 <- data.frame(ranef(gvl.7b)$data_name)
+rf7$data_name <- row.names(rf7)
+names(rf7)[1] <- "rdata"
+df7plus$pred7b <- predict(gvl.7b, newdata=df7plus, re.form=~0, type="link")
+df7plus <- merge(df7plus, rf7, by="data_name")
+df7plus$predlink <- with(df7plus, pred7b+rdata)
+df7plus$predprob <- with(df7plus, exp(predlink)/(1+exp(predlink)) )
+df7plus <- merge(df7plus, unique(modeldata[,c("plottype", "label")]), by="plottype")
+
 df7$plottype <- reorder(df7$plottype, df7$pred4)
 qplot(pred4, label, data=df7, shape=I(3)) + 
+#  geom_point(aes(x=predprob, colour=one.ellipse, shape=one.ellipse), alpha=0.25, size=1.5, data=df7plus) +
   geom_point(aes(x=pred7b, colour=one.ellipse, shape=one.ellipse), size=3) +
   theme_bw() + ylab("") +
   theme(legend.position="bottom") + 
