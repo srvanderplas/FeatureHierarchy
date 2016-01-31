@@ -1564,7 +1564,7 @@ qplot(time, data=modeldata, binwidth = .1) + theme_bw() +
 \text{log } T & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:responseModel}
 \end{align}
 where \begin{itemize}
-\item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_0, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_0$ the average effect of the first trial on the response time,  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$,
+\item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_0, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ is an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_0$ is the average effect of the first trial on the response time,  $\alpha_T$ and $\alpha_C$ represent the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
 \item[$\beta_i$] describe plot types,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
@@ -1627,11 +1627,8 @@ We also assume that random effects for dataset and participant are orthogonal.
 The approximation of confidence level (which is a bounded, discrete variable) is far from perfect, but the results are very interpretable.
 
 Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model. The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported along with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level is significantly lower than if one of the two targets was identified\protect\footnote{The decrease in confidence when both targets are identified may be due to the additional complexity of dual-target search \citep{fleck2010generalized, cain2011anticipatory, adamo2015targets}}. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. 
+These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
 
-% \newdo{I don't  agree with the conclusion below: the dependent variable is not accuracy, but self-reported confidence. For speed-accuracy we need to fit a different model -- model gol.5 does attempt this, and shows that we do, indeed have a highly significant speed-accuracy tradeoff. }
-
-\newtext{These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
-}
 <<modconfidence, echo=FALSE>>=
 conf <- lmer(data=modeldata, conf_level~log(as.numeric(trial.time))+plottype+simpleoutcome+sdline_new+sdgroup_new+k_new+(1|dataset)+(1|ip_address))
 
@@ -1675,7 +1672,7 @@ Parameter & Estimate & Std.\ Error & $z$-value & $P$-value \\
 
 
 \subsection{Faceoff Model}\label{sec:faceoff}
-Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked, is decreasing. Similarly, an increase in within-cluster error leads to a decrease of the number of cluster target picks. 
+Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked decreases. Similarly, an increase in within-cluster error is associated with a decrease of the number of cluster target picks. 
 The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). The effect of plot types is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
@@ -1773,9 +1770,8 @@ aov.9 <- anova(gvl.4, gvl.9) # factor(no.ellipse)
 Response time (composed of log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2$=\Sexpr{round(aov$Chisq[2],1)}, $P$-value=\Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
 Nor does the confidence level of participants ($\chi_5^2$=\Sexpr{round(aov2$Chisq[2],1)}, $P$-value=\Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
-What does have a significant effect on the balance between cluster target and trend target, is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse cuts the probability that the cluster target is selected in less than half (44.6\%; $\chi_1^2$=\Sexpr{round(aov.7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
-We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual plot types into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}).
-\newtext{These effects are summarised in Figure~\ref{fig:gvl7b}.}
+What does have a significant effect on the balance between cluster target and trend target is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse (that is, a group size of less than 4) cuts the probability that the cluster target is selected by more than half (44.6\%; $\chi_1^2$=\Sexpr{round(aov.7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
+We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual plot types into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}). These effects are summarised in Figure~\ref{fig:gvl7b}.
 \begin{figure}
 <<gols.7b, echo=FALSE, fig.width=7, fig.height=4, out.width='0.8\\textwidth'>>=
 
