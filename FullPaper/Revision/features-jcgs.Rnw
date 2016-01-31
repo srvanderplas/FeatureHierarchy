@@ -1455,9 +1455,10 @@ gols.aov.5b <- anova(gol.5, gol.5b)
 %' preds <- predict(gol.5b, newdata=dframe, re.form=~0, type="response")
 %' qplot(log(time),preds, data=dframe, colour=plottype, geom="line")
 %' @
-\newtext{Table~\ref{tab:gol} shows an overview of the parameters of the accuracy model and their estimates. Both $\alpha_T$ and $\alpha_C$ have large negative effects that are highly significant. This indicates that as the signal in the target plots weakens (by an increase in variability around the trend line or within cluster variability), accuracy of participants decreases on average. $\alpha_K$ has a small negative effect, i.e.\ participants are on average answering lineups with three clusters with more accuracy than lineups with five clusters. However, this effect is not significant.
-The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation. }
+Table~\ref{tab:gol} shows an overview of the parameters of the accuracy model and their estimates. Both $\alpha_T$ and $\alpha_C$ have large negative effects that are highly significant. This indicates that as the signal in the target plots weakens (by an increase in variability around the trend line or within cluster variability), accuracy of participants decreases on average. $\alpha_K$ has a small negative effect, i.e.\ participants are on average answering lineups with three clusters with more accuracy than lineups with five clusters. However, this effect is not significant.
+The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation. 
 \newdo{XXX Susan, this is a fatigue effect -- do you have a reference for this?}
+\newdo{I can't remember how we ordered trials. It's possible that we put easier trials at the beginning, which would explain the effect. Fatigue is entirely possible too; I can dig up some reference relating to that just in case. Can you check with Eric about the ordering?}
 
 \begin{table}[htbp]
 % xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
