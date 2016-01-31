@@ -578,10 +578,10 @@ The next section describes the aesthetic combinations and their anticipated effe
 \begin{tabular}{ccccc}
 \begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Trend Emphasis} \\
 & Strength & 0 & 1 & 2 \\
-\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Trend &  \cellcolor{gray!25} Trend + Prediction \\
+\cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Trend &  \cellcolor{gray!25} Trend + Error \\
 \cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Trend \\
 \cellcolor{gray!25}\begin{tabular}{c}  Emphasis\\ \phantom{.} \end{tabular} & 2 & \cellcolor{gray!25}\begin{tabular}{c} Color + Shape\\ Color + Ellipse \end{tabular} && \cellcolor{gray!5}\begin{tabular}{c} Color + Ellipse +\\
-Trend + Prediction \end{tabular}\\
+Trend + Error \end{tabular}\\
 \cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 3 & \cellcolor{gray!35} Color + Shape + Ellipse 
 \end{tabular}}
 \caption[Aesthetics affecting perception of statistical plots]{Plot aesthetics and statistical layers which impact perception of statistical plots, according to gestalt theory. \label{tab:plotaesthetics}}
@@ -623,7 +623,7 @@ Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
   \includegraphics[width=\textwidth]{fig/samplepics-7}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
-  \caption{Trend + Prediction }\vspace{-0.15in}
+  \caption{Trend + Error }\vspace{-0.15in}
   \includegraphics[width=\textwidth]{fig/samplepics-8}
 \end{subfigure}
 \begin{subfigure}[t]{0.24\textwidth}
@@ -632,7 +632,7 @@ Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
 \end{subfigure}
 \begin{subfigure}[t]{.5\textwidth}
 \centering
-  \caption{\scalebox{.8}{Trend + Prediction + Color + Ellipse}}\vspace{-0.15in}
+  \caption{\scalebox{.8}{Trend + Error + Color + Ellipse}}\vspace{-0.15in}
   \includegraphics[width=.49\textwidth]{fig/samplepics-10}
 \end{subfigure}
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{
@@ -967,6 +967,7 @@ gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2),
 @
 
 \subsection{Target Plot Identifications}
+
 \begin{figure}[h!bt]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
 md <- data.frame(plottype = levels(modeldata$plottype), 
@@ -1047,7 +1048,7 @@ We also assume that random effects for dataset and participant are orthogonal.
 
 
 The estimated log odds of a decision in favor of cluster over trend target for each of the plot types are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
-As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + prediction results in the strongest signal in favor of trends. 
+As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in appendix section~\ref{sec:faceoff} for exact numbers and a discussion of further co-variates).
 
@@ -1148,9 +1149,9 @@ ggplot(data=gvl.fixef) +
 
 Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color + trend (similarity vs. continuity) condition. 
 
-When trend line and prediction intervals (``error bands") are present in the same plot, the additional Gestalt principle of common region is recruited, in addition to the continuity heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot in favor of the trend target. 
+When trend line and prediction intervals (``error bands", or ``error" as an aesthetic description) are present in the same plot, the additional Gestalt principle of common region is recruited, in addition to the continuity heuristic present due to the trend line and the linear relationship between $x$ and $y$. The interaction between these heuristics dominates the perceptual experience, decreasing the probability that a participant will select the cluster target plot in favor of the trend target. 
 
-This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + prediction condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend and prediction interval elements is stronger than the effect of color and ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
+This interaction effect explains the different outcomes seen by the two conditions with conflicting aesthetics: the color+trend condition is more likely to result in cluster plot selection, while the color + ellipse + trend + error condition is more likely to result in trend plot selection, because the combined effect of the gestalt heuristics present in the trend and prediction interval elements is stronger than the effect of color and ellipse elements, which only invoke Gestalt heuristics of similarity and common region. 
 
 In summary, the results from this experiment show that in order to gain a significant difference from a plain representation and visually emphasize groups or trends, we need to make use of a statistical layer associated with a statistical interval/probability region in the form of an error band or an ellipse.
 
