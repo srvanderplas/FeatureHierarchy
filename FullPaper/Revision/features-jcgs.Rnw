@@ -1502,9 +1502,11 @@ G(p_1, ..., p_K) = \frac{K}{K-1} \sum_{i=1}^K p_i (1 - p_i).
 \]
 $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, that there is only one group present, i.e.\ $p_i = 0$ for all but one of the groups. A gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.} 
 
-\newtext{Other features measuring the imbalance within a lineup that we consider besides (a) gini impurity are (b)  the difference between the maximum and the minimum number of elements in each of the groups of a lineup, and (c) the number of ellipses missing from the lineup.}
+Other features measuring the imbalance within a lineup that we consider besides (a) gini impurity are (b)  the difference between the maximum and the minimum number of elements in each of the groups of a lineup, and (c) the number of ellipses missing from the lineup.
 
-\newtext{The probability to pick at least one of the targets significantly increases with an increase in gini impurity, indicating a higher amount of homogeneity in group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). We further see a significant effect of gini impurity on individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$). }
+The probability of picking at least one of the targets significantly increases with an increase in gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
+
+We further see a significant effect of gini impurity on individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
 
 
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
@@ -1513,12 +1515,12 @@ $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, th
 % xtable(anova(gol.model, gol.2, gol.2b))
 % @
 
-\newtext{The range of group sizes does not have a significant effect on the probability to pick at least one of the targets, even if different plot types are taken into account.}
+The range of group sizes does not have a significant effect on the probability to pick at least one of the targets, even if different plot types are taken into account.
 
-\newtext{Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither have the number of missing ellipses nor the absence of at least one ellipse a significant effect on this probability, not even when we consider the impact of individual plot types.}
+Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither the number of missing ellipses nor the absence of at least one ellipse have a significant effect on this probability, not even when we consider the impact of individual plot types.
 %\newdo{they are all in the range of model gol.3}
 
-\newtext{To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{sec:faceoff}.}
+To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{sec:faceoff}.
 
 %\newpage
 \subsection{Modelling response times}\label{sec:response}
