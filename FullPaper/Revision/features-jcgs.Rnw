@@ -891,9 +891,6 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 \end{figure}
 
 For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
-
-
-\subsection{Target Plot Identifications}
 <<target-model, echo=FALSE>>=
 modeldata$one.correct <- 1 - modeldata$neither.correct
 gol <- glmer(
@@ -968,10 +965,8 @@ gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2),
                   optCtrl = list(maxfun = 1e5)
                 ))
 @
-In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
-Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
-Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
+\subsection{Target Plot Identifications}
 \begin{figure}[h!bt]\centering
 <<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
 md <- data.frame(plottype = levels(modeldata$plottype), 
@@ -991,8 +986,6 @@ faceoff <- subset(modeldata, trend.correct | cluster.correct)
 
 fac.order <- levels(with(faceoff, reorder(label,label,function(x) -length(x))))
 modeldata$label <- factor(modeldata$label, levels=fac.order)
-
-# qplot(reorder(label,label,function(x) -length(x)), data=faceoff) + coord_flip() + theme_bw() + xlab("") + ylab("# of target evaluations") + geom_bar(aes(x=label), data=modeldata, fill=NA, colour="black")
 
 totals <- modeldata %>% group_by(label, plottype) %>% summarize(eval=length(label), type="Total")
 correct.totals <- faceoff %>% group_by(label, plottype) %>% summarize(eval=length(label), type="Correct")
@@ -1025,24 +1018,14 @@ ggplot() +
   theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +
   scale_fill_manual("Outcome", values=c("grey20", "grey30", "grey20", "grey90"),
                     guide = guide_legend(reverse=TRUE)) 
-
-
-# ggplot() + 
-#   theme_bw() + 
-#   xlab("# of target evaluations") + ylab("") + 
-#   facet_grid(tendency~., space="free_y", scales="free_y") +
-#   geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
-#            data=subset(totals, type=="Total"), stat="identity", 
-#            position="identity", colour="black") + 
-#   geom_rect(aes(xmin=0, xmax=eval, ymin=nlabel-.4, ymax=nlabel+0.4, fill=type), 
-#            data=subset(totals, type=="Correct"), stat="identity", 
-#            position="identity", colour="black") + 
-#   scale_y_continuous(breaks=1:10, labels=md$label) +
-#   theme(legend.position="bottom", strip.text.y = element_text(angle=0))
 @
 \caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Each of the dark areas is split into two, according to the type of target, with evaluations where both targets were identified between the two.
 Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
+
+In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
+Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
+Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
@@ -1050,8 +1033,6 @@ Due to the design of the experiment, each plot type was evaluated almost the sam
 Define $C_{ijk}$ to be the event $$\{\text{Participant }k\text{ selects the cluster target for dataset }j\text{ with aesthetic set }i\}$$
 and $T_{ijk}$ to be the analogous selection of the trend target.
 We model the cluster versus trend decision using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data, and a random effect for participant to account for skill level, as shown in equation~\ref{eqn:faceoffModel}. 
-
-
 \begin{align}
 \text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}
 \end{align}
