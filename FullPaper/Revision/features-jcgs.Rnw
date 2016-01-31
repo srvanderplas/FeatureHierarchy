@@ -870,7 +870,7 @@ qplot(education, data=users, fill=I("grey50"), colour=I("grey40")) + theme_bw() 
 \end{figure}
 
 
-From Figure~\ref{fig:targets} we see that participants identified more cluster targets than trend targets, but also did not primarily identify one target type over the other. Generally a participant picked both types over the course of ten lineups.
+From Figure~\ref{fig:targets} we see that participants identified more cluster targets than trend targets (there were more aesthetics expected to emphasize clustering in the data), but also did not primarily identify one target type over the other. Generally a participant picked both types over the course of ten lineups.
 
 \begin{figure}[ht]
 \centering
