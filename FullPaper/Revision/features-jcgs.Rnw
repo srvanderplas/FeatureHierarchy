@@ -697,7 +697,7 @@ Participants had to complete a pre-trial before being able to access the experim
 %Before access to the experiment was given, participants had to complete a an example task similar to the task in the experiment before deciding whether or not to complete the HIT. 
 The lineups used in the pre-trial contained only a single target,% (5 trend and 5 cluster trials were provided), 
 and participants had to correctly identify the target in at least two lineups. %before being allowed into  the HIT and proceeding to the experimental phase. 
-The webpage used to collect data from Amazon Turk participants is available at \url{http://www.mlcape.com:8080/mahbub/turk16/index.html}. No data was recorded from the pre-trial because participants had not provided informed consent at this point. 
+The webpage used to collect data from Amazon Turk participants is available at \url{https://erichare.shinyapps.io/lineups/}. No data was recorded from the pre-trial because participants had not provided informed consent at this point. 
 
 Once participants completed the example task and provided informed consent, they could accept the HIT through Amazon and were directed to the main experimental task. 
 Participants were required to complete ten lineups, answering ``Which plot is the most different from the others?". Participants were asked to provide a short reason for their choice, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 0 (least confident) to 5 (most confident). 
