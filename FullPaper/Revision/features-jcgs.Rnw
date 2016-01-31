@@ -196,6 +196,7 @@ The processing of visual stimuli utilizes low-level feature detection, which occ
 
 Research on preattentive perception is important because features that are perceived preattentively require less mental effort to process from raw visual stimuli than non-preattentive features. Top-down gestalt heuristics are subsequently applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
 
+\newdo{There are two sequential transitions here that should either be combined or separated a bit... I'm still considering how to do this well.}
 
 This paper describes the design and the results of a user study exploring the hierarchy of gestalt principles in the perception of statistical graphics. We utilize information from previous studies~\citep{heer:2014, robinson:03, healey1996high} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
 
@@ -218,15 +219,11 @@ Apart from the hypothesis testing construct, the use of statistical lineups to t
 In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. 
 % competing signals
 The two targets represent two different, competing signals; an observer's choice then demonstrates empirically which signal is more salient. 
-Cognitively, the presence of two targets leads to a dual-target search scenario~\citep{fleck2010generalized}, which effectively introduces a `masking' effect where the mor salient target is selected and the search for more targets stops (``satisfaction of search"), i.e.\ people tend to pick the more salient target and not notice the second target, even though in the absence of the more salient target they would have picked it out. 
-From a statistical perspective, 
-% like Bayes
-this is analogous to a Bayesian framework in which the relative strengths of two competing models are evaluated by a comparison with each other and with a common null.
+Cognitively, the presence of two targets leads to a dual-target search scenario~\citep{fleck2010generalized}, which effectively introduces a `masking' effect where the more salient target is selected and the search for more targets stops (``satisfaction of search"), i.e.\ people tend to pick the more salient target and not notice the second target, even though in the absence of the more salient target they would have picked it out. 
 
-% can identify both
+From a statistical perspective, this is analogous to a Bayesian framework in which the relative strengths of two competing models are evaluated by a comparison with each other and with a common null.
+
 In the present study, participants were allowed to submit multiple selections to prevent any forced-choice scenario which might skew the results. However, only 0.6\% of the evaluations resulted in an identification of both targets. 
-%If both targets exhibit similar signal, observers may identify both targets, 
-% search for two
 
 The search for multiple targets is a more demanding cognitive task \citep{cain2011anticipatory} that is more sensitive to contextual effects \citep{adamo2015targets}, but without any time constraints imposed by the experimental protocol, participants can be expected to identify at least one of the plots with accuracy comparable to a single-target search task. 
 % identification of one
