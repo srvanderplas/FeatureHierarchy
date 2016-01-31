@@ -688,9 +688,8 @@ The primary purpose of this study is to understand how visual aesthetics affect 
 A secondary purpose of the study is to relate signal strength (as determined by dataset parameters $\sigma_C$, $\sigma_T$, and $K$) to signal detection in a visualization by a human observer.
 
 
-\subsection{Participant Recruitment and Task Description}
+\subsection{Participant Recruitment}
 Participants were recruited using Amazon's Mechanical Turk service\citep{amazon}, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks that are not easily automated. Only workers with at least 100 previous HITs at a 95\% successful completion rate were allowed to sign up for completing the task. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system, as well as a vested interest in doing well. 
-
 
 
 Participants had to complete a pre-trial before being able to access the experiment. 
@@ -700,6 +699,8 @@ and participants had to correctly identify the target in at least two lineups. %
 The webpage used to collect data from Amazon Turk participants is available at \url{https://erichare.shinyapps.io/lineups/}. No data was recorded from the pre-trial because participants had not provided informed consent at this point. 
 
 Once participants completed the example task and provided informed consent, they could accept the HIT through Amazon and were directed to the main experimental task. 
+
+\subsection{Task Description}
 Participants were required to complete ten lineups, answering ``Which plot is the most different from the others?". Participants were asked to provide a short reason for their choice, such as ``Strong linear trend" or ``Groups of points", and to rate their confidence in their selection from 0 (least confident) to 5 (most confident). 
 After the first question, basic demographic information was collected: age range, gender, and highest level of education. 
 
