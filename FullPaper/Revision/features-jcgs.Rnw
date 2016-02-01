@@ -1507,7 +1507,8 @@ Other features measuring the imbalance within a lineup that we consider besides 
 The probability of picking at least one of the targets significantly increases with an increase in gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
 
 We further see a significant effect of gini impurity on individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
-\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)}
+\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)\n
+HH: OK, we can explain this a bit ore: homoegenity (or missing homogeneity) is more obvious in some plot types than others, and yes, color is affected by homogeneity, as are the ellipses. Should we add a plot similar to the last one? I'll try to come up with a plot, and we can decide then.}
 
 
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
