@@ -1507,8 +1507,11 @@ Other features measuring the imbalance within a lineup that we consider besides 
 The probability of picking at least one of the targets significantly increases with an increase in gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
 
 We further see a significant effect of gini impurity on individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
-\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)\\
-HH: OK, we can explain this a bit more: homoegenity (or missing homogeneity) is more obvious in some plot types than others, and yes, color is affected by homogeneity, as are the ellipses. Should we add a plot similar to the last one? I'll try to come up with a plot, and we can decide then. XXX See figure~\ref{fig:two-way}}
+
+\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)
+
+HH: OK, we can explain this a bit ore: homoegenity (or missing homogeneity) is more obvious in some plot types than others, and yes, color is affected by homogeneity, as are the ellipses. Should we add a plot similar to the last one? I'll try to come up with a plot, and we can decide then. XXX See figure~\ref{fig:two-way}, sorry about the colors, I tried to make up for them by adding the shapes. }
+
 
 \begin{figure}
 <<interaction, echo=FALSE, fig.width=8, fig.height=5, out.width='0.8\\textwidth'>>=
@@ -1526,11 +1529,12 @@ df2b <- data.frame(expand.grid(
 cols <- brewer.pal(9, "Set1")
 
 df2b$pred <- predict(gol.2, newdata=df2b, re.form=~0, type="response")
-qplot(gini.min, pred, colour=plottype, data=df2b) + theme_bw() + 
+qplot(gini.min, pred, colour=plottype, shape=plottype,  data=df2b, size=I(2.5)) + theme_bw() + 
   geom_line(aes(group=plottype)) + 
   ylab("Predicted probablity for identifying one of the two targets") + 
   xlab("Gini impurity (0 means no diversity, 1 means complete diversity)") + 
-  scale_colour_manual(values = c(cols, "black"))
+  scale_colour_manual(values = c(cols, "black")) +
+  scale_shape_manual(values=rep(1:6, 2))
 @
 \caption{\label{fig:two-way}Predicted accuracy values for plot types given different values of the gini impurity measure. Values of gini impurity between 0.59 and 1 were actually observed in the panels of the lineups. Accuracy of all plot types with color are lower than their non-colored counterparts, and the addition of ellipses further decreases accuracy. With a large deviation from equi-distributed groups, accuracy is disproportionately affected when color or ellipse aesthetics are present.}
 \end{figure}
