@@ -1102,22 +1102,22 @@ gvl.9 <-  update(gvl.4, .~.+factor(no.ellipse), control=glmerControl(optimizer="
 <<group-vs-line-fig, dependson='group-vs-line-fig', echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
 faceoff$one.ellipse <- faceoff$no.ellipse == 1
 
-gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
-
-gvl.fixef <- data.frame(confint(gvl.4, method="Wald"))[-(1:2),] # exclude sigmas
-names(gvl.fixef) <- c("LB", "UB")
-gvl.fixef$OR <- fixef(gvl.4)
-gvl.fixef <- rbind(gvl.fixef, c(0,0,0))
-row.names(gvl.fixef)[14] <- "plottypePlain"
-
-gvl.all <- gvl.fixef
-gvl.fixef <- gvl.fixef[c(14,5:13),]
-
-suppressMessages(require(multcomp))
-type_compare <- glht(gvl.4, mcp(plottype="Tukey"))
-gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
-# not sure what to do about those warnings
-
+# gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
+# 
+# gvl.fixef <- data.frame(confint(gvl.4, method="Wald"))[-(1:2),] # exclude sigmas
+# names(gvl.fixef) <- c("LB", "UB")
+# gvl.fixef$OR <- fixef(gvl.4)
+# gvl.fixef <- rbind(gvl.fixef, c(0,0,0))
+# row.names(gvl.fixef)[14] <- "plottypePlain"
+# 
+# gvl.all <- gvl.fixef
+# gvl.fixef <- gvl.fixef[c(14,5:13),]
+# 
+# suppressMessages(require(multcomp))
+# type_compare <- glht(gvl.4, mcp(plottype="Tukey"))
+# gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
+# # not sure what to do about those warnings
+# 
 
 gvl.fixef$label <- gsub("plottype", "", row.names(gvl.fixef))
 gvl.fixef$label <- gvl.fixef$label %>% 
@@ -1456,9 +1456,9 @@ gols.aov.5b <- anova(gol.5, gol.5b)
 %' qplot(log(time),preds, data=dframe, colour=plottype, geom="line")
 %' @
 Table~\ref{tab:gol} shows an overview of the parameters of the accuracy model and their estimates. Both $\alpha_T$ and $\alpha_C$ have large negative effects that are highly significant. This indicates that as the signal in the target plots weakens (by an increase in variability around the trend line or within cluster variability), accuracy of participants decreases on average. $\alpha_K$ has a small negative effect, i.e.\ participants are on average answering lineups with three clusters with more accuracy than lineups with five clusters. However, this effect is not significant.
-The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation. 
+The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each evaluation\newtext{, a fatigue effect that has been documented\citep{abdulrahman2014repeated} in studies where participants complete several trials which are similar in a short period of time. As trials were randomly ordered, this effect is not likely to bias the estimates for dataset and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate this effect; however, the effect is relatively small.}
 \newdo{XXX Susan, this is a fatigue effect -- do you have a reference for this?}
-\newdo{I can't remember how we ordered trials. It's possible that we put easier trials at the beginning, which would explain the effect. Fatigue is entirely possible too; I can dig up some reference relating to that just in case. Can you check with Eric about the ordering?}
+\newdo{XXX So $\alpha_O$ is an indicator variable for the 1st trial, right? If so, all it means is that they potentially were more careful on the first trial than on subsequent trials. You could weave that into speed-accuracy tradeoff rather than fatigue... or you could interpret it as evidence that going with your gut isn't an effective strategy/practice doesn't make perfect. I'm not convinced that this is a fatigue effect. I added the reference, but on further examination, there's lots of things this could mean. }
 
 \begin{table}[htbp]
 % xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
@@ -1507,8 +1507,8 @@ Other features measuring the imbalance within a lineup that we consider besides 
 The probability of picking at least one of the targets significantly increases with an increase in gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
 
 We further see a significant effect of gini impurity on individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
-\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)\n
-HH: OK, we can explain this a bit ore: homoegenity (or missing homogeneity) is more obvious in some plot types than others, and yes, color is affected by homogeneity, as are the ellipses. Should we add a plot similar to the last one? I'll try to come up with a plot, and we can decide then. XXX See figure~\ref{fig:two-way}}
+\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)\\
+HH: OK, we can explain this a bit more: homoegenity (or missing homogeneity) is more obvious in some plot types than others, and yes, color is affected by homogeneity, as are the ellipses. Should we add a plot similar to the last one? I'll try to come up with a plot, and we can decide then. XXX See figure~\ref{fig:two-way}}
 
 \begin{figure}
 <<interaction, echo=FALSE, fig.width=8, fig.height=5, out.width='0.8\\textwidth'>>=
@@ -1532,7 +1532,7 @@ qplot(gini.min, pred, colour=plottype, data=df2b) + theme_bw() +
   xlab("Gini impurity (0 means no diversity, 1 means complete diversity)") + 
   scale_colour_manual(values = c(cols, "black"))
 @
-\caption{\label{fig:two-way}Predicted accuracy values for plot types given different values of the gini impurity measure. Values of gini between 0.59 and 1 were actually observed in the panels of the lineups. Accuracy of all plot types with color are lower than their non-colored counterparts. With a large deviation from equi-distributed groups, accuracy is affected disproportionally strong.}
+\caption{\label{fig:two-way}Predicted accuracy values for plot types given different values of the gini impurity measure. Values of gini impurity between 0.59 and 1 were actually observed in the panels of the lineups. Accuracy of all plot types with color are lower than their non-colored counterparts, and the addition of ellipses further decreases accuracy. With a large deviation from equi-distributed groups, accuracy is disproportionately affected when color or ellipse aesthetics are present.}
 \end{figure}
 
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
@@ -1840,7 +1840,7 @@ qplot(pred4, label, data=df7, shape=I(3)) +
   scale_shape("One ellipse missing") +
   xlab("Probability to pick cluster target\n(given one of the targets was picked)") 
 @
-\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different plot types. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model (\ref{eqn:faceoffModel}), the filled triangle and circle represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and plot types. The Trend plots and Shapes are the least affected by the imbalance in groups, while the Color plot shows huge differences in the predicted probability.}
+\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different plot types. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model (\ref{eqn:faceoffModel}), the filled triangle and circle represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and plot types. Plots with trend and shape aesthetics are the least affected by the imbalance in groups, while plots with color aesthetics show huge differences in the predicted probability.}
 \end{figure}
 
 \end{appendix}
