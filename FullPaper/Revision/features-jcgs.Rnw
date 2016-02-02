@@ -1456,7 +1456,7 @@ gols.aov.5b <- anova(gol.5, gol.5b)
 %' qplot(log(time),preds, data=dframe, colour=plottype, geom="line")
 %' @
 Table~\ref{tab:gol} shows an overview of the parameters of the accuracy model and their estimates. Both $\alpha_T$ and $\alpha_C$ have large negative effects that are highly significant. This indicates that as the signal in the target plots weakens (by an increase in variability around the trend line or within cluster variability), accuracy of participants decreases on average. $\alpha_K$ has a small negative effect, i.e.\ participants are on average answering lineups with three clusters with more accuracy than lineups with five clusters. However, this effect is not significant.
-The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each additional evaluation\newtext{This makes $\alpha_O$ a fatigue effect, as has been documented~\citep{abdulrahman2014repeated} in studies where participants complete several trials, which are similar in a short period of time. As the lineups in this study were randomly ordered, this effect is not likely to bias the estimates for dataset and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate this effect. The size of the lineup might also play a role in the size of the fatigue effect. However, the overall effect is relatively ***small***.} \newd{XXX do you really think taht the effect is small? ... by the tenth trial accuracy is reduced by 20\% on average. }
+The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each additional evaluation\newtext{This makes $\alpha_O$ a fatigue effect, as has been documented~\citep{abdulrahman2014repeated} in studies where participants complete several trials, which are similar in a short period of time. As the lineups in this study were randomly ordered, this effect is not likely to bias the estimates for dataset and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate this effect. The size of the lineup might also play a role in the size of the fatigue effect. However, the overall effect is relatively ***small***.} \newdo{XXX do you really think taht the effect is small? ... by the tenth trial accuracy is reduced by 20\% on average. }
 \newdo{XXX So $\alpha_O$ is an indicator variable for the 1st trial, right? If so, all it means is that they potentially were more careful on the first trial than on subsequent trials. You could weave that into speed-accuracy tradeoff rather than fatigue... or you could interpret it as evidence that going with your gut isn't an effective strategy/practice doesn't make perfect. I'm not convinced that this is a fatigue effect. I added the reference, but on further examination, there's lots of things this could mean. }
 \newdo{XXXX HH: Ahh. sorry no. my bad. the first trial was $\alpha_0$ (used in the response time model), here, we have $\alpha_O$ (alpha oh, as in orange for `o'rder). I changed the first trial effect to $\alpha_1$. and hopefully we can tell them apart now. $\alpha_{\text{order}}$ is a linear effect, and it is pretty stable - accuracy goes down by 2\% with each additional trial. I think this is the effect described in the paper, but we could say `might be a fatigue effect'.}
 
@@ -1498,12 +1498,12 @@ The effect of (log) response times on accuracy is highly significant ($\chi^2_1$
 \newdo{XXX Yes, that's what I think is going on (at least on average) in our study. I would say that people either see it right away, and then they might type an additional answer and other stuff. But some lineups are harder - and they need to work at it, and might get it. We could test that theory by checking whether response times have an interaction with the difficulty parameters $s_C$ and $s_T$. I'll try to find out ...  XXX results below.}
 
 <<gol5c, echo=FALSE>>=
-gol.5c <- update(gol.5b, .~.+log(as.numeric(trial.time)):sdline_new + 
-                   log(as.numeric(trial.time)):sdgroup_new) 
-aov.5c <- anova(gol.5b, gol.5c)
+# gol.5c <- update(gol.5b, .~.+log(as.numeric(trial.time)):sdline_new + 
+#                   log(as.numeric(trial.time)):sdgroup_new) 
+# aov.5c <- anova(gol.5b, gol.5c) # P-value is 0.55
 @
 
-\newdo{OK, so the interaction effect between response time and parameters controlling for difficulty is hugely significant: $\chi^2_2$=\Sexpr{aov.5c$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.5c$`Pr(>Chisq)`[2],4)}. Both effects are negative, i.e. as  difficulty increases, the effects of fatigue are even stronger. }
+\newdo{OK, so the interaction effect between response time and parameters controlling for difficulty is not significant: $\chi^2_2$=1.2, $P$-value=0.5465.  }
 
 \begin{figure}
 <<gol5cpred, echo=FALSE, fig.width=8, fig.heigh=10, out.width='\\textwidth'>>=
@@ -1525,7 +1525,7 @@ qplot(trial.time, pred5b, facets=sdline_new~sdgroup_new,
   xlab("Time until response (note the log scale)") + 
   ylab("Probablity to identify at least one target (accuracy)")
 @
-\caption{\label{fig:interaction}In black: predictions from model with  polynomial response time. In colour: additional interactions between response time and each of the difficulty settings. }
+\caption{\label{fig:interaction}In black: predictions from model with  polynomial response time. In colour: additional interactions between response time and each of the difficulty settings. XXX we don't need this figure - just to show how accuracy looks like over time}
 \end{figure}
 
 
