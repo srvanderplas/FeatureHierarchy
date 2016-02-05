@@ -1497,38 +1497,39 @@ The effect of (log) response times on accuracy is highly significant ($\chi^2_1$
 
 \newdo{XXX Yes, that's what I think is going on (at least on average) in our study. I would say that people either see it right away, and then they might type an additional answer and other stuff. But some lineups are harder - and they need to work at it, and might get it. We could test that theory by checking whether response times have an interaction with the difficulty parameters $s_C$ and $s_T$. I'll try to find out ...  XXX results below.}
 
-<<gol5c, echo=FALSE>>=
-# gol.5c <- update(gol.5b, .~.+log(as.numeric(trial.time)):sdline_new + 
-#                   log(as.numeric(trial.time)):sdgroup_new) 
-# aov.5c <- anova(gol.5b, gol.5c) # P-value is 0.55
-@
-
+%' 
+%' <<gol5c, echo=FALSE>>=
+%' # gol.5c <- update(gol.5b, .~.+log(as.numeric(trial.time)):sdline_new + 
+%' #                   log(as.numeric(trial.time)):sdgroup_new) 
+%' # aov.5c <- anova(gol.5b, gol.5c) # P-value is 0.55
+%' @
+%' 
 \newdo{OK, so the interaction effect between response time and parameters controlling for difficulty is not significant: $\chi^2_2$=1.2, $P$-value=0.5465.  }
 
-\begin{figure}
-<<gol5cpred, echo=FALSE, fig.width=8, fig.heigh=10, out.width='\\textwidth'>>=
-df5 <- data.frame(expand.grid(
-  plottype =levels(modeldata$plottype),
-  sdline_new = c(0.25, 0.35, 0.45),
-  sdgroup_new = c(0.2, 0.25, 0.3, 0.35),
-  k_new=factor(c(3,5)),
-  trial.num=5,
-  trial.time = exp(seq(1,7.5, by=0.1))
-))
-df5 <- merge(df5, unique(modeldata[,c("plottype", "label")]), by="plottype")
-df5$pred <- predict(gol.5c, newdata=df5, re.form=~0, type="response")
-df5$pred5b <- predict(gol.5b, newdata=df5, re.form=~0, type="response")
-
-qplot(trial.time, pred5b, facets=sdline_new~sdgroup_new, 
-      data=subset(df5, k_new==3), geom="line", group=label) + 
-  geom_line(aes(y=pred, colour=label), size=1) + theme_bw() + 
-  theme(legend.position="bottom") + scale_x_log10() + 
-  xlab("Time until response (note the log scale)") + 
-  ylab("Probablity to identify at least one target (accuracy)") + 
-  theme(legend.position="bottom")
-@
-\caption{\label{fig:interaction}In black: predictions from model with  polynomial response time. In colour: additional interactions between response time and each of the difficulty settings. XXX we don't need this figure - just to show how accuracy looks like over time}
-\end{figure}
+%' \begin{figure}
+%' <<gol5cpred, echo=FALSE, fig.width=8, fig.heigh=10, out.width='\\textwidth'>>=
+%' df5 <- data.frame(expand.grid(
+%'   plottype =levels(modeldata$plottype),
+%'   sdline_new = c(0.25, 0.35, 0.45),
+%'   sdgroup_new = c(0.2, 0.25, 0.3, 0.35),
+%'   k_new=factor(c(3,5)),
+%'   trial.num=5,
+%'   trial.time = exp(seq(1,7.5, by=0.1))
+%' ))
+%' df5 <- merge(df5, unique(modeldata[,c("plottype", "label")]), by="plottype")
+%' df5$pred <- predict(gol.5c, newdata=df5, re.form=~0, type="response")
+%' df5$pred5b <- predict(gol.5b, newdata=df5, re.form=~0, type="response")
+%' 
+%' qplot(trial.time, pred5b, facets=sdline_new~sdgroup_new, 
+%'       data=subset(df5, k_new==3), geom="line", group=label) + 
+%'   geom_line(aes(y=pred, colour=label), size=1) + theme_bw() + 
+%'   theme(legend.position="bottom") + scale_x_log10() + 
+%'   xlab("Time until response (note the log scale)") + 
+%'   ylab("Probablity to identify at least one target (accuracy)") + 
+%'   theme(legend.position="bottom")
+%' @
+%' \caption{\label{fig:interaction}In black: predictions from model with  polynomial response time. In colour: additional interactions between response time and each of the difficulty settings. XXX we don't need this figure - just to show how accuracy looks like over time}
+%' \end{figure}
 
 
 
