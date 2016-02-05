@@ -135,6 +135,9 @@ source("../../Code/theme_lineup.R")
 @
 %\tableofcontents
 \newpage
+\newdo{HH: for consistency: how do we call the different plot types officially? It shouldn't be plot type, because then I'd be thinking of scatterplots, boxplots and histograms rather than different aesthetics. But aesthetics doesn't capture things exactly either, because of the additional information in ellipses and trend lines. How about `designs' ? 
+Once we agree on a term, we should go through the paper and fix it ...
+}
 \section{Introduction and Background}
 Limits on attention span, short term memory, and information storage mechanisms within the human brain make it difficult for us to process numerical information  in raw form effectively. 
 (Well-designed) data displays are much better suited for this kind of communication, as  they serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data
@@ -1633,7 +1636,7 @@ qplot(time, data=modeldata, binwidth = .1) + theme_bw() +
 \text{log } T & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:timeModel}
 \end{align}
 where \begin{itemize}
-\item[$\alpha$] is a vector of fixed effects $(\mu, \\alpha_1, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ is an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\\alpha_1$ is the average effect of the first trial on the response time,  $\alpha_T$ and $\alpha_C$ represent the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
+\item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ is an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_1$ is the average effect of the first trial on the response time,  $\alpha_T$ and $\alpha_C$ represent the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
 \item[$\beta_i$] describe plot types,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
@@ -1718,7 +1721,7 @@ Parameter & Estimate & Std.\ Error & $z$-value & $P$-value \\
   $\alpha_T$ & -0.583 & 0.205 & -2.839 & 0.0045 \\ 
   $\alpha_C$ & -1.921 & 0.405 & -4.748 & $< 0.0001$ \\ 
   $\alpha_K$ & -0.068 & 0.019 & -3.525 & 0.0004 \\ [3pt]
-  {\bf Outcome} \hfill   Shape & -0.010 & 0.034 & -0.280 & 0.7793 \\ 
+  {\bf Plot type} \hfill   Shape & -0.010 & 0.034 & -0.280 & 0.7793 \\ 
   Plain & 0.000 & --- & --- & ---\\
   Color & 0.038 & 0.034 & 1.119 & 0.2630 \\ 
   Trend & 0.049 & 0.034 & 1.434 & 0.1514 \\ 
