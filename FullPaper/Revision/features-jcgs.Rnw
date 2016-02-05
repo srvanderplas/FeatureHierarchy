@@ -1513,17 +1513,19 @@ df5 <- data.frame(expand.grid(
   sdgroup_new = c(0.2, 0.25, 0.3, 0.35),
   k_new=factor(c(3,5)),
   trial.num=5,
-  trial.time = exp(seq(1,7.5, by=0.25))
+  trial.time = exp(seq(1,7.5, by=0.1))
 ))
+df5 <- merge(df5, unique(modeldata[,c("plottype", "label")]), by="plottype")
 df5$pred <- predict(gol.5c, newdata=df5, re.form=~0, type="response")
 df5$pred5b <- predict(gol.5b, newdata=df5, re.form=~0, type="response")
 
 qplot(trial.time, pred5b, facets=sdline_new~sdgroup_new, 
-      data=subset(df5, k_new==3), geom="line", group=plottype) + 
-  geom_line(aes(y=pred, colour=plottype), size=1) + theme_bw() + 
+      data=subset(df5, k_new==3), geom="line", group=label) + 
+  geom_line(aes(y=pred, colour=label), size=1) + theme_bw() + 
   theme(legend.position="bottom") + scale_x_log10() + 
   xlab("Time until response (note the log scale)") + 
-  ylab("Probablity to identify at least one target (accuracy)")
+  ylab("Probablity to identify at least one target (accuracy)") + 
+  theme(legend.position="bottom")
 @
 \caption{\label{fig:interaction}In black: predictions from model with  polynomial response time. In colour: additional interactions between response time and each of the difficulty settings. XXX we don't need this figure - just to show how accuracy looks like over time}
 \end{figure}
@@ -1559,18 +1561,19 @@ df2b <- data.frame(expand.grid(
   sdgroup_new = 0.25,
   k_new = 3,
   trial.num=5,
-  gini.min=seq(0.5,1, by=0.1)
+  gini.min=seq(0.5,1, by=0.025)
 ))
 
 cols <- brewer.pal(9, "Set1")
+df2b <- merge(df2b, unique(modeldata[,c("plottype", "label")]), by="plottype")
 
 df2b$pred <- predict(gol.2, newdata=df2b, re.form=~0, type="response")
-qplot(gini.min, pred, colour=plottype, shape=plottype,  data=df2b, size=I(2.5)) + theme_bw() + 
-  geom_line(aes(group=plottype)) + 
+qplot(gini.min, pred, colour=label, shape=label,  data=df2b, size=I(2.5)) + theme_bw() + 
+  geom_line(aes(group=label)) + 
   ylab("Predicted probablity for identifying one of the two targets") + 
   xlab("Gini impurity (0 means no diversity, 1 means complete diversity)") + 
-  scale_colour_manual(values = c(cols, "black")) +
-  scale_shape_manual(values=rep(1:6, 2))
+  scale_colour_manual("", values = c(cols, "black")) +
+  scale_shape_manual("", values=rep(1:6, 2)) 
 @
 \caption{\label{fig:two-way}Predicted accuracy values for plot types given different values of the gini impurity measure. Values of gini impurity between 0.59 and 1 were actually observed in the panels of the lineups. Accuracy of all plot types with color are lower than their non-colored counterparts, and the addition of ellipses further decreases accuracy. With a large deviation from equi-distributed groups, accuracy is disproportionately affected when color or ellipse aesthetics are present.}
 \end{figure}
