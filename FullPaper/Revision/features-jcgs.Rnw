@@ -1422,7 +1422,7 @@ Figure~\ref{fig:simulation} shows the result of this simulation approach for a l
 %' In future experiments, it will be advantageous to control the variability in cluster size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. }
 
 \section{Modelling results}
-There are two main types of models discussed in this section:  the models for accuracy  (section~\ref{sec:accuracy}), response times (section~\ref{sec:response}) and confidence levels (section~\ref{sec:confidence}) are based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the faceoff model (section~\ref{app:faceoff}) uses only lineups where at least one of the targets was identified to investigate which variables have an effect on the balance between the targets.
+There are two main types of models discussed in this section:  the models for accuracy  (section~\ref{sec:accuracy}), response times (section~\ref{sec:response}) and confidence levels (section~\ref{sec:confidence}) are based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the faceoff model (section~\ref{app:faceoff}) uses only lineups where at least one of the targets was identified to investigate which variables have an effect on the balance between the targets. An overview of all of the fixed effects considered for each one of this models is given in Table~\ref{tab:models}. The random effects were assumed to have the same structure in all of the models: we assumed one random effect for dataset specific characteristics, one random effect to account for different individuals' skills, and a random error term. We are assuming that all random effects are normally distributed, and pairwise orthogonal.
 
 \begin{table}
 \rowcolors{5}{}{gray!15}
@@ -1524,7 +1524,7 @@ We additionally investigate two more effects: (log) response time and the effect
 The effect of (log) response times on accuracy is highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5b$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
 \newdo{This is somewhat atypicial, if I understand how speed/accuracy tradeoff tends to work: typically, the more time you spend on a problem the higher your likelihood of completing it successfully - that is, it is assumed that participants can solve it eventually no matter what. Instead, what we're seeing (if I understand this correctly) is that there's a speed-accuracy tradeoff after 150 seconds, but before that point, lower response time is associated with higher accuracy - that is, either you see it or you don't, and if you hang out past 150 seconds, then you can sometimes reason your way back into it. We probably need to explain this a bit more - it's not clear, for instance, that you're just adding more terms to the model fit above. The R code is clear, but the text is less so.}
 
-\newdo{XXX Yes, that's what I think is going on (at least on average) in our study. I would say that people either see it right away, and then they might type an additional answer and other stuff. But some lineups are harder - and they need to work at it, and might get it. We could test that theory by checking whether response times have an interaction with the difficulty parameters $s_C$ and $s_T$. I'll try to find out ...  XXX results below.}
+%\newdo{XXX Yes, that's what I think is going on (at least on average) in our study. I would say that people either see it right away, and then they might type an additional answer and other stuff. But some lineups are harder - and they need to work at it, and might get it. We could test that theory by checking whether response times have an interaction with the difficulty parameters $s_C$ and $s_T$. I'll try to find out ...  XXX results below.}
 
 %' 
 %' <<gol5c, echo=FALSE>>=
@@ -1533,7 +1533,7 @@ The effect of (log) response times on accuracy is highly significant ($\chi^2_1$
 %' # aov.5c <- anova(gol.5b, gol.5c) # P-value is 0.55
 %' @
 %' 
-\newdo{OK, so the interaction effect between response time and parameters controlling for difficulty is not significant: $\chi^2_2$=1.2, $P$-value=0.5465.  }
+%\newdo{OK, so the interaction effect between response time and parameters controlling for difficulty is not significant: $\chi^2_2$=1.2, $P$-value=0.5465.  }
 
 %' \begin{figure}
 %' <<gol5cpred, echo=FALSE, fig.width=8, fig.heigh=10, out.width='\\textwidth'>>=
@@ -1570,15 +1570,20 @@ G(p_1, ..., p_K) = \frac{K}{K-1} \sum_{i=1}^K p_i (1 - p_i).
 \]
 $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, that there is only one group present, i.e.\ $p_i = 0$ for all but one of the groups. A gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.} 
 
-Other features measuring the imbalance within a lineup that we consider besides (a) gini impurity are (b)  the difference between the maximum and the minimum number of elements in each of the groups of a lineup, and (c) the number of ellipses missing from the lineup.
 
 The probability of picking at least one of the targets significantly increases with an increase in gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
 
-We further see a significant effect of gini impurity on individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
+We further see a significant effect of gini impurity on accuracy for  individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
+\newtext{This implies that homogeneity (or rather missing homogeneity) has a stronger effect in  some plot types than others. Figure~\ref{fig:two-way} shows the relationship between predicted accuracy and plot types for levels of homogeneity between 0.5 and 1 (similar to the range of Gini impurity observed in the study). Plots making use of color are all affected more strongly by deviations from homogeneity than plots without color. If ellipses are drawn, this effect becomes even more pronounced.
 
-\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)
+Other features measuring the imbalance within a lineup that we considered besides Gini impurity are }
+\begin{itemize}
+\item the difference between the maximum and the minimum number of elements in each of the groups of a lineup, and 
+\item the number of ellipses missing from the lineup.
+\end{itemize}
+%\newdo{What does this even mean? As gini impurity increases, the probability of selecting the cluster target decreases significantly more when the color aesthetic is included, compared to the shape aesthetic...? (I'm making stuff up here, but I honestly can't parse this sentance without running the models outside of knitr... ugh, which means the reviewers won't be able to either.)
 
-HH: OK, we can explain this a bit ore: homogeneity (or missing homogeneity) is more obvious in some plot types than others, and yes, color is affected by homogeneity, as are the ellipses. Should we add a plot similar to the last one? try to come up with a plot, and we can decide then. XXX See figure~\ref{fig:two-way}, sorry about the colors, I tried to make up for them by adding the shapes. }
+%HH: OK, we can explain this a bit ore: homogeneity (or missing homogeneity) is more obvious in some plot types than others, and yes, color is affected by homogeneity, as are the ellipses. Should we add a plot similar to the last one? try to come up with a plot, and we can decide then. XXX See figure~\ref{fig:two-way}, sorry about the colors, I tried to make up for them by adding the shapes. }
 
 
 \begin{figure}
