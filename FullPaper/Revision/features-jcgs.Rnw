@@ -1521,7 +1521,8 @@ $\mu$ & 6.47 & 1.08 & 6.01 & $< 0.0001$ \\
 We additionally investigate two more effects: (log) response time and the effect of imbalances in the group allocation on accuracy.  
 
 \subsubsection{Effect of response time}
-The effect of (log) response times on accuracy is highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5b$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
+The effect of (log) response times on accuracy is highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5$Chisq[2],1)}, $P$-value$<0.0001$).%\Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). 
+With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5b$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
 \newdo{This is somewhat atypicial, if I understand how speed/accuracy tradeoff tends to work: typically, the more time you spend on a problem the higher your likelihood of completing it successfully - that is, it is assumed that participants can solve it eventually no matter what. Instead, what we're seeing (if I understand this correctly) is that there's a speed-accuracy tradeoff after 150 seconds, but before that point, lower response time is associated with higher accuracy - that is, either you see it or you don't, and if you hang out past 150 seconds, then you can sometimes reason your way back into it. We probably need to explain this a bit more - it's not clear, for instance, that you're just adding more terms to the model fit above. The R code is clear, but the text is less so.}
 
 %\newdo{XXX Yes, that's what I think is going on (at least on average) in our study. I would say that people either see it right away, and then they might type an additional answer and other stuff. But some lineups are harder - and they need to work at it, and might get it. We could test that theory by checking whether response times have an interaction with the difficulty parameters $s_C$ and $s_T$. I'll try to find out ...  XXX results below.}
@@ -1568,12 +1569,12 @@ The effect of (log) response times on accuracy is highly significant ($\chi^2_1$
 \[
 G(p_1, ..., p_K) = \frac{K}{K-1} \sum_{i=1}^K p_i (1 - p_i).
 \]
-$G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, that there is only one group present, i.e.\ $p_i = 0$ for all but one of the groups. A gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.} 
+$G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, that there is only one group present, i.e.\ $p_i = 0$ for all but one of the groups. A Gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.} 
 
 
-The probability of picking at least one of the targets significantly increases with an increase in gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
+The probability of picking at least one of the targets significantly increases with an increase in Gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
 
-We further see a significant effect of gini impurity on accuracy for  individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
+We further see a significant effect of Gini impurity on accuracy for  individual plot types ($\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$).
 \newtext{This implies that homogeneity (or rather missing homogeneity) has a stronger effect in  some plot types than others. Figure~\ref{fig:two-way} shows the relationship between predicted accuracy and plot types for levels of homogeneity between 0.5 and 1 (similar to the range of Gini impurity observed in the study). Plots making use of color are all affected more strongly by deviations from homogeneity than plots without color. If ellipses are drawn, this effect becomes even more pronounced.
 
 Other features measuring the imbalance within a lineup that we considered besides Gini impurity are }
