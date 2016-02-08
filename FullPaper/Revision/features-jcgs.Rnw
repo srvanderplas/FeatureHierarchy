@@ -1424,13 +1424,13 @@ Figure~\ref{fig:simulation} shows the result of this simulation approach for a l
 \section{Modelling results}
 We are discussing four main models in this section. According to its dependent variables, these models are:
 \begin{description}
-\item[Accuracy (in section~\ref{sec:accuracy}):] a lineup is considered to be evaluated `accurately', if at least one of its two targets is identified in an evaluation.
-\item[Response time (in section~\ref{sec:response}):] \newdo{XXX needs more}
-\item[Confidence (in section~\ref{sec:confidence}):] \newdo{XXX needs more}
-\item[Balance between targets (in section~\ref{app:faceoff}):] because each lineup includes two targets, we can compare the frequencies with which eachof the two was identified. The objective here is to model the conditional probability of a cluster target identification given one of the two targets was identified, i.e.\ we want to model $P(C_{ijk} \mid C_{ijk} \cup T_{ijk})$, where $C_{ijk}$ and $T_{ijk}$ are  binary variables describing the events that participant $j$ identifies the cluster/trend target in dataset $k$ presented with design $i$.
+\item[Accuracy (in section~\ref{sec:accuracy}):] a lineup is considered to be evaluated `accurately', if at least one of its two targets is identified in an evaluation. We model this probability, i.e.\ $P(C_{ijk} \cup T_{ijk})$, where $C_{ijk}$ and $T_{ijk}$ are  binary variables describing the events that participant $j$ identifies the cluster/trend target in dataset $k$ presented with design $i$.
+\item[Response time (in section~\ref{sec:response}):] response time is measured as the time between which a lineup is presented to a participant and the time point at which an answer is submitted (including besides the choice, all of the additional information, such as confidence level and reason for the choice). On average, participants need 40 seconds to respond to a lineup. Factors that affect this avergae are investigated in the model. 
+\item[Confidence (in section~\ref{sec:confidence}):] for each lineup, participants are asked to provide a subjective evaluation of the level of confidence they have in the choice they made. Confidence is an integer value from 0 (least) to 5 (highest). 
+\item[Balance between targets (in section~\ref{app:faceoff}):] because each lineup includes two targets, we can compare the frequencies with which eachof the two was identified. The objective here is to model the conditional probability of a cluster target identification given one of the two targets was identified, i.e.\ we want to model $P(C_{ijk} \mid C_{ijk} \cup T_{ijk})$.
 \end{description}
 The parameter estimation for the first three models is based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the last model is based on only those lineups where at least one of the targets was identified.
- An overview of all of the fixed effects considered for each one of this models is given in Table~\ref{tab:models}. The random effects were assumed to have the same structure in all of the models: we assumed one random effect for dataset specific characteristics, one random effect to account for different individuals' skills, and a random error term. We are assuming that all random effects are normally distributed, and pairwise orthogonal.
+ An overview of all of the fixed effects considered for each one of these models is given in Table~\ref{tab:models}.  All models are fitted using the same random effects  structure: we assumed one random effect for dataset specific characteristics, one random effect to account for   individuals' different skills, and a random error term. We are assuming that all random effects are normally distributed, and pairwise orthogonal.
 
 \begin{table}
 \rowcolors{5}{}{gray!15}
