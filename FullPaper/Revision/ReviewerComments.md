@@ -22,6 +22,7 @@ output: html_document
 - The experiment is very complicated, and the result is not easily interpreted/effectively communicated
     - *That tends to be how real world stuff goes, but I don't disagree with the point*
     - *True, but we can't say it this way. We need to put in some effort to clean up the results.*
+    - *We have added more structure in the reporting of the results (particularly in the appendix). Hopefully this helps with communicating the results more effectively.*
 - Introduction needs a summary of the main points: preattentive perception, gestalt psychology, and statistical lineups
 - The modification to the lineup protocol is a significant and crucial
 leap, with only rational justification (no empirical evidence).
