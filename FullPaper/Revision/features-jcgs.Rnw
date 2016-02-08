@@ -1422,7 +1422,15 @@ Figure~\ref{fig:simulation} shows the result of this simulation approach for a l
 %' In future experiments, it will be advantageous to control the variability in cluster size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. }
 
 \section{Modelling results}
-There are two main types of models discussed in this section:  the models for accuracy  (section~\ref{sec:accuracy}), response times (section~\ref{sec:response}) and confidence levels (section~\ref{sec:confidence}) are based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the faceoff model (section~\ref{app:faceoff}) uses only lineups where at least one of the targets was identified to investigate which variables have an effect on the balance between the targets. An overview of all of the fixed effects considered for each one of this models is given in Table~\ref{tab:models}. The random effects were assumed to have the same structure in all of the models: we assumed one random effect for dataset specific characteristics, one random effect to account for different individuals' skills, and a random error term. We are assuming that all random effects are normally distributed, and pairwise orthogonal.
+We are discussing four main models in this section. According to its dependent variables, these models are:
+\begin{description}
+\item[Accuracy (in section~\ref{sec:accuracy}):] a lineup is considered to be evaluated `accurately', if at least one of its two targets is identified in an evaluation.
+\item[Response time (in section~\ref{sec:response}):] \newdo{XXX needs more}
+\item[Confidence (in section~\ref{sec:confidence}):] \newdo{XXX needs more}
+\item[Balance between targets (in section~\ref{app:faceoff}):] because each lineup includes two targets, we can compare the frequencies with which eachof the two was identified. The objective here is to model the conditional probability of a cluster target identification given one of the two targets was identified, i.e.\ we want to model $P(C_{ijk} \mid C_{ijk} \cup T_{ijk})$, where $C_{ijk}$ and $T_{ijk}$ are  binary variables describing the events that participant $j$ identifies the cluster/trend target in dataset $k$ presented with design $i$.
+\end{description}
+The parameter estimation for the first three models is based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the last model is based on only those lineups where at least one of the targets was identified.
+ An overview of all of the fixed effects considered for each one of this models is given in Table~\ref{tab:models}. The random effects were assumed to have the same structure in all of the models: we assumed one random effect for dataset specific characteristics, one random effect to account for different individuals' skills, and a random error term. We are assuming that all random effects are normally distributed, and pairwise orthogonal.
 
 \begin{table}
 \rowcolors{5}{}{gray!15}
