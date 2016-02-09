@@ -135,8 +135,6 @@ source("../../Code/theme_lineup.R")
 @
 %\tableofcontents
 \newpage
-\newdo{HH: I'm trying to change all of the designs to `design' whenever appropriate. I'll start with the appendix ...
-}
 \section{Introduction and Background}
 Limits on attention span, short term memory, and information storage mechanisms within the human brain make it difficult for us to process numerical information  in raw form effectively. 
 (Well-designed) data displays are much better suited for this kind of communication, as  they serve as a form of external cognition \citep{zhang1997nature,scaife1996external}, ordering and visually summarizing data
@@ -1037,7 +1035,7 @@ Define $C_{ijk}$ to be the event $$\{\text{Participant }k\text{ selects the clus
 and $T_{ijk}$ to be the analogous selection of the trend target.
 We model the cluster versus trend decision using a logistic regression with a random effect for each dataset to account for different difficulty levels in the generated data, and a random effect for participant to account for skill level, as shown in equation~\ref{eqn:faceoffModel}. 
 \begin{align}
-\text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:faceoffModel}
+\text{logit }P(C_{ijk} | C_{ijk}\cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta, \label{eqn:faceoffModel}
 \end{align}
 where \begin{itemize}
 \item[$\alpha$] is a vector of fixed effects $\left(\mu, \alpha_T, \alpha_C, \alpha_K \right)$. $\mu$ is a baseline average of the probability to pick the cluster target over the trend target.  $\alpha_T$ and $\alpha_C$ are parameters for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and with cluster variability $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$.
@@ -1457,10 +1455,26 @@ Target type \phantom{some filler...} {\footnotesize{(cluster, trend, neither, bo
 \caption{\label{tab:models}Overview of all models and their respective fixed effects. The same random effects were used for each model. All effects were investigated if applicable (otherwise marked by `---'). Checkmarks indicate significance at the 0.05 level. }
 \end{table}
 
+\newtext{The general model structure we are using for all four main models is the following:}
+
+\begin{align}
+g\left(E[Y]\right) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta, \label{eqn:generalModel} 
+\end{align}
+where \begin{itemize}
+\item[$g(.)$,] the left hand side, is made up of a link function $g$ that connects the (conditional) expected value of dependent variable $Y$ to the structural right hand side. We further assume that $Y = g^{-1}(.) + \epsilon$, with $\epsilon \overset{\text{approx}}{\sim}  N\left(0, \sigma^2 I_{n \times n}\right)$.
+\item[$\alpha$, $\beta$] are vectors of fixed effects, where $\beta$ is a vector corresponding to the nine designs investigated, and $\alpha$ encompasses all `other' fixed effects that might have an effect on the dependent variable besides the design of a plot,
+\item[$W, X$] are the design matrices corresponding to the fixed effects,
+\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+\item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics.
+\end{itemize}
+We also assume that random effects for dataset and participant are orthogonal. 
+
+
+
 \subsection{Accuracy Model}\label{sec:accuracy}
 The lineup protocol providess an easy way of measuring accuracy of evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that participant $k$ identifies (at least) one of the targets on the lineup (using aesthetics set $i$) of dataset $j$:
 \begin{align}
-\text{logit }P(C_{ijk} \cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:accuracyModel}
+\text{logit }P(C_{ijk} \cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta, \label{eqn:accuracyModel}
 \end{align}
 where \begin{itemize}
 \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
@@ -1744,7 +1758,7 @@ We also assume that random effects for dataset and participant are orthogonal.
 The approximation of confidence level (which is a bounded, discrete variable) is far from perfect, but the results are very interpretable.
 
 Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model.
-\newtext{Over the course of the study, confidence deteriorates with each additional lineup by about 0.03 (while significant, this effect on confidence is fairly small; confidence is measured between 0 and 5). Beyond this order effect, the first trial does not have a significant effect on the reported confidence.} The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported along with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level is significantly lower than if one of the two targets was identified\protect\footnote{The decrease in confidence when both targets are identified may be due to the additional complexity of dual-target search \citep{fleck2010generalized, cain2011anticipatory, adamo2015targets}}. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. 
+\newtext{Over the course of the study, confidence deteriorates with each additional lineup by about 0.03 (while significant, this effect on confidence is fairly small, as confidence is measured on a scale of 0 to 5). Beyond this order effect, the first trial does not have a significant effect on the reported confidence.} The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported along with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level is significantly lower than if one of the two targets was identified\protect\footnote{The decrease in confidence when both targets are identified may be due to the additional complexity of dual-target search \citep{fleck2010generalized, cain2011anticipatory, adamo2015targets}}. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. 
 These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
 
 <<modconfidence, echo=FALSE>>=
