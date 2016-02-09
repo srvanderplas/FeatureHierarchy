@@ -1462,7 +1462,7 @@ g\left(E[Y]\right) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + 
 \end{align}
 where \begin{itemize}
 \item[$g(.)$,] the left hand side, is made up of a link function $g$ that connects the (conditional) expected value of dependent variable $Y$ to the structural right hand side. We further assume that $Y = g^{-1}(.) + \epsilon$, with $\epsilon \overset{\text{approx}}{\sim}  N\left(0, \sigma^2 I_{n \times n}\right)$.
-\item[$\alpha$, $\beta$] are vectors of fixed effects, where $\beta$ is a vector corresponding to the nine designs investigated, and $\alpha$ encompasses all `other' fixed effects that might have an effect on the dependent variable besides the design of a plot,
+\item[$\alpha$, $\beta$] are vectors of fixed effects, where $\beta$ is a vector corresponding to the ten designs investigated, and $\alpha$ encompasses all `other' fixed effects that might have an effect on the dependent variable besides the design of a plot,
 \item[$W, X$] are the design matrices corresponding to the fixed effects,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics.
@@ -1472,18 +1472,27 @@ We also assume that random effects for dataset and participant are orthogonal.
 
 
 \subsection{Accuracy Model}\label{sec:accuracy}
-The lineup protocol providess an easy way of measuring accuracy of evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that participant $k$ identifies (at least) one of the targets on the lineup (using aesthetics set $i$) of dataset $j$:
-\begin{align}
-\text{logit }P(C_{ijk} \cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta, \label{eqn:accuracyModel}
-\end{align}
-where \begin{itemize}
-\item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
-\item[$\beta_i$] describe designs,
-\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
-\item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
-\item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+The lineup protocol providess an easy way of measuring accuracy of evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that participant $k$ identifies (at least) one of the targets on the lineup (using aesthetics set $i$) of dataset $j$, $P(C_{ijk} \cup T_{ijk})$. As link function $g(.)$ we use the logit function. 
+
+The vector $\alpha$ of fixed effects consists of $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where
+\begin{itemize}
+\item[$\mu$] is an average baseline accuracy (and should not be interpreted, because all other effects are assumed to be zero, which is not practically possible),
+\item[$\alpha_C, \alpha_T$] are the average effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$ on accuracy,
+\item[$\alpha_K$] is the effect of the number of clusters $K \in \{3, 5\}$, and
+\item[$\alpha_O$] an order effect, i.e.\ an effect on accuracy over time.
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
 \end{itemize}
-We also assume that random effects for dataset and participant are orthogonal. 
+% \begin{align}
+% \text{logit }P(C_{ijk} \cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta, \label{eqn:accuracyModel}
+% \end{align}
+% where \begin{itemize}
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
+% % \item[$\beta_i$] describe designs,
+% % \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+% % \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+% % \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+% \end{itemize}
+% We also assume that random effects for dataset and participant are orthogonal. 
 
 <<gols, echo=FALSE>>=
 gols.aov.2 <- anova(gol, gol.2)
