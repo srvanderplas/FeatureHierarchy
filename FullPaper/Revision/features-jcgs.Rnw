@@ -135,8 +135,7 @@ source("../../Code/theme_lineup.R")
 @
 %\tableofcontents
 \newpage
-\newdo{HH: for consistency: how do we call the different plot types officially? It shouldn't be plot type, because then I'd be thinking of scatterplots, boxplots and histograms rather than different aesthetics. But aesthetics doesn't capture things exactly either, because of the additional information in ellipses and trend lines. How about `designs' ? 
-Once we agree on a term, we should go through the paper and fix it ...
+\newdo{HH: I'm trying to change all of the designs to `design' whenever appropriate. I'll start with the appendix ...
 }
 \section{Introduction and Background}
 Limits on attention span, short term memory, and information storage mechanisms within the human brain make it difficult for us to process numerical information  in raw form effectively. 
@@ -893,7 +892,7 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 \caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
 
-For each plot type (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
+For each design (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target  over the trend target. 
 <<target-model, echo=FALSE>>=
 modeldata$one.correct <- 1 - modeldata$neither.correct
 gol <- glmer(
@@ -941,7 +940,7 @@ gol.2b <- update(gol.2, .~.+gini.min:plottype,
                  control = glmerControl(
                    optimizer="bobyqa",
                    optCtrl = list(maxfun = 1e5)
-                )) # individual plot types are significantly different 
+                )) # individual designs are significantly different 
 @
 
 <<gol3, dependson='target-model', echo=FALSE>>=
@@ -1023,13 +1022,13 @@ ggplot() +
   scale_fill_manual("Outcome", values=c("grey20", "grey30", "grey20", "grey90"),
                     guide = guide_legend(reverse=TRUE)) 
 @
-\caption{\label{fig:onetarget} In dark: number of evaluations by plot type, in which at least one of the targets was identified. Each of the dark areas is split into two, according to the type of target, with evaluations where both targets were identified between the two.
-Due to the design of the experiment, each plot type was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
+\caption{\label{fig:onetarget} In dark: number of evaluations by design, in which at least one of the targets was identified. Each of the dark areas is split into two, according to the type of target, with evaluations where both targets were identified between the two.
+Due to the design of the experiment, each design was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
 
-In order to assess which of the two stimuli dominated in each of the plot types, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
-Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by plot type (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
-Plot types  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
+In order to assess which of the two stimuli dominated in each of the designs, we concentrate first on all those responses in which participants identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
+Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by design (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
+Designs  associated with  clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
 
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
@@ -1050,12 +1049,12 @@ where \begin{itemize}
 We also assume that random effects for dataset and participant are orthogonal. 
 
 
-The estimated log odds of a decision in favor of cluster over trend target for each of the plot types are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
+The estimated log odds of a decision in favor of cluster over trend target for each of the designs are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
 As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters and around the trend line, are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in appendix section~\ref{app:faceoff} for exact numbers and a discussion of further co-variates).
 
-\newdo{We found the interaction effects between $s_C$ and plot type and $s_T$ and plot type to be not significant, i.e. the results for the plot types are stable in that sense, that it does not seem to matter how difficult (at least within our parameter setting) a lineup is. XXX Susan, do we want to include this? it's in models gvl.4d and gvl.4e - I didn't include those models in the paper yet, but they are in expanded-model.R.
+\newdo{We found the interaction effects between a design and each of the  parameters controlling variability, $s_C$ and $s_T$, to be not significant, i.e. the results for the designs are stable in that sense, that it does not seem to matter how difficult (at least within our parameter setting) a lineup is. XXX Susan, do we want to include this? it's in models gvl.4d and gvl.4e - I didn't include those models in the paper yet, but they are in expanded-model.R.
 Numbers: $s_T$: plottype interaction: 11.15,9,0.2656 
 $s_C$:plottype interaction: 6.9026,9,0.6473}
 <<group-vs-line, echo=FALSE, warning = FALSE>>=
@@ -1147,7 +1146,7 @@ ggplot(data=gvl.fixef) +
 # dt <- xtable(gvl.fixef[order(gvl.fixef$OR), c("label", "OR", "LB", "UB")], digits=4)
 # print(dt, include.rownames=FALSE)
 @
-\caption[Estimated odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Plot types are significantly different if they do not share a letter as given on the left hand side of the plot.}
+\caption[Estimated odds of decision for cluster versus trend target]{\label{fig:faceoff} Estimated odds of decision for cluster versus trend target based on evaluations that resulted in the identification of one of these targets. Designs are significantly different if they do not share a letter as given on the left hand side of the plot.}
 \end{figure}
 
 Examining the model results from the perspective of Gestalt heuristics, it is clear that the similarity/proximity effect, as indicated by spatial clustering and aesthetics such as color and shape, dominates the equation, including dominating the color + trend (similarity vs. continuity) condition. 
@@ -1163,7 +1162,7 @@ These short explanations provide some additional insight into participant reason
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
-As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of plot type - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
+As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of design - with the exception of the Ellipse + Color plot: here, the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
 
 \begin{figure}[h!t]\centering
 <<sentiment, eval=F, echo=FALSE, fig.width=7, fig.height=7, out.width='.3\\textwidth', fig.show='hold'>>=
@@ -1257,7 +1256,7 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
   \caption{Color + Ellipse, trend}\vspace{-0.2in}
   \includegraphics[width=.9\textwidth]{fig/sentiment-12}
 \end{subfigure}
-\caption[Wordclouds of participant responses for selected plot types]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of plot types. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
+\caption[Wordclouds of participant responses for selected designs]{\label{fig:wordles}Wordclouds of participants' reasoning by outcome for a selected number of designs. Mostly, the reasoning and the choice of the target are highly associated. For the Color + Ellipse plot, participants were distracted from either target by an imbalance in the cluster/color distribution, as can be seen from the reasoning in the bottom left wordcloud.}
 \end{figure}
 
 Further examination of individual participants' responses illustrates that group size (and thus, missing ellipses in the target plot) was a factor in the decision to identify specific null plots as different. Participants provided responses such as ``There is no circle highlighting the yellow symbols in this plot" %line 13515 
@@ -1270,7 +1269,7 @@ This was due to an unintended side-effect of using the k-means algorithm for clu
 %Our cluster allocation algorithm for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
 %Numerically, these null data sets had uneven cluster allocation; 
 The estimation of bounding ellipses fails for groups with fewer than three points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. 
-When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1$=\Sexpr{round(aov7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), with an estimate of $-0.8075$, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual plot types, it is also significant ($\chi^2_9$=\Sexpr{round(aov7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}).  Appendix section~\ref{sec:accuracy} gives more details on this model and its effects.
+When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1$=\Sexpr{round(aov7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), with an estimate of $-0.8075$, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual designs, it is also significant ($\chi^2_9$=\Sexpr{round(aov7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}).  Appendix section~\ref{sec:accuracy} gives more details on this model and its effects.
 
 
 \section{Discussion and Conclusions}\label{sec:Conclusion}
@@ -1441,7 +1440,7 @@ The parameter estimation for the first three models is based on all \Sexpr{nrow(
 \multicolumn{2}{l}{\bf Dependent Variable} & Face-off~\ref{app:faceoff} & Accuracy~\ref{sec:accuracy} & Response Time~\ref{sec:response} & Confidence~\ref{sec:confidence} \\
 \multicolumn{2}{l}{\bf Transformation} & (logit) & (logit) & (log) & --- \\ \hline
 \multicolumn{1}{l}{\bf Effect} & \multicolumn{1}{l}{\bf Parameter} \\ \hline
-Plot type & $\beta$ & \checkmark & \checkmark & \checkmark & \checkmark  \\
+Design & $\beta$ & \checkmark & \checkmark & \checkmark & \checkmark  \\
 Within cluster variability & $\alpha_C$ & \checkmark & \checkmark & \checkmark & \checkmark  \\
 Variability around trendline & $\alpha_T$ & \checkmark & \checkmark & \checkmark & \checkmark  \\
 Number of clusters & $\alpha_K$ &\checkmark  &  & \checkmark & \checkmark  \\
@@ -1465,7 +1464,7 @@ The lineup protocol providess an easy way of measuring accuracy of evaluations b
 \end{align}
 where \begin{itemize}
 \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
-\item[$\beta_i$] describe plot types,
+\item[$\beta_i$] describe designs,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
 \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
@@ -1510,7 +1509,7 @@ $\mu$ & 6.47 & 1.08 & 6.01 & $< 0.0001$ \\
   $\alpha_C$ & -8.59 & 2.40 & -3.58 & 0.0003 \\ 
   $\alpha_{K}$ & -0.11 & 0.11 & -0.93 & 0.3523 \\ 
   $\alpha_O$  & -0.02 & 0.01 & -2.33 & 0.0199 \\ [3pt]
-{\bf Plot type $\beta$} \hfill Plain & 0.00 & --- & --- & --- \\ 
+{\bf Design $\beta$} \hfill Plain & 0.00 & --- & --- & --- \\ 
   Trend + Error & -0.08 & 0.14 & -0.57 & 0.5701 \\ 
   Shape & -0.08 & 0.14 & -0.57 & 0.5694 \\ 
   Trend & -0.35 & 0.13 & -2.61 & 0.0090 \\ 
@@ -1581,7 +1580,7 @@ $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, th
 
 
 The probability of picking at least one of the targets significantly increases with an increase in Gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
-\newtext{In other words, a small Gini index indicates the presence of a null plot with large differences in the number of elements in wach group. This served as a(n unintended)  distractor away from the intended targets and therefore led to a drop in accuracy. Different plot types are affected differently strong (two-way interaction: $\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$): Plots making use of color are all affected more strongly by deviations from homogeneity than plots without color. If ellipses are drawn, the effect becomes even more pronounced. Figure~\ref{fig:two-way} gives an overview of the relationship between predicted accuracy and plot types for levels of homogeneity between 0.5 and 1 (similar to the range of Gini impurity observed in the study).}
+\newtext{In other words, a small Gini index indicates the presence of a null plot with large differences in the number of elements in wach group. This served as a(n unintended)  distractor away from the intended targets and therefore led to a drop in accuracy. Different designs are affected differently strong (two-way interaction: $\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$): Plots making use of color are all affected more strongly by deviations from homogeneity than plots without color. If ellipses are drawn, the effect becomes even more pronounced. Figure~\ref{fig:two-way} gives an overview of the relationship between predicted accuracy and designs for levels of homogeneity between 0.5 and 1 (similar to the range of Gini impurity observed in the study).}
 
 \newtext{ 
 Other features measuring the imbalance within a lineup that we considered besides Gini impurity are }
@@ -1615,7 +1614,7 @@ qplot(gini.min, pred, colour=label, shape=label,  data=df2b, size=I(2.5)) + them
   scale_colour_manual("", values = c(cols, "black")) +
   scale_shape_manual("", values=rep(1:6, 2)) 
 @
-\caption{\label{fig:two-way}Predicted accuracy values for plot types given different values of the gini impurity measure. Values of gini impurity between 0.59 and 1 were actually observed in the panels of the lineups. Accuracy of all plot types with color are lower than their non-colored counterparts, and the addition of ellipses further decreases accuracy. With a large deviation from equi-distributed groups, accuracy is disproportionately affected when color or ellipse aesthetics are present.}
+\caption{\label{fig:two-way}Predicted accuracy values for designs given different values of the gini impurity measure. Values of gini impurity between 0.59 and 1 were actually observed in the panels of the lineups. Accuracy of all designs with color are lower than their non-colored counterparts, and the addition of ellipses further decreases accuracy. With a large deviation from equi-distributed groups, accuracy is disproportionately affected when color or ellipse aesthetics are present.}
 \end{figure}
 
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
@@ -1624,9 +1623,9 @@ qplot(gini.min, pred, colour=label, shape=label,  data=df2b, size=I(2.5)) + them
 % xtable(anova(gol.model, gol.2, gol.2b))
 % @
 
-The range of group sizes does not have a significant effect on the probability to pick at least one of the targets, even if different plot types are taken into account.
+The range of group sizes does not have a significant effect on the probability to pick at least one of the targets, even if different designs are taken into account.
 
-Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither the number of missing ellipses nor the absence of at least one ellipse have a significant effect on this probability, not even when we consider the impact of individual plot types.
+Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither the number of missing ellipses nor the absence of at least one ellipse have a significant effect on this probability, not even when we consider the impact of individual designs.
 %\newdo{they are all in the range of model gol.3}
 
 To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{app:faceoff}.
@@ -1681,7 +1680,7 @@ table$pvals <- cftest(time.2)$test$pvalues
 \end{align}
 where \begin{itemize}
 \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ is an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_1$ is the average effect of the first trial on the response time, $\alpha_O$ is the effect of successive trials on successive trials,  $\alpha_T$ and $\alpha_C$ represent the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
-\item[$\beta_i$] describe plot types,
+\item[$\beta_i$] describe designs,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
 \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
@@ -1707,7 +1706,7 @@ $\mu$ & 2.664 & 0.108 & 24.559 & $< 0.0001$ \\
   $\alpha_T$ & 0.481 & 0.153 & 3.152 & $< 0.0001$ \\ 
   $\alpha_C$ & 1.664 & 0.302 & 5.503 & $< 0.0001$ \\ 
   $\alpha_O$ & -0.030 & 0.002 & -17.273 & $< 0.0001$ \\[3pt]
-{\bf Plot Type $\beta$} \hfill  Plain & 0.000 & --- & --- & --- \\ 
+{\bf Design $\beta$} \hfill  Plain & 0.000 & --- & --- & --- \\ 
   Shape & 0.110 & 0.019 & 5.903 & $< 0.0001$ \\ 
   Color & 0.130 & 0.019 & 6.961 & $< 0.0001$ \\ 
   Trend & 0.144 & 0.019 & 7.714 & $< 0.0001$ \\ 
@@ -1735,7 +1734,7 @@ C & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + 
 \end{align}
 where \begin{itemize}
 \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \tau, \omega_C, \omega_T, \omega_N, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ an average baseline confidence level, $\alpha_1$ is an effect of the first trial on confidence, $\alpha_O$ is the effect of successive lineup evaluations on confidence. $\tau$ is the effect of the (log) time taken  to respond on a participant's confidence, $\omega_*$ is the effect of choosing the {\bf C}luster, {\bf T}rend, {\bf N}either or {\bf B}oth of the targets, $\alpha_T$ and $\alpha_C$ are the effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$, 
-\item[$\beta_i$] describe plot types,
+\item[$\beta_i$] describe designs,
 \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
 \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
@@ -1777,7 +1776,7 @@ $\alpha_1$ & 0.002 & 0.029 & 0.083 & 0.9336 \\
   $\alpha_C$ & -1.899 & 0.389 & -4.879 & $<0.0001$ \\ 
   $\alpha_{K=3}$  & 0.000 & --- & --- & ---\\
   $\alpha_{K=5}$  & -0.131 & 0.037 & -3.559 & 0.0004 \\[3pt]
-{\bf Plot type $\beta$} \hfill Shape & -0.006 & 0.034 & -0.187 & 0.8518 \\ 
+{\bf Design $\beta$} \hfill Shape & -0.006 & 0.034 & -0.187 & 0.8518 \\ 
   Plain  & 0.000 & --- & --- & ---\\
   Color + Shape & 0.024 & 0.034 & 0.698 & 0.4855 \\ 
   Color & 0.040 & 0.034 & 1.178 & 0.2390 \\ 
@@ -1801,7 +1800,7 @@ $\alpha_1$ & 0.002 & 0.029 & 0.083 & 0.9336 \\
 
 \subsection{Faceoff Model}\label{app:faceoff}
 Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked decreases. Similarly, an increase in within-cluster error is associated with a decrease of the number of cluster target picks. 
-The effect of the different plot types is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). The effect of plot types is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
+The effect of the different designs is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). The effect of designs is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
@@ -1820,7 +1819,7 @@ ggplot(data=subset(modeldata, k_new==3)) +
         legend.position="bottom", 
         strip.text.y = element_text(angle=0))
 @
-\caption{\label{fig:outcome-parms}Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=3$ clusters.}
+\caption{\label{fig:outcome-parms}Outcome by design and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=3$ clusters.}
 \end{figure}
 
 \begin{figure}
@@ -1836,7 +1835,7 @@ ggplot(data=subset(modeldata, k_new==5)) +
         legend.position="bottom", 
         strip.text.y = element_text(angle=0))
 @
-\caption{Outcome by plot type and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
+\caption{Outcome by design and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
 \end{figure}
 
 %' 
@@ -1871,7 +1870,7 @@ Intercept & 1.018 & -1.615 & 3.651 \\
 $\alpha_T$ & 16.254 & 13.276 & 19.231 \\ 
 $\alpha_C$ & -16.038 & -21.935 & -10.140 \\ 
 $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
-{\bf Plot Type $\beta$} \hfill  Trend + Error & -0.650 & -0.877 & -0.423 \\ 
+{\bf Design $\beta$} \hfill  Trend + Error & -0.650 & -0.877 & -0.423 \\ 
   Color + Ellipse + Trend + Error & -0.515 & -0.751 & -0.279 \\ 
   Plain & 0.000 & --- & --- \\ 
   Trend & 0.130 & -0.101 & 0.361 \\ 
@@ -1883,7 +1882,7 @@ $\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
   Color + Shape + Ellipse & 0.573 & 0.317 & 0.830 \\ 
    \hline
 \end{tabular}
-\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain plot type as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
+\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain design as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
 }
 \end{table}
 
@@ -1899,7 +1898,7 @@ Response time (composed of log(response time) and effect of first trial) does no
 Nor does the confidence level of participants ($\chi_5^2$=\Sexpr{round(aov2$Chisq[2],1)}, $P$-value=\Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
 What does have a significant effect on the balance between cluster target and trend target is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse (that is, a group size of less than 4) cuts the probability that the cluster target is selected by more than half (44.6\%; $\chi_1^2$=\Sexpr{round(aov.7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
-We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual plot types into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}). These effects are summarised in Figure~\ref{fig:gvl7b}.
+We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual designs into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}). These effects are summarised in Figure~\ref{fig:gvl7b}.
 \begin{figure}
 <<gvl7b.pred, echo=FALSE, fig.width=7, fig.height=4, out.width='0.8\\textwidth'>>=
 
@@ -1943,7 +1942,7 @@ qplot(pred4, label, data=df7, shape=I(3)) +
   scale_shape("One ellipse missing") +
   xlab("Probability to pick cluster target\n(given one of the targets was picked)") 
 @
-\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different plot types. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model (\ref{eqn:faceoffModel}), the filled triangle and circle represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and plot types. Plots with trend and shape aesthetics are the least affected by the imbalance in groups, while plots with color aesthetics show huge differences in the predicted probability.}
+\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different designs. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model (\ref{eqn:faceoffModel}), the filled triangle and circle represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and designs. Plots with trend and shape aesthetics are the least affected by the imbalance in groups, while plots with color aesthetics show huge differences in the predicted probability.}
 \end{figure}
 
 \end{appendix}
