@@ -1479,7 +1479,7 @@ The vector $\alpha$ of fixed effects consists of $(\mu, \alpha_T, \alpha_C, \alp
 \item[$\mu$] is an average baseline accuracy (and should not be interpreted, because all other effects are assumed to be zero, which is not practically possible),
 \item[$\alpha_C, \alpha_T$] are the average effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$ on accuracy,
 \item[$\alpha_K$] is the effect of the number of clusters $K \in \{3, 5\}$, and
-\item[$\alpha_O$] an order effect, i.e.\ an effect on accuracy over time.
+\item[$\alpha_O$] is an order effect, i.e.\ an effect on accuracy for successive lineups.
 % \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
 \end{itemize}
 % \begin{align}
@@ -1551,7 +1551,7 @@ $\mu$ & 6.47 & 1.08 & 6.01 & $< 0.0001$ \\
 We additionally investigate two more effects: (log) response time and the effect of imbalances in the group allocation on accuracy.  
 
 \subsubsection{Effect of response time}
-The effect of (log) response times on accuracy is highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5$Chisq[2],1)}, $P$-value$<0.0001$).%\Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). 
+The effect of (log) response times on accuracy is highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5$Chisq[2],1)}, $P$-value$<0.0001$). %\Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). 
 With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5b$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
 \newdo{This is somewhat atypicial, if I understand how speed/accuracy tradeoff tends to work: typically, the more time you spend on a problem the higher your likelihood of completing it successfully - that is, it is assumed that participants can solve it eventually no matter what. Instead, what we're seeing (if I understand this correctly) is that there's a speed-accuracy tradeoff after 150 seconds, but before that point, lower response time is associated with higher accuracy - that is, either you see it or you don't, and if you hang out past 150 seconds, then you can sometimes reason your way back into it. We probably need to explain this a bit more - it's not clear, for instance, that you're just adding more terms to the model fit above. The R code is clear, but the text is less so.}
 
@@ -1655,7 +1655,7 @@ To investigate the effect of these features on the balance between target models
 
 %\newpage
 \subsection{Modelling response times}\label{sec:response}
-While we do not have the same amount of control in an AMT study that we would have in a lab setting, we can accurately capture the time between presenting a lineup to a participant and the time at which results are submitted. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use the log of response times $T = \left(t_{ijk}\right)_{n \times 1}$:
+While we do not have the same amount of control in an AMT study that we would have in a lab setting, we can accurately capture the time between presenting a lineup to a participant and the time at which results are submitted. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use the log of response times $T = \left(t_{ijk}\right)_{n \times 1}$ as the dependent variable.
 <<response, echo=FALSE>>=
 #load("../../Data/modeldata.Rdata")
 
@@ -1698,17 +1698,19 @@ table <- data.frame(summary(time.2)$coefficients)
 table$pvals <- cftest(time.2)$test$pvalues
 @
 
-\begin{align}
-\text{log } T & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:timeModel}
-\end{align}
-where \begin{itemize}
-\item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ is an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_1$ is the average effect of the first trial on the response time, $\alpha_O$ is the effect of successive trials on successive trials,  $\alpha_T$ and $\alpha_C$ represent the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
-\item[$\beta_i$] describe designs,
-\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
-\item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
-\item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
-\end{itemize}
-We also assume that random effects for dataset and participant are orthogonal. 
+% \begin{align}
+% \text{log } T & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:timeModel}
+% \end{align}
+% where \begin{itemize}
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ is an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_1$ is the average effect of the first trial on the response time, $\alpha_O$ is the effect of successive trials on successive trials,  $\alpha_T$ and $\alpha_C$ represent the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
+% \item[$\beta_i$] describe designs,
+% \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+% \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+% \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+% \end{itemize}
+% We also assume that random effects for dataset and participant are orthogonal. 
+
+\newtext{For the vector of fixed effects, $\alpha$, we estimate, as before, the effects of variability ($\alpha_C$ and $\alpha_T$) on response times, as well as the number of clusters shown ($\alpha_K$). Aside from this, we also consider the  average effect of the first trial,  $\alpha_1$, and the effect of successive trials,  $\alpha_O$, on the response time. $\omega_C, \omega_T, \omega_B$, and $\omega_N$ is a set of parameters assessing the effect of the  outcome of the lineup evaluation on response time (the letters in the subscript stand for `C'luster, `T'rend, `B'oth, and `N'one). }
 
 Table~\ref{tab:response} gives an overview of all parameters of the response time model and their estimates. Similar to what has been found in other lineup studies \citep{humanfactorslineups, hofmann2012graphical}, participants take on average 25\% longer to respond to the first lineup than to subsequent lineups. Aside from this, we see that as the difficulty of lineups increases (controlled by an increase in the parameters $s_C$ and $s_T$), the average amount of time participants spend on each evaluation significantly increases. \newtext{On average, participants respond to each successive lineup about 3\% faster.}
 Depending on the outcome of the evaluation, there are differences in the amount of time: if either one of the targets is identified, the amount of time taken to answer is significantly shorter than if neither of the targets is found. Answers take on average the longest, if both targets are identified (however, this only happens in 0.6\% of the responses). 
@@ -1723,12 +1725,16 @@ Plot aesthetics have a significant impact on the amount of time for responses, w
 Parameter & Estimate & Std.\ Error & $z$ value & $P$-value \\ 
   \hline
 $\mu$ & 2.664 & 0.108 & 24.559 & $< 0.0001$ \\ 
-  $\alpha_1$ & 0.084 & 0.016 & 5.133 & $< 0.0001$ \\
     $\alpha_{K = 3}$ & 0.000 & --- & --- & --- \\ 
     $\alpha_{K = 5}$ & 0.124 & 0.029 & 4.297 & $< 0.0001$ \\ 
   $\alpha_T$ & 0.481 & 0.153 & 3.152 & $< 0.0001$ \\ 
   $\alpha_C$ & 1.664 & 0.302 & 5.503 & $< 0.0001$ \\ 
+  $\alpha_1$ & 0.084 & 0.016 & 5.133 & $< 0.0001$ \\
   $\alpha_O$ & -0.030 & 0.002 & -17.273 & $< 0.0001$ \\[3pt]
+   {\bf Outcome $\omega$} \hfill   Trend & 0.000 & --- & --- & --- \\ 
+  Cluster & 0.027 & 0.013 & 2.117 & 0.0342 \\ 
+  Neither & 0.181 & 0.015 & 11.736 & $< 0.0001$ \\ 
+  Both & 0.347 & 0.057 & 6.079 & $< 0.0001$ \\ [3pt]
 {\bf Design $\beta$} \hfill  Plain & 0.000 & --- & --- & --- \\ 
   Shape & 0.110 & 0.019 & 5.903 & $< 0.0001$ \\ 
   Color & 0.130 & 0.019 & 6.961 & $< 0.0001$ \\ 
@@ -1738,11 +1744,7 @@ $\mu$ & 2.664 & 0.108 & 24.559 & $< 0.0001$ \\
   Color + Shape & 0.209 & 0.019 & 11.194 & $< 0.0001$ \\ 
   Color + Trend & 0.215 & 0.019 & 11.469 & $< 0.0001$ \\ 
   Color + Shape + Ellipse & 0.203 & 0.019 & 10.752 & $< 0.0001$ \\ 
-  Color + Ellipse + Trend + Error & 0.248 & 0.019 & 13.187 & $< 0.0001$ \\ [3pt]
- {\bf Outcome $\omega$} \hfill   Trend & 0.000 & --- & --- & --- \\ 
-  Cluster & 0.027 & 0.013 & 2.117 & 0.0342 \\ 
-  Neither & 0.181 & 0.015 & 11.736 & $< 0.0001$ \\ 
-  Both & 0.347 & 0.057 & 6.079 & $< 0.0001$ \\ 
+  Color + Ellipse + Trend + Error & 0.248 & 0.019 & 13.187 & $< 0.0001$ \\ 
    \hline
 \end{tabular}
 
@@ -1750,21 +1752,24 @@ $\mu$ & 2.664 & 0.108 & 24.559 & $< 0.0001$ \\
 \end{table}
 
 \subsection{Model of confidence levels}\label{sec:confidence}
-With each lineup evaluation, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. Let $C = \left(c_{ijk} \right)$ be the confidence level participant $k$ reports on the lineup (using aesthetics set $i$) of dataset $j$:
+With each lineup evaluation, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. 
+%Let $C = \left(c_{ijk} \right)$ be the confidence level participant $k$ reports on the lineup (using aesthetics set $i$) of dataset $j$:
 
-\begin{align}
-C & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:confidenceModel}
-\end{align}
-where \begin{itemize}
-\item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \tau, \omega_C, \omega_T, \omega_N, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ an average baseline confidence level, $\alpha_1$ is an effect of the first trial on confidence, $\alpha_O$ is the effect of successive lineup evaluations on confidence. $\tau$ is the effect of the (log) time taken  to respond on a participant's confidence, $\omega_*$ is the effect of choosing the {\bf C}luster, {\bf T}rend, {\bf N}either or {\bf B}oth of the targets, $\alpha_T$ and $\alpha_C$ are the effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$, 
-\item[$\beta_i$] describe designs,
-\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
-\item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
-\item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
-\end{itemize}
-We also assume that random effects for dataset and participant are orthogonal. 
+% \begin{align}
+% C & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:confidenceModel}
+% \end{align}
+% where \begin{itemize}
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \tau, \omega_C, \omega_T, \omega_N, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ an average baseline confidence level, $\alpha_1$ is an effect of the first trial on confidence, $\alpha_O$ is the effect of successive lineup evaluations on confidence. $\tau$ is the effect of the (log) time taken  to respond on a participant's confidence, $\omega_*$ is the effect of choosing the {\bf C}luster, {\bf T}rend, {\bf N}either or {\bf B}oth of the targets, $\alpha_T$ and $\alpha_C$ are the effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$, 
+% \item[$\beta_i$] describe designs,
+% \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+% \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+% \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+% \end{itemize}
+% We also assume that random effects for dataset and participant are orthogonal. 
 
-The approximation of confidence level (which is a bounded, discrete variable) is far from perfect, but the results are very interpretable.
+The approximation of confidence level (which is a bounded, discrete variable) by a normal distribution is far from perfect, but the results are very interpretable.
+
+The vector of fixed effects, $\alpha$, includes besides the previously described effects of the control parameters $\alpha_C, \alpha_T, \alpha_K$, the effects of lineup order $\alpha_1, \alpha_O$, the effect of evaluation outcome $\omega_C, \omega_T, \omega_B, \omega_N$, also parameters that control for the amount of time taken by participants to evaluate a lineup: $\tau$ is the effect of log response time on the level of confidence reported by a participant.
 
 Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model.
 \newtext{Over the course of the study, confidence deteriorates with each additional lineup by about 0.03 (while significant, this effect on confidence is fairly small, as confidence is measured on a scale of 0 to 5). Beyond this order effect, the first trial does not have a significant effect on the reported confidence.} The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported along with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level is significantly lower than if one of the two targets was identified\protect\footnote{The decrease in confidence when both targets are identified may be due to the additional complexity of dual-target search \citep{fleck2010generalized, cain2011anticipatory, adamo2015targets}}. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. 
@@ -1799,6 +1804,10 @@ $\alpha_1$ & 0.002 & 0.029 & 0.083 & 0.9336 \\
   $\alpha_C$ & -1.899 & 0.389 & -4.879 & $<0.0001$ \\ 
   $\alpha_{K=3}$  & 0.000 & --- & --- & ---\\
   $\alpha_{K=5}$  & -0.131 & 0.037 & -3.559 & 0.0004 \\[3pt]
+    {\bf Outcome $\omega$} \hfill Trend  & 0.000 & --- & --- & ---\\
+  Cluster & -0.028 & 0.022 & -1.263 & 0.2065 \\ 
+  Both & -0.213 & 0.102 & -2.084 & 0.0372 \\ 
+  Neither & -0.220 & 0.028 & -7.971 & $<0.0001$ \\ [3pt]
 {\bf Design $\beta$} \hfill Shape & -0.006 & 0.034 & -0.187 & 0.8518 \\ 
   Plain  & 0.000 & --- & --- & ---\\
   Color + Shape & 0.024 & 0.034 & 0.698 & 0.4855 \\ 
@@ -1808,11 +1817,7 @@ $\alpha_1$ & 0.002 & 0.029 & 0.083 & 0.9336 \\
   Color + Trend & 0.058 & 0.034 & 1.707 & 0.0878 \\ 
   Color + Ellipse & 0.068 & 0.034 & 1.997 & 0.0459 \\ 
   Color + Ellipse + Trend + Error & 0.106 & 0.034 & 3.132 & 0.0017 \\ 
-  Color + Shape + Ellipse & 0.107 & 0.034 & 3.156 & 0.0016 \\ [3pt]
-  {\bf Outcome $\omega$} \hfill Trend  & 0.000 & --- & --- & ---\\
-  Cluster & -0.028 & 0.022 & -1.263 & 0.2065 \\ 
-  Both & -0.213 & 0.102 & -2.084 & 0.0372 \\ 
-  Neither & -0.220 & 0.028 & -7.971 & $<0.0001$ \\ 
+  Color + Shape + Ellipse & 0.107 & 0.034 & 3.156 & 0.0016 \\ 
    \hline
 \end{tabular}
 \caption{\label{tab:conf}Parameters and estimates for the model of participants' confidence.  }
