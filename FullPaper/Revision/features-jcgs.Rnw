@@ -1656,12 +1656,12 @@ qplot(gini.min, pred, colour=label, shape=label,  data=df2b, size=I(2.5)) + them
 % xtable(anova(gol.model, gol.2, gol.2b))
 % @
 
-The range of group sizes does not have a significant effect on the probability to pick at least one of the targets, even if different designs are taken into account.
-
-Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither the number of missing ellipses nor the absence of at least one ellipse have a significant effect on this probability, not even when we consider the impact of individual designs.
+The range of group sizes does not have a significant effect on the probability to pick at least one of the targets, even if different designs are taken into account. Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither the number of missing ellipses nor the absence of at least one ellipse have a significant effect on this probability, not even when we consider the impact of individual designs.
 %\newdo{they are all in the range of model gol.3}
 
-To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{app:faceoff}.
+% To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{app:faceoff}.
+
+These features have also been included in the faceoff model of section~\ref{app:faceoff} to investigate whether group size imbalance or missing ellipses affects the probability of selecting one target over the other. 
 
 %\newpage
 \subsection{Modelling response times}\label{sec:response}
