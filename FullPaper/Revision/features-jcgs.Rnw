@@ -1519,7 +1519,7 @@ The order effect $\alpha_O$ is small, but significant; as participants answer mo
 $\alpha_O$ may represent a fatigue effect or an experience effect. Fatigue effects have been documented~\citep{abdulrahman2014repeated} in studies where participants complete several trials which are similar in a short period of time. It is also possible that as participants completed additional trials, they learned to look for certain cues (e.g.\ number of groups) which led to the selection of plots which had large differences in group size. While this approach is reasonable using inductive logic, participants using this strategy would be less likely to select the cluster or trend targets as a result. 
 
 
-As the lineups in this study were randomly ordered, either hypothesized effect is unlikely to bias the estimates for dataset and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate both potential fatigue and learning effects.}
+As the lineups in this study were randomly ordered, either hypothesized effect is unlikely to bias the estimates for dataset and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate both potential fatigue and learning effects.
 
 \begin{table}[htbp]
 % xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
