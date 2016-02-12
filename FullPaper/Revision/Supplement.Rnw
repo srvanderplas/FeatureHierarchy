@@ -107,14 +107,14 @@ source("../../Code/theme_lineup.R")
 {#1}\small\normalsize} \spacingset{1}
 
 \begin{appendices}
-\renewcommand\appendixname{Suppplement}
+\renewcommand\appendixname{Supplement}
 \section{Simulation Study of the Parameter Space}\label{app:parametersimulation}
 
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the strength of the linear relationship ($R^2$) and cluster strength for null and target plots. 
 
 Figures~\ref{fig:simulationLineIntervals} and~\ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and cluster strength summary statistics for each set of parameter values. These plots guide our evaluation of ``easy", ``medium" and ``hard" parameter values for trend and cluster tasks. 
 
-Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the width of the blue intervals (bottom figure) changes  between different levels of $K$ and for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
+Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the width of the blue intervals (bottom figure) changes  between different levels of $K$ and for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by data set). Each data set is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
 
 <<simulationparameters,echo=F,include=F, fig.width=10, fig.height=6.5, out.width='.8\\textwidth'>>=
 load("../../Data/SimulationDatasetCriteriaTurk16.Rdata")
@@ -497,13 +497,13 @@ gvl.9 <-  update(gvl.4, .~.+factor(no.ellipse), control=glmerControl(optimizer="
 
 In this supplement, we discuss four primary models used to examine different aspects of the data collected in this experiment. According to its dependent variables, these models are:
 \begin{description}
-\item[Accuracy (in section~\ref{app:accuracy}):] a lineup is considered to be evaluated `accurately', if at least one of its two targets is identified in an evaluation. We model this probability, i.e.\ $P(C_{ijk} \cup T_{ijk})$, where $C_{ijk}$ and $T_{ijk}$ are  binary variables describing the events that participant $k$ identifies the cluster/trend target in dataset $j$ presented with design $i$.
+\item[Accuracy (in section~\ref{app:accuracy}):] a lineup is considered to be evaluated `accurately', if at least one of its two targets is identified in an evaluation. We model this probability, i.e.\ $P(C_{ijk} \cup T_{ijk})$, where $C_{ijk}$ and $T_{ijk}$ are  binary variables describing the events that participant $k$ identifies the cluster/trend target in data set $j$ presented with design $i$.
 \item[Response time (in section~\ref{app:responsetime}):] response time is measured as the time between which a lineup is presented to a participant and the time point at which an answer is submitted. On average, participants need 40 seconds to respond to a lineup. Factors that affect this average (including accuracy, confidence level, and user justification) are also investigated. 
 \item[Confidence (in section~\ref{app:confidence}):] for each lineup, participants are asked to provide a subjective evaluation of the level of confidence they have in the choice they made, in the form of an integer value between 0 (least) to 5 (highest). 
 \item[Balance between targets (in section~\ref{app:faceoff}):] because each lineup includes two targets, we can compare the frequency of identification of each target type. The objective here is to model the conditional probability of a cluster target identification given one of the two targets was identified, i.e.\ we want to model $P(C_{ijk} \mid C_{ijk} \cup T_{ijk})$.
 \end{description}
 The parameter estimation for the first three models is based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the last model is based on only those lineups where at least one of the targets was identified.
- An overview of all of the fixed effects considered for each one of these models is given in Table~\ref{tab:models}.  All models are fitted using the same random effects structure: we assumed one random effect for dataset specific characteristics, one random effect to account for individuals' different skills, and a random error term. We are assuming that all random effects are normally distributed and pairwise orthogonal.
+ An overview of all of the fixed effects considered for each one of these models is given in Table~\ref{tab:models}.  All models are fitted using the same random effects structure: we assumed one random effect for data set specific characteristics, one random effect to account for individuals' different skills, and a random error term. We are assuming that all random effects are normally distributed and pairwise orthogonal.
 
 \begin{table}
 \rowcolors{5}{}{gray!15}
@@ -540,15 +540,15 @@ where \begin{itemize}
 \item[$g(.)$,] the left hand side, is made up of a link function $g$ that connects the (conditional) expected value of dependent variable $Y$ to the structural right hand side. We further assume that $Y = g^{-1}(.) + \epsilon$, with $\epsilon \overset{\text{approx}}{\sim}  N\left(0, \sigma^2 I_{n \times n}\right)$.
 \item[$\alpha$, $\beta$] are vectors of fixed effects, where $\beta$ is a vector corresponding to the ten designs investigated, and $\alpha$ encompasses all `other' fixed effects that might have an effect on the dependent variable besides the design of a plot,
 \item[$W, X$] are the design matrices corresponding to the fixed effects,
-\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for data set specific characteristics,
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics.
 \end{itemize}
-We also assume that random effects for dataset and participant are orthogonal. 
+We also assume that random effects for data set and participant are orthogonal. 
 
 
 
 \subsection{Accuracy Model}\label{app:accuracy}
-The lineup protocol provides an easy way of measuring accuracy of evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that participant $k$ identifies (at least) one of the targets on the lineup (using aesthetics set $i$) of dataset $j$, $P(C_{ijk} \cup T_{ijk})$. We use the logit function as the link function $g(.)$. 
+The lineup protocol provides an easy way of measuring accuracy of evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that participant $k$ identifies (at least) one of the targets on the lineup (using aesthetics set $i$) of data set $j$, $P(C_{ijk} \cup T_{ijk})$. We use the logit function as the link function $g(.)$. 
 
 The vector $\alpha$ of fixed effects consists of $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where
 \begin{itemize}
@@ -595,7 +595,7 @@ The order effect $\alpha_O$ is small, but significant; as participants answer mo
 $\alpha_O$ may represent a fatigue effect or an experience effect. Fatigue effects have been documented~\citep{abdulrahman2014repeated} in studies where participants complete several trials which are similar in a short period of time. It is also possible that as participants completed additional trials, they learned to look for certain cues (e.g.\ number of groups) which led to the selection of plots which had large differences in group size. While this approach is reasonable using inductive logic, participants using this strategy would be less likely to select the cluster or trend targets as a result. 
 
 
-As the lineups in this study were randomly ordered, either hypothesized effect is unlikely to bias the estimates for dataset and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate both potential fatigue and learning effects.
+As the lineups in this study were randomly ordered, either hypothesized effect is unlikely to bias the estimates for data set and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate both potential fatigue and learning effects.
 
 \begin{table}[htbp]
 % xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
@@ -632,7 +632,7 @@ The effect of (log) response times on accuracy is highly significant ($\chi^2_1$
 With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5b$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
 
 
-This speed/accuracy relationship is more complicated than the typical speed/accuracy tradeoff, which assumes that accuracy increases with decreasing speed. Instead, when evaluating lineups, two effects seem to compete: Initially, participants may be able to fairly quickly (and accurately) select the target plot using high-bandwidth visual differences between the plots. If this initial strategy fails, participants may begin making pairwise comparisons in an attempt to select between one of several potential ``targets". These comparisons are slow, but eventually participants may succeed in using inductive reasoning to identify the target plot, producing a slow increase in accuracy after about 150 seconds. 
+This speed/accuracy relationship is more complicated than the typical speed/accuracy trade off, which assumes that accuracy increases with decreasing speed. Instead, when evaluating lineups, two effects seem to compete: Initially, participants may be able to fairly quickly (and accurately) select the target plot using high-bandwidth visual differences between the plots. If this initial strategy fails, participants may begin making pairwise comparisons in an attempt to select between one of several potential ``targets". These comparisons are slow, but eventually participants may succeed in using inductive reasoning to identify the target plot, producing a slow increase in accuracy after about 150 seconds. 
 
 The accuracy of initial impressions made with relatively little information has been documented in the popular press \citep{gladwell2007blink} and in scholarly literature \citep{curhan2007thin, ambady1993half, hogarth2014deciding}. Participants who select a target quickly are likely utilizing intuition as well as conscious reasoning; when combined with lineups which have a clear signal, this approach is fairly accurate. When intuition and initial approaches fail, however, participants must resort to a slower, more deliberate approach which may include attempting to determine both the evaluation metric to utilize and the most different plot when utilizing that metric. This process would take more time and have a higher error rate, particularly if the participant uses a strategy which is not aligned with the data-generating model (for instance, evaluating the size of the groups rather than the spatial clustering of points). 
 The combination of these two effects could explain the quadratic speed/accuracy relationship seen in this model. 
@@ -688,7 +688,7 @@ $G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, th
 
 
 The probability of picking at least one of the targets significantly increases with an increase in Gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
-In other words, a small Gini index indicates the presence of a null plot with large differences in the number of elements in wach group. This served as a(n unintended)  distractor away from the intended targets and therefore led to a drop in accuracy. Different designs are affected differently strong (two-way interaction: $\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$): Plots making use of color are all affected more strongly by deviations from homogeneity than plots without color. If ellipses are drawn, the effect becomes even more pronounced. Figure~\ref{fig:two-way} gives an overview of the relationship between predicted accuracy and designs for levels of homogeneity between 0.5 and 1 (similar to the range of Gini impurity observed in the study).
+In other words, a small Gini index indicates the presence of a null plot with large differences in the number of elements in each group. This served as a(n unintended)  distractor away from the intended targets and therefore led to a drop in accuracy. Different designs are affected differently strong (two-way interaction: $\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$): Plots making use of color are all affected more strongly by deviations from homogeneity than plots without color. If ellipses are drawn, the effect becomes even more pronounced. Figure~\ref{fig:two-way} gives an overview of the relationship between predicted accuracy and designs for levels of homogeneity between 0.5 and 1 (similar to the range of Gini impurity observed in the study).
 
  
 Other features measuring the imbalance within a lineup that we considered besides Gini impurity are 
@@ -736,7 +736,7 @@ The range of group sizes does not have a significant effect on the probability t
 
 % To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{app:faceoff}.
 
-These features have also been included in the faceoff model of section~\ref{app:faceoff} to investigate whether group size imbalance or missing ellipses affects the probability of selecting one target over the other. 
+These features have also been included in the face-off model of section~\ref{app:faceoff} to investigate whether group size imbalance or missing ellipses affects the probability of selecting one target over the other. 
 
 %\newpage
 \subsection{Modelling response times}\label{app:responsetime}
@@ -912,9 +912,9 @@ $\alpha_1$ & 0.002 & 0.029 & 0.083 & 0.9336 \\
 
 
 
-\subsection{Faceoff Model}\label{app:faceoff}
+\subsection{Face-off Model}\label{app:faceoff}
 Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked decreases. Similarly, an increase in within-cluster error is associated with a decrease of the number of cluster target picks. 
-The effect of the different designs is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). The effect of designs is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
+The effect of the different designs is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the face-off model. Numerical estimates can be found in Table~\ref{tab:results}). The effect of designs is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
@@ -1012,7 +1012,7 @@ Response time (composed of log(response time) and effect of first trial) does no
 Nor does the confidence level of participants ($\chi_5^2$=\Sexpr{round(aov2$Chisq[2],1)}, $P$-value=\Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
 
 What does have a significant effect on the balance between cluster target and trend target is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse (that is, a group size of less than 4) cuts the probability that the cluster target is selected by more than half (44.6\%; $\chi_1^2$=\Sexpr{round(aov.7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
-We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual designs into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}). These effects are summarised in Figure~\ref{fig:gvl7b}.
+We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual designs into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}). These effects are summarized in Figure~\ref{fig:gvl7b}.
 \begin{figure}
 <<gvl7b.pred, echo=FALSE, fig.width=7, fig.height=4, out.width='0.8\\textwidth'>>=
 
