@@ -11,26 +11,23 @@ output: html_document
     - *Let's cite your own study from the Infovis paper*
 - Cite critical evaluation study: [Crump et al (2013)](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0057410)
 - Controlling for speed/accuracy tradeoff. 
-    - *We have some data on response time (though imperfect), so we could discuss this briefly if we want to.*
-    - *Susan, by imperfect, do you mean that you don't know what participants were doing, because of the missing control of AMT that we would have in lab sessions? - we can state that and move beyond it.*
-    - *A model of the (log) response time is in the appendix, a paragraph of the major finding is added there*
+    - *We have added a discussion of (log) response time on both the accuracy of lineup evaluations and the balance between targets*
     - *Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend (Chisq:4.4763, df:2, p-value=0.1067)*
+    - *Response time does have an effect on accuracy - but not in the traditional sense that an increased amount of time spent in the evaluation necessarily leads to a higher accuracy.*
 - Would results have been different if relative difficulty of clusters vs. trends was different?
-    - *Yes, the results are different, when relative difficulty changes. Relative difficulty is controlled by the parameters s_C and s_T. We have extended the model accordingly, and added details to the appendix.*
+    - *Yes, the results are different, when the relative difficulty of the lineup changes. Relative difficulty is controlled by the parameters s_C and s_T. We have extended the model accordingly, and added details to the supplement.*
     
 ## Reviewer 2
 - The experiment is very complicated, and the result is not easily interpreted/effectively communicated
-    - *That tends to be how real world stuff goes, but I don't disagree with the point*
-    - *True, but we can't say it this way. We need to put in some effort to clean up the results.*
-    - *We have added more structure in the reporting of the results (particularly in the appendix). Hopefully this helps with communicating the results more effectively.*
+    - *We have added more structure in the reporting of the results (particularly in the supplement). Hopefully this helps with communicating the results more effectively.*
 - Introduction needs a summary of the main points: preattentive perception, gestalt psychology, and statistical lineups
 - The modification to the lineup protocol is a significant and crucial
 leap, with only rational justification (no empirical evidence).
 There are some assumptions here, rather than truisms or established facts.
-    - *True, the modification of the lineup protocol is significant, but I would not call it a leap, but a logical next step for working with the protocol in a different situation. We have to make a better job of listing the assumptions:*
-    - *There are some assumptions that we make without empirical back up: does it matter for individuals decision, whether there is one target or two targets? -- yes it will. The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominate one masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
-    - *Other assumptions: in the evaluation, we first checked the significance of each two-target lineup by using simulation-based inference. That doesn't seem particularly problematic - and we don't talk about this in the paper anyways.*
-    - *More assumptions: For the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. Should we sample? or maybe use weights to see whether it makes a difference for the model? The different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
+    - *True, the modification of the lineup protocol is significant, but I would not call it a leap, rather a logical next step for working with the protocol in a different situation. We have tried to make a better job of explicitly listing the assumptions:*
+    - *Does it matter for an individual's decision, whether there is one target or two targets? -- yes it will. The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominant one masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
+<!--    - *Other assumptions: in the evaluation, we first checked the significance of each two-target lineup by using simulation-based inference. That doesn't seem particularly problematic - and we don't talk about this in the paper anyways.*-->
+    - *For the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. However, the different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
 - Reference Fig 2 in the text.
     - *Fixed*
 - "Prediction" vs. "error", "line" vs. "trend"
