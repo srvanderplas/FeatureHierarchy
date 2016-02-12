@@ -263,7 +263,7 @@ Figure~\ref{fig:simulation} shows the result of this simulation approach for a l
 %' In future experiments, it will be advantageous to control the variability in cluster size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. }
 
 \clearpage
-\section{Model Details and Results} \label{app:models}
+\section{Model Discussion and Results} \label{app:models}
 <<results-setup,echo=F,include=F>>=
 lineups <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors=FALSE)
 lineups$pic_id_old <- lineups$pic_id
@@ -531,7 +531,7 @@ The parameter estimation for the first three models is based on all \Sexpr{nrow(
 \begin{table}
 \rowcolors{5}{}{gray!15}
 \centering
-\scalebox{0.7}{
+\scalebox{0.75}{
 \begin{tabular}{p{2in}ccccc}\hline
  &  & \multicolumn{4}{l}{\bf Model}\\
 \multicolumn{2}{l}{\bf Dependent Variable} & Face-off~\ref{app:faceoff} & Accuracy~\ref{app:accuracy} & Response Time~\ref{app:responsetime} & Confidence~\ref{app:confidence} \\
@@ -644,7 +644,7 @@ $\mu$ & 6.47 & 1.08 & 6.01 & $< 0.0001$ \\
   Color + Ellipse & -1.47 & 0.12 & -12.09 & $< 0.0001$ \\ 
    \hline
 \end{tabular}
-\caption{\label{tab:gol}Parameters and estimates of the accuracy model. }
+\caption{\label{tab:gol}Parameters and estimates of the accuracy model~\ref{app:accuracy}. }
 \end{table}
 
 
@@ -857,7 +857,7 @@ $\mu$ & 2.664 & 0.108 & 24.559 & $< 0.0001$ \\
    \hline
 \end{tabular}
 
-\caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$-values are based on a normal approximation of the $t$ statistics.}
+\caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$-values are based on a normal approximation of the $t$-statistics.}
 \end{table}
 
 \subsection{Model of confidence levels}\label{app:confidence}
@@ -929,7 +929,7 @@ $\alpha_1$ & 0.002 & 0.029 & 0.083 & 0.9336 \\
   Color + Shape + Ellipse & 0.107 & 0.034 & 3.156 & 0.0016 \\ 
    \hline
 \end{tabular}
-\caption{\label{tab:conf}Parameters and estimates for the model of participants' confidence.  }
+\caption{\label{tab:conf}Parameters and estimates for the model of participants' confidence~\ref{app:confidence}.  }
 \end{table}
 
 
