@@ -21,6 +21,8 @@
 \usepackage{hyperref}
 \externaldocument{Supplement}
 %%%
+\usepackage[shortlabels]{enumitem}\setlist[description,1]{leftmargin=0cm}
+\usepackage[shortlabels]{enumitem}\setlist[description,2]{leftmargin=1cm}
 \usepackage[shortlabels]{enumitem}\setlist[enumerate,1]{leftmargin=.5cm}
 \usepackage[shortlabels]{enumitem}\setlist[enumerate,2]{leftmargin=1.5cm}
 \usepackage[shortlabels]{enumitem}\setlist[itemize,1]{leftmargin=.5cm}
