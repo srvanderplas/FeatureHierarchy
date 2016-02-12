@@ -1079,7 +1079,7 @@ qplot(pred4, label, data=df7, shape=I(3)) +
   scale_shape("One ellipse missing") +
   xlab("Probability to pick cluster target\n(given one of the targets was picked)") 
 @
-\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different designs. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model (\ref{eqn:faceoffModel}), the filled triangle and circle represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and designs. Plots with trend and shape aesthetics are the least affected by the imbalance in groups, while plots with color aesthetics show huge differences in the predicted probability.}
+\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different designs. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model,  filled triangles and circles represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and designs. Plots with trend and shape aesthetics are the least affected by the imbalance in groups, while plots with color aesthetics show huge differences in the predicted probability.}
 \end{figure}
 
 \end{appendices}
