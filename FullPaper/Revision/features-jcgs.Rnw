@@ -196,10 +196,6 @@ The processing of visual stimuli utilizes low-level feature detection, which occ
 
 Research on preattentive perception is important because features that are perceived preattentively require less mental effort to process from raw visual stimuli than non-preattentive features. Top-down gestalt heuristics are subsequently applied to the categorized features in order to make sense of the visual scene once the attentive stage of perception is reached. 
 
-\newdo{There are two sequential transitions here that should either be combined or separated a bit... I'm still considering how to do this well.}
-
-This paper describes the design and the results of a user study exploring the hierarchy of gestalt principles in the perception of statistical graphics. We utilize information from previous studies~\citep{heer:2014, robinson:03, healey1996high} concerning the hierarchy of preattentive feature perception in order to maximize the effect of preattentive feature differences. 
-
 
 Statistical graphics can be difficult to examine experimentally; qualitative studies rely on descriptions of the plot by participants who may not be able to articulate their observations precisely, while quantitative studies may only be able to examine whether the viewer can accurately read numerical information from the chart, instead of exploring the overall utility of the data display holistically. Here, we are describing the setup and results of a study using statistical lineup methodology to provide quantitative and qualitative information.
 
@@ -648,7 +644,7 @@ We expect that relative to a plot with no extra aesthetics or statistical layers
 Similarly, we expect that relative to a plot with no extra aesthetics or statistical layers, the addition of a trend line and prediction interval (``error band") increases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model, and decreases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model.
 
 \subsubsection{Color and Shape Palettes}
-Colors and shapes used in this study were selected in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified a maximally differentiable set of 3 and 5 colors each. 
+Colors and shapes used in plot designs were selected based on the results of previous studies~\citep{heer:2014, robinson:03, healey1996high} in order to maximize preattentive feature differentiation. \citet{heer:2014} provide sets of 10 colors and 10 shapes, with corresponding distance matrices, determined by user studies. Using these perceptual kernels for shape and color, we identified a maximally differentiable set of 3 and 5 colors each. 
 
 \begin{figure}[bhtp]\centering
 \caption{Color and shape palettes investigated for differentiability in \protect\citet{heer:2014}. }
@@ -675,7 +671,7 @@ qplot(x=1:10, y=0, shape=shapes, size=I(5)) + scale_shape_identity() + theme_lin
 The color palette used in \citet{heer:2014} and shown in Figure~\ref{fig:colors} is derived from colors available in the visualization software Tableau~\citep{tableau}. 
 
 % \comment{the following statement sounds like a non-sequitur - removing gray to take care of red/green color deficiency does not sound like the first idea that comes to ones mind. How can we re-phrase that to make it less startling?}
-In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette, as gray is often difficult to distinguish from red and green for those with protanopia and deuteranopia, the most common types of colorblindness. This modification also resulted in maximally different color combinations that did not include red-green combinations, which would also impact the ability of color-deficient individuals to participate fully in this experiment.  
+In order to produce experimental stimuli accessible to the approximately 4\% of the population with red-green color deficiency \citep{colorvision}, we removed the gray hue from the palette, as gray is often difficult to distinguish from red and green for those with protanopia and deuteranopia, the most common types of colorblindness. This modification also resulted in maximally different color combinations that did not include red-green combinations, which would also impact the ability of color-deficient individuals to participate fully in this experiment.
 
 Software compatibility issues led us to exclude two shapes used in \citet{heer:2014} and shown in Figure~\ref{fig:shapes}. The left and right triangle shapes (available only in unicode within R) were excluded from our investigation due to size differences between unicode and non-unicode shapes. After optimization over the sum of all pairwise distances, the maximally different shape sequences for the 3 and 5 cluster datasets also conform to the guidelines in \citet{robinson:03}: for $K=3$ the shapes are from Robinson's group 1, 2, and 9, for $K=5$ the shapes are from groups 1, 2, 3, 9, and 10. Robinson's groups are designed so that shapes in different groups show differences in preattentive properties; that is, they are easily distinguishable. In addition, all shapes are non-filled, making them consistent with one of the simplest solutions to overplotting of points in the tradition of \citet{tukey, cleveland:85} and \citet{few}. For this reason we abstained from the additional use of alpha-blending of points to diminish the effect of overplotting in the plots.
 
