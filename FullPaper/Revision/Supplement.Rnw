@@ -108,7 +108,7 @@ source("../../Code/theme_lineup.R")
 
 \begin{appendices}
 \renewcommand\appendixname{Supplement}
-\section{Simulation Study of the Parameter Space}\label{app:parametersimulation}
+\section{Simulations of the Parameter Space}\label{app:parametersimulation}
 
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the strength of the linear relationship ($R^2$) and cluster strength for null and target plots. 
 
