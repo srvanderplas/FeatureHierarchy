@@ -21,7 +21,10 @@
 \usepackage{hyperref}
 \externaldocument{Supplement}
 %%%
-
+\usepackage[shortlabels]{enumitem}\setlist[enumerate,1]{leftmargin=.5cm}
+\usepackage[shortlabels]{enumitem}\setlist[enumerate,2]{leftmargin=1.5cm}
+\usepackage[shortlabels]{enumitem}\setlist[itemize,1]{leftmargin=.5cm}
+\usepackage[shortlabels]{enumitem}\setlist[itemize,2]{leftmargin=1.5cm}
 \graphicspath{{fig/}}
 % \usepackage{endfloat} % Figures to the end of the document
 
@@ -170,9 +173,9 @@ For example, rather than perceiving four legs, a tail, two eyes, two ears, and a
 
 The rules of perceptual organization relevant to graphical perception in this experiment are:
 \begin{itemize}
-\item \textbf{Proximity}: two elements which are close together are more likely to belong to a single unit.
-\item \textbf{Similarity}: the more of the same or similar aesthetics two elements share two elements are, the more likely they belong to a single unit. 
-\item \textbf{Good continuation}: two elements which blend together smoothly likely belong to one unit.
+\item \textbf{Proximity}: two elements which are close together likely belong to a single unit.
+\item \textbf{Similarity}: the more aesthetics two elements share, the more likely they belong to a single unit. 
+\item \textbf{Good continuation}: elements which blend together smoothly are likely one unit.
 \item \textbf{Common region}: elements contained within a common region likely belong together. 
 \end{itemize}
 A complete list of the rules of perceptual grouping can be found in \citet{goldstein2009encyclopedia}.
