@@ -109,7 +109,6 @@
 \begin{abstract}
 Graphics are very effective for communicating numerical information quickly and efficiently, but many of the design choices we make are based on subjective measures, such as personal taste or conventions of the discipline rather than objective criteria. We briefly introduce perceptual principles such as preattentive features and gestalt heuristics, and then discuss the design and results of a factorial experiment examining the effect of plot aesthetics such as color and trend lines on participants' assessment of ambiguous data displays. The quantitative and qualitative experimental results strongly suggest that plot aesthetics have a significant impact on the perception of important features in data displays. 
 
-Supplementary materials for this paper are available online: a supplemental PDF provides additional details about the methodology and model, and code and data are available on \href{http://github.com/srvanderplas/FeatureHierarchy}{github}.
 \end{abstract}
 
 \noindent%
@@ -243,7 +242,7 @@ The search for multiple targets is a more demanding cognitive task \citep{cain20
 %At this level, signal strength is determined by the experimental data and the generating model; we are measuring the ``power" (in a statistical sense) of the human perceptual system, rather than raw numerical signal. 
 
 Using this testing framework, we  apply different aesthetics, such as color and shape, as well as plot objects which display statistical calculations, such as trend lines and bounding ellipses. 
-These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the null plots. 
+These additional plot layers, discussed in more detail in the next section, are designed to emphasize one of the two competing targets and affect the overall visual signal of the target plot relative to the other target and the null plots. 
 We expect that in a situation similar to the third plot of Figure~\ref{fig:gestalt}, the addition of two trend lines would emphasize the ``good continuation" of points in the plot, producing a stronger visual signal, even though the underlying data has not changed. 
 Similarly, the grouping effect in the first plot in the figure should be enhanced if the points in each group are colored differently, as this adds similarity to the proximity heuristic. 
 In plots that are ambiguous, containing some clustering of points as well as a linear relationship between $x$ and $y$, additional aesthetic cues may ``tip the balance" in favor of recognizing one type of signal over the other.
@@ -251,7 +250,7 @@ In plots that are ambiguous, containing some clustering of points as well as a l
 The study in this paper is designed to inform our understanding of the perceptual implications of these additional aesthetics, in order to provide guidelines for the creation of data displays which provide visual cues consistent with gestalt heuristics and preattentive perceptual preferences. 
 
 The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. 
-Experimental results are presented in section~\ref{sec:Results}, and implications and conclusions are discussed in section~\ref{sec:Conclusion}. 
+Experimental results are presented in Section~\ref{sec:Results}, and implications and conclusions are discussed in Section~\ref{sec:Conclusion}. 
 
 \section{Experimental Setup and Design} \label{sec:ExperimentalDesign}
 In this section, we discuss the models generating data for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
@@ -278,7 +277,7 @@ This model has the parameter $\sigma_T$ to reflect the amount of scatter around 
     \item Generate $\tilde{x}_i$, $i=1, ..., N$, as a sequence of evenly spaced points in $[-1, 1]$.\\
     This step ensures that the full range in $x$ is used, which in turn keeps the ratio of $x$ to $y$ range constant.
     \item Jitter $\tilde{x}_i$ by adding small uniformly distributed perturbations to each of the values: $x_i = \tilde{x}_i + \eta_i$, where $\eta_i \sim \text{Unif}(-z, z)$, $z = \frac{2}{5(N-1)}$.
-    \item Generate $y_i$ as a linear regressand of $x_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$. Several values of $\sigma^2_T$ are shown in Figure \ref{fig:trends}. 
+    \item Generate $y_i$ as a linear regressand of $x_i$: $y_i = x_i + e_i$, $e_i \sim N(0, \sigma^2_T)$. Several values of $\sigma^2_T$ are shown in Figure~\ref{fig:trends}. 
     \item Center and scale $x_i$, $y_i$.
   \end{enumerate}
 \end{algorithm}
@@ -1043,7 +1042,7 @@ In order to assess which of the two stimuli dominated in each of the designs, we
 
 Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by design (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). Additional information about the model structure, parameter estimates, and interpretations are provided in Supplement~\ref{app:accuracy}. 
 
-Designs  associated with clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in section~\ref{sec:sentiment}. 
+Designs  associated with clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in Section~\ref{sec:sentiment}. 
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
 For all trials in which at least one of the targets was correctly identified, we compare the probability of selecting the cluster target generated by $M_C$  with the probability of selecting the trend target generated by $M_T$. 
@@ -1308,11 +1307,12 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \begin{description}
 \item[Paper Supplement:] Contains additional details about the methodology and results which were not included in this paper due to space constraints. (pdf)
 \begin{itemize}
-\item Supplement \ref{app:parametersimulation} provides details about simulations of the data-generating model described in section~\ref{sec:parameterselection}.
-\item Supplement \ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
-\item Supplement \ref{app:models} contains a thorough review of models fit to participant target selections, response time, and self-reported confidence. Additional modifications of these models address participant reasoning as discussed in section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, and other interesting features of the data.
+\item Supplement~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
+\item Supplement~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
+\item Supplement~\ref{app:models} contains a thorough review of models fit to participant target selections, response time, and self-reported confidence. Additional modifications of these models address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, and other interesting features of the data.
 \end{itemize}
 \item[\href{http://github.com/srvanderplas/FeatureHierarchy}{Github Repository}:] Contains code for stimuli generation, anonymized data, simulation code and results, and other material. 
+%available on \href{http://github.com/srvanderplas/FeatureHierarchy}{github}.
 \end{description}
 \bibliographystyle{asa}
 \bibliography{references}
