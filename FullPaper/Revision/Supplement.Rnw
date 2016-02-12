@@ -1,0 +1,1067 @@
+\documentclass[12pt]{article}
+% \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+% \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\usepackage{graphicx}
+\usepackage[font=small,skip=5pt]{caption}
+\usepackage{subcaption}
+\usepackage{afterpage}
+\usepackage{amssymb}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+% \usepackage{color}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+%%% Packages for separate supplemental file with cross-refs
+% \usepackage[nokeyprefix]{refstyle}
+% \usepackage{varioref}
+\usepackage{xr}
+\usepackage{xr-hyper}
+\usepackage{xcite}
+\usepackage{hyperref}
+\externaldocument{features-jcgs}
+\externalcitedocument{features-jcgs}
+%%%
+
+\usepackage[titletoc,title]{appendix}
+
+\graphicspath{{fig/}}
+% \usepackage{endfloat} % Figures to the end of the document
+
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\usepackage[colorinlistoftodos]{todonotes}
+%---------------------------------------------------
+%                 Editing Commands
+\newcommand{\done}[2][inline]{\todo[color=SpringGreen, #1]{#2}}  % for todos that have been seen and dealt with
+\newcommand{\meh}[2][inline]{\todo[color=White, #1]{#2}}   % for todos that may no longer be relevant 
+\newcommand{\comment}[2][inline]{\todo[color=SkyBlue, #1]{#2}} % for comments that may not be "to-do"s
+%\newcommand{\mcomment}[1]{\todo[color=SkyBlue]{#1}} % for margin comments
+\newcommand{\newtext}[1]{\todo[inline, color=White]{ \color{OliveGreen}{#1}}} % new text - not necessarily something to be done
+\newcommand{\newdo}[1]{\todo[inline, color=Lime]{#1}} % new to do item
+%
+%---------------------------------------------------
+%                 Placing Figures
+
+\renewcommand{\topfraction}{0.99}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.99}	% max fraction of floats at bottom
+
+\renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+%   Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.98}	% require fuller float pages
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.98}	% require fuller float pages
+
+
+%---------------------------------------------------
+% Define new environment
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{algorithm}[theorem]{Algorithm}
+%---------------------------------------------------
+
+%\pdfminorversion=4
+% NOTE: To produce blinded version, replace "0" with "1" below.
+\newcommand{\blind}{0}
+
+% DON'T change margins - should be 1 inch all around.
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-.5in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.3in}%
+\addtolength{\topmargin}{-.8in}%
+
+<<setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
+rm(list=ls())
+options(replace.assign=TRUE,width=70)
+require(knitr)
+opts_chunk$set(fig.path='fig/', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, message=F, warning=F)
+set_parent('features-jcgs.Rnw')
+library(stringr)
+library(lubridate)
+
+library(reshape2)
+#library(plyr) ## clashes with dplyr
+library(dplyr)
+library(magrittr)
+
+library(ggplot2)
+library(grid)
+suppressMessages(library(gridExtra))
+library(RColorBrewer)
+
+library(nullabor)
+library(digest)
+library(Cairo)
+
+library(lme4)
+
+library(xtable)
+
+source("../../Code/MixtureLineups.R")
+source("../../Code/theme_lineup.R")
+@
+
+\begin{document}
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+\begin{appendices}
+\renewcommand\appendixname{Suppplement}
+\section{Simulation Study of the Parameter Space}\label{app:parametersimulation}
+
+Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the strength of the linear relationship ($R^2$) and cluster strength for null and target plots. 
+
+Figures~\ref{fig:simulationLineIntervals} and~\ref{fig:simulationClusterIntervals} show the 25th and 75th percentiles of the distribution of $R^2$ and cluster strength summary statistics for each set of parameter values. These plots guide our evaluation of ``easy", ``medium" and ``hard" parameter values for trend and cluster tasks. 
+
+Additionally, we note that there is an interaction between $\sigma_C$ and $\sigma_T$: the distinction between target and null on a fixed setting of clustering becomes increasingly difficult as the standard deviation for the linear trend is increased, and vice versa. There may additionally be a three-way interaction between $\sigma_C, \sigma_T$, and $K$: the width of the blue intervals (bottom figure) changes  between different levels of $K$ and for different levels of $\sigma_C$ and $\sigma_T$. These interactions suggest that in order to examine differences in aesthetics, we must block by parameter settings (this can be accomplished through blocking by dataset). Each dataset is non-deterministic, because we have a random process generating from different parameter settings, not a deterministic run setting as in an engineering setting. It is thus important to use replicates of each parameter setting to ensure that we can separate data-level effects from parameter-level effects. 
+
+<<simulationparameters,echo=F,include=F, fig.width=10, fig.height=6.5, out.width='.8\\textwidth'>>=
+load("../../Data/SimulationDatasetCriteriaTurk16.Rdata")
+
+dataset.criteria$ParameterSet <- with(dataset.criteria, sprintf("sdT%.2f-sdC%.2f", sd.trend, sd.cluster))
+dataset.criteria$ParameterSet[dataset.criteria$type=="cluster"] <- with(dataset.criteria[dataset.criteria$type=="cluster",], sprintf("sdC%.2f-sdT%.2f", sd.cluster, sd.trend))
+
+dataset.criteria$lsc <- paste("sigma[C]: ", round(dataset.criteria$sd.cluster, 2))
+dataset.criteria$lst <- paste("sigma[T]: ", round(dataset.criteria$sd.trend, 2))
+dataset.criteria$lK <- paste("K: ", dataset.criteria$K)
+qplot(data=subset(dataset.criteria, type=="line"), x=LB, xend=UB, y=sd.cluster, yend=sd.cluster, color=dist, geom="segment") +
+  geom_point(aes(x=LB, y=sd.cluster, color=dist))  + 
+  geom_point(aes(x=UB, y=sd.cluster, color=dist)) + 
+  facet_grid(lst~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
+  scale_color_brewer("Distribution",palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) \nand target distribution (red) of linearity measured in R squared.") + ylab(expression("Cluster variability":sigma[C]))
+
+qplot(data=subset(dataset.criteria, type=="cluster"), x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segment") +
+  geom_point(aes(x=LB, y=sd.trend, color=dist))  + 
+  geom_point(aes(x=UB, y=sd.trend, color=dist)) + 
+  facet_grid(lsc~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
+  scale_color_brewer("Distribution", palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Max (18) null distribution (blue) \nand target distribution (red) of amount of clustering.") + ylab(expression( "Variability along the trend":sigma[T]))
+
+tmp <- subset(dataset.criteria, type=="gini")
+tmp$dist <- gsub("Max", "Min", tmp$dist)
+qplot(data=tmp, x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segment") +
+  geom_point(aes(x=LB, y=sd.trend, color=dist))  + 
+  geom_point(aes(x=UB, y=sd.trend, color=dist)) + 
+  facet_grid(lsc~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
+  scale_color_brewer("Distribution", palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Min (18) null distribution (blue) \nand target distribution (red) of Gini Impurity.") + ylab(expression( "Variability along the trend":sigma[T]))
+@
+
+\begin{figure}[bht]\centering
+\begin{subfigure}[t]{.8\textwidth}
+\caption{$R^2$ values for target and null data distributions. \label{fig:simulationLineIntervals}}
+\vspace{-.15in}
+\includegraphics[width=\textwidth]{fig/simulationparameters-1}
+\end{subfigure}
+\begin{subfigure}[t]{.8\textwidth}
+\caption{Cluster cohesion statistics $C^2$. \label{fig:simulationClusterIntervals}}
+\vspace{-.15in}
+\includegraphics[width=\textwidth]{fig/simulationparameters-2}
+\end{subfigure}
+\caption{Simulated interquartile ranges between target and most extreme statistic from one of the 18 null plots. }
+\end{figure}
+\clearpage
+\section{Simulation based inference in a two-target lineup scenario}\label{app:probabilitysimulation}
+
+Assume that there are two targets embedded in a lineup of overall size $m$, where $m$ in our experiment is taken to be $m=20$. Let $A$ be the event that one of these targets is chosen.
+Under the null hypothesis that both targets are consistent with being created based on data from the null model, we can assume that under the null hypothesis the expected value of the probability that an observer picks one of these plots from the lineup is $2/m = E[ P(A \mid H_o) ]$.
+For the distribution of $A \mid H_o$ we employ a simulation-based strategy:
+Under the null hypothesis, we can assume, that the $p$-value corresponding to a hypothesis test `the presented data is consistent with the null model' has a standard uniform distribution, i.e. $p_i \sim U[0,1]$ i.i.d.~for all $1 \le i \le m$. We assume that the choice observers make can be modeled using a multinomial distribution, where the probability $\pi_i$ to pick panel $i$ is inversely linear to $p_i$, with $\sum_{i=1}^m \pi_i = 1$.
+
+\begin{figure}[h!tbp]
+<<twotarget-simu, echo=FALSE, results='hide'>>=
+library(vinference) # install from heike/vinference github
+set.seed(20140501)
+K <- 10
+res <- data.frame(rep=rep(1:10, each=K+1))
+res <- res %>% group_by(rep) %>% do(
+  dVsim(x=0:K, K=K, m=20, scenario=3, target=1:2, N=100000)
+  )
+res <- res %>% dplyr::ungroup() %>% dplyr::group_by(x)
+means <- res %>% 
+  dplyr::summarise(avg = mean(scenario3))
+@
+<<twotarget, dependson='twotarget-simu', echo=FALSE, out.width='0.7\\textwidth', fig.width=8, fig.height=5>>=
+qplot(x, scenario3, data=res, shape=I(21), alpha=I(0.8)) +
+theme_bw() + 
+ylab("estimated probability") + xlab("Number of times (out of 10) one of the targets is picked") + 
+  geom_segment(aes(x=x-0.3, xend=x+0.3, y=avg, yend=avg), data=means) + 
+  geom_point(aes(x=x, y=binom), colour="steelblue", pch=4, size=4) + 
+  scale_x_continuous(breaks=0:K, labels=0:K)
+@
+\caption{\label{fig:simulation} 
+Ten simulations of size $b_2 = 1,000$ and $b_1 = 100$ for lineups of size $m=20$ assuming $K=10$ evaluations. 
+The averages of the ten simulation runs are shown as lines. The crosses are probabilities from  Binomial $B_{2/20, 10}$.
+}
+\end{figure} 
+
+W.l.o.g.\ we can assume that the two target plots are in positions 1 and 2. 
+Given that a lineup was evaluated by $K$ individuals, the simulation process for the conditional probability of identifying one of the targets given that both are consistent with the null model, $P(A|H_o)$, is then as follows:
+%
+\begin{enumerate}
+\item Pick two values $p_i \sim U[0,1], i=1, 2$.
+\item Repeat $b_1$ times:
+\begin{enumerate}
+    \item Pick $m-2$ values $p_i \sim U[0,1], i=3, ..., m$.
+    \item Pick $K$ values from a Multinomial distribution with $\pi = \frac{1-p}{|| 1- p||}$, i.e. $x_j \sim M_\pi, i=1, ..., K$
+    \item Return the number of times that $x_j$ is 1 or 2. 
+\end{enumerate} 
+\end{enumerate}
+Repeat the above process $b_2$ times, and average results for a distribution of $A \mid H_o$. 
+The choice of $b_1$ and $b_2$ decides on the number of decimal places to which the estimated distribution can be used reliably. 
+
+Figure~\ref{fig:simulation} shows the result of this simulation approach for a lineup of size 20 assuming $K=10$ evaluation. The density of $A \mid H_o$ is plotted for ten runs (open circles). The variability in the results is relatively small - for comparison, the density of a Binomial distribution $B_{2/20, 10}$ is shown using crosses. The main difference between the densities is the probability of zero or only one identification, while the tail probabilities are very similar.
+
+%' \section{Group Size Inequality}\label{sec:gini}
+%' \newdo{Susan, sorry - but I'd be in favor of taking this section out. It's too much detail. What I'd like to do instead, is including another variable in the models that captures some statistic describing the imbalance in the group - e.g. gini index or smallest group size or something along those lines. That will tie it into the cluster versus trend target analysis }
+%' \newtext{In order to examine the effect of group size inequality, we used simulation (as described in Appendix \ref{app:parametersimulation} to examine the distribution of group size (as measured by gini impurity) in null datasets compared with cluster target datasets generated by the model. This establishes whether there were any systematic differences in group size inequality between data generated from $M_0$ (null data) and data generated from $M_C$ (cluster data). Figure \ref{fig:simulationGiniIntervals} demonstrates that the cluster plots have lower group size differences (e.g. are more equally sized) than null plots at all parameter combinations. It is therefore possible that some participants identified extraordinarily unequal group sizes present in null plots as significantly different from the other lineup plots, ignoring any cluster signal. }
+%' 
+%' \begin{figure}[ht]\centering
+%' <<simulationparameters-gini,echo=F,fig.width=10, fig.height=6.5, out.width='.8\\linewidth', dependson='simulationparameters'>>=
+%' tmp <- subset(dataset.criteria, type=="gini")
+%' 
+%' tmp$lsc <- paste("sigma[C]: ", round(tmp$sd.cluster, 2))
+%' tmp$lst <- paste("sigma[T]: ", round(tmp$sd.trend, 2))
+%' tmp$lK <- paste("K: ", tmp$K)
+%' 
+%' tmp$dist <- gsub("Max", "Min", tmp$dist)
+%' qplot(data=tmp, x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segment") +
+%'   geom_point(aes(x=LB, y=sd.trend, color=dist))  + 
+%'   geom_point(aes(x=UB, y=sd.trend, color=dist)) + 
+%'   facet_grid(lsc~lK, scales="free", labeller="label_parsed")  + theme_bw() + 
+%'   scale_color_brewer("Distribution", palette="Set1") + theme(legend.position="bottom") + xlab("Interquartile intervals of Min (18) null distribution (blue) \nand target distribution (red) of Gini Impurity.") + ylab(expression( "Variability along the trend":sigma[T]))
+%' @
+%' \caption[Simulated IQR of Gini impurity for cluster and null distributions]{Simulated interquartile range of group size inequality statistic values for cluster and null data distributions. \label{fig:simulationGiniIntervals}}
+%' \end{figure}
+%' 
+%' \newtext{Numerically, the null data sets did have uneven group allocation; bounding ellipse estimation failed for groups with fewer than 3 points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse will lead participants to select null plots with that feature (see section~\ref{sec:sentiment} for a more detailed look at participants' responses).}
+%' 
+%' \newtext{This effect actually provides some additional information as to the hierarchy of gestalt features: for plots displaying the same data (including at least one plot with cluster size $<3$), participants were more likely to identify the cluster target plot under the Color and Shape aesthetics than under Color + Ellipse or Color + Shape + Ellipse conditions. 
+%' The presence of the ellipse (and the gestalt common region heuristic) dominated the effect of point similarity (albeit not as originally intended). 
+%' In future experiments, it will be advantageous to control the variability in cluster size in order to remove the conflicting visual influence of gestalt common region heuristics with the greater similarity and proximity present in the target plot. }
+
+\clearpage
+\section{Model Details} \label{app:models}
+<<results-setup,echo=F,include=F>>=
+lineups <- read.csv("../../Data/data-picture-details-gini.csv", stringsAsFactors=FALSE)
+lineups$pic_id_old <- lineups$pic_id
+lineups$pic_id <- 1:nrow(lineups)
+
+users <- read.csv("../../Data/turk16_users_anon.csv", stringsAsFactors=F, header=F, skip = 1)
+names(users) <- c("nick_name", "age", "gender", "education", "ip_address")
+users$age <- factor(users$age, levels=0:10, labels=c("NA", "<18", "18-25", "26-30", "31-35", "36-40", "41-45", "45-50", "51-55", "56-60", "61+"))
+users$gender <- factor(users$gender, levels=0:2, labels=c("NA", "Male", "Female"))
+users$education <- users$education %>% replace(users$education==5, 4) %>% 
+  factor(levels = 0:4, labels = c(NA, "High School or less", "Some college", "Bachelor's degree", "Grad school or higher"))
+
+userdata <- read.csv("../../Data/turk16_results_anon.csv", stringsAsFactors=FALSE)
+userdata$response.id <- 1:nrow(userdata)
+
+tmp <- merge(userdata[!is.na(userdata$pic_id),], lineups[,c("pic_id", "sample_size", "test_param", "param_value", "p_value", "obs_plot_location")], all.x=T, all.y=F)
+tmp$k <- as.numeric(substr(tmp$param_value, 3, 3))
+tmp$sd.line <- as.numeric(substr(tmp$param_value, 12, 15))
+tmp$sd.cluster <- as.numeric(substr(tmp$param_value, 25, 28))
+
+correct.ans <- function(x,y){
+  x1 <- as.numeric(str_trim(unlist(str_split(x, ","))))
+  answers <- str_trim(unlist(str_split(y, ",")))
+  lineplot <- as.numeric(answers[1])
+  groupplot <- as.numeric(answers[2])
+  giniplot <- ifelse(groupplot==as.numeric(answers[3]) | lineplot==as.numeric(answers[3]), NA, as.numeric(answers[3]))
+  cbind(n.answers=length(x1), trend.correct=lineplot%in%x1, cluster.correct=groupplot%in%x1, both.correct = lineplot%in%x1 & groupplot%in%x1, neither.correct=!(lineplot%in%x1 | groupplot%in%x1), none.correct=!(lineplot%in%x1 | groupplot%in%x1 | giniplot%in%x1), gini.correct=giniplot%in%x1)
+}
+
+useranswers <- tmp %>% group_by(response.id) %>% do(data.frame(correct.ans(.["response_no"], .[,"obs_plot_location"]), drop=FALSE))
+
+useranswers <- merge(useranswers, tmp)
+useranswers$plottype <- gsub("turk16-", "", useranswers$test_param)
+useranswers$plottype <- factor(useranswers$plottype, levels=c("plain", "trend", "color", "shape", "colorShape", "colorEllipse", "colorTrend",  "trendError", "colorShapeEllipse", "colorEllipseTrendError"))
+useranswers$sd.cluster <- factor(useranswers$sd.cluster)
+useranswers$sd.line <- factor(useranswers$sd.line)
+useranswers$k <- factor(useranswers$k)
+useranswers$start_time <- ymd_hms(useranswers$start_time)
+useranswers$end_time <- ymd_hms(useranswers$end_time)
+useranswers <- useranswers %>% group_by(param_value, test_param) %>% mutate(
+  param_idx=as.numeric(factor(pic_id))
+)
+
+useranswers <- useranswers %>% group_by(ip_address, nick_name) %>% 
+  mutate(ntrials=length(unique(pic_id)), 
+         trial.no = rank(start_time), 
+         trial.num=order(start_time))
+
+# Remove data from <18 participants
+useranswers <- filter(useranswers, !nick_name%in%users$nick_name[users$age=="<18"])
+users <- filter(users, age!="<18")
+
+modeldata <- useranswers[,c(1, 2, 9:31, 3:8)]
+
+# Remove data from participants who did not complete 10 trials
+incomplete.participants <- unique(modeldata$nick_name[modeldata$ntrials<10])
+incomplete.participant.data <- sum(modeldata$ntrials<10)
+message(paste0(sum(modeldata$ntrials<10), " trials removed because participant completed <10 trials total."))
+
+# Remove data from participants who completed > 10 trials
+modeldata <- filter(modeldata, ntrials>=10)
+extra.participant.data <- sum(modeldata$trial.num>10)
+message(paste0(sum(modeldata$trial.num>10), " trials removed because participant >10 trials."))
+modeldata <- filter(modeldata, trial.num<=10)
+
+# Remove users from database who didn't complete any trials
+message(paste0(sum(!users$nick_name %in% modeldata$nick_name), " users removed from user database - no trials found."))
+users <- users %>% filter(nick_name %in% modeldata$nick_name)
+
+modeldata$outcome <- paste(c("", "trend")[1+as.numeric(modeldata$trend.correct==1)], 
+                           c("", "cluster")[1+as.numeric(modeldata$cluster.correct==1)], 
+                           c("", "neither")[1+as.numeric(modeldata$neither.correct==1)], 
+                           c("", "gini")[1+as.numeric(modeldata$gini.correct==1)], 
+                           sep="")
+modeldata$outcome[modeldata$both.correct==1] <- "both"
+modeldata$first.trial <- modeldata$trial.no == 1
+modeldata$simpleoutcome <- gsub("gini", "", modeldata$outcome)
+modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("neither", "cluster", "trend","both"))
+
+modeldata <- merge(modeldata, lineups[,c("pic_id", "data_name", "param_value")], all.x=T, all.y=T)
+modeldata$dataset <- factor(str_extract(modeldata$data_name, "set-\\d{1,3}") %>% str_replace("set-", "") %>% as.numeric)
+modeldata$individualID <- factor(sprintf("%s-%s", modeldata$ip_address, modeldata$nick_name))
+# data_name and k is not reliable. Use lineups-parameters-new instead
+modeldata$k <- factor(modeldata$k, levels=c(3, 5))
+modeldata$parameter.value <- factor(gsub("set-\\d{1,3}-", "", modeldata$data_name))
+modeldata$start_time <- ymd_hms(modeldata$start_time)
+modeldata$end_time <- ymd_hms(modeldata$end_time)
+modeldata$trial.time <- with(modeldata, end_time-start_time)
+
+lps <- read.csv("../../Data/lineups-parameters-new.csv")
+modeldata <- merge(modeldata, lps[,c("set","k_new","sdline_new","sdgroup_new", "gini.min", "group.min", "no.ellipse", "max.range")], by.x="dataset", by.y="set")
+
+# should be replaced, but carefully
+modeldata <- modeldata %>% group_by(k) %>% mutate(
+  trend.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.line))], 
+  cluster.diff=c("easy", "medium", "hard")[as.numeric(droplevels(sd.cluster))]
+)
+
+modeldata$trend.diff <- factor(modeldata$trend.diff, levels=c("easy", "medium", "hard"))
+modeldata$cluster.diff <- factor(modeldata$cluster.diff, levels=c("easy", "medium", "hard"))
+modeldata$cluster.diff2 <- factor(modeldata$cluster.diff, levels=c("easy", "medium", "hard"), labels=c("Cluster: Easy", "Cluster: Medium", "Cluster: Hard"))
+modeldata$trend.diff2 <- factor(modeldata$trend.diff, levels=c("easy", "medium", "hard"), labels=c("Trend: Easy", "Trend: Medium", "Trend: Hard"))
+
+parameter.design <- unique(modeldata[,c("dataset", "k", "trend.diff", "cluster.diff")])
+
+plot.eval.tab <- apply(with(modeldata, table(dataset, plottype)), 1:2, sum)
+
+# long dataset for table-esque plots
+modeldata.long <- melt(modeldata, id.vars=which(!grepl("(correct)|(outcome)", names(modeldata))), value.vars=c("trend.correct", "cluster.correct", "neither.correct"), value.name="correct", variable.name="answer.type")
+modeldata.long$answer.type <- gsub(".correct", "", modeldata.long$answer.type)
+modeldata.long <- filter(modeldata.long, answer.type %in% c("cluster", "trend", "neither"))
+modeldata.long$correct <- as.numeric(modeldata.long$correct)
+modeldata.long$answer.type <- factor(modeldata.long$answer.type, levels=c("cluster", "trend", "neither"))
+modeldata.long$plottype <- 
+  modeldata.long$plottype %>%
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("plain", "Plain") %>%
+  str_replace("( \\+ )$", "") %>% 
+  factor(levels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                  "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"),
+         labels=c("Plain", "Color", "Shape", "Trend", "Trend + Error", 
+                  "Color + Shape", "Color + Ellipse", "Color + Trend", 
+                  "Color + Shape + Ellipse", "Color + Ellipse + Trend + Error"))
+
+save(modeldata, file="../../Data/modeldata.Rdata")
+
+totaltime <- modeldata %>% group_by(individualID) %>% summarize(
+  total.experiment.time = max(end_time)-min(start_time)
+)
+@
+
+<<target-model, echo=FALSE>>=
+modeldata$one.correct <- 1 - modeldata$neither.correct
+gol <- glmer(
+  one.correct~sdline_new+sdgroup_new+k_new + trial.num + plottype + (1 | data_name) + (1 | individualID), 
+  data = modeldata, family = binomial(), 
+  control = glmerControl(
+                   optimizer="bobyqa",
+                   optCtrl = list(maxfun = 1e5)
+                )
+)
+#gol.model <-  glmer(
+#  one.correct~plottype + (1 | data_name) + (1 | individualID), 
+#  data = modeldata, family = binomial(), control = glmerControl(optimizer = "bobyqa")
+#)
+gol.fixef <- data.frame(confint(gol, method="Wald"))[-(c(1:2,4:7)),] # exclude sigmas
+names(gol.fixef) <- c("LB", "UB")
+gol.fixef$OR <- fixef(gol)[-(2:5)]
+gol.fixef[1,1:3] <- 0
+
+
+suppressMessages(require(multcomp))
+type_compare <- glht(gol, mcp(plottype="Tukey"))
+gol.fixef$letters <- cld(type_compare)$mcletters$Letters
+# not sure what to do about those warnings
+
+gol.fixef$label <- gsub("plottype", "", names(fixef(gol)))[-(2:5)]
+gol.fixef$label <- gol.fixef$label %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("\\(Intercept\\)", "Plain + ") %>%
+  str_replace("( \\+ )$", "") %>% 
+  reorder(gol.fixef$OR)
+
+
+sig <- anova(gol)
+
+@
+
+<<gol2, dependson='target-model', echo=FALSE>>=
+gol.2 <- update(gol, .~.+gini.min) # large gini (i.e. homogeneity) leads to significant better probability of picking one of the targets
+gol.2b <- update(gol.2, .~.+gini.min:plottype,
+                 control = glmerControl(
+                   optimizer="bobyqa",
+                   optCtrl = list(maxfun = 1e5)
+                )) # individual designs are significantly different 
+@
+
+<<gol3, dependson='target-model', echo=FALSE>>=
+modeldata$one.ellipse <- modeldata$no.ellipse == 1
+gol.3 <- update(gol, .~.+one.ellipse) # not significant, nor is the number of missing ellipses, nor the absence of at least one ellipse
+gol.3b <- update(gol.3, .~.+one.ellipse:plottype) 
+@
+
+<<gol4, dependson='target-model', echo=FALSE>>=
+gol.4 <- update(gol, .~.+max.range) # not significant
+gol.4b <- update(gol, .~.+max.range:plottype) # not significant
+@
+
+<<gol5, dependson='target-model', echo=FALSE>>=
+gol.5 <- update(gol, .~.+log(as.numeric(trial.time)), 
+                control = glmerControl(
+                  optimizer="bobyqa",
+                  optCtrl = list(maxfun = 2e5)
+                )) # there is a (highly) significant effect of (log) response time on accuracy. The size of the effect is on average -0.405486 for each unit increase in (log) response time.
+
+gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2), 
+                control = glmerControl(
+                  optimizer="bobyqa",
+                  optCtrl = list(maxfun = 1e5)
+                ))
+@
+
+<<group-vs-line, echo=FALSE, warning = FALSE>>=
+faceoff$one.ellipse <- faceoff$no.ellipse == 1
+
+gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
+
+gvl.fixef <- data.frame(confint(gvl.4, method="Wald"))[-(1:2),] # exclude sigmas
+names(gvl.fixef) <- c("LB", "UB")
+gvl.fixef$OR <- fixef(gvl.4)
+gvl.fixef <- rbind(gvl.fixef, c(0,0,0))
+row.names(gvl.fixef)[14] <- "plottypePlain"
+
+gvl.all <- gvl.fixef
+gvl.fixef <- gvl.fixef[c(14,5:13),]
+
+suppressMessages(require(multcomp))
+type_compare <- glht(gvl.4, mcp(plottype="Tukey"))
+gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
+# not sure what to do about those warnings
+@
+
+<<gvl5, dependson='group-vs-line', echo=FALSE>>=
+gvl.5 <-  update(gvl.4, .~.+first.trial +log(as.numeric(trial.time)), control=glmerControl(optimizer="bobyqa"))
+@
+
+<<gvl6, dependson='group-vs-line', echo=FALSE>>=
+gvl.6 <-  update(gvl.4, .~.+factor(conf_level), control=glmerControl(optimizer="bobyqa"))
+@
+
+<<gvl7, dependson='group-vs-line', echo=FALSE>>=
+gvl.7 <-  update(gvl.4, .~.+one.ellipse, control=glmerControl(optimizer="bobyqa"))
+aov7 <- anova(gvl.4, gvl.7)
+gvl.7b <-  update(gvl.7, .~.+one.ellipse:plottype, control=glmerControl(optimizer="bobyqa"))
+aov7b <- anova(gvl.7, gvl.7b)
+@
+
+<<gvl8, dependson='group-vs-line', echo=FALSE>>=
+gvl.8 <-  update(gvl.4, .~.+gini.min, control=glmerControl(optimizer="bobyqa")) # not significant, not even a little bit
+@
+
+<<gvl9, dependson='group-vs-line', echo=FALSE>>=
+gvl.9 <-  update(gvl.4, .~.+factor(no.ellipse), control=glmerControl(optimizer="bobyqa")) # only 1 missing ellipse has significant negative effect! beautiful!
+@
+
+In this supplement, we discuss four primary models used to examine different aspects of the data collected in this experiment. According to its dependent variables, these models are:
+\begin{description}
+\item[Accuracy (in section~\ref{app:accuracy}):] a lineup is considered to be evaluated `accurately', if at least one of its two targets is identified in an evaluation. We model this probability, i.e.\ $P(C_{ijk} \cup T_{ijk})$, where $C_{ijk}$ and $T_{ijk}$ are  binary variables describing the events that participant $k$ identifies the cluster/trend target in dataset $j$ presented with design $i$.
+\item[Response time (in section~\ref{app:responsetime}):] response time is measured as the time between which a lineup is presented to a participant and the time point at which an answer is submitted. On average, participants need 40 seconds to respond to a lineup. Factors that affect this average (including accuracy, confidence level, and user justification) are also investigated. 
+\item[Confidence (in section~\ref{app:confidence}):] for each lineup, participants are asked to provide a subjective evaluation of the level of confidence they have in the choice they made, in the form of an integer value between 0 (least) to 5 (highest). 
+\item[Balance between targets (in section~\ref{app:faceoff}):] because each lineup includes two targets, we can compare the frequency of identification of each target type. The objective here is to model the conditional probability of a cluster target identification given one of the two targets was identified, i.e.\ we want to model $P(C_{ijk} \mid C_{ijk} \cup T_{ijk})$.
+\end{description}
+The parameter estimation for the first three models is based on all \Sexpr{nrow(modeldata)} available lineup evaluations, while the last model is based on only those lineups where at least one of the targets was identified.
+ An overview of all of the fixed effects considered for each one of these models is given in Table~\ref{tab:models}.  All models are fitted using the same random effects structure: we assumed one random effect for dataset specific characteristics, one random effect to account for individuals' different skills, and a random error term. We are assuming that all random effects are normally distributed and pairwise orthogonal.
+
+\begin{table}
+\rowcolors{5}{}{gray!15}
+\centering
+\scalebox{0.7}{
+\begin{tabular}{p{2in}ccccc}\hline
+ &  & \multicolumn{4}{l}{\bf Model}\\
+\multicolumn{2}{l}{\bf Dependent Variable} & Face-off~\ref{app:faceoff} & Accuracy~\ref{app:accuracy} & Response Time~\ref{app:responsetime} & Confidence~\ref{app:confidence} \\
+\multicolumn{2}{l}{\bf Transformation} & (logit) & (logit) & (log) & --- \\ \hline
+\multicolumn{1}{l}{\bf Effect} & \multicolumn{1}{l}{\bf Parameter} \\ \hline
+Design & $\beta$ & \checkmark & \checkmark & \checkmark & \checkmark  \\
+Within cluster variability & $\alpha_C$ & \checkmark & \checkmark & \checkmark & \checkmark  \\
+Variability around trendline & $\alpha_T$ & \checkmark & \checkmark & \checkmark & \checkmark  \\
+Number of clusters & $\alpha_K$ &\checkmark  &  & \checkmark & \checkmark  \\
+First trial & $\alpha_1$ &  &  & \checkmark & \checkmark \\
+Lineup order & $\alpha_O$ & & \checkmark & \checkmark & \checkmark \\
+(log) Response time & $\tau$ & &  \checkmark   & --- &  \checkmark  \\
+Gini impurity & $\gamma$ &   &  \checkmark  & & \\
+Single missing ellipse & $\nu$  & \checkmark &  & & \\
+Target type \phantom{some filler...} {\footnotesize{(cluster, trend, neither, both)}} &  $\omega_{\{C, T, N, B\}}$ 
+& ---  & ---  &  \checkmark  &   \checkmark 
+\\ \hline
+\bf Data && identified targets & all evaluations &  all evaluations &  all evaluations\\ \hline
+\end{tabular}}
+\caption{\label{tab:models}Overview of all models and their respective fixed effects. The same random effects were used for each model. All effects were investigated if applicable (otherwise marked by `---'). Checkmarks indicate significance at the 0.05 level. }
+\end{table}
+
+The general model structure we are using for all four main models is the following:
+
+\begin{align}
+g\left(E[Y]\right) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta, \label{eqn:generalModel} 
+\end{align}
+where \begin{itemize}
+\item[$g(.)$,] the left hand side, is made up of a link function $g$ that connects the (conditional) expected value of dependent variable $Y$ to the structural right hand side. We further assume that $Y = g^{-1}(.) + \epsilon$, with $\epsilon \overset{\text{approx}}{\sim}  N\left(0, \sigma^2 I_{n \times n}\right)$.
+\item[$\alpha$, $\beta$] are vectors of fixed effects, where $\beta$ is a vector corresponding to the ten designs investigated, and $\alpha$ encompasses all `other' fixed effects that might have an effect on the dependent variable besides the design of a plot,
+\item[$W, X$] are the design matrices corresponding to the fixed effects,
+\item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+\item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics.
+\end{itemize}
+We also assume that random effects for dataset and participant are orthogonal. 
+
+
+
+\subsection{Accuracy Model}\label{app:accuracy}
+The lineup protocol provides an easy way of measuring accuracy of evaluations by assessing the number of participants who identified the data plot. In the modified version, we can use this as well by regarding any lineup evaluation resulting in an identification of at least one of the two targets as `accurate'. We therefore want to model the probability that participant $k$ identifies (at least) one of the targets on the lineup (using aesthetics set $i$) of dataset $j$, $P(C_{ijk} \cup T_{ijk})$. We use the logit function as the link function $g(.)$. 
+
+The vector $\alpha$ of fixed effects consists of $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where
+\begin{itemize}
+\item[$\mu$] is an average baseline accuracy (and should not be interpreted, because all other effects are assumed to be zero, which is not practically possible),
+\item[$\alpha_C, \alpha_T$] are the average effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$ on accuracy,
+\item[$\alpha_K$] is the effect of the number of clusters $K \in \{3, 5\}$, and
+\item[$\alpha_O$] is an order effect, i.e.\ an effect on accuracy for successive lineups.
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
+\end{itemize}
+% \begin{align}
+% \text{logit }P(C_{ijk} \cup T_{ijk}) & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta, \label{eqn:accuracyModel}
+% \end{align}
+% where \begin{itemize}
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_T, \alpha_C, \alpha_K, \alpha_O)$, where $\mu$ an average baseline accuracy (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero),  $\alpha_T$ and $\alpha_C$ for the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ for the effect of the number of clusters $K \in \{3, 5\}$, $\alpha_O$ an order effect, i.e.\ an effect on accuracy over time,
+% % \item[$\beta_i$] describe designs,
+% % \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+% % \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+% % \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+% \end{itemize}
+% We also assume that random effects for dataset and participant are orthogonal. 
+
+<<gols, echo=FALSE>>=
+gols.aov.2 <- anova(gol, gol.2)
+gols.aov.2b <- anova(gol.2, gol.2b)
+gols.aov.5 <- anova(gol, gol.5)
+gols.aov.5b <- anova(gol.5, gol.5b)
+@
+
+%' <<pred.gol5b, echo=FALSE>>=
+%' dframe <- data.frame(expand.grid(
+%'   plottype=levels(modeldata$plottype),
+%'   sdline_new=0.25,
+%'   sdgroup_new=0.2,
+%'   k_new=3,
+%'   time=exp(seq(1,7, length.out=50)),
+%'   gini.min=0
+%' ))
+%' dframe$k_new=factor(dframe$k_new)
+%' preds <- predict(gol.5b, newdata=dframe, re.form=~0, type="response")
+%' qplot(log(time),preds, data=dframe, colour=plottype, geom="line")
+%' @
+Table~\ref{tab:gol} shows an overview of the parameters of the accuracy model and their estimates. Both $\alpha_T$ and $\alpha_C$ have large negative effects that are highly significant. This indicates that as the signal in the target plots weakens (by an increase in variability around the trend line or within cluster variability), accuracy of participants decreases on average. $\alpha_K$ has a small negative effect, i.e.\ participants are on average answering lineups with three clusters with more accuracy than lineups with five clusters. However, this effect is not significant.
+The order effect $\alpha_O$ is small, but significant; as participants answer more lineups, their accuracy decreases on average by about 2\% for each additional evaluation
+$\alpha_O$ may represent a fatigue effect or an experience effect. Fatigue effects have been documented~\citep{abdulrahman2014repeated} in studies where participants complete several trials which are similar in a short period of time. It is also possible that as participants completed additional trials, they learned to look for certain cues (e.g.\ number of groups) which led to the selection of plots which had large differences in group size. While this approach is reasonable using inductive logic, participants using this strategy would be less likely to select the cluster or trend targets as a result. 
+
+
+As the lineups in this study were randomly ordered, either hypothesized effect is unlikely to bias the estimates for dataset and aesthetic effects. In future experiments, it may be advantageous to utilize a two-part experimental design or add a short break to mitigate both potential fatigue and learning effects.
+
+\begin{table}[htbp]
+% xtable(summary(gol)$coefficients, digits=c(0,2,2,2,4))
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+Parameter & Estimate & Std.\ Error & $z$-value & Pr($>$$|$z$|$) \\ 
+  \hline
+$\mu$ & 6.47 & 1.08 & 6.01 & $< 0.0001$ \\ 
+  $\alpha_T$ & -2.55 & 1.20 & -2.12 & 0.0339 \\ 
+  $\alpha_C$ & -8.59 & 2.40 & -3.58 & 0.0003 \\ 
+  $\alpha_{K}$ & -0.11 & 0.11 & -0.93 & 0.3523 \\ 
+  $\alpha_O$  & -0.02 & 0.01 & -2.33 & 0.0199 \\ [3pt]
+{\bf Design $\beta$} \hfill Plain & 0.00 & --- & --- & --- \\ 
+  Trend + Error & -0.08 & 0.14 & -0.57 & 0.5701 \\ 
+  Shape & -0.08 & 0.14 & -0.57 & 0.5694 \\ 
+  Trend & -0.35 & 0.13 & -2.61 & 0.0090 \\ 
+  Color + Shape & -0.51 & 0.13 & -3.95 & 0.0001 \\ 
+  Color & -0.60 & 0.13 & -4.64 & $< 0.0001$ \\ 
+  Color + Trend & -0.70 & 0.13 & -5.49 & $< 0.0001$ \\ 
+  Color + Ellipse + Trend + Error & -1.12 & 0.12 & -9.05 & $< 0.0001$ \\ 
+  Color + Shape + Ellipse & -1.40 & 0.12 & -11.45 & $< 0.0001$ \\ 
+  Color + Ellipse & -1.47 & 0.12 & -12.09 & $< 0.0001$ \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:gol}Parameters and estimates of the accuracy model. }
+\end{table}
+
+
+We additionally investigate two more effects: (log) response time and the effect of imbalances in the group allocation on accuracy.  
+
+\subsubsection{Effect of response time}
+The effect of (log) response times on accuracy is highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5$Chisq[2],1)}, $P$-value$<0.0001$). %\Sexpr{round(gols.aov.5$`Pr(>Chisq)`[2],4)}). 
+With each unit increase in (log) response time the probability for a target identification is reduced on average by about 1/3. However, in the long run, a secondary effect takes place, and response time has a positive effect on accuracy again. Fitting an additional quadratic term in the model is also highly significant ($\chi^2_1$=\Sexpr{round(gols.aov.5b$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.5b$`Pr(>Chisq)`[2],4)}), and leads to an overall minimum accuracy over time at a response time of about 150 seconds.
+
+
+This speed/accuracy relationship is more complicated than the typical speed/accuracy tradeoff, which assumes that accuracy increases with decreasing speed. Instead, when evaluating lineups, two effects seem to compete: Initially, participants may be able to fairly quickly (and accurately) select the target plot using high-bandwidth visual differences between the plots. If this initial strategy fails, participants may begin making pairwise comparisons in an attempt to select between one of several potential ``targets". These comparisons are slow, but eventually participants may succeed in using inductive reasoning to identify the target plot, producing a slow increase in accuracy after about 150 seconds. 
+
+The accuracy of initial impressions made with relatively little information has been documented in the popular press \citep{gladwell2007blink} and in scholarly literature \citep{curhan2007thin, ambady1993half, hogarth2014deciding}. Participants who select a target quickly are likely utilizing intuition as well as conscious reasoning; when combined with lineups which have a clear signal, this approach is fairly accurate. When intuition and initial approaches fail, however, participants must resort to a slower, more deliberate approach which may include attempting to determine both the evaluation metric to utilize and the most different plot when utilizing that metric. This process would take more time and have a higher error rate, particularly if the participant uses a strategy which is not aligned with the data-generating model (for instance, evaluating the size of the groups rather than the spatial clustering of points). 
+The combination of these two effects could explain the quadratic speed/accuracy relationship seen in this model. 
+% 
+% \newdo{Goldilocks lineups - easy, medium, hard - which can be solved using the intuitive or inductive approaches.}
+% \newdo{This is somewhat atypicial, if I understand how speed/accuracy tradeoff tends to work: typically, the more time you spend on a problem the higher your likelihood of completing it successfully - that is, it is assumed that participants can solve it eventually no matter what. Instead, what we're seeing (if I understand this correctly) is that there's a speed-accuracy tradeoff after 150 seconds, but before that point, lower response time is associated with higher accuracy - that is, either you see it or you don't, and if you hang out past 150 seconds, then you can sometimes reason your way back into it. We probably need to explain this a bit more - it's not clear, for instance, that you're just adding more terms to the model fit above. The R code is clear, but the text is less so.}
+
+%\newdo{XXX Yes, that's what I think is going on (at least on average) in our study. I would say that people either see it right away, and then they might type an additional answer and other stuff. But some lineups are harder - and they need to work at it, and might get it. We could test that theory by checking whether response times have an interaction with the difficulty parameters $s_C$ and $s_T$. I'll try to find out ...  XXX results below.}
+
+%' 
+%' <<gol5c, echo=FALSE>>=
+%' # gol.5c <- update(gol.5b, .~.+log(as.numeric(trial.time)):sdline_new + 
+%' #                   log(as.numeric(trial.time)):sdgroup_new) 
+%' # aov.5c <- anova(gol.5b, gol.5c) # P-value is 0.55
+%' @
+%' 
+%\newdo{OK, so the interaction effect between response time and parameters controlling for difficulty is not significant: $\chi^2_2$=1.2, $P$-value=0.5465.  }
+
+%' \begin{figure}
+%' <<gol5cpred, echo=FALSE, fig.width=8, fig.heigh=10, out.width='\\textwidth'>>=
+%' df5 <- data.frame(expand.grid(
+%'   plottype =levels(modeldata$plottype),
+%'   sdline_new = c(0.25, 0.35, 0.45),
+%'   sdgroup_new = c(0.2, 0.25, 0.3, 0.35),
+%'   k_new=factor(c(3,5)),
+%'   trial.num=5,
+%'   trial.time = exp(seq(1,7.5, by=0.1))
+%' ))
+%' df5 <- merge(df5, unique(modeldata[,c("plottype", "label")]), by="plottype")
+%' df5$pred <- predict(gol.5c, newdata=df5, re.form=~0, type="response")
+%' df5$pred5b <- predict(gol.5b, newdata=df5, re.form=~0, type="response")
+%' 
+%' qplot(trial.time, pred5b, facets=sdline_new~sdgroup_new, 
+%'       data=subset(df5, k_new==3), geom="line", group=label) + 
+%'   geom_line(aes(y=pred, colour=label), size=1) + theme_bw() + 
+%'   theme(legend.position="bottom") + scale_x_log10() + 
+%'   xlab("Time until response (note the log scale)") + 
+%'   ylab("Probablity to identify at least one target (accuracy)") + 
+%'   theme(legend.position="bottom")
+%' @
+%' \caption{\label{fig:interaction}In black: predictions from model with  polynomial response time. In colour: additional interactions between response time and each of the difficulty settings. XXX we don't need this figure - just to show how accuracy looks like over time}
+%' \end{figure}
+
+
+
+\subsubsection{Effect of group imbalances}\label{app:ginimodel}
+
+Gini impurity measures the homogeneity of group allocations. Let $n_i$ be the number of elements in the $i$th cluster, $i = 1, ..., K$, with $n = \sum_{i=1}^K n_i$ and let $p_i = n_i / n$ be the frequency of cluster $i$. Then the gini impurity is calculated as 
+\[
+G(p_1, ..., p_K) = \frac{K}{K-1} \sum_{i=1}^K p_i (1 - p_i).
+\]
+$G$ is an index between 0 and 1, where 0 is maximum diversity - in the sense, that there is only one group present, i.e.\ $p_i = 0$ for all but one of the groups. A Gini impurity of 1 indicates perfect homogeneity, i.e.\ $p_i = 1/K$ for all $i$.
+
+
+The probability of picking at least one of the targets significantly increases with an increase in Gini impurity, that is, with more equal group sizes ($\chi^2_1$=\Sexpr{round(gols.aov.2$Chisq[2],1)}, $P$-value=\Sexpr{round(gols.aov.2$`Pr(>Chisq)`[2],4)}). 
+In other words, a small Gini index indicates the presence of a null plot with large differences in the number of elements in wach group. This served as a(n unintended)  distractor away from the intended targets and therefore led to a drop in accuracy. Different designs are affected differently strong (two-way interaction: $\chi^2_9$=\Sexpr{round(gols.aov.2b$Chisq[2],1)}, $P$-value $< 0.0001$): Plots making use of color are all affected more strongly by deviations from homogeneity than plots without color. If ellipses are drawn, the effect becomes even more pronounced. Figure~\ref{fig:two-way} gives an overview of the relationship between predicted accuracy and designs for levels of homogeneity between 0.5 and 1 (similar to the range of Gini impurity observed in the study).
+
+ 
+Other features measuring the imbalance within a lineup that we considered besides Gini impurity are 
+\begin{itemize}
+\item the difference between the maximum and the minimum number of elements in each of the groups of a lineup, and 
+\item the number of ellipses missing from the lineup.
+\end{itemize}
+
+
+\begin{figure}
+<<interaction, echo=FALSE, fig.width=8, fig.height=5, out.width='0.8\\textwidth'>>=
+# need predictions from gol.2b
+
+df2b <- data.frame(expand.grid(
+  plottype = levels(modeldata$plottype),
+  sdline_new = 0.25,
+  sdgroup_new = 0.25,
+  k_new = 3,
+  trial.num=5,
+  gini.min=seq(0.5,1, by=0.025)
+))
+
+cols <- brewer.pal(9, "Set1")
+df2b <- merge(df2b, unique(modeldata[,c("plottype", "label")]), by="plottype")
+
+df2b$pred <- predict(gol.2, newdata=df2b, re.form=~0, type="response")
+qplot(gini.min, pred, colour=label, shape=label,  data=df2b, size=I(2.5)) + theme_bw() + 
+  geom_line(aes(group=label)) + 
+  ylab("Predicted probablity for identifying one of the two targets") + 
+  xlab("Gini impurity (0 means no diversity, 1 means complete diversity)") + 
+  scale_colour_manual("", values = c(cols, "black")) +
+  scale_shape_manual("", values=rep(1:6, 2)) 
+@
+\caption{\label{fig:two-way}Predicted accuracy values for designs given different values of the gini impurity measure. Values of gini impurity between 0.59 and 1 were actually observed in the panels of the lineups. Accuracy of all designs with color are lower than their non-colored counterparts, and the addition of ellipses further decreases accuracy. With a large deviation from equi-distributed groups, accuracy is disproportionately affected when color or ellipse aesthetics are present.}
+\end{figure}
+
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Mon Jan 25 12:40:45 2016
+% <<tab:gols, echo=FALSE>>=
+% xtable(anova(gol.model, gol.2, gol.2b))
+% @
+
+The range of group sizes does not have a significant effect on the probability to pick at least one of the targets, even if different designs are taken into account. Similarly, a single absent ellipse does not lead to a significant change in the probability of detecting one of the target plots. Neither the number of missing ellipses nor the absence of at least one ellipse have a significant effect on this probability, not even when we consider the impact of individual designs.
+%\newdo{they are all in the range of model gol.3}
+
+% To investigate the effect of these features on the balance between target models they are also included and discussed in the faceoff model of section~\ref{app:faceoff}.
+
+These features have also been included in the faceoff model of section~\ref{app:faceoff} to investigate whether group size imbalance or missing ellipses affects the probability of selecting one target over the other. 
+
+%\newpage
+\subsection{Modelling response times}\label{app:responsetime}
+While we do not have the same amount of control in an AMT study that we would have in a lab setting, we can accurately capture the time between presenting a lineup to a participant and the time at which results are submitted. A histogram of these times is given in Figure~\ref{fig:histogram}. Response times are extremely skew. In the model we therefore use the log of response times $T = \left(t_{ijk}\right)_{n \times 1}$ as the dependent variable.
+<<response, echo=FALSE>>=
+#load("../../Data/modeldata.Rdata")
+
+library(lubridate)
+modeldata$start <- ymd_hms(modeldata$start_time)
+modeldata$end <- ymd_hms(modeldata$end_time)
+modeldata$time <- as.numeric(with(modeldata, end-start))
+modeldata$k_new <- factor(modeldata$k_new)
+
+library(lme4)
+time <- lmer(log(time)~first.trial+plottype + simpleoutcome+k_new+sdline_new+sdgroup_new+(1|individualID)+(1|dataset), data=modeldata)
+#time2 <- update(time, .~.-(1|dataset), data=modeldata)
+
+#anova(time, time2) # hugely significant dataset effect? I wouldn't have guessed that. It might be an effect of the large number of evaluations
+
+@
+
+\begin{figure}
+<<histogram, echo=FALSE, fig.width=7, fig.height=4, out.width='.6\\textwidth'>>=
+library(ggplot2)
+qplot(time, data=modeldata, binwidth = .1) + theme_bw() +
+  ylab("# Evaluations") + xlab("Log Response time (in seconds)") +
+  scale_x_log10() + 
+  geom_vline(xintercept=median(modeldata$time), colour = "grey50")
+@
+\caption{\label{fig:histogram}Histogram of (log) response times. The median evaluation time (vertical line) is 29 seconds. }
+\end{figure}
+
+<<times, echo=FALSE>>=
+modeldata$one.ellipse <- modeldata$no.ellipse == 1
+
+time.2 <- update(time, .~.+trial.num) # highly significant
+time.3 <- update(time.2, .~.+gini.min) # not significant
+time.4 <- update(time.2, .~.+one.ellipse, data=modeldata) # not significant
+
+library(xtable)
+library(multcomp)
+
+table <- data.frame(summary(time.2)$coefficients)
+table$pvals <- cftest(time.2)$test$pvalues
+@
+
+% \begin{align}
+% \text{log } T & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:timeModel}
+% \end{align}
+% where \begin{itemize}
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ is an average baseline response time (and should not be interpreted, because $s_C$ and $s_T$ are assumed to be zero), $\alpha_1$ is the average effect of the first trial on the response time, $\alpha_O$ is the effect of successive trials on successive trials,  $\alpha_T$ and $\alpha_C$ represent the effect of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$,
+% \item[$\beta_i$] describe designs,
+% \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+% \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+% \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+% \end{itemize}
+% We also assume that random effects for dataset and participant are orthogonal. 
+
+For the vector of fixed effects, $\alpha$, we estimate, as before, the effects of variability ($\alpha_C$ and $\alpha_T$) on response times, as well as the number of clusters shown ($\alpha_K$). Aside from this, we also consider the  average effect of the first trial,  $\alpha_1$, and the effect of successive trials,  $\alpha_O$, on the response time. $\omega_C, \omega_T, \omega_B$, and $\omega_N$ is a set of parameters assessing the effect of the  outcome of the lineup evaluation on response time (the letters in the subscript stand for `C'luster, `T'rend, `B'oth, and `N'one). 
+
+Table~\ref{tab:response} gives an overview of all parameters of the response time model and their estimates. Similar to what has been found in other lineup studies \citep{humanfactorslineups, hofmann2012graphical}, participants take on average 25\% longer to respond to the first lineup than to subsequent lineups. Aside from this, we see that as the difficulty of lineups increases (controlled by an increase in the parameters $s_C$ and $s_T$), the average amount of time participants spend on each evaluation significantly increases. On average, participants respond to each successive lineup about 3\% faster.
+
+Depending on the outcome of the evaluation, there are differences in the amount of time: if either one of the targets is identified, the amount of time taken to answer is significantly shorter than if neither of the targets is found. Answers take on average the longest, if both targets are identified (however, this only happens in 0.6\% of the responses). 
+Plot aesthetics have a significant impact on the amount of time for responses, with increasing plot complexity associated with increased evaluation time. This may be a function of increased cognitive load, as participants must examine more features in order to identify which plot has the strongest signal. For instance, when color, ellipses, trend lines, and error bands are present, participants have to compare the allocation of color to points, the size, shape, and distance between each set of ellipses, the slope of each trend line, and the width of the error bands. While each participant almost certainly does not complete a full pairwise comparison of all 20 lineup plots across each feature set, the increased complexity of each additional feature does increase the space which must be examined using perceptual heuristics in order to identify the target plot correctly. This is consistent with \citet{borgo2012empirical}, who found that visual embellishments increase the time required to perform visual search tasks using data displays.
+% xtable(table, digits=c(0,3,3,3,3), display=c("s","f","f", "f","e"))
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Wed Jan 20 22:41:48 2016
+\begin{table}[htbp]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+Parameter & Estimate & Std.\ Error & $z$ value & $P$-value \\ 
+  \hline
+$\mu$ & 2.664 & 0.108 & 24.559 & $< 0.0001$ \\ 
+    $\alpha_{K = 3}$ & 0.000 & --- & --- & --- \\ 
+    $\alpha_{K = 5}$ & 0.124 & 0.029 & 4.297 & $< 0.0001$ \\ 
+  $\alpha_T$ & 0.481 & 0.153 & 3.152 & $< 0.0001$ \\ 
+  $\alpha_C$ & 1.664 & 0.302 & 5.503 & $< 0.0001$ \\ 
+  $\alpha_1$ & 0.084 & 0.016 & 5.133 & $< 0.0001$ \\
+  $\alpha_O$ & -0.030 & 0.002 & -17.273 & $< 0.0001$ \\[3pt]
+   {\bf Outcome $\omega$} \hfill   Trend & 0.000 & --- & --- & --- \\ 
+  Cluster & 0.027 & 0.013 & 2.117 & 0.0342 \\ 
+  Neither & 0.181 & 0.015 & 11.736 & $< 0.0001$ \\ 
+  Both & 0.347 & 0.057 & 6.079 & $< 0.0001$ \\ [3pt]
+{\bf Design $\beta$} \hfill  Plain & 0.000 & --- & --- & --- \\ 
+  Shape & 0.110 & 0.019 & 5.903 & $< 0.0001$ \\ 
+  Color & 0.130 & 0.019 & 6.961 & $< 0.0001$ \\ 
+  Trend & 0.144 & 0.019 & 7.714 & $< 0.0001$ \\ 
+  Trend + Error & 0.163 & 0.019 & 8.725 & $< 0.0001$ \\ 
+  Color + Ellipse & 0.206 & 0.019 & 10.895 & $< 0.0001$ \\ 
+  Color + Shape & 0.209 & 0.019 & 11.194 & $< 0.0001$ \\ 
+  Color + Trend & 0.215 & 0.019 & 11.469 & $< 0.0001$ \\ 
+  Color + Shape + Ellipse & 0.203 & 0.019 & 10.752 & $< 0.0001$ \\ 
+  Color + Ellipse + Trend + Error & 0.248 & 0.019 & 13.187 & $< 0.0001$ \\ 
+   \hline
+\end{tabular}
+
+\caption{\label{tab:response} Model parameters and estimates for (log) response time in seconds. The $P$-values are based on a normal approximation of the $t$ statistics.}
+\end{table}
+
+\subsection{Model of confidence levels}\label{app:confidence}
+With each lineup evaluation, participants were asked to give feedback on their level of confidence from 0 (least) to 5 (most). As an approximation, we can fit a mixed effects model with this variable as the dependent, and investigate its relationship with the parameters controlling difficulty of a lineup, the time taken to evaluate the lineup and its outcome. 
+%Let $C = \left(c_{ijk} \right)$ be the confidence level participant $k$ reports on the lineup (using aesthetics set $i$) of dataset $j$:
+
+% \begin{align}
+% C & = \textbf{W}\alpha +  \textbf{X}\beta + \textbf{J}\gamma + \textbf{K}\eta + \epsilon, \label{eqn:confidenceModel}
+% \end{align}
+% where \begin{itemize}
+% \item[$\alpha$] is a vector of fixed effects $(\mu, \alpha_1, \alpha_O, \tau, \omega_C, \omega_T, \omega_N, \alpha_T, \alpha_C, \alpha_K)$, where $\mu$ an average baseline confidence level, $\alpha_1$ is an effect of the first trial on confidence, $\alpha_O$ is the effect of successive lineup evaluations on confidence. $\tau$ is the effect of the (log) time taken  to respond on a participant's confidence, $\omega_*$ is the effect of choosing the {\bf C}luster, {\bf T}rend, {\bf N}either or {\bf B}oth of the targets, $\alpha_T$ and $\alpha_C$ are the effects of the standard error around trend lines $s_T \in \{0.25, 0.35, 0.45\}$ and clusters $s_C \in \{0.2, 0.25, 0.3, 0.35\}$, and $\alpha_K$ is the effect of the number of clusters $K \in \{3, 5\}$, 
+% \item[$\beta_i$] describe designs,
+% \item[$\gamma_j$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{data}}\right)$,  random effect for dataset specific characteristics,
+% \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics,
+% \item[$\epsilon_{ijk}$] $\overset{iid}{\sim}  N\left(0, \sigma^2_e\right)$, error associated with a single trial evaluation.
+% \end{itemize}
+% We also assume that random effects for dataset and participant are orthogonal. 
+
+The approximation of confidence level (which is a bounded, discrete variable) by a normal distribution is far from perfect, but the results are very interpretable.
+
+The vector of fixed effects, $\alpha$, includes besides the previously described effects of the control parameters $\alpha_C, \alpha_T, \alpha_K$, the effects of lineup order $\alpha_1, \alpha_O$, the effect of evaluation outcome $\omega_C, \omega_T, \omega_B, \omega_N$, also parameters that control for the amount of time taken by participants to evaluate a lineup: $\tau$ is the effect of log response time on the level of confidence reported by a participant.
+
+Table~\ref{tab:conf} gives an overview of the parameters and estimates of the model.
+Over the course of the study, confidence deteriorates with each additional lineup by about 0.03 (while significant, this effect on confidence is fairly small, as confidence is measured on a scale of 0 to 5). Beyond this order effect, the first trial does not have a significant effect on the reported confidence. The longer a participant needs to evaluate a lineup, the lower on average will be the value of confidence reported along with it. Similarly, an increase in lineup difficulty (as controlled by increased values of $s_C$ and $s_T$) goes hand in hand with a significant decrease in confidence. If neither one or both of the two targets were identified, the reported confidence level is significantly lower than if one of the two targets was identified\protect\footnote{The decrease in confidence when both targets are identified may be due to the additional complexity of dual-target search \citep{fleck2010generalized, cain2011anticipatory, adamo2015targets}}. Aesthetics in general did not have a significant effect on confidence levels. However, individual aesthetics did lead to a significant increase in confidence: any plot showing ellipses increases the level of confidence on average by about 0.1. 
+These results suggest that the speed of evaluation is not significantly contributing to shifting the balance between selecting one target over the other. 
+
+<<modconfidence, echo=FALSE>>=
+conf <- lmer(data=modeldata, conf_level~first.trial + trial.num + log(as.numeric(trial.time))+plottype+simpleoutcome+sdline_new+sdgroup_new+k_new+(1|dataset)+(1|ip_address))
+
+pconf <- cftest(conf)
+table <- data.frame(summary(conf)$coefficients)
+# lmer reports t values and df. I would rather report the normal approximated values, because degrees of freedom are at least 50 and mostly at 10,000.
+table <- table[,-c(3,5)]
+table$pvalues <- pconf$test$pvalues
+
+conf.2 <- update(conf, .~.+gini.min) # nope
+conf.3 <- update(conf, .~.+one.ellipse) # nope
+conf.4 <- update(conf, .~.-log(as.numeric(trial.time)) + poly(log(as.numeric(trial.time)), 2)) # yes, quadratic term is highly significant
+@
+
+% xtable(table, digits=c(0,3,3,3, 4), display=c("s","f","f", "f","f"))
+\begin{table}[htbp]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+Parameter & Estimate & Std.\ Error & $z$-value & $P$-value \\ 
+  \hline
+$\mu$ & 5.898 & 0.147 & 40.044 & $<0.0001$ \\ 
+  $\alpha_O$ & -0.033 & 0.003 & -10.738 & $<0.0001$ \\ 
+$\alpha_1$ & 0.002 & 0.029 & 0.083 & 0.9336 \\ 
+  $\tau$ & -0.295 & 0.016 & -18.507 & $<0.0001$ \\ 
+  $\alpha_T$ & -0.538 & 0.198 & -2.719 & 0.0066 \\ 
+  $\alpha_C$ & -1.899 & 0.389 & -4.879 & $<0.0001$ \\ 
+  $\alpha_{K=3}$  & 0.000 & --- & --- & ---\\
+  $\alpha_{K=5}$  & -0.131 & 0.037 & -3.559 & 0.0004 \\[3pt]
+    {\bf Outcome $\omega$} \hfill Trend  & 0.000 & --- & --- & ---\\
+  Cluster & -0.028 & 0.022 & -1.263 & 0.2065 \\ 
+  Both & -0.213 & 0.102 & -2.084 & 0.0372 \\ 
+  Neither & -0.220 & 0.028 & -7.971 & $<0.0001$ \\ [3pt]
+{\bf Design $\beta$} \hfill Shape & -0.006 & 0.034 & -0.187 & 0.8518 \\ 
+  Plain  & 0.000 & --- & --- & ---\\
+  Color + Shape & 0.024 & 0.034 & 0.698 & 0.4855 \\ 
+  Color & 0.040 & 0.034 & 1.178 & 0.2390 \\ 
+  Trend & 0.050 & 0.034 & 1.497 & 0.1343 \\ 
+  Trend + Error & 0.052 & 0.034 & 1.533 & 0.1252 \\ 
+  Color + Trend & 0.058 & 0.034 & 1.707 & 0.0878 \\ 
+  Color + Ellipse & 0.068 & 0.034 & 1.997 & 0.0459 \\ 
+  Color + Ellipse + Trend + Error & 0.106 & 0.034 & 3.132 & 0.0017 \\ 
+  Color + Shape + Ellipse & 0.107 & 0.034 & 3.156 & 0.0016 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:conf}Parameters and estimates for the model of participants' confidence.  }
+\end{table}
+
+
+
+
+\subsection{Faceoff Model}\label{app:faceoff}
+Figures~\ref{fig:outcome-parms} and~\ref{fig:outcome-parms-2} show the proportion of outcomes for either the cluster target, the trend target, both or none of them. Overall, cluster targets are picked more often than trend targets. For very small residual errors around the line fit and large within-cluster errors, the number of line target picks are highest. As the standard error around the trend line increases, the number of times the corresponding target is picked decreases. Similarly, an increase in within-cluster error is associated with a decrease of the number of cluster target picks. 
+The effect of the different designs is consistent across different parameter settings (the order of plot designs is given by the marginal effects as estimated in the faceoff model. Numerical estimates can be found in Table~\ref{tab:results}). The effect of designs is most pronounced, when the ambiguity between the two targets is strong, i.e.\ close to a 50:50 decision between the targets. In those cases the additional aesthetics tip the balance in favor of one target over the other.
+\begin{figure}
+<<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
+modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
+modeldata$st <- factor(sprintf("sigma[T]==%.2f", modeldata$sdline_new))
+modeldata$sc <- factor(sprintf("sigma[C]==%.2f", modeldata$sdgroup_new))
+modeldata$sc <- factor(modeldata$sc, levels=rev(levels(modeldata$sc)))
+ggplot(data=subset(modeldata, k_new==3)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(st+sc~., 
+             labeller=label_parsed) +
+  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+        legend.position="bottom", 
+        strip.text.y = element_text(angle=0))
+@
+\caption{\label{fig:outcome-parms}Outcome by design and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=3$ clusters.}
+\end{figure}
+
+\begin{figure}
+<<complex-2, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+ggplot(data=subset(modeldata, k_new==5)) +
+  geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+  facet_grid(st+sc~., 
+             labeller=label_parsed) +
+  scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.title=element_blank(), 
+        axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+        legend.position="bottom", 
+        strip.text.y = element_text(angle=0))
+@
+\caption{Outcome by design and parameter setting for lineups with trend and cluster targets. The cluster target consists of $K=5$ clusters.\label{fig:outcome-parms-2}}
+\end{figure}
+
+%' 
+%' different alternative, not as messy, but there is also not much to see
+%' <<complex-3, dependson='complex', echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
+%' modeldata <- modeldata %>% group_by(k_new, sdline_new, sdgroup_new) %>% mutate(
+%'   rep = as.numeric(dataset) - min(as.numeric(dataset)) + 1
+%' )
+%' ggplot(data=subset(modeldata, k_new==5)) +
+%'   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
+%'   facet_grid(st+sc~rep, labeller=label_parsed, space="free", scales="free") + 
+%'   scale_fill_manual("Outcome", values=c("darkorange", "grey40", "steelblue", "grey90")) + ylab("") + theme_bw() +
+%'   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+%'         axis.title=element_blank(), 
+%'         axis.text.x=element_text(angle=330, hjust=0, vjust=1),
+%'         legend.position="bottom", 
+%'         strip.text.y = element_text(angle=0))
+%' @
+%' 
+
+% library(xtable)
+% xtable(gvl.all[c(1:4,14,5:13),c(3,1,2)], digits=3)
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Tue Jan 12 15:17:45 2016
+\begin{table}[htbp]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+\bf Parameter & \bf Log Odds Ratio & \bf 95\% Lower & \bf 95\% Upper \\ 
+  \hline
+Intercept & 1.018 & -1.615 & 3.651 \\ 
+$\alpha_T$ & 16.254 & 13.276 & 19.231 \\ 
+$\alpha_C$ & -16.038 & -21.935 & -10.140 \\ 
+$\alpha_K$ & -0.281 & -0.563 & 0.001 \\[3pt]
+{\bf Design $\beta$} \hfill  Trend + Error & -0.650 & -0.877 & -0.423 \\ 
+  Color + Ellipse + Trend + Error & -0.515 & -0.751 & -0.279 \\ 
+  Plain & 0.000 & --- & --- \\ 
+  Trend & 0.130 & -0.101 & 0.361 \\ 
+  Color & 0.271 & 0.032 & 0.509 \\ 
+  Shape & 0.277 & 0.043 & 0.510 \\ 
+  Color + Shape & 0.314 & 0.076 & 0.551 \\ 
+  Color + Ellipse & 0.459 & 0.207 & 0.711 \\ 
+  Color + Trend & 0.459 & 0.219 & 0.700 \\ 
+  Color + Shape + Ellipse & 0.573 & 0.317 & 0.830 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:results} Odds Ratios of picking the cluster target over the trend target (with the plain design as a baseline). The last two columns are 95\% confidence intervals. Within the plain plots, the odds of choosing the cluster target over the trend target is about 2:1. % precisely 711:359  
+}
+\end{table}
+
+<<tabplus, echo=FALSE, warning=FALSE>>=
+aov <- anova(gvl.4, gvl.5)
+aov2 <- anova(gvl.4, gvl.6)
+aov.7 <- anova(gvl.4, gvl.7)
+aov.7b <- anova(gvl.7, gvl.7b)
+aov.8 <- anova(gvl.4, gvl.8) # gini 
+aov.9 <- anova(gvl.4, gvl.9) # factor(no.ellipse) 
+@
+Response time (composed of log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend target ($\chi_2^2$=\Sexpr{round(aov$Chisq[2],1)}, $P$-value=\Sexpr{round(aov$`Pr(>Chisq)`[2],4)}). 
+Nor does the confidence level of participants ($\chi_5^2$=\Sexpr{round(aov2$Chisq[2],1)}, $P$-value=\Sexpr{round(aov2$`Pr(>Chisq)`[2],4)}). 
+
+What does have a significant effect on the balance between cluster target and trend target is the absence of one of the ellipses in one of the panels of the lineup: a single missing ellipse (that is, a group size of less than 4) cuts the probability that the cluster target is selected by more than half (44.6\%; $\chi_1^2$=\Sexpr{round(aov.7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7$`Pr(>Chisq)`[2],4)}). 
+We also find a significant effect if we additionally take the two-way interaction between a single missing ellipse and individual designs into account ($\chi_9^2$=\Sexpr{round(aov.7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov.7b$`Pr(>Chisq)`[2],4)}). These effects are summarised in Figure~\ref{fig:gvl7b}.
+\begin{figure}
+<<gvl7b.pred, echo=FALSE, fig.width=7, fig.height=4, out.width='0.8\\textwidth'>>=
+
+df7 <- data.frame(expand.grid(
+  plottype =levels(modeldata$plottype),
+  sdline_new = 0.275,
+  sdgroup_new = 0.25,
+  k_new=5,
+  one.ellipse=c(TRUE, FALSE)
+))
+
+df7plus <- data.frame(expand.grid(
+  data_name=unique(faceoff$data_name),
+  plottype =levels(modeldata$plottype),
+  sdline_new = 0.275,
+  sdgroup_new = 0.25,
+  k_new=5,
+  one.ellipse=c(TRUE, FALSE)
+))
+df7$pred4 <- predict(gvl.4, newdata=df7, re.form=~0, type="response")
+df7$pred7 <- predict(gvl.7, newdata=df7, re.form=~0, type="response")
+df7$pred7b <- predict(gvl.7b, newdata=df7, re.form=~0, type="response")
+df7 <- merge(df7, unique(modeldata[,c("plottype", "label")]), by="plottype")
+
+rf7 <- data.frame(ranef(gvl.7b)$data_name)
+rf7$data_name <- row.names(rf7)
+names(rf7)[1] <- "rdata"
+df7plus$pred7b <- predict(gvl.7b, newdata=df7plus, re.form=~0, type="link")
+df7plus <- merge(df7plus, rf7, by="data_name")
+df7plus$predlink <- with(df7plus, pred7b+rdata)
+df7plus$predprob <- with(df7plus, exp(predlink)/(1+exp(predlink)) )
+df7plus <- merge(df7plus, unique(modeldata[,c("plottype", "label")]), by="plottype")
+
+df7$plottype <- reorder(df7$plottype, df7$pred4)
+qplot(pred4, label, data=df7, shape=I(3)) + 
+#  geom_point(aes(x=predprob, colour=one.ellipse, shape=one.ellipse), alpha=0.25, size=1.5, data=df7plus) +
+  geom_point(aes(x=pred7b, colour=one.ellipse, shape=one.ellipse), size=3) +
+  theme_bw() + ylab("") +
+  theme(legend.position="bottom") + 
+  scale_colour_manual("One ellipse missing", values=c("steelblue", "darkorange")) +
+  scale_shape("One ellipse missing") +
+  xlab("Probability to pick cluster target\n(given one of the targets was picked)") 
+@
+\caption{\label{fig:gvl7b} Overview of the probability to pick the cluster target given the different designs. $s_C$ and $s_T$ are set to 0.25 and  0.275, respectively, and $K=3$ is assumed. The plus symbols indicate probabilities from the base model (\ref{eqn:faceoffModel}), the filled triangle and circle represent predicted probabilities under a model including the two-way interaction between a single missing ellipse and designs. Plots with trend and shape aesthetics are the least affected by the imbalance in groups, while plots with color aesthetics show huge differences in the predicted probability.}
+\end{figure}
+
+\end{appendices}
+
+\bibliographystyle{asa}
+\newsavebox\mytempbib
+\savebox\mytempbib{\parbox{\textwidth}{\bibliography{references}}}
+\end{document}
