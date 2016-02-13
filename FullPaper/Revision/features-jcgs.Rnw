@@ -1315,6 +1315,7 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \item Supplement~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
 \item Supplement~\ref{app:models} contains a thorough review of models fit to participant target selections, response time, and self-reported confidence. Additional modifications of these models address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, and other interesting features of the data.
 \end{itemize}
+\item[modeldata.csv:] (anonymized) data of participants' responses from the AMT study (csv file). 
 \item[\href{http://github.com/srvanderplas/FeatureHierarchy}{Github Repository}:] Contains code for stimuli generation, anonymized data, simulation code and results, and other material. 
 %available on \href{http://github.com/srvanderplas/FeatureHierarchy}{github}.
 \end{description}
