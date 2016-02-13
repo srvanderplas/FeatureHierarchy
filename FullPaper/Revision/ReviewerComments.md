@@ -3,6 +3,9 @@ title: "Reviewer Comments"
 output: html_document
 ---
 
+*We would like to thank the reviewers for their valuable feedback. We have tried to incorporate all of their suggestions, as detailed below.*
+*The biggest change to the paper was to expand the discussion of the underlying models (of accuracy, response time, participants' confidence, and the balance between targets). We added this discussion in an supplemental part and are only highlighting the most relevant results in the paper.*
+
 ## Reviewer 1
 - perceptual theorizing more up to date (attentional processing, guided search models, biased competition models)
 - statistical sophistication of participants not addressed
@@ -39,7 +42,7 @@ There are some assumptions here, rather than truisms or established facts.
 - Top of pg 19 - unclear use of "plot" vs. "lineup". Need a clear example of a lineup. Is Figure 6 a lineup?
     - *Figure 6 contains 10 separate lineups. That needs an additional sentence of clarification in the paper.*
 - Confusion about the null hypothesis in Sec 3.2. Are we comparing trend vs. cluster or trend + cues vs. trend - cues or cluster + cues vs. cluster - cues? 
-    - *Yes. :-p* *XXX Yes, in all of the above?*
+    - *section 3.2 discusses effects on accuracy (as defined as identification of at least one of the targets in a lineup evaluation), section 3.3 discusses the balance between targets (given at least one target was identified). We have expanded the discussion of the modelling results in the paper to clarify this, and added a lot of extra discussion in a supplement.*
     
     
 ## Reviewer 3
