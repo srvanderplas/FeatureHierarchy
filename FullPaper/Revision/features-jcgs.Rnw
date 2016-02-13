@@ -1038,12 +1038,13 @@ ggplot() +
 Due to the design of the experiment, each design was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
 
-
+\newtext{Lineup evaluations provide us with a simple to assess measure of accurateness: we can say, that a lineup is evaluated `accurately', if the data plot in the lineup was identified (or here, if at least one of the target plots in the lineup was identified). Accuracy is therefore a measure of both a participant's skill and the strength of the signal in the data/target plot. In a model, we accommodate for different skills of participants by including a random intercept, because in this situation we are much more interested in a further investigation of a target's signal strength.}
+\newtext{As planned, an increase of either within cluster variability ($s_C$) or scatter around the trend line ($s_T$) leads to a significant drop in accuracy. Over the course of the experiment, accuracy drops by a small, but significant amount with each additional evaluation, probably due to a fatigue effect. }
+\newtext{The different designs have significantly different accuracies associated with them:}
 Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by design (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
-Designs  associated with clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in Section~\ref{sec:sentiment}. 
+Designs  associated with clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). \newtext{This might have been due to an unintended signal in the lineups because of imbalances in the group allocation of clusters, which are emphasized strongly by color and ellipses.} We discuss this  in more detail in Section~\ref{sec:sentiment} based on participants' reasoning. 
 
-\newdo{XXX this needs more details. }
-Additional information about the model structure, parameter estimates, and interpretations are provided in Supplement~\ref{app:accuracy}. 
+Additional information about the model structure, numeric values of the parameter estimates, and more interpretation are provided in Supplement~\ref{app:accuracy}. 
 
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
@@ -1313,7 +1314,7 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \begin{itemize}
 \item Supplement~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
 \item Supplement~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
-\item Supplement~\ref{app:models} contains a thorough review of models fit to participant target selections, response time, and self-reported confidence. Additional modifications of these models address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, and other interesting features of the data.
+\item Supplement~\ref{app:models} contains a thorough discussions of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
 \item[modeldata.csv:] (anonymized) data of participants' responses from the AMT study (csv file). 
 \item[\href{http://github.com/srvanderplas/FeatureHierarchy}{Github Repository}:] Contains code for stimuli generation, anonymized data, simulation code and results, and other material. 
