@@ -253,7 +253,7 @@ The study in this paper is designed to inform our understanding of the perceptua
 The next section discusses the particulars of the experimental design, including the data generation model, plot aesthetics, selection of color and shape palettes, and other important considerations. 
 Experimental results are presented in Section~\ref{sec:Results}, and implications and conclusions are discussed in Section~\ref{sec:Conclusion}. 
 
-\section{Experimental Setup and Design} \label{sec:ExperimentalDesign}
+\section{Experimental Setup and Design}\label{sec:ExperimentalDesign}
 In this section, we discuss the models generating data for the two types of signal plots and the null plots, the selection of plot aesthetic combinations and aesthetic values, and the design and execution of the experiment.
 
 \subsection{Data Generation}
@@ -575,7 +575,7 @@ Density of test statistics measuring trend strength and cluster strength for tar
 \end{figure}
 
 Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in Supplement~\ref{app:parametersimulation}. 
-Using information from the simulation, we identified values and generate lineup data sets for each  $\sigma_T$ and $\sigma_C$ (as shown in Table~\ref{tab:parameters}) corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. 
+Using information from the simulation, we identify values and generate lineup data sets for each  $\sigma_T$ and $\sigma_C$ (as shown in Table~\ref{tab:parameters}) corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. 
 It is important to note that the numerical measures we have described in equations~\eqref{eq:linearMeasure} and~\eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target data sets from the null data sets; the simulation cannot provide us with exact information on the perceptual discriminability.
 It has been established that human perception of scatter plots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
 
@@ -900,9 +900,8 @@ ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, da
 \caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
 
-\newtext{
-We modeled accuracy rates, response times, participant confidence, and the selection of cluster vs. trend targets in great detail. A thorough discussion of these models and the corresponding results is provided in Supplement~\ref{app:models}; only the models describing target plot selection are discussed here due to space constraints.
-}
+In the evaluation of the collected data, we modeled accuracy rates, response times, participant confidence, and the selection of cluster vs.\ trend targets in detail. A thorough discussion of these models and the corresponding results is provided in Supplement~\ref{app:models}. Only the models describing target plot selection are discussed here.
+
 
 For each design (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target over the trend target. 
 
@@ -1039,13 +1038,17 @@ ggplot() +
 Due to the design of the experiment, each design was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
 \end{figure}
 
-In order to assess which of the two stimuli dominated in each of the designs, we first model the probability that a participant identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
 
-Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by design (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). Additional information about the model structure, parameter estimates, and interpretations are provided in Supplement~\ref{app:accuracy}. 
-
+Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by design (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
 Designs  associated with clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). A  possible cause for this is discussed in more detail in Section~\ref{sec:sentiment}. 
 
+\newdo{XXX this needs more details. }
+Additional information about the model structure, parameter estimates, and interpretations are provided in Supplement~\ref{app:accuracy}. 
+
+
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
+In order to assess which of the two stimuli dominated in each of the designs, we first model the probability that a participant identified at least one of the targets (\Sexpr{sum(1-modeldata$neither)} trials). 
+
 For all trials in which at least one of the targets was correctly identified, we compare the probability of selecting the cluster target generated by $M_C$  with the probability of selecting the trend target generated by $M_T$. 
 Define $C_{ijk}$ to be the event $$\{\text{Participant }k\text{ selects the cluster target for data set }j\text{ with aesthetic set }i\}$$
 and $T_{ijk}$ to be the analogous selection of the trend target.
@@ -1069,7 +1072,7 @@ As hypothesized, the strongest signal for identifying groups, is color + shape +
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
 The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters ($s_C$) and around the trend line ($s_T$), are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in Supplement~\ref{app:faceoff} for exact numbers and a discussion of further co-variates).
 
-\newtext{The addition of an interaction effect between plot design and levels of $\alpha_C$ or $\alpha_T$ did not significantly improve the predictive ability of the model. That is, the selection of the cluster or trend target does not appear to be influenced by the combination of a plot design and the difficulty of the parameters controlling data generation (within the ranges of parameters examined in this experiment) outside of the individual effects of plot design and trend/cluster variability.}
+The addition of  interaction effects between plot design and control parameters $s_C$ or $s_T$ does not significantly improve the fit of the model. That is, the selection of the cluster or trend target does not appear to be influenced by the combination of a plot design and the difficulty of a lineup (as controlled by the parameters $s_C$ and $s_T$), at least within the ranges of parameters examined in this experiment.
 
 %%%%% Additional Information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is fit in models gvl.4d and gvl.4e - they are in expanded-model.R.
