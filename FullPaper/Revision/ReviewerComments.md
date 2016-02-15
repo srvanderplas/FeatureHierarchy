@@ -13,6 +13,7 @@ output: html_document
     - *Was this addressed by any of Mahbub's demographic studies?*
     - *Let's cite your own study from the Infovis paper*
 - Cite critical evaluation study: [Crump et al (2013)](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0057410)
+    - *Thanks for pointing out this paper, we have added it to the discussion.*
 - Controlling for speed/accuracy tradeoff. 
     - *We have added a discussion of (log) response time on both the accuracy of lineup evaluations and the balance between targets*
     - *Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend (Chisq:4.4763, df:2, p-value=0.1067)*
@@ -30,7 +31,7 @@ There are some assumptions here, rather than truisms or established facts.
     - *True, the modification of the lineup protocol is significant, but I would not call it a leap, rather a logical next step for working with the protocol in a different situation. We have tried to make a better job of explicitly listing the assumptions:*
     - *Having two rather than just one target in the lineup matters for an individual's decision: The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominant one masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
 <!--    - *Other assumptions: in the evaluation, we first checked the significance of each two-target lineup by using simulation-based inference. That doesn't seem particularly problematic - and we don't talk about this in the paper anyways.*-->
-    - *From a statistical persepctive, for the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. However, the different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
+    - *From a statistical perspective, for the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. However, the different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
 - Reference Fig 2 in the text.
     - *Fixed*
 - "Prediction" vs. "error", "line" vs. "trend"
@@ -49,24 +50,22 @@ There are some assumptions here, rather than truisms or established facts.
     
 ## Reviewer 3
 - Link given to the experiment isn't active.
-    - *Link to https://erichare.shinyapps.io/lineups/ works, but isn't ideal. We're still working on a better description of the experiments.*
-    - *One part of the description would be an extended README for the github repo. We need to clean it up, too ...*
+    - *We have fixed the link to the experiment [now at (https://erichare.shinyapps.io/lineups/)]. We have added a better description of the experiment in  an extended README file on the github repo at (https://github.com/srvanderplas/FeatureHierarchy)*
 - Perceived saliency (ability to identify target) may not mean increased comprehension
     - *valid point, but if you don't see the signal clearly in a non-lineup plot, you can't comprehend whatever it is the creator of the plot was trying to get across...*
     - *Is there some cognitive research on saliency versus comprehension? - There was an Infovis paper in 2013 and 2016 on memorability of graphs.*
 - Task description in a separate subsection, not buried within the participant recruitment subsection
-    - *that might help, I agree*
+    - *We have added section 2.6, which consists of the task description.*
 - Fig 11 is confusing, given that plot types associated with clustering have a lower probability of correct target evaluations. What is the frequency of cluster vs. trend target selection in a plain graph?
     - *There is no such thing as 'the odds' of cluster versus trend selection for a plain graph, because these odds are highly dependent on the actual parameter setting - e.g. for a lineup with a strong cluster signal (i.e. s_C low, and s_T relatively large), the odds of choosing the cluster target are much higher than if the cluster signal is weak. However, the relative log odds (i.e. the odds ratio) between the plot types is unaffected by this, because model (1) does not include any interaction of plot type effect with another co-variate.*
     - *We have added the odds for selecting the cluster over the trend target for the plain graph for one set of parameters to give an indication of the overall odds.*
-    - *The confusion arises from the problem, that while overall the probability of identifying a target decreases, the odds are still in favor of the clustering target. We might need to add something on the gini index.*
 - How do subjective confidence scores correlate with incorrect evaluations or estimated odds as shown in Fig 11?
-    - *They don't. Is this consistent with other Mturk studies?*
     - *A model of self-reported confidence scores is added to the appendix/supplement. Generally, confidence agrees with (perceived) difficulty of the lineup; i.e. for parameter values that allow for more variability in the trend or the clusters, confidence is reported lower. There is one notable exception: for plots with an ellipse confidence is reported higher, corresponding to an (unintended) signal in the cluster assignment of some of the plots.*
-    - *This is pretty consistent with our findings - there's some discussion in the 'Comparing designs' infovis paper*
+    - *This is finding is  consistent with previous results, e.g. there's some discussion in the 'Graphical tests for ... competing designs' paper (Hofmann et al, 2012)*
 - I appreciate the word cloud visualizations of participant comments but I expected a more thorough discussion of their reasoning. 
+    - *We have added a discussion of the gini impurity as a quantitative measure for the group imbalance that participants' reasoning seems to hint at (in supplement C).*
 - Revisit the sentence "...the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution." for clarification. Also, discuss why the plot types associated with clustering had significantly fewer correct evaluations more thoroughly.
-    - *Here's where we should go a bit into the Gini index discussion. In particular, the ellipses seem to highlight the absence of a cluster - figure 15 is screaming that all over.*
+    - *We have re-written the sentence for clarification. Supplement C contains a lot more detail on how the group imbalance (measured in gini impurity as well as the absence of individual ellipses) affected accuracy of lineup evaluations, particularly for lineups with a design tailored for emphasizing clusters.*
 - Discussion of additive effects can benefit from the psychophysics literature on integrality (or separability) of perceptual dimensions (Garner & Felfoldy, Integrality of stimulus dimensions in various types of information processing, 1970). 
 - Page 19: table 2 -> Table 2
     - *Fixed*
