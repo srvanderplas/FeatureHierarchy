@@ -10,9 +10,9 @@ Graphics are very effective for communicating numerical information quickly and 
 **Some Lineups and Designs:**
 
 
-![alt text](FeatureHierarchyImages/Turk16/svgs/0b114b82cdc8b505153a642faf2e29c8.svg "Plain Lineup, targets are in panels #6 and #8") ![alt text](FeatureHierarchyImages/Turk16/svgs/1b4491b66980539a3d929485874ac41a.svg "Color + Ellipse Lineup, targets are in panels #11 and #16")
+![alt text](svgs/0b114b82cdc8b505153a642faf2e29c8.svg "Plain Lineup, targets are in panels #6 and #8") ![alt text](svgs/1b4491b66980539a3d929485874ac41a.svg "Color + Ellipse Lineup, targets are in panels #11 and #16")
 
-![alt text](FeatureHierarchyImages/Turk16/svgs/1f0b537e7879b0892d48e9e3353be55b.svg "Trend + Prediction Lineup, targets are in panels #5 and #12") ![alt text](FeatureHierarchyImages/Turk16/svgs/2c3006303975936a99ecc23e4ce789a9.svg "Color + Shape + Trend + Ellipse Lineup, targets are in panels #8 and #13")
+![alt text](svgs/1f0b537e7879b0892d48e9e3353be55b.svg "Trend + Prediction Lineup, targets are in panels #5 and #12") ![alt text](svgs/2c3006303975936a99ecc23e4ce789a9.svg "Color + Shape + Trend + Ellipse Lineup, targets are in panels #8 and #13")
 
 **Experiment:**
 The webpage used to collect data from Amazon Turk participants is available [here](https://erichare.shinyapps.io/lineups/).
@@ -28,6 +28,7 @@ This repository contains the data and code necessary to reproduce the images in 
 
 * The [Data](Data) folder contains the data necessary to generate the images, as well as anonymized user data and simulation study results. See the [Rnw file used to generate the paper](FullPaper/Revision/features-jcgs.Rnw) to understand how these files fit into the analysis in context.
 
-* The [Images](Images) folder contains the data sets and statistics about the data sets used to generate the lineups in this study. The images must be generated using R, and are not provided in this repository in rendered form. 
+* The [Images](Images) folder contains the data sets and statistics about the data sets used to generate the lineups in this study.  
 
+* The [svgs](svgs) folder contains the lineups shown to participants.
 
