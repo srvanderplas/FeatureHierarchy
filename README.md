@@ -10,7 +10,7 @@ Graphics are very effective for communicating numerical information quickly and 
 **Some Lineups and Designs:**
 
 
-![alt text](svgs/0b114b82cdc8b505153a642faf2e29c8.svg "Plain Lineup, targets are in panels #6 and #8") ![alt text](svgs/1b4491b66980539a3d929485874ac41a.svg "Color + Ellipse Lineup, targets are in panels #11 and #16")
+![alt text](https://github.com/srvanderplas/FeatureHierarchy/blob/master/svgs/0b114b82cdc8b505153a642faf2e29c8.svg "Plain Lineup, targets are in panels #6 and #8") ![alt text](svgs/1b4491b66980539a3d929485874ac41a.svg "Color + Ellipse Lineup, targets are in panels #11 and #16")
 
 ![alt text](svgs/1f0b537e7879b0892d48e9e3353be55b.svg "Trend + Prediction Lineup, targets are in panels #5 and #12") ![alt text](svgs/2c3006303975936a99ecc23e4ce789a9.svg "Color + Shape + Trend + Ellipse Lineup, targets are in panels #8 and #13")
 
