@@ -218,9 +218,9 @@ Statistical graphics can be difficult to examine experimentally; qualitative stu
 Lineups fuse commonly used psychological tests (target identification, visual search) \citep{visualreasoning} with statistical hypothesis tests, thereby enabling formal experimental evaluation of statistical graphics. 
 
 Lineups are an experimental tool designed to serve as a visually conducted hypothesis test, separating significant effects from those that would be expected under a null hypothesis \citep{buja2009statistical, majumder2013validation,hofmann2012graphical, wickham2010graphical}. 
-A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (examples are shown in Figure~\ref{fig:plotExamples}). 
-Of these plots, one plot is the ``target plot'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 plots are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
-If a participant can identify the target plot from the field of distractors, this counts as evidence against the null hypothesis. 
+A statistical lineup consists of (usually) 20 sub-plots, arranged in a grid (ten examples for lineups are shown in Figure~\ref{fig:plotExamples}). 
+Of these sub-plots, or panels, one is the ``target'', generated from either real data or an alternate model (equivalent to $H_A$ in hypothesis testing); the other 19 panels are generated either using bootstrap samples of the real data or by generating ``true null" plots from the null distribution $H_0$. 
+If a participant can identify the target  from the field of distractors, this counts as evidence against the null hypothesis. 
 Based on the number of evaluations and the number of target identifications, significance of a finding is then determined in the same sense as for a conventional hypothesis test. 
 Performance on lineups has been shown to depend primarily on logical reasoning ability, and does not depend significantly on statistical training \citep{visualreasoning}.
 
@@ -645,8 +645,8 @@ Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
   \caption{\scalebox{.8}{Trend + Error + Color + Ellipse}}\vspace{-0.15in}
   \includegraphics[width=.49\textwidth]{fig/samplepics-10}
 \end{subfigure}
-\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{
-Overview of each of the 10 plot feature combinations compared in this study, with $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. 
+\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{\newtext{Set of lineups for } $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \newtext{Each lineup shows one of the 10 designs comprised of feature combinations}
+ compared in this study. 
 \label{fig:plotExamples}
 }
 \end{figure}

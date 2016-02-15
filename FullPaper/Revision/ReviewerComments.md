@@ -4,7 +4,7 @@ output: html_document
 ---
 
 *We would like to thank the reviewers for their valuable feedback. We have tried to incorporate all of their suggestions, as detailed below.*
-*The biggest change to the paper was to expand the discussion of the underlying models (of accuracy, response time, participants' confidence, and the balance between targets). We added this discussion in an supplemental part and are only highlighting the most relevant results in the paper.*
+*The biggest change to the paper was to expand the discussion of the underlying models (of accuracy, response time, participants' confidence, and the balance between targets). We added this discussion in an supplemental part and are only highlighting the most relevant results in the paper itself.*
 
 ## Reviewer 1
 - perceptual theorizing more up to date (attentional processing, guided search models, biased competition models)
@@ -16,9 +16,9 @@ output: html_document
 - Controlling for speed/accuracy tradeoff. 
     - *We have added a discussion of (log) response time on both the accuracy of lineup evaluations and the balance between targets*
     - *Response time (split into log(response time) and effect of first trial) does not have a significant effect on the decision between cluster and trend (Chisq:4.4763, df:2, p-value=0.1067)*
-    - *Response time does have an effect on accuracy - but not in the traditional sense that an increased amount of time spent in the evaluation necessarily leads to a higher accuracy.*
+    - *Response time does have an effect on accuracy - but not in the traditional sense that an increased amount of time spent in the evaluation necessarily leads to a higher accuracy. At first, an increase in response time is associated with a decrease in accuracy, after about 150 seconds, this effect reverses and an increase in response time leads to higher accuracy.*
 - Would results have been different if relative difficulty of clusters vs. trends was different?
-    - *Yes, the results are different, when the relative difficulty of the lineup changes. Relative difficulty is controlled by the parameters s_C and s_T. We have extended the model accordingly, and added details to the supplement.*
+    - *Yes, the results are different, when the relative difficulty of the lineup changes. Relative difficulty is controlled by the parameters s_C and s_T. We have extended the discussion of the models accordingly, and added details to the supplement.*
     
 ## Reviewer 2
 - The experiment is very complicated, and the result is not easily interpreted/effectively communicated
@@ -28,19 +28,21 @@ output: html_document
 leap, with only rational justification (no empirical evidence).
 There are some assumptions here, rather than truisms or established facts.
     - *True, the modification of the lineup protocol is significant, but I would not call it a leap, rather a logical next step for working with the protocol in a different situation. We have tried to make a better job of explicitly listing the assumptions:*
-    - *Does it matter for an individual's decision, whether there is one target or two targets? -- yes it will. The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominant one masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
+    - *Having two rather than just one target in the lineup matters for an individual's decision: The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominant one masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
 <!--    - *Other assumptions: in the evaluation, we first checked the significance of each two-target lineup by using simulation-based inference. That doesn't seem particularly problematic - and we don't talk about this in the paper anyways.*-->
-    - *For the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. However, the different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
+    - *From a statistical persepctive, for the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. However, the different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
 - Reference Fig 2 in the text.
     - *Fixed*
 - "Prediction" vs. "error", "line" vs. "trend"
-    - *Dangit, I missed a line vs. trend!!!* 
+    - *Fixed*
     - *I think I've fixed this, for the most part. Some LaTeX tables may still need help.*
+    HH: Susan, could you check  on this?
 - Figure 6 (f) should be "shape + color + ellipse"?
     - *Fixed*
 - Fig 7a should be Fig 7b? (page 16, line 41)
+*Fig 7a shows the color paletter, Fig 7b shows the shapes - we think that all references and descriptions reflect this now.*
 - Top of pg 19 - unclear use of "plot" vs. "lineup". Need a clear example of a lineup. Is Figure 6 a lineup?
-    - *Figure 6 contains 10 separate lineups. That needs an additional sentence of clarification in the paper.*
+    - *Figure 6 contains 10 separate lineups. We have added a sentence of clarification in the paper.*
 - Confusion about the null hypothesis in Sec 3.2. Are we comparing trend vs. cluster or trend + cues vs. trend - cues or cluster + cues vs. cluster - cues? 
     - *section 3.2 discusses effects on accuracy (as defined as identification of at least one of the targets in a lineup evaluation), section 3.3 discusses the balance between targets (given at least one target was identified). We have expanded the discussion of the modelling results in the paper to clarify this, and added a lot of extra discussion in a supplement.*
     
