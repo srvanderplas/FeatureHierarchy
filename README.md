@@ -10,9 +10,9 @@ Graphics are very effective for communicating numerical information quickly and 
 **Some Lineups and Designs:**
 
 
-![alt text](pngs/0b114b82cdc8b505153a642faf2e29c8.png "Plain Lineup, targets are in panels #6 and #8") ![alt text](pngs/1b4491b66980539a3d929485874ac41a.png "Color + Ellipse Lineup, targets are in panels #11 and #16")
+![alt text](pngs/0b114b82cdc8b505153a642faf2e29c8.png "Plain Lineup, targets are in panels #6 and #8") ![alt text](pngs/1b4491b66980539a3d929485874ac41a.png "Color + Ellipse Lineup, targets are in panels #11 and #17")
 
-![alt text](svgs/1f0b537e7879b0892d48e9e3353be55b.svg "Trend + Prediction Lineup, targets are in panels #5 and #12") ![alt text](svgs/2c3006303975936a99ecc23e4ce789a9.svg "Color + Shape + Trend + Ellipse Lineup, targets are in panels #8 and #13")
+![alt text](pngs/1f0b537e7879b0892d48e9e3353be55b.png "Trend + Prediction Lineup, targets are in panels #5 and #12") ![alt text](pngs/2c3006303975936a99ecc23e4ce789a9.png "Color + Shape + Trend + Ellipse Lineup, targets are in panels #8 and #13")
 
 **Experiment:**
 The webpage used to collect data from Amazon Turk participants is available [here](https://erichare.shinyapps.io/lineups/).
