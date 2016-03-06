@@ -9,9 +9,7 @@ output: html_document
 ## Reviewer 1
 - perceptual theorizing more up to date (attentional processing, guided search models, biased competition models)
 - statistical sophistication of participants not addressed
-    - *Has this been addressed in previous MTurk work?*
-    - *Was this addressed by any of Mahbub's demographic studies?*
-    - *Let's cite your own study from the Infovis paper*
+    - *VanderPlas & Hofmann (2016) TVCG citation has been added to provide supporting evidence that statistical training is not a significant predictor of lineup performance.*
 - Cite critical evaluation study: [Crump et al (2013)](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0057410)
     - *Thanks for pointing out this paper, we have added it to the discussion.*
 - Controlling for speed/accuracy tradeoff. 
@@ -25,32 +23,28 @@ output: html_document
 - The experiment is very complicated, and the result is not easily interpreted/effectively communicated
     - *We have added more structure in the reporting of the results (particularly in the supplement). Hopefully this helps with communicating the results more effectively.*
 - Introduction needs a summary of the main points: preattentive perception, gestalt psychology, and statistical lineups
-- The modification to the lineup protocol is a significant and crucial
-leap, with only rational justification (no empirical evidence).
-There are some assumptions here, rather than truisms or established facts.
+- The modification to the lineup protocol is a significant and crucial leap, with only rational justification (no empirical evidence). There are some assumptions here, rather than truisms or established facts.
     - *True, the modification of the lineup protocol is significant, but I would not call it a leap, rather a logical next step for working with the protocol in a different situation. We have tried to make a better job of explicitly listing the assumptions:*
-    - *Having two rather than just one target in the lineup matters for an individual's decision: The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominant one masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
-<!--    - *Other assumptions: in the evaluation, we first checked the significance of each two-target lineup by using simulation-based inference. That doesn't seem particularly problematic - and we don't talk about this in the paper anyways.*-->
+    - *Having two rather than just one target in the lineup matters for an individual's decision: The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominant target masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
     - *From a statistical perspective, for the model comparing the two targets we are using only those instances, in which at least one of the targets was successfully identified. This means we have fewer data for more difficult decisions. However, the different sample sizes are not affecting the parameter estimates, but only show up in their standard errors. The differences are too small to have practical effects (sd(Plain) = 0.1179, sd(Color+Shape+Ellipse) = 0.1310).*
 - Reference Fig 2 in the text.
     - *Fixed*
 - "Prediction" vs. "error", "line" vs. "trend"
-    - *Fixed*
-    - *I think I've fixed this, for the most part. Some LaTeX tables may still need help.*
+    - *Fixed*. Additional text has been added in the paper to clarify in situations where "error" may be used for formatting sake (e.g. in tables). 
     HH: Susan, could you check  on this?
 - Figure 6 (f) should be "shape + color + ellipse"?
     - *Fixed*
 - Fig 7a should be Fig 7b? (page 16, line 41)
-*Fig 7a shows the color paletter, Fig 7b shows the shapes - we think that all references and descriptions reflect this now.*
+    - *Fig 7a shows the color palette, Fig 7b shows the shapes - we think that all references and descriptions reflect this now.*
 - Top of pg 19 - unclear use of "plot" vs. "lineup". Need a clear example of a lineup. Is Figure 6 a lineup?
     - *Figure 6 contains 10 separate lineups. We have added a sentence of clarification in the paper.*
 - Confusion about the null hypothesis in Sec 3.2. Are we comparing trend vs. cluster or trend + cues vs. trend - cues or cluster + cues vs. cluster - cues? 
-    - *section 3.2 discusses effects on accuracy (as defined as identification of at least one of the targets in a lineup evaluation), section 3.3 discusses the balance between targets (given at least one target was identified). We have expanded the discussion of the modelling results in the paper to clarify this, and added a lot of extra discussion in a supplement.*
+    - *Section 3.2 discusses effects on accuracy (as defined as identification of at least one of the targets in a lineup evaluation), section 3.3 discusses the balance between targets (given at least one target was identified). We have expanded the discussion of the modelling results in the paper to clarify this, and added a lot of extra discussion in a supplement.*
     
     
 ## Reviewer 3
 - Link given to the experiment isn't active.
-    - *We have fixed the link to the experiment [now at (https://erichare.shinyapps.io/lineups/)]. We have added a better description of the experiment in  an extended README file on the github repo at (https://github.com/srvanderplas/FeatureHierarchy)*
+    - *We have fixed the link to the experiment [now at (https://erichare.shinyapps.io/lineups/)]. We have also added a better description of the experiment in  an extended README file on the github repo at (https://github.com/srvanderplas/FeatureHierarchy)*
 - Perceived saliency (ability to identify target) may not mean increased comprehension
     - *valid point, but if you don't see the signal clearly in a non-lineup plot, you can't comprehend whatever it is the creator of the plot was trying to get across...*
     - *Is there some cognitive research on saliency versus comprehension? - There was an Infovis paper in 2013 and 2016 on memorability of graphs.*
