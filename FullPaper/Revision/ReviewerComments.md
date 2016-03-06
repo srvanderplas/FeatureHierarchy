@@ -8,6 +8,7 @@ output: html_document
 
 ## Reviewer 1
 - perceptual theorizing more up to date (attentional processing, guided search models, biased competition models)
+    - *We've added some discussion of dual-target search, as well as recent citations on perceptual theory as it applies to statistical graphics.*
 - statistical sophistication of participants not addressed
     - *VanderPlas & Hofmann (2016) TVCG citation has been added to provide supporting evidence that statistical training is not a significant predictor of lineup performance.*
 - Cite critical evaluation study: [Crump et al (2013)](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0057410)
@@ -31,7 +32,6 @@ output: html_document
     - *Fixed*
 - "Prediction" vs. "error", "line" vs. "trend"
     - *Fixed*. Additional text has been added in the paper to clarify in situations where "error" may be used for formatting sake (e.g. in tables). 
-    HH: Susan, could you check  on this?
 - Figure 6 (f) should be "shape + color + ellipse"?
     - *Fixed*
 - Fig 7a should be Fig 7b? (page 16, line 41)
