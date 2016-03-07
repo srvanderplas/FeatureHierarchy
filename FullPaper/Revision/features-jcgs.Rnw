@@ -645,13 +645,12 @@ Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
   \caption{\scalebox{.8}{Trend + Error + Color + Ellipse}}\vspace{-0.15in}
   \includegraphics[width=.49\textwidth]{fig/samplepics-10}
 \end{subfigure}
-\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{\newtext{Set of lineups for } $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. \newtext{Each lineup shows one of the 10 designs comprised of feature combinations}
- compared in this study. 
+\caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Set of lineups for  $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. Each lineup shows one of the 10 designs comprised of feature combinations compared in this study. 
 \label{fig:plotExamples}
 }
 \end{figure}
 
-\afterpage{\clearpage}
+%\afterpage{\clearpage}
 
 We expect that relative to a plot with no extra aesthetics or statistical layers, the addition of color, shape, and 95\% boundary ellipses increases the probability of a participant selecting the target plot with data generated from $M_C$, the cluster model, and that the addition of these aesthetics  decreases the probability of a participant selecting the target plot with data generated from $M_T$, the trend model. In addition, we expect that with multiple aesthetics which emphasize the clustering of data, participants will have a higher probability of selecting the cluster target plot \citep{eriksen1955multidimensional}.
 
