@@ -46,8 +46,7 @@ output: html_document
 - Link given to the experiment isn't active.
     - *We have fixed the link to the experiment [now at (https://erichare.shinyapps.io/lineups/)]. We have also added a better description of the experiment in  an extended README file on the github repo at (https://github.com/srvanderplas/FeatureHierarchy)*
 - Perceived saliency (ability to identify target) may not mean increased comprehension
-    - *valid point, but if you don't see the signal clearly in a non-lineup plot, you can't comprehend whatever it is the creator of the plot was trying to get across...*
-    - *Is there some cognitive research on saliency versus comprehension? - There was an Infovis paper in 2013 and 2016 on memorability of graphs.*
+    - *This is a valid point:  understanding is based on saliency, but saliency is not sufficient for understanding. Measuring actual comprehension is hard, and we are not claiming to do that with lineups.*
 - Task description in a separate subsection, not buried within the participant recruitment subsection
     - *We have added section 2.6, which consists of the task description.*
 - Fig 11 is confusing, given that plot types associated with clustering have a lower probability of correct target evaluations. What is the frequency of cluster vs. trend target selection in a plain graph?
