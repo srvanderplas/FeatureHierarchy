@@ -172,12 +172,12 @@ qplot(data=tmp, x=LB, xend=UB, y=sd.trend, yend=sd.trend, color=dist, geom="segm
 \begin{figure}[bht]\centering
 \begin{subfigure}[t]{.8\textwidth}
 \caption{$R^2$ values for target and null data distributions. \label{fig:simulationLineIntervals}}
-\vspace{-.15in}
+%\vspace{-.15in}
 \includegraphics[width=\textwidth]{fig/simulationparameters-1}
 \end{subfigure}
 \begin{subfigure}[t]{.8\textwidth}
 \caption{Cluster cohesion statistics $C^2$. \label{fig:simulationClusterIntervals}}
-\vspace{-.15in}
+%\vspace{-.15in}
 \includegraphics[width=\textwidth]{fig/simulationparameters-2}
 \end{subfigure}
 \caption{Simulated interquartile ranges between target and most extreme statistic from one of the 18 null plots. }
