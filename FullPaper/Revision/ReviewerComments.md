@@ -61,5 +61,6 @@ output: html_document
 - Revisit the sentence "...the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution." for clarification. Also, discuss why the plot types associated with clustering had significantly fewer correct evaluations more thoroughly.
     - *We have re-written the sentence for clarification. Supplement C contains a lot more detail on how the group imbalance (measured in gini impurity as well as the absence of individual ellipses) affected accuracy of lineup evaluations, particularly for lineups with a design tailored for emphasizing clusters.*
 - Discussion of additive effects can benefit from the psychophysics literature on integrality (or separability) of perceptual dimensions (Garner & Felfoldy, Integrality of stimulus dimensions in various types of information processing, 1970). 
+    - *Thank you for pointing out the reference. We've expanded the discussion accordingly.* 
 - Page 19: table 2 -> Table 2
     - *Fixed*
