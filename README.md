@@ -15,7 +15,7 @@ Graphics are very effective for communicating numerical information quickly and 
 ![alt text](pngs/1f0b537e7879b0892d48e9e3353be55b.png "Trend + Prediction Lineup, targets are in panels #5 and #12") ![alt text](pngs/2c3006303975936a99ecc23e4ce789a9.png "Color + Shape + Trend + Ellipse Lineup, targets are in panels #8 and #13")
 
 **Experiment:**
-The webpage used to collect data from Amazon Turk participants is available [here](https://erichare.shinyapps.io/lineups/).
+The webpage used to collect data from Amazon Turk participants is available [here (choose turk #16)](https://erichare.shinyapps.io/lineups/).
 
 
 
