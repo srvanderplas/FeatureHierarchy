@@ -1,7 +1,4 @@
 \documentclass[12pt]{article}
-% \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
-% \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
-%\usepackage{graphicx}
 \usepackage[font=small,skip=5pt]{caption}
 \usepackage{subcaption}
 \usepackage{afterpage}
