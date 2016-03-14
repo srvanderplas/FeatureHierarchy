@@ -24,7 +24,7 @@ output: word_document
 - The experiment is very complicated, and the result is not easily interpreted/effectively communicated
     - *We have added more structure in the reporting of the results (particularly in the supplement). Hopefully this helps with communicating the results more effectively.*
 - Introduction needs a summary of the main points: preattentive perception, gestalt psychology, and statistical lineups
-    - *Fixed*
+    - *We have added an additional sentence at the beginning of the paper to clarify the scope of the introduction.*
 - The modification to the lineup protocol is a significant and crucial leap, with only rational justification (no empirical evidence). There are some assumptions here, rather than truisms or established facts.
     - *True, the modification of the lineup protocol is significant, but I would not call it a leap, rather a logical next step for working with the protocol in a different situation. We have tried to make a better job of explicitly listing the assumptions:*
     - *Having two rather than just one target in the lineup matters for an individual's decision: The theory behind it has its roots in cognition theory: When two targets compete with each other, the dominant target masks the other. As soon as one target is identified, the search usually stops (validated by the fact that in only 0.6% of the evaluations both targets were identified).  When the second target is removed, the first target will attract more decisions.*
