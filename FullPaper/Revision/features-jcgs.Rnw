@@ -145,7 +145,7 @@ library(xtable)
 source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
 
-theme_set(theme_bw(base_size = 10))
+theme_set(theme_bw(base_size = 10) + theme(plot.title = element_text(size = 11)))
 @
 %\tableofcontents
 \newpage
@@ -493,7 +493,7 @@ As a result, the distribution of the cluster statistic values are more easily se
 
 \begin{figure}[ht]
 \centering
-<<null-distribution-1, echo=FALSE, cache=T, fig.width=6.5, fig.height=2.2, out.width = "\\textwidth">>=
+<<null-distribution-1, echo=FALSE, cache=T, fig.width=7.5, fig.height=2.5, out.width = "\\textwidth">>=
 source("../../Code/MixtureLineups.R")
 sT = 0.25
 sC = 0.20
@@ -889,7 +889,7 @@ ggplot(data = tmp) +
   theme_bw() + 
   scale_y_continuous("# Participants", limits = c(0, 350)) + 
   xlab("Age of Participants") + 
-  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), plot.title = element_text(size = 12)) + 
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), text = element_text(size = 10)) + 
   ggtitle("Participant Age Distribution")
 @
 \end{subfigure}
@@ -915,7 +915,7 @@ ggplot(data = tmp) +
   theme_bw() + 
   scale_y_continuous("# Participants") + 
   xlab("Age of Participants") + 
-  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), plot.title = element_text(size = 12)) + 
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), text = element_text(size = 10)) + 
   ggtitle("Participant Education Levels")
 @
 \end{subfigure}
@@ -927,7 +927,7 @@ From Figure~\ref{fig:targets} we see that participants identified more cluster t
 
 \begin{figure}[ht]
 \centering
-<<targets, fig.width=5.2, fig.height=2.25, out.width='0.8\\textwidth', echo=FALSE>>=
+<<targets, fig.width=5.2, fig.height=2.25, echo=FALSE>>=
 user.data <- modeldata %>% group_by(individualID) %>% 
   summarize(answers=length(individualID),
             cluster=sum(cluster.correct),
@@ -946,7 +946,8 @@ ggplot() +
   ylab("# of participants") + 
   xlab("# of target identifications (out of ten)") + 
   geom_line(aes(x, value, colour=variable, group=variable), data=clm) + 
-  ggtitle("Target Identification by Participants")
+  ggtitle("Target Identification by Participants") + 
+  theme(text = element_text(size = 10))
 @
 \caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
@@ -1048,8 +1049,7 @@ modeldata$label <- modeldata$plottype %>%
   str_replace("plain", "Plain") %>%
   str_replace("( \\+ )$", "") %>%
   str_replace_all(c("Color" = "C", "Shape" = "S", "Ellipse" = "L", "Trend" = "T", "Error" = "E")) %>%
-  str_replace("\\+ T \\+ E", "+\\\nT + E") %>%
-  str_replace("S \\+ L", "S\\\n+ L")
+  str_replace_all(" \\+ ", "+") 
 
 faceoff <- subset(modeldata, trend.correct | cluster.correct)
 
@@ -1084,7 +1084,7 @@ ggplot() +
   facet_grid(.~tendency, space="free", scales="free") +
   xlab("") + ylab("# of target evaluations") +
   theme_bw() +
-  theme(axis.text.x = element_text(vjust=1), legend.position = "bottom") +
+  theme(axis.text.x = element_text(vjust=1), axis.title.x = element_blank(), legend.position = "bottom", text = element_text(size = 10)) +
   scale_fill_manual("Outcome", values=c("grey20", "grey30", "grey20", "grey90"),
                     guide = guide_legend(reverse=TRUE)) 
 @
