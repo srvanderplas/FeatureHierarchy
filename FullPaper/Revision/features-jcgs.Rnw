@@ -1,40 +1,38 @@
 \documentclass[12pt]{article}
-% \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
-% \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
-%\usepackage{graphicx}
-% \usepackage{endfloat}
 \usepackage[font=small,skip=5pt]{caption}
 \usepackage{subcaption}
+
 \usepackage{afterpage}
-\usepackage{amssymb}
-\usepackage{natbib}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-% \usepackage{color}
+\usepackage{placeins}
 \usepackage{multirow}
 \usepackage{rotating}
+\graphicspath{{fig/}}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage[dvipsnames,svgnames,table]{xcolor}
-%%% Packages for separate supplemental file with cross-refs
-% \usepackage[nokeyprefix]{refstyle}
-% \usepackage{varioref}
+
+
+\usepackage{natbib}
 \usepackage{xr}
 \usepackage{xr-hyper}
 \usepackage{hyperref}
 \externaldocument{Supplement}
 
 %%%
-\usepackage[shortlabels]{enumitem}\setlist[description,1]{leftmargin=0cm}
-\usepackage[shortlabels]{enumitem}\setlist[description,2]{leftmargin=1cm}
-\usepackage[shortlabels]{enumitem}\setlist[enumerate,1]{leftmargin=.5cm}
-\usepackage[shortlabels]{enumitem}\setlist[enumerate,2]{leftmargin=1.5cm}
-\usepackage[shortlabels]{enumitem}\setlist[itemize,1]{leftmargin=.5cm}
-\usepackage[shortlabels]{enumitem}\setlist[itemize,2]{leftmargin=1.5cm}
-\graphicspath{{fig/}}
+\usepackage[shortlabels]{enumitem}
+\setlist[description,1]{leftmargin=0cm}
+\setlist[description,2]{leftmargin=1cm}
+\setlist[enumerate,1]{leftmargin=.5cm}
+\setlist[enumerate,2]{leftmargin=1.5cm}
+\setlist[itemize,1]{leftmargin=.5cm}
+\setlist[itemize,2]{leftmargin=1.5cm}
 % \usepackage{endfloat} % Figures to the end of the document
 
-\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
-\usepackage[colorinlistoftodos]{todonotes}
 %---------------------------------------------------
+\usepackage[colorinlistoftodos]{todonotes}
 %                 Editing Commands
 \newcommand{\done}[2][inline]{\todo[color=SpringGreen, #1]{#2}}  % for todos that have been seen and dealt with
 \newcommand{\meh}[2][inline]{\todo[color=White, #1]{#2}}   % for todos that may no longer be relevant 
@@ -42,10 +40,10 @@
 %\newcommand{\mcomment}[1]{\todo[color=SkyBlue]{#1}} % for margin comments
 \newcommand{\newtext}[1]{\todo[inline, color=White]{ \color{OliveGreen}{#1}}} % new text - not necessarily something to be done
 \newcommand{\newdo}[1]{\todo[inline, color=Lime]{#1}} % new to do item
-%
+
+
 %---------------------------------------------------
 %                 Placing Figures
-
 \renewcommand{\topfraction}{0.99}	% max fraction of floats at top
 \renewcommand{\bottomfraction}{0.99}	% max fraction of floats at bottom
 
@@ -54,7 +52,6 @@
 \renewcommand{\floatpagefraction}{0.98}	% require fuller float pages
 % N.B.: floatpagefraction MUST be less than topfraction !!
 \renewcommand{\dblfloatpagefraction}{0.98}	% require fuller float pages
-
 
 %---------------------------------------------------
 % Define new environment
@@ -72,7 +69,6 @@
 \addtolength{\textwidth}{1in}%
 \addtolength{\textheight}{1.3in}%
 \addtolength{\topmargin}{-.8in}%
-
 
 \begin{document}
 
@@ -148,6 +144,8 @@ library(xtable)
 
 source("../../Code/MixtureLineups.R")
 source("../../Code/theme_lineup.R")
+
+theme_set(theme_bw(base_size = 10))
 @
 %\tableofcontents
 \newpage
@@ -173,7 +171,7 @@ Gestalt rules of perception can be easily applied to statistical graphics, as th
 
 For example, rather than perceiving four legs, a tail, two eyes, two ears, and a nose, we perceive a dog. This is due to certain perceptual heuristics, which provide a ``top-down" method of understanding visual stimuli by taking into account past experience. 
 
-The rules of perceptual organization relevant to graphical perception in this experiment are:
+The rules of perceptual organization relevant to graph perception in this experiment are:
 \begin{itemize}
 \item \textbf{Proximity}: two elements which are close together likely belong to a single unit.
 \item \textbf{Similarity}: the more aesthetics two elements share, the more likely they belong to a single unit. 
@@ -183,24 +181,27 @@ The rules of perceptual organization relevant to graphical perception in this ex
 A complete list of the rules of perceptual grouping can be found in \citet{goldstein2009encyclopedia}.
 
 \begin{figure}\centering
-<<gestalt1, echo =FALSE, out.width='0.32\\textwidth', fig.width=3, fig.height=3, fig.show='hold'>>=
+<<gestalt1, echo =FALSE, out.width='0.25\\textwidth', fig.width=1.7, fig.height=1.7, fig.show='hold'>>=
 x1 <- rnorm(25, mean=4, sd=0.5)
 x2 <- rnorm(25, mean=0, sd=0.5)
 y1 <- rnorm(25, mean=1, sd=0.5)
 y2 <- rnorm(25, mean=2, sd=0.5)
-qplot(c(x1,x2), c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")
+qplot(c(x1,x2), c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") + 
+  theme(axis.title = element_blank(), axis.text = element_blank())
 
 x <- rnorm(60)
 y <- rnorm(60)
 group <- rep(1:4, length=60)
-qplot(x,y, color=factor(group%/%2), shape=factor(group%/%2)) + theme_bw() + xlab("x") + ylab("y") + scale_color_brewer(palette="Set1") + theme(legend.position="none")
+qplot(x,y, color=factor(group%/%2), shape=factor(group%/%2)) + theme_bw() + xlab("x") + ylab("y") + scale_color_brewer(palette="Set1") + theme(legend.position="none") + 
+  theme(axis.title = element_blank(), axis.text = element_blank())
 
 x1 <- runif(50,-.75,1.25)
 y1 <- x1^2 - x1 + rnorm(50, sd=0.1)
 x2 <- runif(25,-.75,1.25)
 y2 <- x2 + rnorm(25, sd=0.1)
 
-qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y") 
+qplot(c(x1,x2),c(y1,y2)) + theme_bw() + xlab("x") + ylab("y")  + 
+  theme(axis.title = element_blank(), axis.text = element_blank())
 @
 \caption[Gestalt principles applied to statistical plots]{\label{fig:gestalt} \emph{Proximity} renders the fifty points of the first scatter plot as two distinct (and equal-sized) groups. Shapes and colors create three groups of points in the middle scatter plot by invoking the Gestalt principle of \emph{Similarity}. \emph{Good Continuation} renders the points in the scatter plot on the right hand side into two groups of points on curves: one a straight line with an upward slope, the other a curve that initially decreases and at the end of the range shows an uptick.}
 \end{figure}
@@ -300,13 +301,16 @@ $$
 The use of $R^2$ to assess the strength of the linear relationship (rather than the correlation) is indicated because human perception of correlation strength more closely aligns with $R^2$ \citep{bobko1979perception,lewandowsky1989perception}. 
 
 \begin{figure}[ht]
-<<trends, fig.width=8, fig.height=2.5, out.width='\\textwidth', echo=FALSE>>=
+<<trends, fig.width=6.5, fig.height=1.7, out.width='.8\\textwidth', echo=FALSE>>=
 res <- data.frame(sd.trend = rep(c(0.1, 0.2, 0.3, 0.4), each = 45))
 res <- res %>% group_by(sd.trend) %>% do(sim.line(N = 45, sd.trend = as.numeric(.[1,1])))
 
 res$label <- paste("sigma[T] :",res$sd.trend)
 qplot(x,y, data = res, pch = I(1)) + facet_grid(facets = .~label, labeller = "label_parsed") + theme_bw() + 
-  theme(plot.margin = unit(c(0,0,0,0), "cm"))
+  theme(plot.margin = unit(c(0,0,0,0), "cm")) + 
+  theme(axis.title = element_blank()) + 
+  scale_x_continuous(breaks = c(-.75, 0, .75)) + 
+  scale_y_continuous(breaks = c(-1.5, -.75, 0, .75, 1.5))
 @
 \caption[Parameters affecting $M_T$]{\label{fig:trends} Set of scatter plots showing one draw each from the trend model $M_T$ for parameter values of  $\sigma_T \in \{0.1, 0.2, 0.3, 0.4\}$.}
 \end{figure}
@@ -342,7 +346,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 \end{algorithm} 
 
 \begin{figure}[bht]
-<<cluster, fig.width=8, fig.height=4.5, out.width='\\textwidth', echo=FALSE>>=
+<<cluster, fig.width=5.2, fig.height=2.8, echo=FALSE>>=
 
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -393,7 +397,8 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
   geom_point() + 
   facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
-  scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1)
+  scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1) + 
+  theme(axis.title = element_blank())
 @
 \caption[Parameters affecting $M_C$]{\label{fig:clusters} 
 Scatter plots of clustering output for different inner cluster spread $\sigma_C$  (left to right) and different number of clusters $K$ (top and bottom), generated using the same random seed at each parameter setting. 
@@ -423,7 +428,7 @@ Observations are assigned to specific clusters using hierarchical clustering, wh
 This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[hbt]
-<<lambda, fig.width=8, fig.height=3.5, out.width='.95\\textwidth', echo=FALSE>>=
+<<lambda, fig.width=6.5, fig.height=3.25, out.width='\\textwidth', echo=FALSE>>=
 
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -449,7 +454,8 @@ ggplot(aes(x=x, y=y, color=color, shape=shape), data=res) +
   geom_point() + 
   facet_grid(facets=Klabel~label, labeller="label_parsed") + theme_bw() + 
   theme(plot.margin=unit(c(0,0,0,0), "cm"), legend.position="none") + 
-  scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1)
+  scale_shape_identity() + scale_color_identity() + theme(aspect.ratio=1) + 
+  theme(axis.title = element_blank())
 @
 \caption[Mixing parameter for null model $M_0$]{\label{fig:lambda} Scatter plots of data generated from $M_0$ using different values of $\lambda$, generated using the same random seed at each $\lambda$ value.}
 \end{figure}
@@ -487,7 +493,7 @@ As a result, the distribution of the cluster statistic values are more easily se
 
 \begin{figure}[ht]
 \centering
-<<null-distribution-1, echo=FALSE, cache=T, fig.width=8, fig.height=3>>=
+<<null-distribution-1, echo=FALSE, cache=T, fig.width=6.5, fig.height=2.2, out.width = "\\textwidth">>=
 source("../../Code/MixtureLineups.R")
 sT = 0.25
 sC = 0.20
@@ -565,7 +571,7 @@ ggplot(data = subset(longres, Statistic != "Gini Impurity")) +
   scale_color_manual("Distribution", values = c("black",  "gray")) + 
   scale_fill_manual("Distribution", values = c("transparent", "gray")) +  
   theme_bw() + 
-  theme(legend.position = c(.15, .8))
+  theme(legend.position = c(0, 1), legend.justification = c(0, 1))
 
 @
 \caption[Simulation-based test statistic density for null and target plots]{
@@ -584,9 +590,9 @@ The next section describes the aesthetic combinations and their anticipated effe
 
 \begin{table}[hbtp]
 \centering
-\scalebox{0.8}{
+\scalebox{0.83}{
 \begin{tabular}{ccccc}
-\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} && \multicolumn{3}{c}{\cellcolor{gray!25} Trend Emphasis} \\
+&& \multicolumn{3}{c}{\cellcolor{gray!25} Trend Emphasis} \\
 & Strength & 0 & 1 & 2 \\
 \cellcolor{gray!25}\begin{tabular}{c} \phantom{.}\\ \phantom{.} \end{tabular} & 0 &  \cellcolor{gray!5} None &  \cellcolor{gray!15} Trend &  \cellcolor{gray!25} Trend + Error \\
 \cellcolor{gray!25}\begin{tabular}{c} \\ Cluster \end{tabular} & 1 &  \cellcolor{gray!15}\begin{tabular}{c}Color\\ Shape\end{tabular} & \cellcolor{gray!5} Color + Trend \\
@@ -604,47 +610,49 @@ Examples of these plot aesthetics are shown in Figure~\ref{fig:plotExamples}.
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Plain}\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Plain}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-1}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Color}\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Color}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-2}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Shape}\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Shape}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-3}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Shape + Color}\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Shape + Color}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-4}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Color + Ellipse}\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Color + Ellipse\vspace{-.1in}\\\hspace{\textwidth}}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-5}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{\scalebox{.8}{Color + Shape + Ellipse}}\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Color + Shape + \vspace{-.1in}\\\hspace{\textwidth}\phantom{(f) }Ellipse}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-6}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Trend}\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Trend\vspace{-.1in}\\\hspace{\textwidth}}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-7}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Trend + Error }\vspace{-0.15in}
+\begin{subfigure}[t]{0.2425\textwidth}
+  \caption{Trend + Error\vspace{-.1in}\\\hspace{\textwidth}}\vspace{-.1in}
   \includegraphics[width=\textwidth]{fig/samplepics-8}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-  \caption{Trend + Color}\vspace{-0.15in}
-  \includegraphics[width=\textwidth]{fig/samplepics-9}
-\end{subfigure}
-\begin{subfigure}[t]{.5\textwidth}
+\begin{subfigure}[t]{0.495\textwidth}
 \centering
-  \caption{\scalebox{.8}{Trend + Error + Color + Ellipse}}\vspace{-0.15in}
-  \includegraphics[width=.49\textwidth]{fig/samplepics-10}
+  \caption{Trend + Color}\vspace{-.1in}
+  \includegraphics[width=.505\textwidth]{fig/samplepics-9}
 \end{subfigure}
+\begin{subfigure}[t]{.495\textwidth}
+\centering
+  \caption{Trend + Error + Color + Ellipse}\vspace{-.1in}
+  \includegraphics[width=.505\textwidth]{fig/samplepics-10}
+\end{subfigure}
+
 \caption[Sample lineup stimuli for each of the 10 aesthetic combinations]{Set of lineups for  $K=3$, $\sigma_T=0.25$ and $\sigma_C=0.20$. Each lineup shows one of the 10 designs comprised of feature combinations compared in this study. 
 \label{fig:plotExamples}
 }
@@ -866,13 +874,49 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 
 \begin{figure}[ht]
 \begin{subfigure}[t]{0.55\textwidth}
-<<demographics-1, echo=FALSE, fig.width=8.53, fig.height=4, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
-qplot(age, data=users, fill=I("grey50"), colour=I("grey40")) + theme_bw() + xlab("Age of participants") + ylab("# Participants") + ggtitle("Participant Age Distribution")
+<<demographics-1, echo=FALSE, fig.width=3.575, fig.height=1.7, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
+tmp <- users %>%
+  group_by(age) %>%
+  summarize(count = n()) %>%
+  mutate(
+    label = str_replace(as.character(age), "-", "-\\\n")
+  )
+ggplot(data = tmp) + 
+  geom_bar(aes(x = age, y = count), stat = "identity", 
+           fill = "grey70", color = "grey40") + 
+  geom_text(aes(x = age, y = count, label = label, vjust = as.numeric(count > 100)*1.5-.25), 
+            hjust = .5,  size = 3) + 
+  theme_bw() + 
+  scale_y_continuous("# Participants", limits = c(0, 350)) + 
+  xlab("Age of Participants") + 
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), plot.title = element_text(size = 12)) + 
+  ggtitle("Participant Age Distribution")
 @
 \end{subfigure}
 \begin{subfigure}[t]{0.43\textwidth}
-<<demographics-2, echo=FALSE, fig.width=6.6, fig.height=4, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
-qplot(education, data=users, fill=I("grey50"), colour=I("grey40")) + theme_bw() + xlab("(self-reported) Highest level of participants' education") + ylab("# Participants") + ggtitle("Participant Education Levels")
+<<demographics-2, echo=FALSE, fig.width=2.795, fig.height=1.694, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
+tmp <- users %>%
+  group_by(education) %>%
+  summarize(count = n()) %>%
+  mutate(
+    label = as.character(education) %>%
+      str_replace_all(c("High School or less" = "<= High\\\nSchool",
+                    "Some college" = "Some\\\ncollege",
+                    "Bachelor's degree" = "Bachelor",
+                    "Grad school or higher" = "Graduate"))
+  )
+
+ggplot(data = tmp) + 
+  geom_bar(aes(x = education, y = count), stat = "identity", 
+           fill = "grey70", color = "grey40") + 
+  geom_text(aes(x = education, y = count, label = label, 
+                hjust = as.numeric(count > 100)*1.5 - .25), 
+            vjust = .5,  size = 3, angle = 90) + 
+  theme_bw() + 
+  scale_y_continuous("# Participants") + 
+  xlab("Age of Participants") + 
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), plot.title = element_text(size = 12)) + 
+  ggtitle("Participant Education Levels")
 @
 \end{subfigure}
 \caption{\label{fig:demographics}Basic demographics of participants.}
@@ -883,7 +927,7 @@ From Figure~\ref{fig:targets} we see that participants identified more cluster t
 
 \begin{figure}[ht]
 \centering
-<<targets, fig.width=6, fig.height=4.0, out.width='0.55\\textwidth', echo=FALSE>>=
+<<targets, fig.width=5.2, fig.height=2.25, out.width='0.8\\textwidth', echo=FALSE>>=
 user.data <- modeldata %>% group_by(individualID) %>% 
   summarize(answers=length(individualID),
             cluster=sum(cluster.correct),
@@ -894,7 +938,15 @@ names(clusters) <- c("x", "Cluster")
 clusters$Trend <- trends$Freq 
 clm <- melt(clusters, measure.var=2:3)
 
-ggplot() + geom_point(aes(x, value, colour=variable, shape=variable), size=3, data=clm) + theme_bw() + scale_colour_brewer("Target", palette="Set1") + scale_shape_discrete("Target") + theme(legend.position="bottom") + ylab("Number of participants") + xlab("Number of target identifications (out of ten)") + geom_line(aes(x, value, colour=variable, group=variable), data=clm) + ggtitle("Target Identification by Participants")
+ggplot() + 
+  geom_point(aes(x, value, colour=variable, shape=variable), size=3, data=clm) + 
+  theme_bw() + 
+  scale_colour_brewer("Target", palette="Set1") + 
+  scale_shape_discrete("Target") + 
+  ylab("# of participants") + 
+  xlab("# of target identifications (out of ten)") + 
+  geom_line(aes(x, value, colour=variable, group=variable), data=clm) + 
+  ggtitle("Target Identification by Participants")
 @
 \caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
@@ -982,7 +1034,7 @@ gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2),
 \subsection{Target Plot Identifications}
 
 \begin{figure}[h!bt]\centering
-<<faceoffdata, echo=FALSE, fig.width=9, fig.height=4.75, out.width='.75\\textwidth'>>=
+<<faceoffdata, echo=FALSE, fig.width=6.5, fig.height=3, out.width='\\textwidth'>>=
 md <- data.frame(plottype = levels(modeldata$plottype), 
                  tendency=c("none", "trend", "cluster", "cluster", "cluster", "cluster", "conflict", "trend", "cluster", "conflict"))
 
@@ -994,7 +1046,10 @@ modeldata$label <- modeldata$plottype %>%
   str_replace("Ellipse", "Ellipse + ") %>%
   str_replace("Error", "Error + ") %>%
   str_replace("plain", "Plain") %>%
-  str_replace("( \\+ )$", "")
+  str_replace("( \\+ )$", "") %>%
+  str_replace_all(c("Color" = "C", "Shape" = "S", "Ellipse" = "L", "Trend" = "T", "Error" = "E")) %>%
+  str_replace("\\+ T \\+ E", "+\\\nT + E") %>%
+  str_replace("S \\+ L", "S\\\n+ L")
 
 faceoff <- subset(modeldata, trend.correct | cluster.correct)
 
@@ -1024,17 +1079,17 @@ sub.totals$simpleoutcome <- factor(
   levels=c("cluster", "both", "trend", "neither"))
 sub.totals$tendency <- factor(sub.totals$tendency, levels=c("none", "trend", "cluster", "conflict"))
 ggplot() +
-  geom_bar(aes(label, fill=simpleoutcome, weight=eval), data=sub.totals, 
+  geom_bar(aes(x = label, fill=simpleoutcome, weight=eval), data=sub.totals, 
            colour="grey40") +
   facet_grid(.~tendency, space="free", scales="free") +
   xlab("") + ylab("# of target evaluations") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +
+  theme(axis.text.x = element_text(vjust=1), legend.position = "bottom") +
   scale_fill_manual("Outcome", values=c("grey20", "grey30", "grey20", "grey90"),
                     guide = guide_legend(reverse=TRUE)) 
 @
 \caption{\label{fig:onetarget} In dark: number of evaluations by design, in which at least one of the targets was identified. Each of the dark areas is split into two, according to the type of target, with evaluations where both targets were identified between the two.
-Due to the design of the experiment, each design was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles).}
+Due to the design of the experiment, each design was evaluated almost the same number of times (between 1195 and 1208 times, outlined rectangles). T = Trend, E = Error, S = Shape, C = Color, and L = Ellipse. }
 \end{figure}
 
 Lineup evaluations provide us with a simple to assess measure of accurateness: we can say, that a lineup is evaluated `accurately', if the data plot in the lineup was identified (or here, if at least one of the target plots in the lineup was identified). Accuracy is therefore a measure of both a participant's skill and the strength of the signal in the data/target plot. In a model, we accommodate for different skills of participants by including a random intercept, because in this situation we are much more interested in a further investigation of a target's signal strength.
@@ -1124,7 +1179,7 @@ gvl.9 <-  update(gvl.4, .~.+factor(no.ellipse), control=glmerControl(optimizer="
 @
 
 \begin{figure}[h!bt]\centering
-<<group-vs-line-fig, dependson='group-vs-line', echo=FALSE, fig.width=9, fig.height=4, out.width='.95\\textwidth', warning = FALSE>>=
+<<group-vs-line-fig, dependson='group-vs-line', echo=FALSE, fig.width=6.5, fig.height=2.5, out.width='\\textwidth', warning = FALSE>>=
 faceoff$one.ellipse <- faceoff$no.ellipse == 1
 
 # gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
@@ -1157,15 +1212,15 @@ gvl.fixef$label <- gvl.fixef$label %>%
 
 ggplot(data=gvl.fixef) + 
   geom_hline(yintercept=0, colour="gray70") + 
-  geom_pointrange(aes(x=label, y=OR, ymin=LB, ymax=UB), size=.75) + 
+  geom_pointrange(aes(x=label, y=OR, ymin=LB, ymax=UB), size=.25) + 
   coord_flip() + 
   theme_bw() + 
   ggtitle("Odds of selecting Cluster over Trend Target") + 
   xlab("") +
   geom_text(aes(y=-1, x=label, label=letters)) + 
   scale_y_continuous(
-    "Odds (on log scale) of selecting Cluster over Trend Target and 95% Wald Intervals\n(Reference level: Plain plot)", 
-    breaks=c(-1, log(c(1/c(2, 1.75, 1.5,1.25), c(1,1.25,1.5, 1.75,2 ))), 1), labels=c("<--Trend\n  Target", "1/2  ","1/1.75", "1/1.5", "1/1.25","1","1.25","1.5", "1.75", "2", "Cluster-->\nTarget  "), limits=c(-1,1))
+    "Odds (on log scale) with 95% Wald Intervals\n(Reference level: Plain plot)", 
+    breaks=c(-1, log(c(1/c(2, 1.5), c(1,1.5, 2 ))), 1), labels=c("  <--Trend\n      Target", "1/2", "1/1.5" ,"1", "1.5", "2", "Cluster-->  \nTarget      "), limits=c(-1,1))
 # dt <- xtable(gvl.fixef[order(gvl.fixef$OR), c("label", "OR", "LB", "UB")], digits=4)
 # print(dt, include.rownames=FALSE)
 @
@@ -1231,17 +1286,16 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
 \centering
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Plain, neither target} \vspace{-0.15in}
-  \includegraphics[width=0.9\textwidth]{fig/sentiment-1}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-1}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Plain, cluster target}\vspace{-0.15in}
-  \includegraphics[width=0.9\textwidth]{fig/sentiment-2}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-2}
 \end{subfigure}
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Plain, trend target}\vspace{-0.15in}
-  \includegraphics[width=0.9\textwidth]{fig/sentiment-3}
+  \includegraphics[width=.9\textwidth]{fig/sentiment-3}
 \end{subfigure}
-
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Trend, neither target}\vspace{-0.2in}
   \includegraphics[width=.9\textwidth]{fig/sentiment-4}
@@ -1254,7 +1308,6 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
   \caption{Trend, trend target}\vspace{-0.2in}
   \includegraphics[width=.9\textwidth]{fig/sentiment-6}
 \end{subfigure}
-
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color, neither target}\vspace{-0.2in}
   \includegraphics[width=.9\textwidth]{fig/sentiment-7}
@@ -1267,7 +1320,6 @@ wordcloud(d$word,d$freq, scale=c(8,.3),min.freq=2,max.words=100, random.order=T,
   \caption{Color, trend target}\vspace{-0.2in}
   \includegraphics[width=.9\textwidth]{fig/sentiment-9}
 \end{subfigure}
-
 \begin{subfigure}[t]{0.275\textwidth}
   \caption{Color + Ellipse, neither}\vspace{-0.2in}
   \includegraphics[width=.9\textwidth]{fig/sentiment-10}
@@ -1295,7 +1347,7 @@ This was due to an unintended side-effect of using the k-means algorithm for clu
 The estimation of bounding ellipses fails for clusters with fewer than three points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. 
 When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1$=\Sexpr{round(aov7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), with an estimate of $-0.8075$, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual designs, it is also significant ($\chi^2_9$=\Sexpr{round(aov7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}). Supplement~\ref{app:ginimodel} contains more details on this model and its effects.
 
-
+\FloatBarrier
 \section{Discussion and Conclusions}\label{sec:Conclusion}
 
 Taken together, the results presented suggest that plot aesthetics influence the perception of the dominant effect in the displayed data. 
