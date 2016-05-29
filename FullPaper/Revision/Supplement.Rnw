@@ -105,7 +105,7 @@ source("../../Code/theme_lineup.R")
 
 \if0\blind
 {
-  \title{\bf Supplement to: Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
+  \title{\bf Appendix to ``Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics" published in the Journal of Computational and Graphical Statistics}
   \author{Susan VanderPlas\thanks{
     The authors gratefully acknowledge funding from the National Science Foundation Grant \# DMS 1007697. All data collection has been conducted with approval from the Institutional Review Board IRB 10-347}\hspace{.2cm}\\
     Department of Statistics and Statistical Laboratory, Iowa State University\\
@@ -121,13 +121,13 @@ source("../../Code/theme_lineup.R")
   \bigskip
   \bigskip
   \begin{center}
-    {\LARGE\bf Supplement to: Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
+    {\LARGE\bf Appendix to: Clusters beat Trend!? \\Testing feature hierarchy in statistical graphics}
 \end{center}
   \medskip
 } \fi
 
 \begin{appendices}
-\renewcommand\appendixname{Supplement}
+\renewcommand\appendixname{Appendix}
 \section{Simulations of the Parameter Space}\label{app:parametersimulation}
 
 Using 1000 simulations for each of the 98 combinations of parameters ($K=\{3,5\}$, $\sigma_C=\{.1, .15, .2, .25, .3, .35, .4\}$, $\sigma_T=\{.2, .25, .3, .35, .4, .45, .5\}$), we explored the effect of parameter value on the distribution of summary statistics describing the strength of the linear relationship ($R^2$) and cluster strength for null and target plots. 
@@ -189,7 +189,11 @@ Under the null hypothesis, we can assume, that the $p$-value corresponding to a 
 
 \begin{figure}[h!tbp]
 <<twotarget-simu, echo=FALSE, results='hide'>>=
-library(vinference) # install from heike/vinference github
+if (!require(vinference, quietly = TRUE)) {
+  devtools::install_github("heike/vinference") # install from heike/vinference github
+}
+
+library(vinference) 
 set.seed(20140501)
 K <- 10
 res <- data.frame(rep=rep(1:10, each=K+1))
