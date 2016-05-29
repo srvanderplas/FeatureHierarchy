@@ -3,6 +3,8 @@ library(nullabor)
 library(compiler)
 library(doMC)
 registerDoMC(6)
+library(magrittr)
+library(dplyr)
 library(plyr)
 library(reshape2)
 library(ggplot2)
@@ -21,9 +23,10 @@ tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.3) {
     c(unlist(input.pars), eval.data(gen.data(input.pars)))
   })))
 }
-nulldist<- cmpfun(tmp)
+nulldist <- cmpfun(tmp)
 
-simulation.results <- ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd.trend, sC=sd.cluster)), .parallel=T)
+# Use plyr because it is parallelizable
+simulation.results <- plyr::ldply(1:nrow(data.parms), function(i) with(data.parms[i,], nulldist(M=1000, N=N, K=K, sT=sd.trend, sC=sd.cluster)), .parallel=T)
 names(simulation.results)[3:4] <- c("sd.trend", "sd.cluster")
 simulation.results$sd.trend <- round(simulation.results$sd.trend, 2)
 simulation.results$sd.cluster <- round(simulation.results$sd.cluster, 2)
