@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[12pt]{article}
 \usepackage[font=small,skip=5pt]{caption}
 \usepackage{subcaption}
 
