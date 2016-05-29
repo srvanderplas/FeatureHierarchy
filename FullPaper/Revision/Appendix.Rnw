@@ -478,6 +478,7 @@ gol.5b <- update(gol, .~. + poly(log(as.numeric(trial.time)),2),
 @
 
 <<group-vs-line, echo=FALSE, warning = FALSE>>=
+faceoff <- subset(modeldata, trend.correct | cluster.correct)
 faceoff$one.ellipse <- faceoff$no.ellipse == 1
 
 gvl.4 <-  glmer(cluster.correct~sdline_new + sdgroup_new +k_new + plottype + (1|data_name) + (1|individualID), data=faceoff, family=binomial(), control=glmerControl(optimizer="bobyqa"))
