@@ -230,7 +230,7 @@ Apart from the hypothesis testing construct, the use of statistical lineups to t
 % modification
 In this paper we {\bf modify the lineup protocol} by introducing a second target to each lineup. 
 % competing signals
-The two targets represent two different, competing signals. An observer's choice then demonstrates empirically which signal is more salient. The probability distribution which underlies the hypothesis testing framework changes slightly with the addition of a second target (see Supplement~\ref{app:probabilitysimulation} for more details). Single-target lineups rely on the hypothesis testing framework; the dual-target lineup is more similar to a (Bayesian) comparison of the relative strengths of two competing models with respect to a common null. 
+The two targets represent two different, competing signals. An observer's choice then demonstrates empirically which signal is more salient. The probability distribution which underlies the hypothesis testing framework changes slightly with the addition of a second target (see Appendix~\ref{app:probabilitysimulation} for more details). Single-target lineups rely on the hypothesis testing framework; the dual-target lineup is more similar to a (Bayesian) comparison of the relative strengths of two competing models with respect to a common null. 
 
 Cognitively, the presence of two targets leads to a dual-target search scenario~\citep{fleck2010generalized}, which  introduces a `masking' effect where the more salient target is selected and the search for more targets stops (``satisfaction of search"), i.e.\ people tend to pick the more salient target and not notice the second target, even though in the absence of the more salient target they would have picked it out. 
 
@@ -582,7 +582,7 @@ Density of test statistics measuring trend strength and cluster strength for tar
 }
 \end{figure}
 
-Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in Supplement~\ref{app:parametersimulation}. 
+Graphical summaries of simulation results for a range of values for $\sigma_C$ and $\sigma_T$ are provided in Appendix~\ref{app:parametersimulation}. 
 Using information from the simulation, we identify values and generate lineup data sets for each  $\sigma_T$ and $\sigma_C$ (as shown in Table~\ref{tab:parameters}) corresponding to ``easy", ``medium" and ``hard" numerical comparisons between corresponding target data sets and null data sets. 
 It is important to note that the numerical measures we have described in equations~\eqref{eq:linearMeasure} and~\eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target data sets from the null data sets; the simulation cannot provide us with exact information on the perceptual discriminability.
 It has been established that human perception of scatter plots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
@@ -958,7 +958,7 @@ ggplot() +
 \caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
 
-In the evaluation of the collected data, we modeled accuracy rates, response times, participant confidence, and the selection of cluster vs.\ trend targets in detail. A thorough discussion of these models and the corresponding results is provided in Supplement~\ref{app:models}. Only the models describing target plot selection are discussed here.
+In the evaluation of the collected data, we modeled accuracy rates, response times, participant confidence, and the selection of cluster vs.\ trend targets in detail. A thorough discussion of these models and the corresponding results is provided in Appendixt~\ref{app:models}. Only the models describing target plot selection are discussed here.
 
 
 For each design (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target over the trend target. 
@@ -1104,7 +1104,7 @@ The different designs have significantly different accuracies associated with th
 Figure~\ref{fig:onetarget} shows an overview of the number of evaluations by design (outlines) and the number of times participants chose at least one of the targets (dark shaded areas). 
 Designs  associated with clustering as shown in Table~\ref{tab:plotaesthetics} lead to significantly fewer correct evaluations ($\chi^2_{9} = 389$, $p$-value $< 0.0001$). This might have been due to an unintended signal in the lineups because of imbalances in the group allocation of clusters, which are emphasized strongly by color and ellipses. We discuss this  in more detail in Section~\ref{sec:sentiment} based on participants' reasoning. 
 
-Additional information about the model structure, numeric values of the parameter estimates, and more interpretation are provided in Supplement~\ref{app:accuracy}. 
+Additional information about the model structure, numeric values of the parameter estimates, and more interpretation are provided in Appendix~\ref{app:accuracy}. 
 
 
 \subsection{Face-Off: Trend versus Cluster}\label{sec:faceoff}
@@ -1126,12 +1126,12 @@ where \begin{itemize}
 
 We assume that the errors associated with a single trial evaluation, $\epsilon_{ijk}$, are normally distributed with variance $\sigma^2_e$. We also assume that random effects for data set and participant are orthogonal. 
 %
-Additional model details, estimated fixed effects, and significance tests are provided in Supplement~\ref{app:faceoff}. 
+Additional model details, estimated fixed effects, and significance tests are provided in Appendix~\ref{app:faceoff}. 
 
 The estimated log odds of a decision in favor of cluster over trend target for each of the designs are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
 As hypothesized, the strongest signal for identifying groups, is color + shape + ellipse, while trend + error results in the strongest signal in favor of trends. 
 Most of the effects are not significantly different, as seen in the letter values \citep{piepho:04} based on Tukey's Post Hoc difference tests on the left hand side of the figure, representing pairwise comparisons of all of the designs, adjusted for multiple comparison. 
-The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters ($s_C$) and around the trend line ($s_T$), are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in Supplement~\ref{app:faceoff} for exact numbers and a discussion of further co-variates).
+The estimates for parameters $\alpha_C$ and $\alpha_T$, quantifying the effect of increased variability within clusters ($s_C$) and around the trend line ($s_T$), are highly significant  and work as hypothesized: with an increase in the variability, the strength of the target's signal decreases and correspondingly the probability for detecting the corresponding target decreases significantly (see Table~\ref{tab:results} in Appendix~\ref{app:faceoff} for exact numbers and a discussion of further co-variates).
 
 The addition of  interaction effects between plot design and control parameters $s_C$ or $s_T$ does not significantly improve the fit of the model. That is, the selection of the cluster or trend target does not appear to be influenced by the combination of a plot design and the difficulty of a lineup (as controlled by the parameters $s_C$ and $s_T$), at least within the ranges of parameters examined in this experiment.
 
@@ -1249,7 +1249,7 @@ These short explanations provide some additional insight into participant reason
 
 
 \subsection{Participant Reasoning}\label{sec:sentiment}
-As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of design - with the exception of the Ellipse + Color plot: here, specific colors are mentioned, which might be an indication that participants were distracted from the intended target by an imbalance in the group allocation in one of the null panels. This is further investigated in Supplement~C.
+As part of each trial, participants were asked to provide a short justification of their plot choice. Figure~\ref{fig:wordles} gives an overview of summaries of participants' reasoning in form of word clouds. In the word clouds, stopwords are excluded from participants' reasons, unless they refer to quantities, such as `none', `all', `some', `few', etc. Reasons are also stemmed, so that words such as `group', `groups', `grouping', `grouped', and so on, all appear as the same (most prevalent) word in the cloud. What can be seen is a strong focus in terms of the reasoning depending on the outcome. If the participant chose one of the targets, the reasoning reflects this choice. When neither of the targets is chosen, there is less focus in the response. The word clouds look surprisingly similar independently of design - with the exception of the Ellipse + Color plot: here, specific colors are mentioned, which might be an indication that participants were distracted from the intended target by an imbalance in the group allocation in one of the null panels. This is further investigated in Appendix~\ref{app:ginimodel}.
 %the mentioning of specific colors is indicative of participants' distraction from the intended target towards an imbalance of the color/cluster distribution. 
 
 \begin{figure}[h!t]\centering
@@ -1354,7 +1354,7 @@ This was due to an unintended side-effect of using the k-means algorithm for clu
 %Our cluster allocation algorithm for null target plots may have produced unintentional results; rather than providing unambiguous gestalt cues which reinforced group separation, instead, our null plots provided mixed cues which varied the number of points in a cluster and the presence of the additional similarity cue. 
 %Numerically, these null data sets had uneven cluster allocation; 
 The estimation of bounding ellipses fails for clusters with fewer than three points and in these cases, ellipses were not drawn. Visually, the conspicuous absence of an ellipse led participants to select null plots with that feature. 
-When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1$=\Sexpr{round(aov7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), with an estimate of $-0.8075$, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual designs, it is also significant ($\chi^2_9$=\Sexpr{round(aov7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}). Supplement~\ref{app:ginimodel} contains more details on this model and its effects.
+When we include a variable encoding the absence of one of the ellipses in a lineup into model~(\ref{eqn:faceoffModel}) it is highly significant ($\chi^2_1$=\Sexpr{round(aov7$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7$`Pr(>Chisq)`[2],4)}), with an estimate of $-0.8075$, indicating that if one of the ellipses in a lineup is missing, the probability of picking the cluster target is reduced to less than half (44.6\%) of the trend target. If we additionally consider the effect of a missing ellipse on individual designs, it is also significant ($\chi^2_9$=\Sexpr{round(aov7b$Chisq[2],1)}, $P$-value=\Sexpr{round(aov7b$`Pr(>Chisq)`[2],4)}). Appendix~\ref{app:ginimodel} contains more details on this model and its effects.
 
 \FloatBarrier
 \section{Discussion and Conclusions}\label{sec:Conclusion}
@@ -1371,11 +1371,11 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 
 \section{Supplementary Materials}
 \begin{description}
-\item[Paper Supplement:] Contains additional details about the methodology and results which were not included in this paper due to space constraints. (pdf)
+\item[Paper Appendix:] Contains additional details about the methodology and results which were not included in this paper due to space constraints. (pdf)
 \begin{itemize}
-\item Supplement~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
-\item Supplement~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
-\item Supplement~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
+\item Appendix~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
+\item Appendix~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
+\item Appendix~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
 \item[modeldata.csv:] (anonymized) data of participants' responses from the AMT study (csv file). 
 \item[vanderplas-hofmann.R:] code to re-produce all of the figures and model results of the paper (R file). 
