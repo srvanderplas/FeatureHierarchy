@@ -244,7 +244,7 @@ if (file.exists("SmallSimulation.Rdata")) {
 
   res <- nulldist(M = M, N = 45, K = 3, sT = sT, sC = sC)
 
-  save(res, file = "./fig/nulldist.Rdata")
+  save(res, file = "SmallSimulation.Rdata")
 }
 
 longres <- melt(res, id.vars = 1:4, variable.name = "type", value.name = "value")

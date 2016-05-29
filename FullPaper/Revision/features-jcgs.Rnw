@@ -549,7 +549,7 @@ res <- nulldist(N=N, sC=sC, sT=sT)
   
   res <- nulldist(M=M, N=45, K=3, sT=sT, sC=sC)
   
-  save(res, file="./fig/nulldist.Rdata")
+  save(res, file="../../Data/SmallSimulation.Rdata")
 }
 
 longres <- melt(res, id.vars = 1:4, variable.name = "type", value.name = "value")
