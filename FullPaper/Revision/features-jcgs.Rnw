@@ -708,7 +708,7 @@ A secondary purpose of the study is to relate signal strength (as determined by 
 
 
 \subsection{Participant Recruitment}
-Participants were recruited using Amazon's Mechanical Turk service\citep{amazon}, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks that are not easily automated. Only workers with at least 100 previous HITs at a 95\% successful completion rate were allowed to sign up for completing the task. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system, as well as a vested interest in doing well. 
+Participants were recruited using Amazon's Mechanical Turk service\citep{amazon}, which connects interested workers with ``Human Intelligence Tasks" (HITs), which are (typically) short tasks that are not easily automated. This service has been found to produce results with  reasonably high data quality that alos compare well to laboratory studies \cite{crump2013}. In our study, only workers with at least 100 previous HITs at a 95\% successful completion rate were allowed to sign up for completing the task. These restrictions reduce the amount of data cleaning required by ensuring that participants have experience with the Mechanical Turk system, as well as a vested interest in performing well. 
 
 
 Participants had to complete a pre-trial before being able to access the experiment. 
@@ -958,7 +958,7 @@ ggplot() +
 \caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
 
-In the evaluation of the collected data, we modeled accuracy rates, response times, participant confidence, and the selection of cluster vs.\ trend targets in detail. A thorough discussion of these models and the corresponding results is provided in Appendixt~\ref{app:models}. Only the models describing target plot selection are discussed here.
+In the evaluation of the collected data, we modeled accuracy rates, response times, participant confidence, and the selection of cluster vs.\ trend targets in detail. A thorough discussion of these models and the corresponding results is provided in Appendix~\ref{app:models}. Only the models describing target plot selection are discussed here.
 
 
 For each design (aesthetic combination), we first consider the probability that a participant selects one of the two target plots, and then we consider the conditional probability of selecting the cluster target over the trend target. 
