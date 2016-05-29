@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
 \usepackage[font=small,skip=5pt]{caption}
 \usepackage{subcaption}
 
@@ -301,7 +301,7 @@ $$
 The use of $R^2$ to assess the strength of the linear relationship (rather than the correlation) is indicated because human perception of correlation strength more closely aligns with $R^2$ \citep{bobko1979perception,lewandowsky1989perception}. 
 
 \begin{figure}[ht]
-<<trends, fig.width=6.5, fig.height=1.7, out.width='\\textwidth', echo=FALSE>>=
+<<trends, fig.width=7, fig.height=1.8, out.width='\\textwidth', echo=FALSE>>=
 res <- data.frame(sd.trend = rep(c(0.1, 0.2, 0.3, 0.4), each = 45))
 res <- res %>% group_by(sd.trend) %>% do(sim.line(N = 45, sd.trend = as.numeric(.[1,1])))
 
@@ -346,7 +346,7 @@ We begin by generating $K$ cluster centers on a $K \times K$ grid, then we gener
 \end{algorithm} 
 
 \begin{figure}[bht]
-<<cluster, fig.width=5.2, fig.height=2.8, echo=FALSE>>=
+<<cluster, fig.width=5.75, fig.height=3.15, out.width='.8\\textwidth', echo=FALSE>>=
 
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -428,7 +428,7 @@ Observations are assigned to specific clusters using hierarchical clustering, wh
 This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[hbt]
-<<lambda, fig.width=6.5, fig.height=3.25, out.width='\\textwidth', echo=FALSE>>=
+<<lambda, fig.width=7, fig.height=3.5, out.width='\\textwidth', echo=FALSE>>=
 
 colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", 
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -493,7 +493,7 @@ As a result, the distribution of the cluster statistic values are more easily se
 
 \begin{figure}[ht]
 \centering
-<<null-distribution-1, echo=FALSE, cache=T, fig.width=7.5, fig.height=2.5, out.width = "\\textwidth">>=
+<<null-distribution-1, echo=FALSE, cache=T, fig.width=8, fig.height=2.65, out.width = "\\textwidth">>=
 source("../../Code/MixtureLineups.R")
 sT = 0.25
 sC = 0.20
@@ -571,7 +571,9 @@ ggplot(data = subset(longres, Statistic != "Gini Impurity")) +
   scale_color_manual("Distribution", values = c("black",  "gray")) + 
   scale_fill_manual("Distribution", values = c("transparent", "gray")) +  
   theme_bw() + 
-  theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+  theme(legend.position = c(0, 1), legend.justification = c(0, 1),
+        axis.text = element_text(size = 10), axis.title = element_text(size = 10))
+#        panel.margin=grid::unit(c(0,0,0,0), unit="cm"))
 
 @
 \caption[Simulation-based test statistic density for null and target plots]{
@@ -874,7 +876,7 @@ Each plot was evaluated by between \Sexpr{min(plot.eval.tab)} and \Sexpr{max(plo
 
 \begin{figure}[ht]
 \begin{subfigure}[t]{0.55\textwidth}
-<<demographics-1, echo=FALSE, fig.width=3.575, fig.height=1.7, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
+<<demographics-1, echo=FALSE, fig.width=3.8, fig.height=1.9, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
 tmp <- users %>%
   group_by(age) %>%
   summarize(count = n()) %>%
@@ -888,35 +890,39 @@ ggplot(data = tmp) +
             hjust = .5,  size = 3) + 
   theme_bw() + 
   scale_y_continuous("# Participants", limits = c(0, 350)) + 
-  xlab("Age of Participants") + 
-  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), text = element_text(size = 10)) + 
-  ggtitle("Participant Age Distribution")
+  xlab("Age of Participants") +
+  theme(axis.text = element_text(size = 10), axis.title = element_text(size = 10),
+        panel.margin=grid::unit(c(0,0,0,0), unit="cm")) +
+  theme(axis.text.x = element_blank(), text = element_text(size = 10)) 
 @
 \end{subfigure}
-\begin{subfigure}[t]{0.43\textwidth}
-<<demographics-2, echo=FALSE, fig.width=2.795, fig.height=1.694, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
+\begin{subfigure}[t]{0.46\textwidth}
+<<demographics-2, echo=FALSE, fig.width=3.1, fig.height=1.8, fig.keep='all', fig.show='hold', out.width='\\textwidth'>>=
 tmp <- users %>%
   group_by(education) %>%
   summarize(count = n()) %>%
   mutate(
     label = as.character(education) %>%
-      str_replace_all(c("High School or less" = "<= High\\\nSchool",
+      str_replace_all(c("High School or less" = "High School\\\nor less",
                     "Some college" = "Some\\\ncollege",
                     "Bachelor's degree" = "Bachelor",
-                    "Grad school or higher" = "Graduate"))
+                    "Grad school or higher" = "Graduate\\\nSchool"))
   )
 
 ggplot(data = tmp) + 
   geom_bar(aes(x = education, y = count), stat = "identity", 
            fill = "grey70", color = "grey40") + 
-  geom_text(aes(x = education, y = count, label = label, 
-                hjust = as.numeric(count > 100)*1.5 - .25), 
+  geom_text(aes(x = education, y = c(1.1, .95, .95, .95)*count, label = label, 
+                hjust = c(0,1,1,1)), #as.numeric(count > 100)*1.5 - .25), 
             vjust = .5,  size = 3, angle = 90) + 
   theme_bw() + 
   scale_y_continuous("# Participants") + 
-  xlab("Age of Participants") + 
-  theme(axis.text.x = element_blank(), axis.title.x = element_blank(), text = element_text(size = 10)) + 
-  ggtitle("Participant Education Levels")
+  xlab("Education Levels") +
+    theme(axis.text = element_text(size = 10), axis.title = element_text(size = 10),
+        panel.margin=grid::unit(c(0,0,0,0), unit="cm")) +
+  theme(axis.text.x = element_blank(), text = element_text(size = 10),
+        axis.title.y = element_blank()) #+ 
+#  ggtitle("Participant Education Levels")
 @
 \end{subfigure}
 \caption{\label{fig:demographics}Basic demographics of participants.}
@@ -927,7 +933,7 @@ From Figure~\ref{fig:targets} we see that participants identified more cluster t
 
 \begin{figure}[ht]
 \centering
-<<targets, fig.width=5.2, fig.height=2.25, echo=FALSE>>=
+<<targets, fig.width=5.2, fig.height=2.25, out.width='.7\\textwidth', echo=FALSE>>=
 user.data <- modeldata %>% group_by(individualID) %>% 
   summarize(answers=length(individualID),
             cluster=sum(cluster.correct),
@@ -946,8 +952,8 @@ ggplot() +
   ylab("# of participants") + 
   xlab("# of target identifications (out of ten)") + 
   geom_line(aes(x, value, colour=variable, group=variable), data=clm) + 
-  ggtitle("Target Identification by Participants") + 
-  theme(text = element_text(size = 10))
+#  ggtitle("Target Identification by Participants") + 
+  theme(axis.text = element_text(size = 10), axis.title = element_text(size = 10))
 @
 \caption{\label{fig:targets}Target identifications by participants. Generally,  participants are not primed for one target over the other.}
 \end{figure}
@@ -1220,7 +1226,10 @@ ggplot(data=gvl.fixef) +
   geom_text(aes(y=-1, x=label, label=letters)) + 
   scale_y_continuous(
     "Odds (on log scale) with 95% Wald Intervals\n(Reference level: Plain plot)", 
-    breaks=c(-1, log(c(1/c(2, 1.5), c(1,1.5, 2 ))), 1), labels=c("  <--Trend\n      Target", "1/2", "1/1.5" ,"1", "1.5", "2", "Cluster-->  \nTarget      "), limits=c(-1,1))
+    breaks=c(-1, log(c(1/c(2, 1.5), c(1,1.5, 2 ))), 1), labels=c("  <--Trend\n      Target", "1/2", "1/1.5" ,"1", "1.5", "2", "Cluster-->  \nTarget      "), limits=c(-1,1)) +
+  theme(axis.text=element_text(size=10), axis.title=element_text(size=10),
+        plot.title=element_text(size=10),
+        panel.margin=grid::unit(c(0,0,0,0), unit="cm"))
 # dt <- xtable(gvl.fixef[order(gvl.fixef$OR), c("label", "OR", "LB", "UB")], digits=4)
 # print(dt, include.rownames=FALSE)
 @
