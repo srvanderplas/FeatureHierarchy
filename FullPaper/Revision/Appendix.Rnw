@@ -204,6 +204,7 @@ res <- res %>% dplyr::ungroup() %>% dplyr::group_by(x)
 means <- res %>% 
   dplyr::summarise(avg = mean(scenario3))
 @
+
 <<twotarget, dependson='twotarget-simu', echo=FALSE, out.width='0.7\\textwidth', fig.width=8, fig.height=5>>=
 qplot(x, scenario3, data=res, shape=I(21), alpha=I(0.8)) +
 theme_bw() + 
