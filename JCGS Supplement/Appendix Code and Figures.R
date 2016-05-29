@@ -32,7 +32,59 @@ source("theme_lineup.R") # Lineup theme for ggplot2
 # Simulations of the parameter space
 
 # Load simulation data
-load("SimulationDatasetCriteriaTurk16.Rdata")
+if (file.exists("SimulationDatasetCriteriaTurk16.Rdata")) {
+  load("SimulationDatasetCriteriaTurk16.Rdata")
+} else {
+  # Generate simulation results. This will take a while. 
+  library(nullabor)
+  library(compiler)
+  library(doMC)
+  registerDoMC(6)
+  library(magrittr)
+  library(dplyr)
+  library(plyr) # required for parallel computation - dplyr functionality is missing
+  
+  # Simulation parameters
+  data.parms <- expand.grid(K=c(3, 5),
+                            sd.trend=round(seq(.2, .5, by=.05), 2),
+                            sd.cluster=round(seq(.1, .4, by=.05), 2))
+  data.parms$N <- data.parms$K*15
+  
+  
+  tmp <- function(M=1000, N=45, K=3, sT=0.3, sC=0.3) {
+    data.frame(t(replicate(M, {
+      input.pars <- list(N=N, K=K, sd.trend=sT, sd.cluster=sC)
+      c(unlist(input.pars), eval.data(gen.data(input.pars)))
+    })))
+  }
+  nulldist <- cmpfun(tmp)
+  
+  # Use plyr because it is parallelizable
+  simulation.results <- plyr::ldply(
+    1:nrow(data.parms), 
+    function(i) {
+      with(data.parms[i,], 
+           nulldist(M=1000, N=N, K=K, sT=sd.trend, sC=sd.cluster))
+    }, 
+    .parallel=T)
+  names(simulation.results)[3:4] <- c("sd.trend", "sd.cluster")
+  simulation.results$sd.trend <- round(simulation.results$sd.trend, 2)
+  simulation.results$sd.cluster <- round(simulation.results$sd.cluster, 2)
+  
+  longres <- melt(simulation.results, id.vars=1:4, variable.name="type", value.name = "value")
+  longres$dist <- c("Data", "Max(18 Nulls)")[1+grepl("null", longres$type)]
+  longres$type <- gsub("null.", "", longres$type, fixed=T)
+  
+  # dataset.criteria <- ddply(longres, .(type, dist, sd.trend, sd.cluster, K), summarize, LB = quantile(value, .25), mean=mean(value), UB = quantile(value, .75))
+  dataset.criteria <- longres %>% group_by(type, dist, sd.trend, sd.cluster, K) %>%
+    summarize(
+      LB = quantile(value, .25), 
+      mean=mean(value), 
+      UB = quantile(value, .75)
+    )
+  
+  save(dataset.criteria, file="SimulationDatasetCriteriaTurk16.Rdata")
+}
 
 dataset.criteria$ParameterSet <- with(
   dataset.criteria,
@@ -360,4 +412,5 @@ qplot(pred4, label, data = df7, shape = I(3)) +
   scale_colour_manual("One ellipse missing", values = c("steelblue", "darkorange")) +
   scale_shape("One ellipse missing") +
   xlab("Probability to pick cluster target\n(given one of the targets was picked)")
+
 
