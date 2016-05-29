@@ -1124,8 +1124,8 @@ where \begin{itemize}
 \item[$\eta_k$] $\overset{iid}{\sim} N\left(0, \sigma^2_{\text{participant}}\right)$, random effect for participant characteristics.
 \end{itemize}
 
-We assume that the errors associated with a single trial evaluation, $\epsilon_{ijk}$ are normally distributed with variance $\sigma^2_e$. We also assume that random effects for data set and participant are orthogonal. 
-
+We assume that the errors associated with a single trial evaluation, $\epsilon_{ijk}$, are normally distributed with variance $\sigma^2_e$. We also assume that random effects for data set and participant are orthogonal. 
+%
 Additional model details, estimated fixed effects, and significance tests are provided in Supplement~\ref{app:faceoff}. 
 
 The estimated log odds of a decision in favor of cluster over trend target for each of the designs are shown in Figure~\ref{fig:faceoff}. From left to right the (log) odds of selecting the cluster target over the trend target increase. 
@@ -1375,9 +1375,10 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \begin{itemize}
 \item Supplement~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
 \item Supplement~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
-\item Supplement~\ref{app:models} contains a thorough discussions of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
+\item Supplement~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
 \item[modeldata.csv:] (anonymized) data of participants' responses from the AMT study (csv file). 
+\item[vanderplas-hofmann.R:] code to re-produce all of the figures and model results of the paper (R file). 
 \item[\href{http://github.com/srvanderplas/FeatureHierarchy}{Github Repository}:] Contains code for stimuli generation, anonymized data, simulation code and results, and other material. 
 %available on \href{http://github.com/srvanderplas/FeatureHierarchy}{github}.
 \end{description}
