@@ -10,7 +10,7 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage[dvipsnames,svgnames,table]{xcolor}
-%%% Packages for separate supplemental file with cross-refs
+%%% Packages for separate appendixal file with cross-refs
 % \usepackage[nokeyprefix]{refstyle}
 % \usepackage{varioref}
 \usepackage{xr}
@@ -448,7 +448,7 @@ gol.2 <- update(gol, .~.+gini.min) # large gini (i.e. homogeneity) leads to sign
 gol.2b <- update(gol.2, .~.+gini.min:plottype,
                  control = glmerControl(
                    optimizer="bobyqa",
-                   optCtrl = list(maxfun = 1e5)
+                   optCtrl = list(maxfun = 2e5)
                 )) # individual designs are significantly different 
 @
 
@@ -521,7 +521,7 @@ gvl.8 <-  update(gvl.4, .~.+gini.min, control=glmerControl(optimizer="bobyqa")) 
 gvl.9 <-  update(gvl.4, .~.+factor(no.ellipse), control=glmerControl(optimizer="bobyqa")) # only 1 missing ellipse has significant negative effect! beautiful!
 @
 
-In this supplement, we discuss four primary models used to examine different aspects of the data collected in this experiment. According to its dependent variables, these models are:
+In this appendix, we discuss four primary models used to examine different aspects of the data collected in this experiment. According to its dependent variables, these models are:
 \begin{description}
 \item[Accuracy (in section~\ref{app:accuracy}):] a lineup is considered to be evaluated `accurately', if at least one of its two targets is identified in an evaluation. We model this probability, i.e.\ $P(C_{ijk} \cup T_{ijk})$, where $C_{ijk}$ and $T_{ijk}$ are  binary variables describing the events that participant $k$ identifies the cluster/trend target in data set $j$ presented with design $i$.
 \item[Response time (in section~\ref{app:responsetime}):] response time is measured as the time between which a lineup is presented to a participant and the time point at which an answer is submitted. On average, participants need 40 seconds to respond to a lineup. Factors that affect this average (including accuracy, confidence level, and user justification) are also investigated. 
