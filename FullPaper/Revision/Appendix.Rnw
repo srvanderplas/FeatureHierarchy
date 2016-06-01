@@ -744,7 +744,6 @@ Other features measuring the imbalance within a lineup that we considered beside
 \begin{figure}
 <<interaction, echo=FALSE, fig.width=8, fig.height=5, out.width='0.8\\textwidth'>>=
 # need predictions from gol.2b
-
 df2b <- data.frame(expand.grid(
   plottype = levels(modeldata$plottype),
   sdline_new = 0.25,
@@ -972,7 +971,8 @@ The effect of the different designs is consistent across different parameter set
 \begin{figure}
 <<complex,echo=FALSE, fig.width=8, fig.height=10, out.width='\\textwidth'>>=
 modeldata$simpleoutcome <- factor(modeldata$simpleoutcome, levels=c("trend", "both", "cluster", "neither"))
-modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
+
+#modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixef$OR)])
 modeldata$st <- factor(sprintf("sigma[T]==%.2f", modeldata$sdline_new))
 modeldata$sc <- factor(sprintf("sigma[C]==%.2f", modeldata$sdgroup_new))
 modeldata$sc <- factor(modeldata$sc, levels=rev(levels(modeldata$sc)))
