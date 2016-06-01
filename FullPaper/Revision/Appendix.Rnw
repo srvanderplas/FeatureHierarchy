@@ -500,6 +500,19 @@ suppressMessages(require(multcomp))
 type_compare <- glht(gvl.4, mcp(plottype="Tukey"))
 gvl.fixef$letters <- cld(type_compare)$mcletters$Letters
 # not sure what to do about those warnings
+
+gvl.fixef$label <- gsub("plottype", "", row.names(gvl.fixef))
+gvl.fixef$label <- gvl.fixef$label %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("\\(Intercept\\)", "Plain + ") %>%
+  str_replace("( \\+ )$", "") %>% 
+  reorder(gvl.fixef$OR)
+
+
 @
 
 <<gvl5, dependson='group-vs-line', echo=FALSE>>=
@@ -963,6 +976,7 @@ modeldata$label <- factor(modeldata$label, levels=gvl.fixef$label[order(gvl.fixe
 modeldata$st <- factor(sprintf("sigma[T]==%.2f", modeldata$sdline_new))
 modeldata$sc <- factor(sprintf("sigma[C]==%.2f", modeldata$sdgroup_new))
 modeldata$sc <- factor(modeldata$sc, levels=rev(levels(modeldata$sc)))
+
 ggplot(data=subset(modeldata, k_new==3)) +
   geom_bar(aes(x=label, fill=simpleoutcome), position="fill") +
   facet_grid(st+sc~., 
