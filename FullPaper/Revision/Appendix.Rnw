@@ -460,7 +460,11 @@ gol.3b <- update(gol.3, .~.+one.ellipse:plottype)
 
 <<gol4, dependson='target-model', echo=FALSE>>=
 gol.4 <- update(gol, .~.+max.range) # not significant
-gol.4b <- update(gol, .~.+max.range:plottype) # not significant
+gol.4b <- update(gol, .~.+max.range:plottype,
+                 control = glmerControl(
+                   optimizer="bobyqa",
+                   optCtrl = list(maxfun = 2e5)
+                )) # not significant
 @
 
 <<gol5, dependson='target-model', echo=FALSE>>=
@@ -737,6 +741,17 @@ df2b <- data.frame(expand.grid(
   gini.min=seq(0.5,1, by=0.025)
 ))
 
+modeldata$label <- modeldata$plottype
+modeldata$label <- modeldata$plottype %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("plain", "Plain") %>%
+  str_replace("( \\+ )$", "") %>%
+  str_replace_all(c("Color" = "C", "Shape" = "S", "Ellipse" = "L", "Trend" = "T", "Error" = "E")) %>%
+  str_replace_all(" \\+ ", "+") 
 cols <- brewer.pal(9, "Set1")
 df2b <- merge(df2b, unique(modeldata[,c("plottype", "label")]), by="plottype")
 
@@ -1071,6 +1086,18 @@ df7plus <- merge(df7plus, rf7, by="data_name")
 df7plus$predlink <- with(df7plus, pred7b+rdata)
 df7plus$predprob <- with(df7plus, exp(predlink)/(1+exp(predlink)) )
 df7plus <- merge(df7plus, unique(modeldata[,c("plottype", "label")]), by="plottype")
+
+df7$label <- df7$plottype
+df7$label <- df7$plottype %>% 
+  str_replace("color", "Color + ") %>% 
+  str_replace("[sS]hape", "Shape + ") %>%
+  str_replace("[tT]rend", "Trend + ") %>%
+  str_replace("Ellipse", "Ellipse + ") %>%
+  str_replace("Error", "Error + ") %>%
+  str_replace("plain", "Plain") %>%
+  str_replace("( \\+ )$", "") %>%
+  str_replace_all(c("Color" = "C", "Shape" = "S", "Ellipse" = "L", "Trend" = "T", "Error" = "E")) %>%
+  str_replace_all(" \\+ ", "+") 
 
 df7$plottype <- reorder(df7$plottype, df7$pred4)
 qplot(pred4, label, data=df7, shape=I(3)) + 
