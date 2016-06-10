@@ -1,0 +1,105 @@
+\documentclass[12pt]{article}
+\usepackage[font=small,skip=5pt]{caption}
+\usepackage{subcaption}
+
+\usepackage{afterpage}
+\usepackage{placeins}
+\usepackage{multirow}
+\usepackage{rotating}
+\graphicspath{{fig/}}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+
+
+\usepackage{natbib}
+\usepackage{xr}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+\externaldocument{Appendix}
+
+%%%
+\usepackage[shortlabels]{enumitem}
+\setlist[description,1]{leftmargin=0cm}
+\setlist[description,2]{leftmargin=1cm}
+\setlist[enumerate,1]{leftmargin=.5cm}
+\setlist[enumerate,2]{leftmargin=1.5cm}
+\setlist[itemize,1]{leftmargin=.5cm}
+\setlist[itemize,2]{leftmargin=1.5cm}
+% \usepackage{endfloat} % Figures to the end of the document
+
+%---------------------------------------------------
+\usepackage[colorinlistoftodos]{todonotes}
+%                 Editing Commands
+\newcommand{\done}[2][inline]{\todo[color=SpringGreen, #1]{#2}}  % for todos that have been seen and dealt with
+\newcommand{\meh}[2][inline]{\todo[color=White, #1]{#2}}   % for todos that may no longer be relevant 
+\newcommand{\comment}[2][inline]{\todo[color=SkyBlue, #1]{#2}} % for comments that may not be "to-do"s
+%\newcommand{\mcomment}[1]{\todo[color=SkyBlue]{#1}} % for margin comments
+\newcommand{\newtext}[1]{\todo[inline, color=White]{ \color{OliveGreen}{#1}}} % new text - not necessarily something to be done
+\newcommand{\newdo}[1]{\todo[inline, color=Lime]{#1}} % new to do item
+
+
+%---------------------------------------------------
+%                 Placing Figures
+\renewcommand{\topfraction}{0.99}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.99}	% max fraction of floats at bottom
+
+\renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+%   Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.98}	% require fuller float pages
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.98}	% require fuller float pages
+
+%---------------------------------------------------
+% Define new environment
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{algorithm}[theorem]{Algorithm}
+%---------------------------------------------------
+
+%\pdfminorversion=4
+% NOTE: To produce blinded version, replace "0" with "1" below.
+\newcommand{\blind}{0}
+
+% DON'T change margins - should be 1 inch all around.
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-.5in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.3in}%
+\addtolength{\topmargin}{-.8in}%
+
+\begin{document}
+
+\section{Included Files}
+\subsection{Supplement.zip}
+\begin{description}
+\item [README] This file contains a manifest of all other files included in the zip directory and is repeated below for clarity. (Present in .txt, .html, and .md formats)
+\item [Article Code and Figures.R] This file contains code to generate all of the figures and models presented in the paper. Data about users has been anonymized to comply with IRB regulations, and is provided in a csv file (modeldata.csv). 
+\item [Appendix Code and Figures.R] This file contains code to generate all of the figures and models presented in the online appendix, with some additional comments/documentation. 
+\item [color\_perceptual\_kernel.csv] - Kernels from Demiralp et al. (2014) used to identify maximally different colors (subject to some constraints) for use in this experiment.
+\item [shape\_perceptual\_kernel.csv] - Kernels from Demiralp et al. (2014) used to identify maximally different shapes (subject to some constraints) for use in this experiment.
+\item [SmallSimulation.csv] Simulation data used to generate Figure 4. Provided for convenience, as the simulation takes a considerable amount of time to run. Code to generate the simulation file is also included if verification of the simulation methodology is desired. 
+\item [modeldata.csv] Participant response data from the experiment. Used to fit all of the models presented in the paper and supplement. 
+\item [SimulationDatasetCriteriaTurk16.csv] Simulation data to generate figures. Code is included (in Appendix Code and Figures.R) to generate this file if verification of the simulation methodology is desired. 
+\end{description}
+
+\subsection{Tex Files.Zip}
+\begin{description}
+\item [fig/] Folder containing all figures for tex document compilation
+\item [Appendix-printed.pdf] Printed PDF version to reduce compatibility issues
+\item [Appendix.pdf] PDF of online Appendix
+\item [Appendix.bbl] Generated bibliography file for appendix
+\item [Appendix.tex] tex file of appendix
+\item [Appendix.Rnw] Rstudio RNW file of appendix (contains code + tex)
+\item [features-jcgs-printed.pdf] Printed PDF version to reduce compatibility issues
+\item [features-jcgs.pdf] PDF of paper
+\item [features-jcgs.bbl] Generated bibliography file for Paper
+\item [features-jcgs.tex] tex file of Paper
+\item [features-jcgs.Rnw] Rstudio RNW file of paper (contains code + tex)
+\item [references.bib] BibTeX file of references used by both the paper and appendix.
+\end{description}
+
+
+\end{document}

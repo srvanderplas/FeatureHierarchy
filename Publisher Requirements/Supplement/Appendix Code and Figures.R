@@ -25,15 +25,203 @@ suppressMessages(library(multcomp)) # Multiple comparisons
 library(vinference) # install from heike/vinference github
 
 # --- Important Functions ------------------------------------------------------
-source("MixtureLineups.R") # Functions to simulate data, save plots, calculate statistics, etc.
-source("theme_lineup.R") # Lineup theme for ggplot2
+# Identify the best combination of a set of colors/shapes based on a 
+# provided distance matrix
+best.combo <- function(ngroups = 3, palette, dist.matrix){
+  # check distance matrix
+  if (nrow(dist.matrix) != length(palette) | 
+      ncol(dist.matrix) != length(palette)) {
+    stop(paste0("The distance matrix does not match the size of the palette. ",
+                "It should be ", length(palette), "x", length(palette), "."))
+  }
+  if ( (sum(dist.matrix < 0) > 0) ) {
+    stop("Distance matrix cannot have negative entries.")
+  }
+  
+  require(combinat)
+  clist <- t(combn(1:length(palette), ngroups))
+  pairwise.combos <- t(combn(1:ngroups, 2))
+  res <- rowSums(apply(pairwise.combos, 1, function(i){
+    diag(as.matrix(dist.matrix[clist[,i[1]], clist[,i[2]]]))
+  }))
+  
+  return(palette[clist[which.max(res),]])
+}
+
+# Simulate clustered data: N points, in K clusters, with 
+# sd.cluster within-cluster standard deviation
+sim.clusters <- function(K, N, sd.cluster=.3){  
+  xc <- sample(1:K, replace = F)
+  yc <- sample(1:K, replace = F)
+  xc <- jitter(xc, amount = .2)
+  yc <- jitter(yc, amount = .2)
+  while (cor(xc,yc) < .25 | cor(xc,yc) > .75) {
+    xc <- sample(1:K, replace = F)
+    yc <- sample(1:K, replace = F)
+    xc <- jitter(xc, amount = .2)
+    yc <- jitter(yc, amount = .2)
+  }
+  
+  yc <- scale(yc)
+  xc <- scale(xc)
+  
+  groups <- sample(K, N, replace = TRUE, 
+                   prob = abs(rnorm(K, mean = 1/K, sd = 0.5 / K ^ 2)))
+  
+  yerr <- rnorm(N, sd = sd.cluster)
+  xerr <- rnorm(N, sd = sd.cluster)
+  
+  cluster.data <- data.frame(x = xc[groups] + xerr, 
+                             y = yc[groups] + yerr, 
+                             group = groups)
+  return(cluster.data)
+}
+
+# Simulate linear data: N points with (sd.trend)^2 error variance
+sim.line <- function(K = 3, N = 45, sd.trend = .3){
+  # Simulate data from line
+  line.data <- data.frame(x = jitter(seq(-1, 1, length.out = N)), y = 0)
+  line.data$y <- line.data$x + rnorm(N, 0, sd.trend)
+  
+  return(line.data)
+}
+
+# Simulate data which is a mixture between clusters and lines
+# Calls sim.clusters and sim.line
+mixture.sim <- function(lambda, K, N, sd.trend=.3, sd.cluster=.3){
+  cluster.data <- sim.clusters(K = K, N = N, sd.cluster = sd.cluster)
+  cluster.data[,c("x", "y")] <- scale(cluster.data[,c("x", "y")])
+  line.data <- sim.line(K = K, N = N, sd.trend = sd.trend)
+  line.data[,c("x", "y")] <- scale(line.data[,c("x", "y")])
+  
+  ll <- rbinom(n = N, size = 1, prob = lambda)  # one model or the other
+  mix.data <- data.frame(
+    x = ll*cluster.data$x + (1 - ll)*line.data$x,  
+    y = ll*cluster.data$y + (1 - ll)*line.data$y,
+    group = as.numeric(cluster.data$group)  
+  )
+  
+  mix.data[,c("x", "y")] <- scale(mix.data[,c("x", "y")])
+  
+  mix.data$group <- cutree(hclust(dist(mix.data[,c("x", "y")])), k = K) 
+  # grouping by the best K clusters
+  
+  return(mix.data)
+}
+
+# Generate data for an entire lineup
+gen.data <- function(input){
+  # Position of target plots
+  pos <- sample(1:20, size = 2)
+  
+  # Trend target data
+  trenddata <- mixture.sim(lambda = 0, 
+                           N = input$N, 
+                           K = input$K, 
+                           sd.trend = input$sd.trend, 
+                           sd.cluster = input$sd.cluster)
+  # Cluster target data
+  clusterdata <- mixture.sim(lambda = 1, 
+                             N = input$N, 
+                             K = input$K, 
+                             sd.trend = input$sd.trend, 
+                             sd.cluster = input$sd.cluster)
+  
+  # Null data
+  # Need 19 data sets so that nullabor works; then replace the data at 
+  # cluster target position with cluster target data
+  nulldata <- rdply(19, function(.sample) 
+    mixture.sim(lambda = .5, 
+                N = input$N, 
+                K = input$K, 
+                sd.cluster = input$sd.cluster, 
+                sd.trend = input$sd.trend
+    ))
+  
+  data <- lineup(true = trenddata, pos = pos[1], n = 20, samples = nulldata)
+  data <- rbind.fill(
+    subset(data, .sample != pos[2]), 
+    cbind(.sample = pos[2], clusterdata))
+  
+  data$target1 <- pos[1]
+  data$target2 <- pos[2]
+  
+  data
+}
+
+# Calculate cluster sum of squares
+cluster <- function(dframe) {
+  # we assume to have x, y, and a group variable
+  xmean <- mean(dframe$x)
+  ymean <- mean(dframe$y)
+  dframe$dist <- with(dframe, (x - xmean) ^ 2 + (y - ymean) ^ 2)
+  SSTotal <- sum(dframe$dist)
+  dframe <- dframe %>% 
+    group_by(group) %>% 
+    mutate(xgroup = mean(x), ygroup = mean(y))
+  dframe$gdist <- with(dframe, (x - xgroup) ^ 2 + (y - ygroup) ^ 2)
+  SSGroup <- sum(dframe$gdist)
+  (SSTotal - SSGroup)/SSTotal
+}
+
+# Calculate gini statistic
+gini <- function(y, unbiased = TRUE, na.rm = FALSE){
+  if ( (!is.numeric(y))) {
+    warning("'y' is not numeric; returning NA")
+    return(NA)
+  }
+  if (!na.rm && any(na.ind <- is.na(y)))
+    stop("'x' contain NAs")
+  if (na.rm)
+    y <- y[!na.ind]
+  x <- as.numeric(table(y))/sum(y)
+  1 - sum(x ^ 2)
+}
+
+# Calculate trend/group/gini statistics for any given dataset
+eval.df <- function(df){
+  data.frame(
+    line = summary(lm(y~x, data = df))$r.squared, 
+    group = cluster(df),
+    gini = gini(df$group)
+  )
+}
+
+# Calculate statistics for each lineup
+eval.data <- function(df){
+  
+  nulls <- subset(df, .sample != target1 & .sample != target2)
+  groups <- subset(df, .sample == target2)
+  lines <- subset(df, .sample == target1)
+  
+  nl <- ddply(nulls, .(.sample), eval.df)
+  
+  cl <- eval.df(groups)
+  ll <- eval.df(lines)
+  
+  c(null.line = max(nl$line), 
+    null.cluster = max(nl$group), 
+    null.gini = min(nl$gini),
+    line = ll$line, 
+    cluster = cl$group,
+    gini = cl$gini)
+}
+
+theme_lineup <- function(base_size = 12, base_family = ""){
+  theme_bw(base_size = base_size, base_family = base_family) %+replace% 
+    theme(legend.position = "none", 
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          plot.margin = unit(c(1,1,0,0), "line")
+    )}
 
 # --- Supplement A -------------------------------------------------------------
 # Simulations of the parameter space
 
-# Load simulation data
-if (file.exists("SimulationDatasetCriteriaTurk16.Rdata")) {
-  load("SimulationDatasetCriteriaTurk16.Rdata")
+# Read simulation data
+if (file.exists("SimulationDatasetCriteriaTurk16.csv")) {
+  dataset.criteria <- read.csv("SimulationDatasetCriteriaTurk16.csv", stringsAsFactors = F)
 } else {
   # Generate simulation results. This will take a while. 
   library(nullabor)
@@ -83,7 +271,7 @@ if (file.exists("SimulationDatasetCriteriaTurk16.Rdata")) {
       UB = quantile(value, .75)
     )
   
-  save(dataset.criteria, file="SimulationDatasetCriteriaTurk16.Rdata")
+  write.csv(dataset.criteria, file = "SimulationDatasetCriteriaTurk16.csv", row.names = F)
 }
 
 dataset.criteria$ParameterSet <- with(
@@ -135,7 +323,16 @@ ylab("estimated probability") + xlab("Number of times (out of 10) one of the tar
 # --- Supplement C - Models ----------------------------------------------------
 
 ### Prepare modeldata data frame ###
-load("modeldata.Rdata")
+modeldata <- read.csv("modeldata.csv", stringsAsFactors = F) %>%
+  mutate(start_time = ymd_hms(start_time),
+         end_time = ymd_hms(end_time),
+         k = factor(k, levels = c(3, 5)),
+         plottype = factor(plottype, levels = c("plain", "trend", "color", 
+                                                "shape", "colorShape", "colorEllipse", 
+                                                "colorTrend",  "trendError", 
+                                                "colorShapeEllipse", 
+                                                "colorEllipseTrendError"))
+  )
 
 totaltime <- modeldata %>% group_by(individualID) %>% summarize(
   total.experiment.time = max(end_time) - min(start_time)

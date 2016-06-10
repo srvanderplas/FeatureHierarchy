@@ -1377,7 +1377,7 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \item Appendix~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
 \item Appendix~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
-\item[Supplement.zip:] Zip directory containing files to recreate the figures and analysis presented in the paper and appendix. 
+\item[Supplement.zip:] Zip directory containing files to recreate the figures and analysis presented in the paper and appendix. A README file is included with explanations about file content.
 \item[\href{http://github.com/srvanderplas/FeatureHierarchy}{Github Repository}:] Contains code for stimuli generation, anonymized data, simulation code and results, and other material. 
 %available on \href{http://github.com/srvanderplas/FeatureHierarchy}{github}.
 \end{description}
