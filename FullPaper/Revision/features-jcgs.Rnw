@@ -1372,13 +1372,14 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 
 \section{Supplementary Materials}
 \begin{description}
-\item[Appendix:] Contains additional details about the methodology and results presented in the paper. (pdf)
+\item[Appendix:] Contains additional details about the methodology and results presented in the paper. 
 \begin{itemize}
 \item Appendix~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
 \item Appendix~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
 \item Appendix~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
-\item[Supplement.zip:] Zip directory containing files to recreate the figures and analysis presented in the paper and appendix. A README file is included with explanations about file content.
+\hfill (pdf file)
+\item[Supplement.zip:] \newdo{XXX we need to spill each file out by name - could you include the zip file on the repo? XXX } Zip directory containing files to recreate the figures and analysis presented in the paper and appendix. A README file is included with explanations about file content.
 \end{description}
 \bibliographystyle{asa}
 \bibliography{references}
