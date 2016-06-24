@@ -587,7 +587,8 @@ Using information from the simulation, we identify values and generate lineup da
 It is important to note that the numerical measures we have described in equations~\eqref{eq:linearMeasure} and~\eqref{eq:clusterMeasure} only provide information on the numerical discriminability of the target data sets from the null data sets; the simulation cannot provide us with exact information on the perceptual discriminability.
 It has been established that human perception of scatter plots does not replicate statistical measures exactly \citep{bobko1979perception, mosteller1981eye, lewandowsky1989perception}.
 
-Each of the generated data sets is then plotted as a lineup using aesthetics which emphasize clusters and/or linear relationships, in order to experimentally determine how these aesthetics change a participant's preference and ability to identify each target plot. 
+Each of the generated data sets is then plotted as a lineup using aesthetics which emphasize clusters and/or linear relationships, in order to experimentally determine how these aesthetics change a participant's preference and ability to identify each target plot.\footnote{Code for stimuli generation, simulation code and results are provided in the github repository at \url{http://github.com/srvanderplas/FeatureHierarchy}.
+} 
 The next section describes the aesthetic combinations and their anticipated effect on participant responses. 
 
 \begin{table}[hbtp]
@@ -1378,8 +1379,6 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \item Appendix~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
 \item[Supplement.zip:] Zip directory containing files to recreate the figures and analysis presented in the paper and appendix. A README file is included with explanations about file content.
-\item[\href{http://github.com/srvanderplas/FeatureHierarchy}{Github Repository}:] Contains code for stimuli generation, anonymized data, simulation code and results, and other material. 
-%available on \href{http://github.com/srvanderplas/FeatureHierarchy}{github}.
 \end{description}
 \bibliographystyle{asa}
 \bibliography{references}
