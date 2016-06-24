@@ -1379,8 +1379,10 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \item Appendix~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
 \hfill (Appendix.pdf, pdf file)
-\item[] R code to re-produce figures of the paper and the online appendix.
-\hfill (, R file)
+\item[R code] R code to re-produce figures of the paper and the online appendix.
+\hfill (JCGS_-_VanderPlas_and_Hofmann.R, R file)
+\item[Data] Anonymized responses from the turk study to investigate feature hierarchy. Each line corresponds to one lineup evaluation by a participant.
+\hfill (modeldata.csv, csv file)
 \end{description}
 \bibliographystyle{asa}
 \bibliography{references}
