@@ -1372,7 +1372,7 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 
 \section{Supplementary Materials}
 \begin{description}
-\item[Paper Appendix:] Contains additional details about the methodology and results which were not included in this paper due to space constraints. (pdf)
+\item[Appendix:] Contains additional details about the methodology and results presented in the paper. (pdf)
 \begin{itemize}
 \item Appendix~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
 \item Appendix~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
