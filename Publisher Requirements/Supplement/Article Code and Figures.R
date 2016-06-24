@@ -273,11 +273,11 @@ colors <-  c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
 shapes <- c(1,0,3,4,8,5,2,6,-0x25C1, -0x25B7)
 
-colortm <- read.csv("color-perceptual-kernel.csv")
+colortm <- read.csv("https://raw.githubusercontent.com/uwdata/perceptual-kernels/master/data/kernels/color-tm.txt", header = F)
 colortm[8,] <- 0
 colortm[,8] <- 0
 
-shapetm <- read.csv("shape-perceptual-kernel.csv")
+shapetm <- read.csv("https://raw.githubusercontent.com/uwdata/perceptual-kernels/master/data/kernels/shape-tm.txt", header = F)
 shapetm[9,] <- shapetm[,9] <- 0
 shapetm[10,] <- shapetm[,10] <- 0
 
@@ -380,7 +380,7 @@ N = 45
 K = 3
 M = 1000
 
-if (file.exists("SmallSimulation.Rdata")) {
+if (file.exists("SmallSimulation.csv")) {
   res <- read.csv("SmallSimulation.csv", stringsAsFactors = F)
 } else {
   # Compute simulation - this will take a while.
