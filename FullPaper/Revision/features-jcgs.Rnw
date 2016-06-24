@@ -1376,11 +1376,10 @@ While more studies are necessary to fully explore the non-additive mechanism of 
 \begin{itemize}
 \item Appendix~\ref{app:parametersimulation} provides details about simulations of the data-generating model described in Section~\ref{sec:parameterselection}.
 \item Appendix~\ref{app:probabilitysimulation} discusses the probability distribution underlying hypothesis testing for dual-target lineups.
-\item Appendix~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Modifications to these models also address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
+\item Appendix~\ref{app:models} contains a thorough discussion of models fit to participant target selections, response time, and self-reported confidence. Variations on these models address participant reasoning as discussed in Section~\ref{sec:sentiment}, the relationship between participant response time and accuracy, as well as additional features of the data.
 \end{itemize}
 \hfill (Appendix.pdf, pdf file)
-\item[R code] R code to re-produce figures of the paper and the online appendix.
-\hfill (JCGS_-_VanderPlas_and_Hofmann.R, R file)
+\item[R code] R code to re-produce figures of the paper as well as fit models used in the paper and the online appendix.\hfill (JCGS\_VanderPlas\_Hofmann.R, R file)
 \item[Data] Anonymized responses from the turk study to investigate feature hierarchy. Each line corresponds to one lineup evaluation by a participant.
 \hfill (modeldata.csv, csv file)
 \end{description}
