@@ -423,8 +423,7 @@ The cluster index $C^2$, which is approximately inversely linear in $\sigma_C^2$
 
 
 \subsubsection{Null Model \texorpdfstring{$M_0$}{M0}}
-The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. 
-Observations are assigned to specific clusters using hierarchical clustering, which creates groups consistent with any structure present in the generated data. 
+The generative model for null data is a mixture model $M_0$ that draws $n_c \sim \text{Binomial}(N, \lambda)$ observations from the cluster model, and $n_T = N - n_c$ from the regression model $M_T$. Figure \ref{fig:lambda} shows data produced from the mixture model for different values of $\lambda$. Observations are assigned to specific clusters using hierarchical clustering, which creates groups consistent with any structure present in the generated data. 
 This provides a plausible grouping for use in aesthetic and statistics requiring categorical data (color, shape, bounding ellipses). 
 
 \begin{figure}[hbt]
